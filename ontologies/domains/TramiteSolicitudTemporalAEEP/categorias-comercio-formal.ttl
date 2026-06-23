@@ -1,0 +1,227 @@
+@prefix tst:   <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal#> .
+@prefix core:    <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo:    <http://purl.org/ontology/bibo/> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+
+# #############################################################################
+# CATEGORIAS DE APROVECHAMIENTO — COMERCIO FORMAL
+# (categorias del tramite SUIT 26521, distintas a la venta informal)
+# #############################################################################
+# Desarrolla las categorias de aprovechamiento economico para actores/comercios
+# formales: mesas y sillas, eventos ocasionales, parques de diversiones,
+# amoblamiento urbano, avisos publicitarios y parqueaderos. Todo en namespace
+# tst:, subclases del tramite base TramiteSolicitudTemporalAEEP, conectado solo
+# a los pilares (Persona/Lugar) que ya importa la parte formal del tramite.
+#
+# Fuentes: portal medellin.gov.co/portalapp; SUIT 26521; Decreto 2148 de 2015;
+# Acuerdo 048 de 2014; concepts/formal_commerce/aprovechamiento_economico.md;
+# context/conceptos_mesas_sillas_v1.md; concepts/pev/avisos_publicitarios_temporales.md.
+# #############################################################################
+
+<https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal/categorias-comercio-formal>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal/categorias-comercio-formal/0.2.1> ;
+    dcterms:title "Aprovechamiento - Categorias de comercio formal"@es ;
+    dcterms:description """Categorias de aprovechamiento economico para comercios/actores formales
+    del tramite SUIT 26521 (mesas y sillas, eventos ocasionales, parques de diversiones,
+    amoblamiento urbano, avisos publicitarios, parqueaderos)."""@es ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:created "2026-06-17"^^xsd:date ;
+    dcterms:modified "2026-06-17"^^xsd:date ;
+    bibo:status "draft"@en ;
+    owl:versionInfo "0.2.1" ;
+    vann:preferredNamespacePrefix "tst" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal#" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal> .
+
+# =============================================================================
+# SOLICITUDES DE COMERCIO FORMAL  ·  [SOLICITUD]  (una subclase DEFINIDA por categoria)
+# =============================================================================
+# Simetrico a tst:SolicitudVentaInformal. Cada categoria formal tiene su propia
+# subclase de solicitud, que "se vuelve" de ese tipo exactamente cuando su
+# tipoTramite vale la categoria correspondiente (owl:hasValue). Ademas cada una
+# es subclase de su tramite/categoria (tst:Autorizacion*), de donde hereda los
+# datos propios (numero de mesas, aforo, etc.). SolicitudComercioFormal las
+# agrupa por CONVENIENCIA.
+
+tst:SolicitudComercioFormal a owl:Class ;
+    rdfs:subClassOf tst:SolicitudTramite ;
+    # Conveniencia: agrupa las solicitudes cuyo tipoTramite es una de las 6 categorias formales.
+    owl:equivalentClass [
+        a owl:Class ;
+        owl:intersectionOf (
+            tst:SolicitudTramite
+            [ a owl:Restriction ; owl:onProperty tst:tipoTramite ;
+              owl:someValuesFrom [ a owl:Class ; owl:oneOf (
+                  tst:cat-mesas-sillas tst:cat-eventos-ocasionales tst:cat-parques-diversiones
+                  tst:cat-amoblamiento-urbano tst:cat-avisos-publicitarios tst:cat-parqueaderos ) ] ]
+        )
+    ] ;
+    rdfs:label "Solicitud de tramite - Comercio formal"@es ;
+    skos:prefLabel "Solicitud de comercio formal"@es ;
+    skos:definition """Clase de CONVENIENCIA que agrupa las solicitudes de comercio formal del
+    tramite SUIT 26521 (mesas y sillas, eventos ocasionales, parques de diversiones, amoblamiento
+    urbano, avisos publicitarios, parqueaderos). Una solicitud es de comercio formal cuando su
+    tipoTramite es una de esas 6 categorias; cada modalidad tiene su propia subclase definida."""@es ;
+    tst:tipoArtefacto "solicitud" .
+
+# --- una subclase de solicitud DEFINIDA por categoria (subclase tambien de su Autorizacion*) ---
+
+tst:SolicitudMesasYSillas a owl:Class ;
+    rdfs:subClassOf tst:SolicitudComercioFormal , tst:AutorizacionMesasYSillas ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf (
+        tst:SolicitudTramite
+        [ a owl:Restriction ; owl:onProperty tst:tipoTramite ; owl:hasValue tst:cat-mesas-sillas ] ) ] ;
+    rdfs:label "Solicitud - Mesas y sillas"@es ; skos:prefLabel "Solicitud de mesas y sillas"@es ;
+    skos:definition "Solicitud de la categoria mesas y sillas; se vuelve de este tipo cuando tipoTramite = cat-mesas-sillas."@es ;
+    tst:tipoArtefacto "solicitud" .
+
+tst:SolicitudEventosOcasionales a owl:Class ;
+    rdfs:subClassOf tst:SolicitudComercioFormal , tst:AutorizacionEventosOcasionales ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf (
+        tst:SolicitudTramite
+        [ a owl:Restriction ; owl:onProperty tst:tipoTramite ; owl:hasValue tst:cat-eventos-ocasionales ] ) ] ;
+    rdfs:label "Solicitud - Eventos ocasionales"@es ; skos:prefLabel "Solicitud de eventos ocasionales"@es ;
+    skos:definition "Solicitud de la categoria eventos ocasionales; se vuelve de este tipo cuando tipoTramite = cat-eventos-ocasionales."@es ;
+    tst:tipoArtefacto "solicitud" .
+
+tst:SolicitudParquesDiversiones a owl:Class ;
+    rdfs:subClassOf tst:SolicitudComercioFormal , tst:AutorizacionParquesDiversiones ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf (
+        tst:SolicitudTramite
+        [ a owl:Restriction ; owl:onProperty tst:tipoTramite ; owl:hasValue tst:cat-parques-diversiones ] ) ] ;
+    rdfs:label "Solicitud - Parques de diversiones"@es ; skos:prefLabel "Solicitud de parques de diversiones"@es ;
+    skos:definition "Solicitud de la categoria parques de diversiones; se vuelve de este tipo cuando tipoTramite = cat-parques-diversiones."@es ;
+    tst:tipoArtefacto "solicitud" .
+
+tst:SolicitudAmoblamientoUrbano a owl:Class ;
+    rdfs:subClassOf tst:SolicitudComercioFormal , tst:AutorizacionAmoblamientoUrbano ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf (
+        tst:SolicitudTramite
+        [ a owl:Restriction ; owl:onProperty tst:tipoTramite ; owl:hasValue tst:cat-amoblamiento-urbano ] ) ] ;
+    rdfs:label "Solicitud - Amoblamiento urbano"@es ; skos:prefLabel "Solicitud de amoblamiento urbano"@es ;
+    skos:definition "Solicitud de la categoria amoblamiento urbano; se vuelve de este tipo cuando tipoTramite = cat-amoblamiento-urbano."@es ;
+    tst:tipoArtefacto "solicitud" .
+
+tst:SolicitudAvisosPublicitarios a owl:Class ;
+    rdfs:subClassOf tst:SolicitudComercioFormal , tst:AutorizacionAvisosPublicitarios ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf (
+        tst:SolicitudTramite
+        [ a owl:Restriction ; owl:onProperty tst:tipoTramite ; owl:hasValue tst:cat-avisos-publicitarios ] ) ] ;
+    rdfs:label "Solicitud - Avisos publicitarios"@es ; skos:prefLabel "Solicitud de avisos publicitarios"@es ;
+    skos:definition "Solicitud de la categoria avisos publicitarios; se vuelve de este tipo cuando tipoTramite = cat-avisos-publicitarios."@es ;
+    tst:tipoArtefacto "solicitud" .
+
+tst:SolicitudParqueaderos a owl:Class ;
+    rdfs:subClassOf tst:SolicitudComercioFormal , tst:AutorizacionParqueaderos ;
+    owl:equivalentClass [ a owl:Class ; owl:intersectionOf (
+        tst:SolicitudTramite
+        [ a owl:Restriction ; owl:onProperty tst:tipoTramite ; owl:hasValue tst:cat-parqueaderos ] ) ] ;
+    rdfs:label "Solicitud - Parqueaderos"@es ; skos:prefLabel "Solicitud de parqueaderos (con o sin actividad economica)"@es ;
+    skos:definition "Solicitud de la categoria parqueaderos (con o sin actividad economica); se vuelve de este tipo cuando tipoTramite = cat-parqueaderos."@es ;
+    tst:tipoArtefacto "solicitud" .
+
+# =============================================================================
+# 1. MESAS Y SILLAS
+# =============================================================================
+tst:AutorizacionMesasYSillas a owl:Class ;
+    rdfs:subClassOf tst:TramiteSolicitudTemporalAEEP ;
+    rdfs:label "Autorizacion - Mesas y sillas"@es ;
+    skos:definition """Categoria que autoriza el uso del espacio publico con mesas y sillas anexas a un
+    establecimiento de comercio formal (restaurantes, cafes, bares) frente a su fachada."""@es ;
+    skos:scopeNote "Fuente: context/conceptos_mesas_sillas_v1.md; Decreto 2148 de 2015."@es ;
+    tst:categoria tst:cat-mesas-sillas ; tst:tipoArtefacto "categoria" .
+
+tst:establecimientoAnexo a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionMesasYSillas ; rdfs:range xsd:string ;
+    rdfs:label "establecimiento de comercio anexo"@es ;
+    skos:definition "Nombre/identificacion del establecimiento formal al que se anexan las mesas y sillas."@es .
+tst:numeroMesas a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionMesasYSillas ; rdfs:range xsd:integer ; rdfs:label "numero de mesas"@es .
+tst:numeroSillas a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionMesasYSillas ; rdfs:range xsd:integer ; rdfs:label "numero de sillas"@es .
+tst:areaMobiliario a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionMesasYSillas ; rdfs:range xsd:decimal ; rdfs:label "area ocupada por mobiliario (m2)"@es .
+
+# =============================================================================
+# 2. EVENTOS OCASIONALES
+# =============================================================================
+tst:AutorizacionEventosOcasionales a owl:Class ;
+    rdfs:subClassOf tst:TramiteSolicitudTemporalAEEP ;
+    rdfs:label "Autorizacion - Eventos ocasionales"@es ;
+    skos:definition """Categoria que autoriza el uso temporal del espacio publico para eventos
+    ocasionales con aprovechamiento economico (ferias, mercados, actividades comerciales o
+    culturales)."""@es ;
+    skos:scopeNote "Fuente: concepts/formal_commerce/aprovechamiento_economico.md; PR-GGOL-019/020."@es ;
+    tst:categoria tst:cat-eventos-ocasionales ; tst:tipoArtefacto "categoria" .
+
+tst:tipoEvento a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionEventosOcasionales ; rdfs:range xsd:string ; rdfs:label "tipo de evento"@es .
+tst:aforoEstimado a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionEventosOcasionales ; rdfs:range xsd:integer ; rdfs:label "aforo estimado"@es .
+tst:fechaInicioEvento a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionEventosOcasionales ; rdfs:range xsd:date ; rdfs:label "fecha inicio del evento"@es .
+tst:fechaFinEvento a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionEventosOcasionales ; rdfs:range xsd:date ; rdfs:label "fecha fin del evento"@es .
+
+# =============================================================================
+# 3. PARQUES DE DIVERSIONES
+# =============================================================================
+tst:AutorizacionParquesDiversiones a owl:Class ;
+    rdfs:subClassOf tst:TramiteSolicitudTemporalAEEP ;
+    rdfs:label "Autorizacion - Parques de diversiones"@es ;
+    skos:definition """Categoria que autoriza la instalacion temporal de atracciones mecanicas y
+    parques de diversiones en el espacio publico."""@es ;
+    skos:scopeNote "Requiere certificacion de seguridad de las atracciones. Fuente: SUIT 26521."@es ;
+    tst:categoria tst:cat-parques-diversiones ; tst:tipoArtefacto "categoria" .
+
+tst:numeroAtracciones a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionParquesDiversiones ; rdfs:range xsd:integer ; rdfs:label "numero de atracciones"@es .
+tst:certificadoSeguridadAtracciones a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionParquesDiversiones ; rdfs:range xsd:boolean ;
+    rdfs:label "certificado de seguridad de atracciones"@es .
+tst:areaParque a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionParquesDiversiones ; rdfs:range xsd:decimal ; rdfs:label "area ocupada (m2)"@es .
+
+# =============================================================================
+# 4. AMOBLAMIENTO URBANO
+# =============================================================================
+tst:AutorizacionAmoblamientoUrbano a owl:Class ;
+    rdfs:subClassOf tst:TramiteSolicitudTemporalAEEP ;
+    rdfs:label "Autorizacion - Amoblamiento urbano"@es ;
+    skos:definition """Categoria que autoriza el aprovechamiento de mobiliario urbano (mupis,
+    paraderos, modulos, cabinas) con fines economicos o publicitarios."""@es ;
+    skos:scopeNote "Articulado con Agencia APP y, cuando hay redes, con EPM. Fuente: Acuerdo 048 de 2014."@es ;
+    tst:categoria tst:cat-amoblamiento-urbano ; tst:tipoArtefacto "categoria" .
+
+tst:tipoMobiliario a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionAmoblamientoUrbano ; rdfs:range xsd:string ;
+    rdfs:label "tipo de mobiliario"@es ; skos:scopeNote "mupi, paradero, modulo, cabina, ..."@es .
+tst:numeroElementos a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionAmoblamientoUrbano ; rdfs:range xsd:integer ; rdfs:label "numero de elementos"@es .
+
+# =============================================================================
+# 5. AVISOS PUBLICITARIOS
+# =============================================================================
+tst:AutorizacionAvisosPublicitarios a owl:Class ;
+    rdfs:subClassOf tst:TramiteSolicitudTemporalAEEP ;
+    rdfs:label "Autorizacion - Avisos publicitarios"@es ;
+    skos:definition """Categoria que autoriza avisos publicitarios y publicidad exterior visual en
+    el espacio publico (vallas, avisos, pendones) con aprovechamiento economico."""@es ;
+    skos:scopeNote "Fuente: concepts/pev/avisos_publicitarios_temporales.md, avisos_transitorios.md, vallas_publicitarias.md."@es ;
+    tst:categoria tst:cat-avisos-publicitarios ; tst:tipoArtefacto "categoria" .
+
+tst:tipoAviso a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionAvisosPublicitarios ; rdfs:range xsd:string ;
+    rdfs:label "tipo de aviso"@es ; skos:scopeNote "valla, aviso, pendon, publicidad exterior visual, ..."@es .
+tst:dimensionesAviso a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionAvisosPublicitarios ; rdfs:range xsd:string ; rdfs:label "dimensiones del aviso"@es .
+tst:mensajePublicitario a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionAvisosPublicitarios ; rdfs:range xsd:string ; rdfs:label "mensaje publicitario"@es .
+
+# =============================================================================
+# 6. PARQUEADEROS
+# =============================================================================
+tst:AutorizacionParqueaderos a owl:Class ;
+    rdfs:subClassOf tst:TramiteSolicitudTemporalAEEP ;
+    rdfs:label "Autorizacion - Parqueaderos"@es ;
+    skos:definition """Categoria que autoriza el aprovechamiento del espacio publico como
+    parqueadero, con o sin actividad economica asociada."""@es ;
+    skos:scopeNote "Fuente: portal medellin.gov.co/portalapp (Parqueaderos con o sin actividad economica)."@es ;
+    tst:categoria tst:cat-parqueaderos ; tst:tipoArtefacto "categoria" .
+
+tst:numeroCupos a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionParqueaderos ; rdfs:range xsd:integer ; rdfs:label "numero de cupos"@es .
+tst:conActividadEconomica a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionParqueaderos ; rdfs:range xsd:boolean ;
+    rdfs:label "con actividad economica"@es ; skos:definition "Indica si el parqueadero cobra/explota economicamente (vs. sin actividad economica)."@es .
+tst:tarifaHora a owl:DatatypeProperty ; rdfs:domain tst:AutorizacionParqueaderos ; rdfs:range xsd:decimal ; rdfs:label "tarifa por hora"@es .

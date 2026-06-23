@@ -1,0 +1,357 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vocab: <https://w3id.org/medellin/espacio-publico/vocab/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# =============================================================================
+# VOCABULARIO CONTROLADO: Tipologia de Venta Informal
+# =============================================================================
+# Vocabulario SKOS jerarquico que clasifica los tipos de productos y servicios
+# ofrecidos por vendedores informales. Incluye sinonimos para limpieza de datos.
+# Reemplaza la tabla a2_listas.tipologia_venta_v1 del DMP.
+# =============================================================================
+
+vocab:tipologia-venta a skos:ConceptScheme ;
+    owl:versionInfo "0.1.0" ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Tipologia de Venta Informal"@es ;
+    dcterms:title "Informal Sales Typology"@en ;
+    dcterms:description """Vocabulario controlado jerarquico para clasificar los tipos
+    de productos y servicios comercializados por vendedores informales en el espacio
+    publico de Medellin. Organizado en categorias principales con subcategorias
+    especificas. Incluye sinonimos para normalizacion automatica."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico" ;
+    dcterms:created "2026-01-06"^^xsd:date ;
+    dcterms:modified "2026-01-06"^^xsd:date ;
+    dcterms:source "FO-GGOL-048 - Formulario de caracterizacion" ;
+    prov:wasDerivedFrom <duckdb:///warehouses/raw_catalog.db#a2_listas.tipologia_venta_v1> ;
+    skos:hasTopConcept
+        vocab:alimentos-bebidas ,
+        vocab:variedades ,
+        vocab:servicios ,
+        vocab:artesanias-manualidades .
+
+# =============================================================================
+# CATEGORIA PRINCIPAL: Alimentos y Bebidas
+# =============================================================================
+
+vocab:alimentos-bebidas a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Alimentos y bebidas"@es ;
+    skos:prefLabel "Food and beverages"@en ;
+    skos:altLabel "Comida"@es ;
+    skos:altLabel "Alimentos"@es ;
+    skos:notation "alimentos_bebidas" ;
+    skos:definition "Venta de productos alimenticios preparados o sin preparar y bebidas"@es ;
+    skos:topConceptOf vocab:tipologia-venta ;
+    skos:narrower
+        vocab:comidas-rapidas ,
+        vocab:frutas-verduras ,
+        vocab:bebidas ,
+        vocab:dulces-confiteria ,
+        vocab:panaderia ,
+        vocab:helados .
+
+# Subcategoria: Comidas Rapidas
+vocab:comidas-rapidas a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Comidas rapidas"@es ;
+    skos:altLabel "Comida rapida"@es ;
+    skos:altLabel "Fast food"@en ;
+    skos:notation "comidas_rapidas" ;
+    skos:definition "Alimentos preparados para consumo inmediato: empanadas, arepas, hamburguesas, perros calientes, etc."@es ;
+    skos:broader vocab:alimentos-bebidas ;
+    skos:hiddenLabel "comida rapida"@es ;
+    skos:hiddenLabel "hamburguesas"@es ;
+    skos:hiddenLabel "perros calientes"@es ;
+    skos:hiddenLabel "empanadas"@es ;
+    skos:hiddenLabel "arepas"@es ;
+    skos:hiddenLabel "fritos"@es ;
+    skos:hiddenLabel "salchipapas"@es ;
+    skos:hiddenLabel "chorizos"@es ;
+    skos:hiddenLabel "pinchos"@es ;
+    skos:hiddenLabel "COMIDAS RAPIDAS"@es .
+
+# Subcategoria: Frutas y Verduras
+vocab:frutas-verduras a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Frutas y verduras"@es ;
+    skos:altLabel "Fruver"@es ;
+    skos:notation "frutas_verduras" ;
+    skos:definition "Venta de frutas frescas, verduras, hortalizas y productos de la huerta"@es ;
+    skos:broader vocab:alimentos-bebidas ;
+    skos:hiddenLabel "frutas"@es ;
+    skos:hiddenLabel "verduras"@es ;
+    skos:hiddenLabel "fruver"@es ;
+    skos:hiddenLabel "plaza de mercado"@es ;
+    skos:hiddenLabel "mangos"@es ;
+    skos:hiddenLabel "naranjas"@es ;
+    skos:hiddenLabel "aguacates"@es ;
+    skos:hiddenLabel "tomates"@es ;
+    skos:hiddenLabel "FRUTAS Y VERDURAS"@es .
+
+# Subcategoria: Bebidas
+vocab:bebidas a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Bebidas"@es ;
+    skos:notation "bebidas" ;
+    skos:definition "Venta de bebidas preparadas o envasadas: jugos, tintos, aromáticas, refrescos"@es ;
+    skos:broader vocab:alimentos-bebidas ;
+    skos:hiddenLabel "jugos"@es ;
+    skos:hiddenLabel "tintos"@es ;
+    skos:hiddenLabel "cafe"@es ;
+    skos:hiddenLabel "aromaticas"@es ;
+    skos:hiddenLabel "refrescos"@es ;
+    skos:hiddenLabel "gaseosas"@es ;
+    skos:hiddenLabel "agua"@es ;
+    skos:hiddenLabel "BEBIDAS"@es .
+
+# Subcategoria: Dulces y Confiteria
+vocab:dulces-confiteria a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Dulces y confiteria"@es ;
+    skos:altLabel "Dulces"@es ;
+    skos:altLabel "Confiteria"@es ;
+    skos:notation "dulces_confiteria" ;
+    skos:definition "Venta de dulces, confites, chocolates, chicles y productos de confiteria"@es ;
+    skos:broader vocab:alimentos-bebidas ;
+    skos:hiddenLabel "dulces"@es ;
+    skos:hiddenLabel "confiteria"@es ;
+    skos:hiddenLabel "chocolates"@es ;
+    skos:hiddenLabel "chicles"@es ;
+    skos:hiddenLabel "bombones"@es ;
+    skos:hiddenLabel "mentas"@es ;
+    skos:hiddenLabel "DULCES"@es .
+
+# Subcategoria: Panaderia
+vocab:panaderia a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Panaderia"@es ;
+    skos:notation "panaderia" ;
+    skos:definition "Venta de productos de panaderia y reposteria: pan, pasteles, galletas"@es ;
+    skos:broader vocab:alimentos-bebidas ;
+    skos:hiddenLabel "pan"@es ;
+    skos:hiddenLabel "pasteles"@es ;
+    skos:hiddenLabel "galletas"@es ;
+    skos:hiddenLabel "ponques"@es ;
+    skos:hiddenLabel "PANADERIA"@es .
+
+# Subcategoria: Helados
+vocab:helados a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Helados"@es ;
+    skos:notation "helados" ;
+    skos:definition "Venta de helados, paletas y productos congelados"@es ;
+    skos:broader vocab:alimentos-bebidas ;
+    skos:hiddenLabel "helados"@es ;
+    skos:hiddenLabel "paletas"@es ;
+    skos:hiddenLabel "cremas"@es ;
+    skos:hiddenLabel "HELADOS"@es .
+
+# =============================================================================
+# CATEGORIA PRINCIPAL: Variedades
+# =============================================================================
+
+vocab:variedades a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Variedades"@es ;
+    skos:prefLabel "Miscellaneous goods"@en ;
+    skos:altLabel "Miscelanea"@es ;
+    skos:altLabel "Varios"@es ;
+    skos:notation "variedades" ;
+    skos:definition "Miscelanea de productos no alimenticios de uso personal y domestico"@es ;
+    skos:topConceptOf vocab:tipologia-venta ;
+    skos:narrower
+        vocab:ropa-calzado ,
+        vocab:accesorios-bisuteria ,
+        vocab:tecnologia-electronica ,
+        vocab:articulos-hogar ,
+        vocab:juguetes ,
+        vocab:cosmeticos-belleza .
+
+# Subcategoria: Ropa y Calzado
+vocab:ropa-calzado a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Ropa y calzado"@es ;
+    skos:notation "ropa_calzado" ;
+    skos:definition "Venta de prendas de vestir, calzado y accesorios de moda"@es ;
+    skos:broader vocab:variedades ;
+    skos:hiddenLabel "ropa"@es ;
+    skos:hiddenLabel "calzado"@es ;
+    skos:hiddenLabel "zapatos"@es ;
+    skos:hiddenLabel "camisetas"@es ;
+    skos:hiddenLabel "pantalones"@es ;
+    skos:hiddenLabel "medias"@es ;
+    skos:hiddenLabel "tenis"@es ;
+    skos:hiddenLabel "ROPA"@es ;
+    skos:hiddenLabel "ROPA Y CALZADO"@es .
+
+# Subcategoria: Accesorios y Bisuteria
+vocab:accesorios-bisuteria a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Accesorios y bisuteria"@es ;
+    skos:notation "accesorios_bisuteria" ;
+    skos:definition "Venta de accesorios personales, bisuteria, bolsos, correas, gafas"@es ;
+    skos:broader vocab:variedades ;
+    skos:hiddenLabel "accesorios"@es ;
+    skos:hiddenLabel "bisuteria"@es ;
+    skos:hiddenLabel "bolsos"@es ;
+    skos:hiddenLabel "correas"@es ;
+    skos:hiddenLabel "gafas"@es ;
+    skos:hiddenLabel "aretes"@es ;
+    skos:hiddenLabel "cadenas"@es ;
+    skos:hiddenLabel "manillas"@es ;
+    skos:hiddenLabel "ACCESORIOS"@es .
+
+# Subcategoria: Tecnologia y Electronica
+vocab:tecnologia-electronica a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Tecnologia y electronica"@es ;
+    skos:notation "tecnologia_electronica" ;
+    skos:definition "Venta de articulos electronicos, accesorios de celular, audifonos, cargadores"@es ;
+    skos:broader vocab:variedades ;
+    skos:hiddenLabel "tecnologia"@es ;
+    skos:hiddenLabel "electronica"@es ;
+    skos:hiddenLabel "celulares"@es ;
+    skos:hiddenLabel "audifonos"@es ;
+    skos:hiddenLabel "cargadores"@es ;
+    skos:hiddenLabel "pilas"@es ;
+    skos:hiddenLabel "cables"@es ;
+    skos:hiddenLabel "TECNOLOGIA"@es .
+
+# Subcategoria: Articulos del Hogar
+vocab:articulos-hogar a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Articulos del hogar"@es ;
+    skos:notation "articulos_hogar" ;
+    skos:definition "Venta de utensilios domesticos, plasticos, aseo, decoracion"@es ;
+    skos:broader vocab:variedades ;
+    skos:hiddenLabel "hogar"@es ;
+    skos:hiddenLabel "plasticos"@es ;
+    skos:hiddenLabel "aseo"@es ;
+    skos:hiddenLabel "utensilios"@es ;
+    skos:hiddenLabel "cocina"@es ;
+    skos:hiddenLabel "HOGAR"@es .
+
+# Subcategoria: Juguetes
+vocab:juguetes a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Juguetes"@es ;
+    skos:notation "juguetes" ;
+    skos:definition "Venta de juguetes, articulos infantiles y recreativos"@es ;
+    skos:broader vocab:variedades ;
+    skos:hiddenLabel "juguetes"@es ;
+    skos:hiddenLabel "munecas"@es ;
+    skos:hiddenLabel "carros"@es ;
+    skos:hiddenLabel "pelotas"@es ;
+    skos:hiddenLabel "JUGUETES"@es .
+
+# Subcategoria: Cosmeticos y Belleza
+vocab:cosmeticos-belleza a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Cosmeticos y belleza"@es ;
+    skos:notation "cosmeticos_belleza" ;
+    skos:definition "Venta de productos cosmeticos, maquillaje, perfumes, cuidado personal"@es ;
+    skos:broader vocab:variedades ;
+    skos:hiddenLabel "cosmeticos"@es ;
+    skos:hiddenLabel "belleza"@es ;
+    skos:hiddenLabel "maquillaje"@es ;
+    skos:hiddenLabel "perfumes"@es ;
+    skos:hiddenLabel "cremas"@es ;
+    skos:hiddenLabel "COSMETICOS"@es .
+
+# =============================================================================
+# CATEGORIA PRINCIPAL: Servicios
+# =============================================================================
+
+vocab:servicios a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Servicios"@es ;
+    skos:prefLabel "Services"@en ;
+    skos:notation "servicios" ;
+    skos:definition "Prestacion de servicios personales y comerciales en espacio publico"@es ;
+    skos:topConceptOf vocab:tipologia-venta ;
+    skos:narrower
+        vocab:reparaciones ,
+        vocab:servicios-personales ,
+        vocab:fotografia ,
+        vocab:lustrado-calzado .
+
+# Subcategoria: Reparaciones
+vocab:reparaciones a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Reparaciones"@es ;
+    skos:notation "reparaciones" ;
+    skos:definition "Servicios de reparacion de articulos: celulares, relojes, calzado, electrodomesticos"@es ;
+    skos:broader vocab:servicios ;
+    skos:hiddenLabel "reparaciones"@es ;
+    skos:hiddenLabel "arreglos"@es ;
+    skos:hiddenLabel "reparacion celulares"@es ;
+    skos:hiddenLabel "relojeria"@es ;
+    skos:hiddenLabel "remontadora"@es ;
+    skos:hiddenLabel "REPARACIONES"@es .
+
+# Subcategoria: Servicios Personales
+vocab:servicios-personales a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Servicios personales"@es ;
+    skos:notation "servicios_personales" ;
+    skos:definition "Servicios de cuidado personal: peluqueria, manicure, masajes"@es ;
+    skos:broader vocab:servicios ;
+    skos:hiddenLabel "peluqueria"@es ;
+    skos:hiddenLabel "manicure"@es ;
+    skos:hiddenLabel "masajes"@es ;
+    skos:hiddenLabel "corte de pelo"@es ;
+    skos:hiddenLabel "SERVICIOS PERSONALES"@es .
+
+# Subcategoria: Fotografia
+vocab:fotografia a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Fotografia"@es ;
+    skos:notation "fotografia" ;
+    skos:definition "Servicios de fotografia instantanea y retrato"@es ;
+    skos:broader vocab:servicios ;
+    skos:hiddenLabel "fotografia"@es ;
+    skos:hiddenLabel "fotos"@es ;
+    skos:hiddenLabel "fotografo"@es ;
+    skos:hiddenLabel "FOTOGRAFIA"@es .
+
+# Subcategoria: Lustrado de Calzado
+vocab:lustrado-calzado a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Lustrado de calzado"@es ;
+    skos:altLabel "Embolador"@es ;
+    skos:notation "lustrado_calzado" ;
+    skos:definition "Servicios de limpieza y lustrado de calzado"@es ;
+    skos:broader vocab:servicios ;
+    skos:hiddenLabel "lustrado"@es ;
+    skos:hiddenLabel "embolador"@es ;
+    skos:hiddenLabel "limpiabotas"@es ;
+    skos:hiddenLabel "LUSTRADO"@es .
+
+# =============================================================================
+# CATEGORIA PRINCIPAL: Artesanias y Manualidades
+# =============================================================================
+
+vocab:artesanias-manualidades a skos:Concept ;
+    skos:inScheme vocab:tipologia-venta ;
+    skos:prefLabel "Artesanias y manualidades"@es ;
+    skos:prefLabel "Handicrafts"@en ;
+    skos:altLabel "Artesanias"@es ;
+    skos:altLabel "Manualidades"@es ;
+    skos:notation "artesanias_manualidades" ;
+    skos:definition "Venta de productos artesanales y hechos a mano"@es ;
+    skos:topConceptOf vocab:tipologia-venta ;
+    skos:hiddenLabel "artesanias"@es ;
+    skos:hiddenLabel "manualidades"@es ;
+    skos:hiddenLabel "hechos a mano"@es ;
+    skos:hiddenLabel "artesanal"@es ;
+    skos:hiddenLabel "indigena"@es ;
+    skos:hiddenLabel "etnico"@es ;
+    skos:hiddenLabel "ARTESANIAS"@es .

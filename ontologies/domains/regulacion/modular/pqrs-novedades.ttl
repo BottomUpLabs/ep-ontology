@@ -1,0 +1,515 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# Ontologia Modular: PQRS y Novedades de Vendedores Regulados
+# =============================================================================
+# Fecha creacion: 2026-01-07
+# Descripcion: Define solicitudes PQRS (Peticiones, Quejas, Reclamos, Sugerencias)
+#              relacionadas con novedades administrativas que afectan el estado de
+#              vendedores regulados: fallecimiento, cambio de titular, suspension.
+#              Basado en diagrama 'Ciclo de Vida - Candidato de Autorizacion'.
+
+<https://w3id.org/medellin/espacio-publico/regulacion/pqrs-novedades> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/regulacion/pqrs-novedades/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/institutional-core-entities> ;
+    dcterms:title "Espacio Publico - PQRS y Novedades"@es ;
+    dcterms:description """Ontologia que define tramites PQRS para gestionar novedades 
+    administrativas de vendedores regulados, incluyendo fallecimiento, cesion de permisos 
+    y suspensiones temporales. Implementa transiciones de estado del Decision Point 'Novedad'.
+    Extiende core:SolicitudPQRS, core:Tramite y core:Resolucion."""@es ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-01-07"^^xsd:date ;
+    dcterms:source "Diagrama: Ciclo de Vida - Candidato de Autorizacion (Decision Point 'Novedad')" ;
+    owl:versionInfo "0.1.0" .
+    # Nota: Este modulo se importa via regulacion-imports.ttl que incluye todas las dependencias core
+
+
+
+# =============================================================================
+# ESPECIALIZACION DE SolicitudPQRS PARA REGULACION DE VENDEDORES
+# =============================================================================
+# La clase abstracta core:SolicitudPQRS se especializa aqui para el dominio
+# de regulacion de vendedores informales.
+
+:SolicitudPQRSVendedor a owl:Class ;
+    rdfs:subClassOf core:SolicitudPQRS ;
+    rdfs:label "Solicitud PQRS de Vendedor"@es ;
+    rdfs:label "Vendor PQRS Request"@en ;
+    skos:prefLabel "Solicitud de Novedad de Vendedor Regulado"@es ;
+    skos:altLabel "PQRS de Vendedor"@es ;
+    skos:altLabel "Novedad Administrativa de Vendedor"@es ;
+    skos:definition """Especializacion de SolicitudPQRS para el dominio de vendedores
+    informales. Agrupa las novedades administrativas que afectan el estado de
+    vendedores regulados: fallecimiento, cesion de permisos, suspensiones.
+    Genera numeroRadicado para seguimiento y puede resultar en modificaciones
+    al estado del vendedor regulado o su autorizacion."""@es ;
+    skos:scopeNote """Tipos de PQRS de vendedores:
+    - NovedadFallecimiento: Notifica deceso del titular (requiere certificado de defuncion)
+    - NovedadCambioTitular: Solicita cesion del permiso a familiar o tercero autorizado
+    - NovedadSuspension: Solicita suspension temporal por enfermedad, amenazas, etc.
+    - NovedadCancelacion: Titular solicita cancelar voluntariamente su autorizacion
+    - NovedadReubicacion: Solicita traslado por obra publica o amenaza documentada
+    
+    Basado en diagrama 'Ciclo de Vida - Candidato de Autorizacion' (Decision Point 'Novedad').
+    Estas solicitudes modifican el estado del VendedorInformalRegulado."""@es ;
+    skos:example "PQRS RAD-2025-00456 - NovedadFallecimiento de titular con radicado de certificado defuncion"@es ;
+    dcterms:source "Proceso PR-GGOL-012 - Gestion de novedades de vendedores regulados" ;
+    dcterms:source "Ley 1755 de 2015 - Derecho de peticion" ;
+    dcterms:source "Diagrama: Ciclo de Vida - Decision Point 'Novedad'" .
+
+# =============================================================================
+# CLASE: NovedadFallecimiento
+# =============================================================================
+
+:NovedadFallecimiento a owl:Class ;
+    rdfs:label "Novedad por Fallecimiento"@es ;
+    rdfs:label "Death Notification"@en ;
+    rdfs:subClassOf core:Novedad ;
+    skos:prefLabel "Novedad de Fallecimiento de Titular"@es ;
+    skos:altLabel "Notificacion de deceso"@es ;
+    skos:altLabel "Fallecimiento de vendedor"@es ;
+    skos:definition """Solicitud PQRS presentada por familiar, tercero o entidad que notifica
+    el fallecimiento del titular de un PermisoOcupacion vigente. Desencadena proceso de
+    verificacion documental (certificado de defuncion) y evaluacion de cesion a beneficiarios
+    elegibles (conyugue, hijo mayor de edad, conviviente acreditado)."""@es ;
+    skos:scopeNote """Flujo NovedadFallecimiento (basado en diagrama 'Persona Fallece'):
+    
+    FASE 1 - RADICACION:
+    1. Familiar/tercero radica PQRS con certificado de defuncion
+    2. Sistema asigna :numeroRadicado (ej: RAD-2025-00456)
+    3. NovedadFallecimiento → estado: 'radicado'
+    4. VendedorInformalRegulado → transita a estado: 'fallece' (TRIGGER AUTOMATICO)
+    
+    FASE 2 - VERIFICACION:
+    5. Equipo juridico verifica:
+       - Certificado de defuncion vigente (Registraduria)
+       - Identidad del solicitante (parentesco acreditado)
+       - Estado del PermisoOcupacion (vigente/vencido)
+       - Obligaciones pendientes (deudas con entidad)
+    6. NovedadFallecimiento → estado: 'en_verificacion_documental'
+    
+    FASE 3 - EVALUACION DE CESION:
+    7a. Si HAY BENEFICIARIO ELEGIBLE (conyugue/hijo/conviviente):
+        - Se evalua viabilidad de cesion (ConceptoTecnico)
+        - Beneficiario debe cumplir requisitos (caracterizacion previa, sin permisos activos)
+        - NovedadFallecimiento → estado: 'en_evaluacion_cesion'
+    7b. Si NO HAY BENEFICIARIO o beneficiario NO CUMPLE requisitos:
+        - Se procede a terminacion definitiva del permiso
+        - NovedadFallecimiento → estado: 'resuelto_desfavorable'
+    
+    FASE 4 - DECISION:
+    8a. Si CESION APROBADA:
+        - NovedadFallecimiento → estado: 'resuelto_favorable_cesion'
+        - EVENTO: CesionPermisoFallecimiento (genera nuevo PermisoOcupacion para beneficiario)
+        - VendedorInformalRegulado (fallecido) → estado: 'fallecido' (TERMINAL)
+        - NUEVO VendedorInformalRegulado (beneficiario) → estado: 'activo'
+        - Se emite nueva Resolucion y nuevo Carne
+    8b. Si CESION NEGADA o SIN BENEFICIARIO:
+        - NovedadFallecimiento → estado: 'resuelto_desfavorable_sin_cesion'
+        - PermisoOcupacion → estado: 'revocado'
+        - VendedorInformalRegulado → estado: 'fallecido' (TERMINAL)
+        - Modulo asignado → retorna a inventario disponible
+    
+    REQUISITOS CESION:
+    - Beneficiario debe ser: conyugue, hijo mayor de edad, o conviviente >5 anos
+    - Beneficiario debe estar caracterizado (FO-GGOL-048 completo)
+    - Sin permisos vigentes en otro punto
+    - Sin antecedentes de revocatorias
+    - Cumplir obligaciones pendientes del titular fallecido
+    
+    IMPACTO EN ENTIDADES:
+    - VendedorInformalRegulado (titular) → 'fallecido'
+    - PermisoOcupacion (original) → 'revocado'
+    - Carne (original) → 'destruido_con_trazabilidad'
+    - Modulo → 'recuperado' o 'reasignado' (segun decision)
+    
+    Duracion promedio: 30-60 dias calendario."""@es ;
+    skos:example "NovedadFallecimiento RAD-2025-00456: Deceso Juan Perez, beneficiario: hijo mayor de edad"@es ;
+    dcterms:source "Proceso PR-GGOL-012 - Novedades de regulados" ;
+    dcterms:source "Diagrama: 'Persona Fallece' (Decision Point 'Novedad')" ;
+    dcterms:source "concepts/regulated/novedades_regulados.md" .
+
+# =============================================================================
+# CLASE: NovedadCambioTitular
+# =============================================================================
+
+:NovedadCambioTitular a owl:Class ;
+    rdfs:label "Novedad de Cambio de Titular"@es ;
+    rdfs:label "Title Change Request"@en ;
+    rdfs:subClassOf core:Novedad ;
+    skos:prefLabel "Novedad de Cambio de Titular"@es ;
+    skos:altLabel "Cesion de permiso"@es ;
+    skos:altLabel "Cambio de titular"@es ;
+    skos:altLabel "Traspaso de autorizacion"@es ;
+    skos:definition """Solicitud PQRS presentada por el titular vigente de un PermisoOcupacion
+    que solicita cesion voluntaria del permiso a un familiar directo o conviviente acreditado.
+    Requiere consentimiento expreso del titular actual y evaluacion de elegibilidad del
+    beneficiario propuesto."""@es ;
+    skos:scopeNote """Flujo NovedadCambioTitular (basado en diagrama 'Persona Cambia de Titular'):
+    
+    FASE 1 - RADICACION:
+    1. Titular actual radica PQRS solicitando cesion voluntaria
+    2. Documentos requeridos:
+       - Formulario de cesion (FO-GGOL-XXX)
+       - Cedula titular actual y beneficiario propuesto
+       - Certificado de parentesco (registro civil, matrimonio, convivencia)
+       - Caracterizacion del beneficiario (FO-GGOL-048)
+       - Paz y salvo de obligaciones del titular actual
+    3. Sistema asigna :numeroRadicado
+    4. NovedadCambioTitular → estado: 'radicado'
+    5. VendedorInformalRegulado → transita a estado: 'cambia_titular'
+    
+    FASE 2 - VERIFICACION:
+    6. Equipo juridico verifica:
+       - Consentimiento expreso del titular actual
+       - Parentesco acreditado (conyugue, hijo, conviviente >5 anos)
+       - PermisoOcupacion vigente y sin suspensiones
+       - Paz y salvo de obligaciones (sin deudas)
+       - Beneficiario caracterizado y elegible
+    7. NovedadCambioTitular → estado: 'en_verificacion_documental'
+    
+    FASE 3 - EVALUACION DE ELEGIBILIDAD BENEFICIARIO:
+    8. ConceptoTecnico evalua beneficiario propuesto:
+       - Sin permisos vigentes en otro punto
+       - Sin antecedentes de revocatorias
+       - Cumple criterios de vulnerabilidad (Acuerdo 076/2014)
+       - Capacidad para operar el modulo (edad, salud)
+    9. NovedadCambioTitular → estado: 'en_evaluacion_elegibilidad'
+    
+    FASE 4 - DECISION:
+    10a. Si CESION APROBADA:
+        - NovedadCambioTitular → estado: 'resuelto_favorable_cesion_aprobada'
+        - EVENTO: CesionPermisoVoluntaria
+        - VendedorInformalRegulado (titular actual) → estado: 'cancelado' (TERMINAL)
+        - PermisoOcupacion (original) → estado: 'revocado'
+        - NUEVO PermisoOcupacion → emitido para beneficiario
+        - NUEVO VendedorInformalRegulado (beneficiario) → estado: 'activo'
+        - Se emite nueva Resolucion y nuevo Carne
+        - Modulo mantiene asignacion continua (sin retorno a inventario)
+    10b. Si CESION NEGADA:
+        - NovedadCambioTitular → estado: 'resuelto_desfavorable_cesion_negada'
+        - VendedorInformalRegulado → retorna a estado: 'activo'
+        - PermisoOcupacion → mantiene estado: 'activo'
+        - Se notifica causales de negacion al titular
+    
+    CAUSALES DE NEGACION:
+    - Beneficiario no cumple parentesco requerido
+    - Beneficiario tiene permiso vigente en otro punto
+    - Beneficiario con antecedentes de revocatoria
+    - Titular actual con obligaciones pendientes
+    - Permiso suspendido o con proceso sancionatorio abierto
+    
+    IMPACTO EN ENTIDADES (si aprobado):
+    - VendedorInformalRegulado (titular actual) → 'cancelado'
+    - PermisoOcupacion (original) → 'revocado'
+    - Carne (original) → 'destruido_con_trazabilidad'
+    - Modulo → 'reasignado' (sin cambio de ubicacion)
+    - NUEVO VendedorInformalRegulado (beneficiario) → 'activo'
+    - NUEVO PermisoOcupacion → 'activo'
+    - NUEVO Carne → 'entregado_con_constancia'
+    
+    Duracion promedio: 45-90 dias calendario."""@es ;
+    skos:example "NovedadCambioTitular RAD-2025-00789: Maria Lopez cede permiso a su hijo Carlos Lopez"@es ;
+    dcterms:source "Proceso PR-GGOL-012 - Novedades de regulados" ;
+    dcterms:source "Diagrama: 'Persona Cambia de Titular' (Decision Point 'Novedad')" ;
+    dcterms:source "concepts/regulated/novedades_regulados.md" .
+
+# =============================================================================
+# CLASE: NovedadSuspension
+# =============================================================================
+
+:NovedadSuspension a owl:Class ;
+    rdfs:label "Novedad de Suspension"@es ;
+    rdfs:label "Suspension Request"@en ;
+    rdfs:subClassOf core:Novedad ;
+    skos:prefLabel "Novedad de Suspension Temporal"@es ;
+    skos:altLabel "Solicitud de suspension"@es ;
+    skos:altLabel "Suspension temporal del permiso"@es ;
+    skos:definition """Solicitud PQRS presentada por el titular de un PermisoOcupacion
+    solicitando suspension temporal de la autorizacion por causales justificadas: enfermedad
+    grave, amenazas documentadas, desplazamiento temporal, calamidad domestica, o atencion
+    a dependientes en situacion critica. La suspension NO termina el permiso, pero pausa
+    temporalmente las obligaciones y el uso del modulo."""@es ;
+    skos:scopeNote """Flujo NovedadSuspension (inferido de Decision Point 'Novedad' - estado 'suspendido'):
+    
+    FASE 1 - RADICACION:
+    1. Titular radica PQRS solicitando suspension temporal
+    2. Documentos requeridos segun causal:
+       - Enfermedad: certificado medico de incapacidad >30 dias
+       - Amenaza: denuncia ante Fiscalia o Policia
+       - Desplazamiento: certificado RUV o entidad competente
+       - Calamidad domestica: certificado de defuncion, hospitalizacion, etc.
+    3. Sistema asigna :numeroRadicado
+    4. NovedadSuspension → estado: 'radicado'
+    5. VendedorInformalRegulado → transita a estado: 'suspendido' (PROVISIONAL)
+    
+    FASE 2 - VERIFICACION:
+    6. Equipo juridico/social verifica:
+       - Validez de documentos soporte
+       - Vigencia del PermisoOcupacion
+       - Ausencia de procesos sancionatorios abiertos
+       - Paz y salvo de obligaciones (puede tener deudas menores)
+    7. NovedadSuspension → estado: 'en_verificacion_documental'
+    
+    FASE 3 - EVALUACION TECNICA:
+    8. ConceptoTecnico evalua:
+       - Pertinencia de la causal invocada
+       - Duracion solicitada de suspension (maximo 6 meses)
+       - Viabilidad de retomar actividad posterior
+       - Impacto en cupos disponibles (si modulo queda inactivo)
+    9. NovedadSuspension → estado: 'en_evaluacion_tecnica'
+    
+    FASE 4 - DECISION:
+    10a. Si SUSPENSION APROBADA:
+        - NovedadSuspension → estado: 'resuelto_favorable_suspension_aprobada'
+        - VendedorInformalRegulado → estado: 'suspendido' (CONFIRMADO)
+        - PermisoOcupacion → estado: 'suspendido'
+        - Modulo → estado: 'en_mantenimiento' o 'retirado_temporalmente'
+        - Carne → estado: 'vencido' (debe renovarse al reactivar)
+        - Se define plazo de suspension (30-180 dias)
+        - Se suspenden cobros de ocupacion durante suspension
+    10b. Si SUSPENSION NEGADA:
+        - NovedadSuspension → estado: 'resuelto_desfavorable_suspension_negada'
+        - VendedorInformalRegulado → retorna a estado: 'activo'
+        - Se notifican causales de negacion
+    
+    FASE 5 - REACTIVACION (PROCESO POSTERIOR):
+    11. Al vencer plazo de suspension:
+        - Titular solicita reactivacion (nuevo tramite o automatico)
+        - Se verifica resolucion de causal original
+        - Si procede: VendedorInformalRegulado → retorna a 'activo'
+        - PermisoOcupacion → retorna a 'activo'
+        - Se emite nuevo Carne
+    
+    CAUSALES DE NEGACION:
+    - Causal no justificada o insuficiente documentacion
+    - Proceso sancionatorio abierto contra el titular
+    - Suspension solicitada excede plazo maximo (6 meses)
+    - Solicitudes reiteradas sin resolucion de causa
+    - Deudas significativas pendientes
+    
+    IMPACTO EN ENTIDADES (si aprobado):
+    - VendedorInformalRegulado → 'suspendido'
+    - PermisoOcupacion → 'suspendido'
+    - Carne → 'vencido'
+    - Modulo → 'retirado_temporalmente' o 'en_mantenimiento'
+    - Cobros de ocupacion → SUSPENDIDOS durante periodo
+    
+    NOTA: La suspension NO es sancion, es medida de proteccion temporal.
+    
+    Duracion promedio tramite: 15-30 dias calendario.
+    Duracion suspension: 30-180 dias segun causal."""@es ;
+    skos:example "NovedadSuspension RAD-2025-00123: Suspension por enfermedad grave (90 dias)"@es ;
+    dcterms:source "Proceso PR-GGOL-012 - Novedades de regulados" ;
+    dcterms:source "Diagrama: Decision Point 'Novedad' (estado 'suspendido')" ;
+    dcterms:source "concepts/regulated/novedades_regulados.md" .
+
+
+
+# =============================================================================
+# PROPIEDADES DE DATOS: NovedadFallecimiento
+# =============================================================================
+
+:certificadoDefuncionNumero a owl:DatatypeProperty ;
+    rdfs:label "numero de certificado de defuncion"@es ;
+    rdfs:domain :NovedadFallecimiento ;
+    rdfs:range xsd:string ;
+    skos:definition "Numero del certificado de defuncion expedido por Registraduria"@es .
+
+:fechaDefuncion a owl:DatatypeProperty ;
+    rdfs:label "fecha de defuncion"@es ;
+    rdfs:domain :NovedadFallecimiento ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha del deceso del titular segun certificado oficial"@es .
+
+:lugarDefuncion a owl:DatatypeProperty ;
+    rdfs:label "lugar de defuncion"@es ;
+    rdfs:domain :NovedadFallecimiento ;
+    rdfs:range xsd:string ;
+    skos:definition "Municipio y departamento del deceso"@es .
+
+:beneficiarioNombre a owl:DatatypeProperty ;
+    rdfs:label "nombre del beneficiario"@es ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf ( :NovedadFallecimiento :NovedadCambioTitular )
+    ] ;
+    rdfs:range xsd:string ;
+    skos:definition "Nombre completo del beneficiario propuesto para cesion"@es .
+
+:beneficiarioDocumento a owl:DatatypeProperty ;
+    rdfs:label "documento del beneficiario"@es ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf ( :NovedadFallecimiento :NovedadCambioTitular )
+    ] ;
+    rdfs:range xsd:string ;
+    skos:definition "Numero de cedula del beneficiario"@es .
+
+:parentescoBeneficiario a owl:DatatypeProperty ;
+    rdfs:label "parentesco del beneficiario"@es ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf ( :NovedadFallecimiento :NovedadCambioTitular )
+    ] ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo de parentesco del beneficiario con titular"@es ;
+    skos:scopeNote "Valores: conyugue, hijo, hija, conviviente, padre, madre"@es .
+
+:certificadoParentesco a owl:DatatypeProperty ;
+    rdfs:label "certificado de parentesco"@es ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf ( :NovedadFallecimiento :NovedadCambioTitular )
+    ] ;
+    rdfs:range xsd:string ;
+    skos:definition "Numero del certificado que acredita parentesco (registro civil, matrimonio)"@es .
+
+:cesionAprobada a owl:DatatypeProperty ;
+    rdfs:label "cesion aprobada"@es ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf ( :NovedadFallecimiento :NovedadCambioTitular )
+    ] ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la cesion fue aprobada (true) o negada (false)"@es .
+
+:fechaDecisionCesion a owl:DatatypeProperty ;
+    rdfs:label "fecha de decision de cesion"@es ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf ( :NovedadFallecimiento :NovedadCambioTitular )
+    ] ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha en que se decidio sobre la cesion"@es .
+
+:motivoNegacionCesion a owl:DatatypeProperty ;
+    rdfs:label "motivo de negacion de cesion"@es ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf ( :NovedadFallecimiento :NovedadCambioTitular )
+    ] ;
+    rdfs:range xsd:string ;
+    skos:definition "Justificacion legal/tecnica de la negacion de cesion"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: NovedadCambioTitular
+# =============================================================================
+
+:consentimientoTitular a owl:DatatypeProperty ;
+    rdfs:label "consentimiento del titular"@es ;
+    rdfs:domain :NovedadCambioTitular ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si el titular actual consintio expresamente la cesion"@es .
+
+:fechaConsentimiento a owl:DatatypeProperty ;
+    rdfs:label "fecha de consentimiento"@es ;
+    rdfs:domain :NovedadCambioTitular ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha en que titular firmo consentimiento de cesion"@es .
+
+:motivoCesionVoluntaria a owl:DatatypeProperty ;
+    rdfs:label "motivo de cesion voluntaria"@es ;
+    rdfs:domain :NovedadCambioTitular ;
+    rdfs:range xsd:string ;
+    skos:definition "Razon por la cual titular desea ceder el permiso"@es ;
+    skos:example "Edad avanzada, Cambio de actividad economica, Traslado de ciudad"@es .
+
+:pazSalvoTitular a owl:DatatypeProperty ;
+    rdfs:label "paz y salvo del titular"@es ;
+    rdfs:domain :NovedadCambioTitular ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si titular esta al dia con obligaciones (true) o tiene deudas (false)"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: NovedadSuspension
+# =============================================================================
+
+:causalSuspension a owl:DatatypeProperty ;
+    rdfs:label "causal de suspension"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:string ;
+    skos:definition "Causa especifica que justifica la solicitud de suspension"@es ;
+    skos:scopeNote "Valores: enfermedad_grave, amenaza_documentada, desplazamiento_temporal, calamidad_domestica, atencion_dependiente"@es .
+
+:duracionSuspensionSolicitada a owl:DatatypeProperty ;
+    rdfs:label "duracion de suspension solicitada"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:integer ;
+    skos:definition "Numero de dias de suspension solicitados por el titular"@es ;
+    skos:scopeNote "Rango: 30-180 dias (maximo 6 meses)"@es .
+
+:documentoSoporteCausal a owl:DatatypeProperty ;
+    rdfs:label "documento soporte de causal"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:string ;
+    skos:definition "Numero o identificacion del documento que acredita la causal"@es ;
+    skos:example "Certificado medico No. 12345, Denuncia Fiscalia No. 67890"@es .
+
+:suspensionAprobada a owl:DatatypeProperty ;
+    rdfs:label "suspension aprobada"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la suspension fue aprobada (true) o negada (false)"@es .
+
+:fechaInicioSuspension a owl:DatatypeProperty ;
+    rdfs:label "fecha de inicio de suspension"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha en que inicia la suspension del permiso"@es .
+
+:fechaFinSuspension a owl:DatatypeProperty ;
+    rdfs:label "fecha de fin de suspension"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha programada de finalizacion de la suspension"@es .
+
+:duracionSuspensionAprobada a owl:DatatypeProperty ;
+    rdfs:label "duracion de suspension aprobada"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:integer ;
+    skos:definition "Numero de dias de suspension aprobados por la entidad"@es .
+
+:reactivacionSolicitada a owl:DatatypeProperty ;
+    rdfs:label "reactivacion solicitada"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si titular ha solicitado reactivacion antes de vencimiento"@es .
+
+:fechaSolicitudReactivacion a owl:DatatypeProperty ;
+    rdfs:label "fecha de solicitud de reactivacion"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha en que titular solicita reactivar permiso suspendido"@es .
+
+:reactivacionAprobada a owl:DatatypeProperty ;
+    rdfs:label "reactivacion aprobada"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la reactivacion fue aprobada (true) o negada (false)"@es .
+
+:fechaReactivacion a owl:DatatypeProperty ;
+    rdfs:label "fecha de reactivacion"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha efectiva de reactivacion del permiso"@es .
+
+:motivoNegacionSuspension a owl:DatatypeProperty ;
+    rdfs:label "motivo de negacion de suspension"@es ;
+    rdfs:domain :NovedadSuspension ;
+    rdfs:range xsd:string ;
+    skos:definition "Justificacion de la negacion de la solicitud de suspension"@es .

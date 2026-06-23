@@ -1,0 +1,299 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vocab: <https://w3id.org/medellin/espacio-publico/vocab/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# =============================================================================
+# VOCABULARIO CONTROLADO: Estado del Vendedor Informal
+# =============================================================================
+# Vocabulario SKOS que define los estados del ciclo de vida institucional
+# del vendedor informal. Incluye sinonimos (hiddenLabel) para limpieza de datos.
+# Reemplaza la tabla a2_listas.estado_vendedor_v1 del DMP.
+# =============================================================================
+
+vocab:estado-vendedor a skos:ConceptScheme ;
+    owl:versionInfo "0.1.0" ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Estado de Regulacion del Vendedor Informal"@es ;
+    dcterms:title "Informal Vendor Regulation Status"@en ;
+    dcterms:description """Vocabulario controlado para los estados del ciclo de vida
+    institucional del vendedor informal en Medellin. Define estados desde la
+    identificacion inicial hasta estados terminales como regulado, revocado o reubicado.
+    Incluye sinonimos para normalizacion automatica de datos sucios."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:created "2026-01-06"^^xsd:date ;
+    dcterms:modified "2026-01-06"^^xsd:date ;
+    dcterms:source "Acuerdo 076 de 2014 - Politica Publica de Vendedores Informales" ;
+    dcterms:source "Proceso PR-GGOL-019 - Autorizacion de ocupacion" ;
+    prov:wasDerivedFrom <duckdb:///warehouses/raw_catalog.db#a2_listas.estado_vendedor_v1> ;
+    skos:hasTopConcept
+        vocab:identificado-territorio ,
+        vocab:caracterizado-socialmente ,
+        vocab:solicitante-regulacion ,
+        vocab:regulado-activo ,
+        vocab:regulado-suspendido ,
+        vocab:revocado ,
+        vocab:reubicado ,
+        vocab:fallecido .
+
+# =============================================================================
+# CONCEPTO: Identificado en Territorio
+# =============================================================================
+
+vocab:identificado-territorio a skos:Concept ;
+    skos:inScheme vocab:estado-vendedor ;
+    skos:prefLabel "Identificado en territorio"@es ;
+    skos:prefLabel "Identified in territory"@en ;
+    skos:altLabel "Identificado"@es ;
+    skos:altLabel "En territorio"@es ;
+    skos:notation "identificado_territorio" ;
+    skos:definition """Vendedor detectado en operacion mediante recorridos de campo,
+    reportes ciudadanos o registros de operativos. Sin caracterizacion socioeconomica
+    formal. Estado inicial del proceso de regulacion."""@es ;
+    skos:scopeNote "Estado inicial. Permite transicion a 'caracterizado_socialmente'."@es ;
+    skos:historyNote "Creado como estado inicial del proceso segun Acuerdo 076/2014"@es ;
+    # Sinonimos para limpieza de datos (hiddenLabel)
+    skos:hiddenLabel "identificado"@es ;
+    skos:hiddenLabel "en territorio"@es ;
+    skos:hiddenLabel "sin caracterizar"@es ;
+    skos:hiddenLabel "detectado"@es ;
+    skos:hiddenLabel "nuevo"@es ;
+    skos:hiddenLabel "por caracterizar"@es ;
+    skos:hiddenLabel "pendiente caracterizacion"@es ;
+    skos:hiddenLabel "identificado en campo"@es ;
+    skos:hiddenLabel "IDENTIFICADO"@es ;
+    skos:hiddenLabel "IDENTIFICADO EN TERRITORIO"@es .
+
+# =============================================================================
+# CONCEPTO: Caracterizado Socialmente
+# =============================================================================
+
+vocab:caracterizado-socialmente a skos:Concept ;
+    skos:inScheme vocab:estado-vendedor ;
+    skos:prefLabel "Caracterizado socialmente"@es ;
+    skos:prefLabel "Socially characterized"@en ;
+    skos:altLabel "Caracterizado"@es ;
+    skos:altLabel "Con censo"@es ;
+    skos:altLabel "Con caracterizacion"@es ;
+    skos:notation "caracterizado_socialmente" ;
+    skos:definition """Vendedor con formulario FO-GGOL-048 de caracterizacion diligenciado
+    completamente. Incluye datos personales, familiares, socioeconomicos y de ubicacion.
+    Datos validados mediante cruce interinstitucional."""@es ;
+    skos:scopeNote "Permite transicion a 'solicitante_regulacion' o vinculacion a programas."@es ;
+    skos:broader vocab:identificado-territorio ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "caracterizado"@es ;
+    skos:hiddenLabel "con caracterizacion"@es ;
+    skos:hiddenLabel "censado"@es ;
+    skos:hiddenLabel "con censo"@es ;
+    skos:hiddenLabel "fo-ggol-048 completo"@es ;
+    skos:hiddenLabel "encuestado"@es ;
+    skos:hiddenLabel "registrado"@es ;
+    skos:hiddenLabel "con encuesta"@es ;
+    skos:hiddenLabel "caracterizacion completa"@es ;
+    skos:hiddenLabel "CARACTERIZADO"@es ;
+    skos:hiddenLabel "CARACTERIZADO SOCIALMENTE"@es .
+
+# =============================================================================
+# CONCEPTO: Solicitante de Regulacion
+# =============================================================================
+
+vocab:solicitante-regulacion a skos:Concept ;
+    skos:inScheme vocab:estado-vendedor ;
+    skos:prefLabel "Solicitante de regulacion"@es ;
+    skos:prefLabel "Regulation applicant"@en ;
+    skos:altLabel "Solicitante"@es ;
+    skos:altLabel "En tramite"@es ;
+    skos:altLabel "Aspirante"@es ;
+    skos:notation "solicitante_regulacion" ;
+    skos:definition """Vendedor caracterizado que ha radicado solicitud formal de
+    autorizacion temporal de ocupacion del espacio publico (formulario FO-GGOL-026).
+    En proceso de verificacion, visitas domiciliarias y evaluacion."""@es ;
+    skos:scopeNote "Permite transicion a 'regulado_activo', 'negado' o 'desistido'."@es ;
+    skos:broader vocab:caracterizado-socialmente ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "solicitante"@es ;
+    skos:hiddenLabel "en tramite"@es ;
+    skos:hiddenLabel "aspirante"@es ;
+    skos:hiddenLabel "tramite en curso"@es ;
+    skos:hiddenLabel "en proceso"@es ;
+    skos:hiddenLabel "pendiente aprobacion"@es ;
+    skos:hiddenLabel "radicado"@es ;
+    skos:hiddenLabel "con radicado"@es ;
+    skos:hiddenLabel "en evaluacion"@es ;
+    skos:hiddenLabel "SOLICITANTE"@es ;
+    skos:hiddenLabel "EN TRAMITE"@es .
+
+# =============================================================================
+# CONCEPTO: Regulado Activo
+# =============================================================================
+
+vocab:regulado-activo a skos:Concept ;
+    skos:inScheme vocab:estado-vendedor ;
+    skos:prefLabel "Regulado activo"@es ;
+    skos:prefLabel "Active regulated"@en ;
+    skos:altLabel "Autorizado"@es ;
+    skos:altLabel "Vigente"@es ;
+    skos:altLabel "Con permiso"@es ;
+    skos:notation "regulado_activo" ;
+    skos:definition """Vendedor con autorizacion vigente de ocupacion del espacio publico.
+    Tiene resolucion notificada, carne vigente, opera en ubicacion asignada (modulo o
+    punto autorizado) y cumple obligaciones establecidas."""@es ;
+    skos:scopeNote "Permite transicion a 'suspendido', 'revocado', 'vencido' o 'reubicado'."@es ;
+    skos:broader vocab:solicitante-regulacion ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "regulado"@es ;
+    skos:hiddenLabel "autorizado"@es ;
+    skos:hiddenLabel "activo"@es ;
+    skos:hiddenLabel "con autorizacion"@es ;
+    skos:hiddenLabel "vigente"@es ;
+    skos:hiddenLabel "con permiso"@es ;
+    skos:hiddenLabel "aprobado"@es ;
+    skos:hiddenLabel "con resolucion"@es ;
+    skos:hiddenLabel "modulo asignado"@es ;
+    skos:hiddenLabel "con modulo"@es ;
+    skos:hiddenLabel "REGULADO"@es ;
+    skos:hiddenLabel "REGULADO ACTIVO"@es ;
+    skos:hiddenLabel "AUTORIZADO"@es .
+
+# =============================================================================
+# CONCEPTO: Regulado Suspendido
+# =============================================================================
+
+vocab:regulado-suspendido a skos:Concept ;
+    skos:inScheme vocab:estado-vendedor ;
+    skos:prefLabel "Regulado suspendido"@es ;
+    skos:prefLabel "Suspended regulated"@en ;
+    skos:altLabel "Suspendido"@es ;
+    skos:altLabel "Con suspension"@es ;
+    skos:notation "regulado_suspendido" ;
+    skos:definition """Vendedor con autorizacion temporalmente suspendida por incumplimiento
+    de obligaciones, quejas de la comunidad, obras en la zona u otras causales.
+    Puede reactivarse tras subsanar las causas de suspension."""@es ;
+    skos:scopeNote "Permite transicion a 'regulado_activo' (reactivacion) o 'revocado'."@es ;
+    skos:related vocab:regulado-activo ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "suspendido"@es ;
+    skos:hiddenLabel "con suspension"@es ;
+    skos:hiddenLabel "suspension temporal"@es ;
+    skos:hiddenLabel "inactivo temporal"@es ;
+    skos:hiddenLabel "en suspension"@es ;
+    skos:hiddenLabel "SUSPENDIDO"@es ;
+    skos:hiddenLabel "REGULADO SUSPENDIDO"@es .
+
+# =============================================================================
+# CONCEPTO: Revocado
+# =============================================================================
+
+vocab:revocado a skos:Concept ;
+    skos:inScheme vocab:estado-vendedor ;
+    skos:prefLabel "Revocado"@es ;
+    skos:prefLabel "Revoked"@en ;
+    skos:altLabel "Sin autorizacion"@es ;
+    skos:altLabel "Autorizacion revocada"@es ;
+    skos:notation "revocado" ;
+    skos:definition """Vendedor cuya autorizacion ha sido revocada definitivamente por
+    incumplimiento grave, falsedad en documentos, ocupacion de zonas no autorizadas,
+    conductas sancionables u otras causales establecidas en la normativa."""@es ;
+    skos:scopeNote "Estado terminal. Puede iniciar nuevo proceso tras periodo de carencia."@es ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "revocado"@es ;
+    skos:hiddenLabel "sin autorizacion"@es ;
+    skos:hiddenLabel "autorizacion revocada"@es ;
+    skos:hiddenLabel "cancelado"@es ;
+    skos:hiddenLabel "terminado"@es ;
+    skos:hiddenLabel "anulado"@es ;
+    skos:hiddenLabel "REVOCADO"@es .
+
+# =============================================================================
+# CONCEPTO: Reubicado
+# =============================================================================
+
+vocab:reubicado a skos:Concept ;
+    skos:inScheme vocab:estado-vendedor ;
+    skos:prefLabel "Reubicado"@es ;
+    skos:prefLabel "Relocated"@en ;
+    skos:altLabel "Con reubicacion"@es ;
+    skos:altLabel "Formalizado"@es ;
+    skos:notation "reubicado" ;
+    skos:definition """Vendedor que ha transitado desde la informalidad hacia una
+    alternativa economica formal o semiformal: local comercial, plaza de mercado,
+    emprendimiento formalizado, vinculacion laboral u otra salida productiva."""@es ;
+    skos:scopeNote "Estado terminal exitoso. Representa objetivo de politica publica."@es ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "reubicado"@es ;
+    skos:hiddenLabel "con reubicacion"@es ;
+    skos:hiddenLabel "formalizado"@es ;
+    skos:hiddenLabel "en plaza"@es ;
+    skos:hiddenLabel "con local"@es ;
+    skos:hiddenLabel "alternativa economica"@es ;
+    skos:hiddenLabel "reubicacion exitosa"@es ;
+    skos:hiddenLabel "REUBICADO"@es ;
+    skos:hiddenLabel "FORMALIZADO"@es .
+
+# =============================================================================
+# CONCEPTO: Fallecido
+# =============================================================================
+
+vocab:fallecido a skos:Concept ;
+    skos:inScheme vocab:estado-vendedor ;
+    skos:prefLabel "Fallecido"@es ;
+    skos:prefLabel "Deceased"@en ;
+    skos:notation "fallecido" ;
+    skos:definition """El vendedor ha fallecido. Estado terminal que cierra el rol
+    institucional. La autorizacion puede ser transferible a familiar beneficiario
+    segun lo establecido en la normativa vigente."""@es ;
+    skos:scopeNote "Estado terminal. Requiere certificado de defuncion."@es ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "fallecido"@es ;
+    skos:hiddenLabel "muerto"@es ;
+    skos:hiddenLabel "defuncion"@es ;
+    skos:hiddenLabel "FALLECIDO"@es .
+
+# =============================================================================
+# CONCEPTO: Negado (Estado alternativo)
+# =============================================================================
+
+vocab:negado a skos:Concept ;
+    skos:inScheme vocab:estado-vendedor ;
+    skos:prefLabel "Negado"@es ;
+    skos:prefLabel "Denied"@en ;
+    skos:altLabel "Solicitud negada"@es ;
+    skos:notation "negado" ;
+    skos:definition """Vendedor cuya solicitud de autorizacion fue negada por no
+    cumplir requisitos, no disponibilidad de espacio, u otras causales. Puede
+    volver a solicitar tras subsanar condiciones."""@es ;
+    skos:related vocab:solicitante-regulacion ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "negado"@es ;
+    skos:hiddenLabel "solicitud negada"@es ;
+    skos:hiddenLabel "rechazado"@es ;
+    skos:hiddenLabel "no aprobado"@es ;
+    skos:hiddenLabel "denegado"@es ;
+    skos:hiddenLabel "NEGADO"@es .
+
+# =============================================================================
+# CONCEPTO: Desistido (Estado alternativo)
+# =============================================================================
+
+vocab:desistido a skos:Concept ;
+    skos:inScheme vocab:estado-vendedor ;
+    skos:prefLabel "Desistido"@es ;
+    skos:prefLabel "Withdrawn"@en ;
+    skos:altLabel "Desistimiento"@es ;
+    skos:notation "desistido" ;
+    skos:definition """Vendedor que desistio voluntariamente de su solicitud de
+    autorizacion antes de la decision final. Puede volver a iniciar proceso."""@es ;
+    skos:related vocab:solicitante-regulacion ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "desistido"@es ;
+    skos:hiddenLabel "desistimiento"@es ;
+    skos:hiddenLabel "retiro voluntario"@es ;
+    skos:hiddenLabel "abandono"@es ;
+    skos:hiddenLabel "DESISTIDO"@es .

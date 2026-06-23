@@ -1,0 +1,617 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema: <http://schema.org/> .
+@prefix iso11179: <http://purl.org/iso11179/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# ONTOLOGIA: Lugar, PuestoVenta, Vivienda y Modulo - Espacio Publico
+# =============================================================================
+# Entidades ESPACIALES de primer orden. Separadas de entidades-primer-orden.ttl
+# (que importa) para que el lugar y sus especializaciones vivan en un modulo
+# dedicado, igual que PersonaNatural en core/persona-natural.ttl.
+#
+# Taxonomia:
+#   :Lugar            (clase abstracta padre; no se instancia directamente)
+#    +-- :PuestoVenta (rdfs:subClassOf :Lugar)  -- punto de venta del vendedor
+#    |    +-- :Modulo (rdfs:subClassOf :PuestoVenta) -- puesto con modulo fisico
+#    +-- :Vivienda    (rdfs:subClassOf :Lugar)  -- residencia
+#
+# :Lugar queda como clase ABSTRACTA: la ubicacion (direccion, barrio, comuna,
+# latitud, longitud, ...) se modela directamente sobre :PuestoVenta y :Vivienda
+# por herencia; no se instancian :Lugar "pelados".
+#
+# Direccion estructurada: la nomenclatura vial colombiana se descompone en
+# propiedades independientes (viaPrincipal*, viaSecundaria*, placaNumero,
+# direccionInterior, ...). Cada componente se anota con :componenteDe :direccionTexto;
+# :direccionTexto es DERIVADA por concatenacion de esos componentes (ver la regla
+# SHACL en shapes/core/direccion-concat-shapes.ttl, que la calcula con CONCAT).
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda/0.1.0> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/entidades-primer-orden> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:issued "2026-06-03"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Lugar, Puesto de Venta, Vivienda y Modulo"@es ;
+    dcterms:title "Public Space - Place, Sales Point, Dwelling and Module"@en ;
+    dcterms:description """Ontologia de las entidades espaciales de primer orden:
+    :Lugar (abstracta) y sus especializaciones :PuestoVenta (con :Modulo) y
+    :Vivienda. Define la ubicacion geografica, la nomenclatura vial estructurada
+    (con :direccionTexto derivada por concatenacion), y los atributos operativos
+    del puesto de venta y de la vivienda. Reutiliza :Negocio y las anotaciones de
+    ciclo de vida de core/entidades-primer-orden (importado)."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:created "2026-06-03"^^xsd:date ;
+    dcterms:modified "2026-06-03"^^xsd:date ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    owl:versionInfo "0.1.0" .
+
+# =============================================================================
+# PROPIEDADES DE METADATOS
+# =============================================================================
+
+:componenteDe a owl:AnnotationProperty ;
+    rdfs:label "componente de"@es ;
+    rdfs:comment """Indica que esta propiedad es un componente de una direccion
+    estructurada cuya concatenacion produce el valor de la propiedad objetivo
+    (tipicamente :direccionTexto)."""@es .
+
+:derivadaDe a owl:AnnotationProperty ;
+    rdfs:label "derivada de"@es ;
+    rdfs:comment """Indica que el valor de esta propiedad se obtiene (concatena o
+    calcula) a partir de otras propiedades; no es un dato capturado de forma
+    independiente."""@es .
+
+# =============================================================================
+# CLASE: Lugar (Entidad de Primer Orden - ABSTRACTA)
+# =============================================================================
+
+:Lugar a owl:Class ;
+    rdfs:label "Lugar"@es ;
+    rdfs:label "Place"@en ;
+    skos:prefLabel "Lugar"@es ;
+    skos:altLabel "Espacio Publico"@es ;
+    skos:altLabel "Ubicacion"@es ;
+    skos:definition """Ubicacion fisica en el territorio urbano. Clase ABSTRACTA:
+    no se instancia directamente; sus instancias son siempre un :PuestoVenta o una
+    :Vivienda. Su estado fundamental (existente/demolido, habilitado/en_obras) NO es
+    controlado por la Subsecretaria de Espacio Publico."""@es ;
+    skos:scopeNote """Reune los atributos de ubicacion comunes (direccion,
+    barrio, comuna, municipio, sector, territorio, latitud/longitud y la
+    nomenclatura vial estructurada) que heredan :PuestoVenta y :Vivienda."""@es ;
+    iso11179:objectClass "Espacio_Publico" ;
+    :tipoCicloVida "ciclo_vida_entidad" ;
+    :estadosCicloVida ("habilitado" "en_obras" "clausurado" "demolido") ;
+    :gestionadoPor "Ciudad (independiente de Espacio Publico)" .
+
+# =============================================================================
+# CLASE: PuestoVenta (Unidad Operativa de Venta) - subClassOf Lugar
+# =============================================================================
+
+:PuestoVenta a owl:Class ;
+    rdfs:label "Puesto de Venta"@es ;
+    rdfs:label "Sales Point"@en ;
+    rdfs:subClassOf :Lugar ;
+    skos:prefLabel "Puesto de Venta"@es ;
+    skos:altLabel "Punto de venta"@es ;
+    skos:definition """Unidad operativa donde un VendedorInformalRegulado ejerce su
+    actividad economica en el espacio publico. Representa la ocupacion autorizada
+    incluyendo dimensiones, actividad economica, horarios y equipamiento.
+
+    Es un :Lugar (hereda direccion, barrio, comuna, latitud, longitud): la ubicacion
+    geografica del puesto se modela directamente sobre el PuestoVenta, no sobre una
+    entidad :Lugar separada. :Lugar queda como clase abstracta padre de :PuestoVenta
+    y :Vivienda.
+
+    Incorpora ademas:
+    - Modulo (opcional): Infraestructura fisica asignada (subclase :Modulo)
+    - Actividad economica y tipologia
+    - Dimensiones y area de ocupacion"""@es ;
+    skos:scopeNote """Basado en seccion 'Puesto' del DMP regulacion_v1.
+    Un VendedorInformalRegulado tiene exactamente un PuestoVenta activo."""@es ;
+    iso11179:objectClass "Puesto_Venta" .
+
+# =============================================================================
+# CLASE: Modulo (Puesto de Venta con Modulo Fisico) - subClassOf PuestoVenta
+# =============================================================================
+# NOTA: clase distinta de regulacion#Modulo (el activo institucional con ciclo de
+# vida e inventario, en regulacion/infraestructura). Aqui :Modulo es la
+# especializacion estructural del puesto cuando opera sobre un modulo fisico, y
+# recoge los atributos de modulo capturados en los estandares (numero, placa,
+# tipo, material).
+
+:Modulo a owl:Class ;
+    rdfs:label "Puesto con Modulo"@es ;
+    rdfs:label "Module Sales Point"@en ;
+    rdfs:subClassOf :PuestoVenta ;
+    skos:prefLabel "Puesto con Modulo"@es ;
+    skos:definition """Puesto de venta que opera sobre un modulo fisico
+    (infraestructura). Especializa :PuestoVenta con los atributos del modulo
+    (numero, placa, tipo, material) tal como se capturan en los estandares
+    regulacion_v1, regulacion_fallecidos_v1 y regulados_cambio_titular_v1."""@es ;
+    skos:scopeNote """Distinta de regulacion#Modulo (el bien/activo institucional
+    con su propio ciclo de vida de inventario en regulacion/infraestructura). Aqui
+    el modulo se modela como faceta del puesto, no como activo gestionado."""@es ;
+    iso11179:objectClass "Modulo_Puesto" .
+
+# =============================================================================
+# CLASE: Vivienda (Residencia) - subClassOf Lugar
+# =============================================================================
+
+:Vivienda a owl:Class ;
+    rdfs:label "Vivienda"@es ;
+    rdfs:label "Dwelling"@en ;
+    rdfs:subClassOf :Lugar ;
+    skos:prefLabel "Vivienda"@es ;
+    skos:altLabel "Domicilio"@es ;
+    skos:altLabel "Residencia"@es ;
+    skos:definition """Lugar de residencia de una persona o familia. Relevante para
+    visitas domiciliarias, caracterizacion socioeconomica y evaluacion de condiciones
+    de vulnerabilidad. Su estado fisico no es controlado por la institucion.
+    Es un :Lugar (hereda direccion, barrio, comuna, municipio, latitud, longitud)."""@es ;
+    skos:scopeNote """Captura:
+    - Tipo de vivienda (casa, apartamento, cuarto, inquilinato)
+    - Tenencia (propia, arriendo, ocupante)
+    - Estrato socioeconomico
+    - Servicios publicos disponibles (acueducto, alcantarillado, energia, gas,
+      internet, telefono, recoleccion de basuras)
+    - Materiales (paredes, piso, techo)
+    - Condiciones de habitabilidad"""@es ;
+    iso11179:objectClass "Vivienda" ;
+    :tipoCicloVida "ciclo_vida_entidad" ;
+    :estadosCicloVida ("habitable" "en_riesgo" "destruida") ;
+    :gestionadoPor "Propietario/arrendatario (independiente)" .
+
+# =============================================================================
+# PROPIEDADES DE OBJETO (Object Properties)
+# =============================================================================
+
+:ubicadoEn a owl:ObjectProperty ;
+    rdfs:label "ubicado en"@es ;
+    rdfs:comment "Relaciona un negocio con el lugar donde opera"@es ;
+    rdfs:domain :Negocio ;
+    rdfs:range :Lugar ;
+    rdfs:subPropertyOf schema:location .
+
+:operaEnLugar a owl:ObjectProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range :Lugar ;
+    rdfs:label "opera en lugar"@es ;
+    skos:definition "Vincula el puesto de venta a su ubicacion geografica"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS - Lugar: ubicacion (heredadas por PuestoVenta y Vivienda)
+# =============================================================================
+
+:latitud a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "latitud"@es ;
+    rdfs:comment "Coordenada geografica latitud (grados decimales)"@es ;
+    rdfs:domain :Lugar ;
+    rdfs:range xsd:decimal ;
+    rdfs:subPropertyOf schema:latitude .
+
+:longitud a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "longitud"@es ;
+    rdfs:comment "Coordenada geografica longitud (grados decimales)"@es ;
+    rdfs:domain :Lugar ;
+    rdfs:range xsd:decimal ;
+    rdfs:subPropertyOf schema:longitude .
+
+:direccionTexto a owl:DatatypeProperty ;
+    rdfs:label "direccion texto"@es ;
+    rdfs:domain :Lugar ;
+    rdfs:range xsd:string ;
+    :derivadaDe :viaPrincipalTipo, :viaPrincipalNumero, :viaPrincipalLetra,
+        :viaPrincipalCardinal, :viaSecundariaTipo, :viaSecundariaNumero,
+        :viaSecundariaLetra, :viaSecundariaCardinal, :placaNumero,
+        :direccionInterior, :direccionComplemento ;
+    rdfs:comment """Direccion en formato textual. Es DERIVADA por concatenacion de
+    los componentes de nomenclatura vial cuando estos existen. Formato Colombia:
+    '<viaPrincipalTipo> <viaPrincipalNumero><viaPrincipalLetra> <viaPrincipalCardinal>
+    # <viaSecundariaNumero><viaSecundariaLetra> <viaSecundariaCardinal>
+    - <placaNumero> <direccionInterior> <direccionComplemento>'.
+    El calculo declarativo (CONCAT) vive en la regla SHACL
+    shapes/core/direccion-concat-shapes.ttl. Tambien puede traer el texto crudo de
+    la fuente cuando no hay descomposicion."""@es .
+
+:comunaNombre a owl:DatatypeProperty ;
+    rdfs:label "nombre de comuna"@es ;
+    rdfs:domain :Lugar ;
+    rdfs:range xsd:string ;
+    skos:definition "Comuna (lista controlada 'comuna' del contrato DMP)."@es .
+
+:barrioNombre a owl:DatatypeProperty ;
+    rdfs:label "nombre de barrio"@es ;
+    rdfs:domain :Lugar ;
+    rdfs:range xsd:string ;
+    skos:definition "Barrio (lista controlada 'barrio' del contrato DMP)."@es .
+
+:municipioNombre a owl:DatatypeProperty ;
+    rdfs:label "nombre de municipio"@es ;
+    rdfs:domain :Lugar ;
+    rdfs:range xsd:string ;
+    skos:definition "Municipio (lista controlada 'municipio'/'municipios' del DMP)."@es .
+
+:sectorNombre a owl:DatatypeProperty ;
+    rdfs:label "nombre de sector"@es ;
+    rdfs:domain :Lugar ;
+    rdfs:range xsd:string ;
+    skos:definition "Sector dentro del barrio o zona de venta."@es .
+
+:territorioCod a owl:DatatypeProperty ;
+    rdfs:label "codigo de territorio"@es ;
+    rdfs:domain :Lugar ;
+    rdfs:range xsd:string ;
+    skos:definition "Territorio operativo (lista controlada 'territorio': 01..16)."@es .
+
+:referenciaTexto a owl:DatatypeProperty ;
+    rdfs:label "punto de referencia"@es ;
+    rdfs:domain :Lugar ;
+    rdfs:range xsd:string ;
+    skos:definition "Punto de referencia en texto libre para ubicar el lugar."@es .
+
+:costadoCod a owl:DatatypeProperty ;
+    rdfs:label "costado"@es ;
+    rdfs:domain :Lugar ;
+    rdfs:range xsd:string ;
+    skos:definition "Costado/orientacion de la via (lista controlada 'orientacion')."@es .
+
+# --- Lugar: nomenclatura vial estructurada (componentes de :direccionTexto) ---
+
+:viaPrincipalTipo a owl:DatatypeProperty ;
+    rdfs:label "tipo via principal"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Tipo de via principal (Calle/Carrera/...; lista 'nomenclatura_vial')."@es .
+
+:viaPrincipalNumero a owl:DatatypeProperty ;
+    rdfs:label "numero via principal"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Numero de la via principal."@es .
+
+:viaPrincipalLetra a owl:DatatypeProperty ;
+    rdfs:label "letra via principal"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Letra de la via principal (lista 'tipo_via_letra')."@es .
+
+:viaPrincipalCardinal a owl:DatatypeProperty ;
+    rdfs:label "cardinal via principal"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Cardinalidad/orientacion de la via principal (lista 'orientacion')."@es .
+
+:viaSecundariaTipo a owl:DatatypeProperty ;
+    rdfs:label "tipo via secundaria"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Tipo de via generadora/secundaria o de cruce (lista 'nomenclatura_vial')."@es .
+
+:viaSecundariaNumero a owl:DatatypeProperty ;
+    rdfs:label "numero via secundaria"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Numero de la via generadora/secundaria o de cruce."@es .
+
+:viaSecundariaLetra a owl:DatatypeProperty ;
+    rdfs:label "letra via secundaria"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Letra de la via generadora/secundaria o de cruce."@es .
+
+:viaSecundariaCardinal a owl:DatatypeProperty ;
+    rdfs:label "cardinal via secundaria"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Cardinalidad/orientacion de la via generadora/secundaria o de cruce."@es .
+
+:placaNumero a owl:DatatypeProperty ;
+    rdfs:label "numero de placa"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Numero de placa (parte despues del guion) o numero complementario."@es .
+
+:direccionInterior a owl:DatatypeProperty ;
+    rdfs:label "interior de direccion"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Interior/apto/torre/local dentro de la direccion."@es .
+
+:direccionComplemento a owl:DatatypeProperty ;
+    rdfs:label "complemento de direccion"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Complemento de la direccion (texto adicional)."@es .
+
+:direccionUbicacion a owl:DatatypeProperty ;
+    rdfs:label "ubicacion de direccion"@es ;
+    rdfs:domain :Lugar ; rdfs:range xsd:string ;
+    :componenteDe :direccionTexto ;
+    skos:definition "Descriptor de ubicacion adicional capturado aparte de la direccion."@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS - PuestoVenta
+# =============================================================================
+
+:puestoActividadEconomica a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "actividad economica"@es ;
+    skos:definition "Actividad economica principal del puesto (ej: frutas, alimentos preparados)"@es .
+
+:puestoActividadDetalle a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "detalle de actividad economica"@es ;
+    skos:definition "Descripcion/tipologia detallada de los productos o servicios vendidos"@es .
+
+:puestoClaseVenta a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "clase de venta"@es ;
+    skos:definition "Clasificacion del tipo de venta (ambulante, estacionario, semiestacionario; lista 'clase_venta')"@es .
+
+:puestoTipologia a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipologia del puesto"@es ;
+    skos:definition "Tipologia estructural del puesto de venta (lista 'tipologia_original')"@es .
+
+:puestoHorario a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "horario de venta"@es ;
+    skos:definition "Horario autorizado de operacion (ej: 6am-6pm)"@es .
+
+:puestoArea a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "area de ocupacion"@es ;
+    skos:definition "Area en metros cuadrados autorizada para ocupacion"@es .
+
+:puestoDimensionFrente a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "dimension frente"@es ;
+    skos:definition "Dimension del frente del puesto en metros"@es .
+
+:puestoDimensionFondo a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "dimension fondo"@es ;
+    skos:definition "Dimension del fondo del puesto en metros"@es .
+
+:puestoDimensionAlto a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "dimension alto"@es ;
+    skos:definition "Dimension del alto del puesto en metros"@es .
+
+:puestoAmoblamientoClase a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "clase de amoblamiento"@es ;
+    skos:definition "Tipo/clase de amoblamiento o equipamiento del puesto"@es .
+
+:amoblamientoPropietario a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "propietario del amoblamiento"@es ;
+    skos:definition "Propiedad/tenencia del amoblamiento (propio del vendedor o institucional)"@es .
+
+:puestoAmoblamientoMaterial a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "material del amoblamiento"@es ;
+    skos:definition "Material del amoblamiento (lista 'material_amueblamiento')"@es .
+
+:puestoAmoblamientoCubierta a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "cubierta del amoblamiento"@es ;
+    skos:definition "Tipo de cubierta del amoblamiento (lista 'cubierta')"@es .
+
+:puestoAmoblamientoEstado a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "estado del amoblamiento"@es ;
+    skos:definition "Estado/condicion del amoblamiento (lista 'estado')"@es .
+
+:puestoAmoblamientoPlaca a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "placa/serial del amoblamiento"@es ;
+    skos:definition "Numero de placa o serial del amoblamiento"@es .
+
+:puestoServicioAgua a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "servicio de agua del puesto"@es ;
+    skos:definition "Disponibilidad/tipo de servicio de agua en el sitio del puesto"@es .
+
+:puestoServicioAlcantarillado a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "servicio de alcantarillado del puesto"@es ;
+    skos:definition "Disponibilidad de alcantarillado en el sitio del puesto"@es .
+
+:puestoServicioEnergia a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "servicio de energia del puesto"@es ;
+    skos:definition "Disponibilidad/tipo de servicio de energia (luz) en el sitio del puesto"@es .
+
+:puestoServicioGas a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "servicio de gas del puesto"@es ;
+    skos:definition "Disponibilidad/tipo de servicio de gas en el sitio del puesto"@es .
+
+:puestoServiciosPublicos a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "servicios publicos del puesto"@es ;
+    skos:definition "Indicador/listado de servicios publicos del sitio (lista 'servicio_publico')"@es .
+
+:puestoServicioPipeta a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "uso de pipeta de gas"@es ;
+    skos:definition "Indica si el puesto usa pipeta de gas"@es .
+
+:puestoServicioPipetaCapacidad a owl:DatatypeProperty ;
+    rdfs:domain :PuestoVenta ;
+    rdfs:range xsd:string ;
+    rdfs:label "capacidad de la pipeta"@es ;
+    skos:definition "Capacidad de la pipeta de gas (ej: maximo 20 libras)"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS - Modulo
+# =============================================================================
+
+:moduloNumero a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "numero de modulo"@es ;
+    skos:definition "Numero identificador del modulo fisico del puesto"@es .
+
+:moduloPlaca a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "placa de modulo"@es ;
+    skos:definition "Placa del modulo fisico del puesto"@es .
+
+:moduloTipo a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipo de modulo"@es ;
+    skos:definition "Tipo de modulo fisico (lista 'tipo_modulo')"@es .
+
+:moduloMaterial a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "material de modulo"@es ;
+    skos:definition "Material del modulo fisico (lista 'material_pared')"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS - Vivienda
+# =============================================================================
+
+:tipoVivienda a owl:DatatypeProperty ;
+    rdfs:label "tipo de vivienda"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo de vivienda (lista 'tipo_vivienda')"@es .
+
+:tenenciaVivienda a owl:DatatypeProperty ;
+    rdfs:label "tenencia de vivienda"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:string ;
+    skos:definition "Tenencia de la vivienda (lista 'tenencia_vivienda')"@es .
+
+:estratoSocioeconomico a owl:DatatypeProperty ;
+    rdfs:label "estrato socioeconomico"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:integer .
+
+# --- Vivienda: servicios. Se conservan AMBAS representaciones por servicio:
+#     el indicador booleano (tiene*) y el valor TIPADO (*Tipo) que trae la fuente
+#     (listas tipo_acueducto / tipo_conexion_* / servicio_publico). El booleano se
+#     deriva del tipo (existe conexion <-> distinto de 'sin'/'ninguno').
+
+:tieneAcueducto a owl:DatatypeProperty ;
+    rdfs:label "tiene acueducto"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:boolean ;
+    :derivadaDe :acueductoTipo ;
+    skos:definition "Indicador booleano de acueducto; derivable de :acueductoTipo."@es .
+
+:acueductoTipo a owl:DatatypeProperty ;
+    rdfs:label "tipo de acueducto"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo/condicion de acueducto (lista 'tipo_acueducto': veredal, irregular, prepago, postpago, sin)."@es .
+
+:tieneAlcantarillado a owl:DatatypeProperty ;
+    rdfs:label "tiene alcantarillado"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:boolean ;
+    :derivadaDe :alcantarilladoTipo ;
+    skos:definition "Indicador booleano de alcantarillado; derivable de :alcantarilladoTipo."@es .
+
+:alcantarilladoTipo a owl:DatatypeProperty ;
+    rdfs:label "tipo de alcantarillado"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo de conexion de alcantarillado (lista 'tipo_conexion_alcantarillado')."@es .
+
+:tieneEnergia a owl:DatatypeProperty ;
+    rdfs:label "tiene energia"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:boolean ;
+    :derivadaDe :energiaTipo ;
+    skos:definition "Indicador booleano de energia; derivable de :energiaTipo."@es .
+
+:energiaTipo a owl:DatatypeProperty ;
+    rdfs:label "tipo de energia"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo de conexion de energia (lista 'tipo_conexion_energia')."@es .
+
+:tieneGas a owl:DatatypeProperty ;
+    rdfs:label "tiene gas"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:boolean ;
+    :derivadaDe :gasTipo ;
+    skos:definition "Indicador booleano de gas; derivable de :gasTipo."@es .
+
+:gasTipo a owl:DatatypeProperty ;
+    rdfs:label "tipo de gas"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo de conexion de gas (lista 'tipo_conexion_gas': natural, propano/pipeta, sin)."@es .
+
+:tieneInternet a owl:DatatypeProperty ;
+    rdfs:label "tiene internet"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la vivienda tiene internet domiciliario"@es .
+
+:tieneRecoleccionBasuras a owl:DatatypeProperty ;
+    rdfs:label "tiene recoleccion de basuras"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la vivienda cuenta con recoleccion de basuras"@es .
+
+:tieneTelefonoFijo a owl:DatatypeProperty ;
+    rdfs:label "tiene telefono fijo"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la vivienda cuenta con telefonia fija"@es .
+
+:materialParedes a owl:DatatypeProperty ;
+    rdfs:label "material de paredes"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:string ;
+    skos:definition "Material de las paredes (lista 'material_pared'; puede ser multivaluado)"@es .
+
+:materialPiso a owl:DatatypeProperty ;
+    rdfs:label "material de piso"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:string ;
+    skos:definition "Material del piso (lista 'material_piso'; puede ser multivaluado)"@es .
+
+:materialTecho a owl:DatatypeProperty ;
+    rdfs:label "material de techo"@es ;
+    rdfs:domain :Vivienda ;
+    rdfs:range xsd:string ;
+    skos:definition "Material del techo (lista 'material_techo'; puede ser multivaluado)"@es .

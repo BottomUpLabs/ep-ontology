@@ -1,0 +1,801 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix : <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix shp: <https://w3id.org/medellin/espacio-publico/shapes/vendedor#> .
+@prefix role: <https://w3id.org/medellin/espacio-publico/roles#> .
+@prefix vocab: <https://w3id.org/medellin/espacio-publico/vocab/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# Shared SPARQL prefix declarations for sh:sparql constraints in this file.
+<https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> a sh:Declarable ;
+    sh:declare [ sh:prefix "core" ; sh:namespace "https://w3id.org/medellin/espacio-publico/core#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "role" ; sh:namespace "https://w3id.org/medellin/espacio-publico/roles#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "reg" ; sh:namespace "https://w3id.org/medellin/espacio-publico/regulacion#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "ctrl" ; sh:namespace "https://w3id.org/medellin/espacio-publico/control#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "vocab" ; sh:namespace "https://w3id.org/medellin/espacio-publico/vocab/"^^xsd:anyURI ] .
+
+
+# =============================================================================
+# SHACL SHAPES: Validacion de Datos del Vendedor Informal
+# =============================================================================
+# Restricciones de validacion para datos del programa de vendedores informales.
+# Reemplaza la validacion basada en a3_formatos del DMP.
+# Ejecutar con pyshacl o integrar en pipeline dbt.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/shapes/vendedor> a owl:Ontology ;
+    dcterms:title "Espacio Publico - SHACL Shapes del Vendedor Informal"@es ;
+    dcterms:description "Restricciones SHACL de validacion basica de datos del vendedor informal (identificador, estado, fechas, persona base, tipologia)."@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    vann:preferredNamespacePrefix "shp" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/shapes/vendedor#" ;
+    owl:versionInfo "0.1.0" ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/shapes/vendedor/0.1.0> .
+
+# =============================================================================
+# SHAPE: Vendedor Informal (Rol Institucional)
+# =============================================================================
+
+role:VendedorInformalShape a sh:NodeShape ;
+    sh:targetClass role:VendedorInformal ;
+    rdfs:label "Shape de Validacion - Vendedor Informal"@es ;
+    dcterms:description "Restricciones de validacion para el rol de vendedor informal"@es ;
+
+    # --- Identificador del Vendedor ---
+    sh:property [
+        sh:path :vendedorId ;
+        sh:name "ID de Vendedor"@es ;
+        sh:description "Identificador unico asignado por el sistema"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^VEN-[0-9]{6}$" ;
+        sh:message "vendedor_id debe tener formato VEN-XXXXXX (ej: VEN-123456)"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Estado de Regulacion ---
+    sh:property [
+        sh:path :vendedorEstadoCod ;
+        sh:name "Codigo de Estado"@es ;
+        sh:description "Estado actual en el ciclo de vida institucional"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in (
+            "identificado_territorio"
+            "caracterizado_socialmente"
+            "solicitante_regulacion"
+            "regulado_activo"
+            "regulado_suspendido"
+            "revocado"
+            "reubicado"
+            "fallecido"
+            "negado"
+            "desistido"
+        ) ;
+        sh:message "vendedor_estado_cod debe ser un valor del vocabulario estado-vendedor"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Fecha Inicio Estado ---
+    sh:property [
+        sh:path :vendedorFechaInicioEstado ;
+        sh:name "Fecha Inicio Estado"@es ;
+        sh:description "Fecha en que el vendedor entro al estado actual"@es ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:lessThanOrEquals :vendedorFechaFinEstado ;
+        sh:message "Fecha inicio debe ser anterior o igual a fecha fin"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Fecha Fin Estado (opcional) ---
+    sh:property [
+        sh:path :vendedorFechaFinEstado ;
+        sh:name "Fecha Fin Estado"@es ;
+        sh:description "Fecha en que el vendedor salio del estado (null si es estado actual)"@es ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Referencia a Persona Base ---
+    sh:property [
+        sh:path role:basadoEn ;
+        sh:name "Basado en Persona"@es ;
+        sh:description "Referencia a la entidad Persona base"@es ;
+        sh:class :Persona ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Vendedor debe estar basado en exactamente una Persona"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Tipologia de Venta ---
+    sh:property [
+        sh:path :tipologiaVentaCod ;
+        sh:name "Tipologia de Venta"@es ;
+        sh:description "Categoria principal del producto o servicio vendido"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:in (
+            "alimentos_bebidas"
+            "frutas_verduras"
+            "comidas_rapidas"
+            "bebidas"
+            "dulces_snacks"
+            "variedades"
+            "ropa_calzado"
+            "accesorios"
+            "electronica"
+            "servicios"
+            "reparaciones"
+            "belleza"
+            "artesanias_manualidades"
+        ) ;
+        sh:message "tipologia_venta_cod debe ser un valor del vocabulario tipologia-venta"@es ;
+        sh:severity sh:Warning
+    ] .
+
+# =============================================================================
+# SHAPE: Persona (Entidad Base)
+# =============================================================================
+
+:PersonaShape a sh:NodeShape ;
+    sh:targetClass :Persona ;
+    rdfs:label "Shape de Validacion - Persona"@es ;
+    dcterms:description "Restricciones de validacion para la entidad Persona"@es ;
+
+    # --- Tipo de Documento ---
+    sh:property [
+        sh:path :documentoTipo ;
+        sh:name "Tipo de Documento"@es ;
+        sh:description "Codigo del tipo de documento de identidad"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in (
+            "CC"
+            "CE"
+            "TI"
+            "PA"
+            "PEP"
+            "PPT"
+            "NIT"
+            "RC"
+            "NUIP"
+        ) ;
+        sh:message "tipo_documento_cod debe ser CC, CE, TI, PA, PEP, PPT, NIT, RC o NUIP"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Numero de Documento ---
+    sh:property [
+        sh:path :documentoNumero ;
+        sh:name "Numero de Documento"@es ;
+        sh:description "Numero del documento de identidad"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[0-9A-Za-z]{5,15}$" ;
+        sh:message "Numero de documento debe tener 5-15 caracteres alfanumericos"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Nombre Completo ---
+    sh:property [
+        sh:path :nombreCompleto ;
+        sh:name "Nombre Completo"@es ;
+        sh:description "Nombre completo de la persona"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minLength 3 ;
+        sh:maxLength 200 ;
+        sh:message "Nombre completo debe tener entre 3 y 200 caracteres"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Primer Nombre ---
+    sh:property [
+        sh:path :nombre1 ;
+        sh:name "Primer Nombre"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minLength 2 ;
+        sh:maxLength 50 ;
+        sh:pattern "^[A-Za-zÀ-ÿ\\s]+$" ;
+        sh:message "Primer nombre solo debe contener letras (2-50 caracteres)"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Primer Apellido ---
+    sh:property [
+        sh:path :apellido1 ;
+        sh:name "Primer Apellido"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minLength 2 ;
+        sh:maxLength 50 ;
+        sh:pattern "^[A-Za-zÀ-ÿ\\s]+$" ;
+        sh:message "Primer apellido solo debe contener letras (2-50 caracteres)"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Fecha de Nacimiento ---
+    sh:property [
+        sh:path :fechaNacimiento ;
+        sh:name "Fecha de Nacimiento"@es ;
+        sh:datatype xsd:date ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:message "Fecha de nacimiento debe ser una fecha valida"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Edad ---
+    sh:property [
+        sh:path :edad ;
+        sh:name "Edad"@es ;
+        sh:description "Edad en anos al momento del registro"@es ;
+        sh:datatype xsd:integer ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 120 ;
+        sh:message "Edad debe estar entre 0 y 120 anos"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Sexo ---
+    sh:property [
+        sh:path :sexo ;
+        sh:name "Sexo"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:in ("M" "F" "I" "NB") ;
+        sh:message "Sexo debe ser M (Masculino), F (Femenino), I (Intersexual) o NB (No Binario)"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Telefono ---
+    sh:property [
+        sh:path :telefonoFijo ;
+        sh:name "Telefono"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[0-9]{7,10}$" ;
+        sh:message "Telefono debe tener 7-10 digitos"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Celular ---
+    sh:property [
+        sh:path :celular ;
+        sh:name "Celular"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:pattern "^3[0-9]{9}$" ;
+        sh:message "Celular debe ser un numero de 10 digitos comenzando por 3"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Correo Electronico ---
+    sh:property [
+        sh:path :correoElectronico ;
+        sh:name "Correo Electronico"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" ;
+        sh:message "Correo electronico debe tener formato valido (ejemplo@dominio.com)"@es ;
+        sh:severity sh:Warning
+    ] .
+
+# =============================================================================
+# SHAPE: Lugar (Ubicacion de Venta)
+# =============================================================================
+
+:LugarShape a sh:NodeShape ;
+    sh:targetClass :Lugar ;
+    rdfs:label "Shape de Validacion - Lugar"@es ;
+    dcterms:description "Restricciones de validacion para ubicaciones de venta"@es ;
+
+    # --- Direccion ---
+    sh:property [
+        sh:path :lugarDireccion ;
+        sh:name "Direccion"@es ;
+        sh:description "Direccion completa de la ubicacion"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minLength 5 ;
+        sh:maxLength 200 ;
+        sh:message "Direccion debe tener entre 5 y 200 caracteres"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Barrio ---
+    sh:property [
+        sh:path :lugarBarrio ;
+        sh:name "Barrio"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minLength 2 ;
+        sh:maxLength 100 ;
+        sh:message "Barrio debe tener entre 2 y 100 caracteres"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Comuna ---
+    sh:property [
+        sh:path :lugarComunaNumero ;
+        sh:name "Numero de Comuna"@es ;
+        sh:description "Numero de comuna de Medellin (1-16) o corregimiento (50-90)"@es ;
+        sh:datatype xsd:integer ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:or (
+            [ sh:minInclusive 1 ; sh:maxInclusive 16 ]
+            [ sh:minInclusive 50 ; sh:maxInclusive 90 ]
+        ) ;
+        sh:message "Comuna debe ser 1-16 (urbana) o 50-90 (corregimiento)"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Latitud ---
+    sh:property [
+        sh:path :lugarLatitudDecimal ;
+        sh:name "Latitud"@es ;
+        sh:description "Coordenada de latitud en grados decimales"@es ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 6.1 ;
+        sh:maxInclusive 6.4 ;
+        sh:message "Latitud debe estar entre 6.1 y 6.4 (rango Medellin)"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Longitud ---
+    sh:property [
+        sh:path :lugarLongitudDecimal ;
+        sh:name "Longitud"@es ;
+        sh:description "Coordenada de longitud en grados decimales"@es ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive -75.7 ;
+        sh:maxInclusive -75.4 ;
+        sh:message "Longitud debe estar entre -75.7 y -75.4 (rango Medellin)"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Validacion Cruzada: Coordenadas ---
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Si hay latitud, debe haber longitud (y viceversa)"@es ;
+        sh:severity sh:Warning ;
+        sh:select """
+            PREFIX : <https://w3id.org/medellin/espacio-publico/core#>
+            SELECT $this
+            WHERE {
+                $this a :Lugar .
+                {
+                    $this :lugarLatitudDecimal ?lat .
+                    FILTER NOT EXISTS { $this :lugarLongitudDecimal ?lon }
+                } UNION {
+                    $this :lugarLongitudDecimal ?lon .
+                    FILTER NOT EXISTS { $this :lugarLatitudDecimal ?lat }
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Negocio (Unidad Economica)
+# =============================================================================
+
+:NegocioShape a sh:NodeShape ;
+    sh:targetClass :Negocio ;
+    rdfs:label "Shape de Validacion - Negocio"@es ;
+    dcterms:description "Restricciones de validacion para unidades economicas informales"@es ;
+
+    # --- Nombre del Negocio ---
+    sh:property [
+        sh:path :negocioNombre ;
+        sh:name "Nombre del Negocio"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minLength 2 ;
+        sh:maxLength 100 ;
+        sh:message "Nombre del negocio debe tener entre 2 y 100 caracteres"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Antiguedad en Anos ---
+    sh:property [
+        sh:path :negocioAntiguedadAnos ;
+        sh:name "Antiguedad en Anos"@es ;
+        sh:description "Anos de operacion del negocio"@es ;
+        sh:datatype xsd:integer ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 80 ;
+        sh:message "Antiguedad debe estar entre 0 y 80 anos"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Dias de Trabajo por Semana ---
+    sh:property [
+        sh:path :negocioDiasTrabajo ;
+        sh:name "Dias de Trabajo por Semana"@es ;
+        sh:datatype xsd:integer ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 7 ;
+        sh:message "Dias de trabajo debe estar entre 1 y 7"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Horas de Trabajo por Dia ---
+    sh:property [
+        sh:path :negocioHorasTrabajo ;
+        sh:name "Horas de Trabajo por Dia"@es ;
+        sh:datatype xsd:integer ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 24 ;
+        sh:message "Horas de trabajo debe estar entre 1 y 24"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Ingresos Mensuales ---
+    sh:property [
+        sh:path :negocioIngresosMensuales ;
+        sh:name "Ingresos Mensuales"@es ;
+        sh:description "Ingresos mensuales aproximados en pesos colombianos"@es ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:message "Ingresos mensuales no pueden ser negativos"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Operado Por ---
+    sh:property [
+        sh:path :operadoPor ;
+        sh:name "Operado Por"@es ;
+        sh:description "Persona que opera el negocio"@es ;
+        sh:class :Persona ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Negocio debe ser operado por exactamente una Persona"@es ;
+        sh:severity sh:Violation
+    ] .
+
+# =============================================================================
+# SHAPE: Familia (Nucleo Familiar)
+# =============================================================================
+
+:FamiliaShape a sh:NodeShape ;
+    sh:targetClass :Familia ;
+    rdfs:label "Shape de Validacion - Familia"@es ;
+    dcterms:description "Restricciones de validacion para nucleos familiares"@es ;
+
+    # --- Total de Integrantes ---
+    sh:property [
+        sh:path :familiaTotalIntegrantes ;
+        sh:name "Total de Integrantes"@es ;
+        sh:datatype xsd:integer ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 20 ;
+        sh:message "Total de integrantes debe estar entre 1 y 20"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Menores de Edad ---
+    sh:property [
+        sh:path :familiaMenoresEdad ;
+        sh:name "Menores de Edad"@es ;
+        sh:description "Cantidad de menores de 18 anos en el hogar"@es ;
+        sh:datatype xsd:integer ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 15 ;
+        sh:message "Menores de edad debe estar entre 0 y 15"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Adultos Mayores ---
+    sh:property [
+        sh:path :familiaAdultosMayores ;
+        sh:name "Adultos Mayores"@es ;
+        sh:description "Cantidad de personas mayores de 60 anos en el hogar"@es ;
+        sh:datatype xsd:integer ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 10 ;
+        sh:message "Adultos mayores debe estar entre 0 y 10"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Personas con Discapacidad ---
+    sh:property [
+        sh:path :familiaPersonasDiscapacidad ;
+        sh:name "Personas con Discapacidad"@es ;
+        sh:datatype xsd:integer ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:message "Personas con discapacidad no puede ser negativo"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Estrato Socioeconomico ---
+    sh:property [
+        sh:path :familiaEstrato ;
+        sh:name "Estrato Socioeconomico"@es ;
+        sh:datatype xsd:integer ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 6 ;
+        sh:message "Estrato socioeconomico debe estar entre 1 y 6"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Validacion Cruzada: Menores + Adultos <= Total ---
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Suma de menores y adultos mayores no puede exceder total de integrantes"@es ;
+        sh:severity sh:Warning ;
+        sh:select """
+            PREFIX : <https://w3id.org/medellin/espacio-publico/core#>
+            SELECT $this
+            WHERE {
+                $this a :Familia ;
+                      :familiaTotalIntegrantes ?total ;
+                      :familiaMenoresEdad ?menores ;
+                      :familiaAdultosMayores ?mayores .
+                FILTER ((?menores + ?mayores) > ?total)
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Resolucion (Permiso Temporal)
+# =============================================================================
+
+:ResolucionShape a sh:NodeShape ;
+    sh:targetClass :Resolucion ;
+    rdfs:label "Shape de Validacion - Resolucion"@es ;
+    dcterms:description "Restricciones de validacion para resoluciones de autorizacion"@es ;
+
+    # --- Numero de Resolucion ---
+    sh:property [
+        sh:path :resolucionNumero ;
+        sh:name "Numero de Resolucion"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[0-9]{1,10}$" ;
+        sh:message "Numero de resolucion debe ser numerico (1-10 digitos)"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Fecha de Expedicion ---
+    sh:property [
+        sh:path :resolucionFechaExpedicion ;
+        sh:name "Fecha de Expedicion"@es ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Fecha de expedicion es obligatoria y debe ser fecha valida"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Fecha de Vencimiento ---
+    sh:property [
+        sh:path :resolucionFechaVencimiento ;
+        sh:name "Fecha de Vencimiento"@es ;
+        sh:datatype xsd:date ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:message "Fecha de vencimiento debe ser fecha valida"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Estado de la Resolucion ---
+    sh:property [
+        sh:path :resolucionEstadoCod ;
+        sh:name "Estado de la Resolucion"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in (
+            "vigente"
+            "vencida"
+            "revocada"
+            "suspendida"
+            "en_tramite"
+        ) ;
+        sh:message "Estado de resolucion debe ser vigente, vencida, revocada, suspendida o en_tramite"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Validacion Cruzada: Expedicion < Vencimiento ---
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Fecha de expedicion debe ser anterior a fecha de vencimiento"@es ;
+        sh:severity sh:Violation ;
+        sh:select """
+            PREFIX : <https://w3id.org/medellin/espacio-publico/core#>
+            SELECT $this
+            WHERE {
+                $this a :Resolucion ;
+                      :resolucionFechaExpedicion ?expedicion ;
+                      :resolucionFechaVencimiento ?vencimiento .
+                FILTER (?expedicion >= ?vencimiento)
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Modulo (Infraestructura Asignada)
+# =============================================================================
+
+:ModuloShape a sh:NodeShape ;
+    sh:targetClass :Modulo ;
+    rdfs:label "Shape de Validacion - Modulo"@es ;
+    dcterms:description "Restricciones de validacion para modulos de venta asignados"@es ;
+
+    # --- Codigo del Modulo ---
+    sh:property [
+        sh:path :moduloCodigo ;
+        sh:name "Codigo del Modulo"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^MOD-[A-Z0-9]{2,10}$" ;
+        sh:message "Codigo de modulo debe tener formato MOD-XX (ej: MOD-A123)"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Tipo de Modulo ---
+    sh:property [
+        sh:path :moduloTipoCod ;
+        sh:name "Tipo de Modulo"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:in (
+            "carreta"
+            "kiosko"
+            "caseta"
+            "punto_fijo"
+            "ambulante"
+        ) ;
+        sh:message "Tipo de modulo debe ser carreta, kiosko, caseta, punto_fijo o ambulante"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Area en Metros Cuadrados ---
+    sh:property [
+        sh:path :moduloAreaM2 ;
+        sh:name "Area en Metros Cuadrados"@es ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0.5 ;
+        sh:maxInclusive 50 ;
+        sh:message "Area del modulo debe estar entre 0.5 y 50 metros cuadrados"@es ;
+        sh:severity sh:Warning
+    ] ;
+
+    # --- Estado del Modulo ---
+    sh:property [
+        sh:path :moduloEstadoCod ;
+        sh:name "Estado del Modulo"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:in (
+            "disponible"
+            "asignado"
+            "mantenimiento"
+            "retirado"
+        ) ;
+        sh:message "Estado del modulo debe ser disponible, asignado, mantenimiento o retirado"@es ;
+        sh:severity sh:Warning
+    ] .
+
+# =============================================================================
+# SHAPE: Carnet (Credencial del Vendedor)
+# =============================================================================
+
+:CarnetShape a sh:NodeShape ;
+    sh:targetClass :Carnet ;
+    rdfs:label "Shape de Validacion - Carnet"@es ;
+    dcterms:description "Restricciones de validacion para carnets de vendedor"@es ;
+
+    # --- Numero del Carnet ---
+    sh:property [
+        sh:path :carnetNumero ;
+        sh:name "Numero del Carnet"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^CAR-[0-9]{6}$" ;
+        sh:message "Numero de carnet debe tener formato CAR-XXXXXX (ej: CAR-123456)"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Fecha de Expedicion ---
+    sh:property [
+        sh:path :carnetFechaExpedicion ;
+        sh:name "Fecha de Expedicion"@es ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Fecha de expedicion del carnet es obligatoria"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Fecha de Vencimiento ---
+    sh:property [
+        sh:path :carnetFechaVencimiento ;
+        sh:name "Fecha de Vencimiento"@es ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Fecha de vencimiento del carnet es obligatoria"@es ;
+        sh:severity sh:Violation
+    ] ;
+
+    # --- Estado del Carnet ---
+    sh:property [
+        sh:path :carnetEstadoCod ;
+        sh:name "Estado del Carnet"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in (
+            "vigente"
+            "vencido"
+            "renovado"
+            "anulado"
+        ) ;
+        sh:message "Estado del carnet debe ser vigente, vencido, renovado o anulado"@es ;
+        sh:severity sh:Violation
+    ] .
+
+# =============================================================================
+# FIN DE SHAPES
+# =============================================================================

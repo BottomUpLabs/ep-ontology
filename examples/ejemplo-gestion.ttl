@@ -1,0 +1,60 @@
+@prefix core:    <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix role:    <https://w3id.org/medellin/espacio-publico/roles#> .
+@prefix gestion: <https://w3id.org/medellin/espacio-publico/gestiones#> .
+@prefix ex:      <https://w3id.org/medellin/espacio-publico/example/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+# =============================================================================
+# EJEMPLO ILUSTRATIVO (datos ficticios) — ontologia de gestiones y evidencias
+# =============================================================================
+# Demuestra las conexiones explicitas de una gestion (una fila de la tabla
+# gestiones de trx_gestiones.xlsx): una Visita Administrativa del Equipo Social
+# conectada con la persona atendida (core:PersonaNatural), su puesto de venta
+# (core:PuestoVenta), el gestor que la realiza (gestion:Gestor) y la evidencia
+# que la soporta (gestion:EvidenciaArchivo).
+# Validar con:  pyshacl -s shapes/espacio-publico-shapes.ttl -e ontologies/espacio-publico.ttl examples/ejemplo-gestion.ttl
+# =============================================================================
+
+# --- Entidades de primer orden -----------------------------------------------
+
+ex:persona-002 a core:PersonaNatural ;
+    rdfs:label "Carlos Restrepo Mejia (ficticio)" ;
+    core:documentoTipo "CC" ;                       # vendedor_documento_tipo
+    core:documentoNumero "71234567" ;               # vendedor_documento_numero
+    core:nombreCompleto "Carlos Restrepo Mejia" .   # vendedor_nombre
+
+ex:puesto-001 a core:PuestoVenta ;
+    rdfs:label "Puesto de venta en Villa Hermosa (ficticio)" ;
+    core:barrioNombre "Villa Hermosa" ;             # venta_lugar_barrio
+    core:direccionTexto "Carrera 17 H 56 - 48" ;    # venta_lugar_direccion
+    core:territorioCod "Territorio 03" ;            # venta_lugar_territorio
+    core:comunaNombre "Villa Hermosa" .             # venta_lugar_comuna
+
+# --- Gestor (rol institucional basado en una persona) ------------------------
+
+ex:persona-gestora-001 a core:PersonaNatural ;
+    rdfs:label "Laura Gomez (ficticia, profesional del equipo)" ;
+    core:correoElectronico "laura.gomez@example.org" .
+
+ex:gestor-001 a gestion:Gestor ;
+    rdfs:label "Rol de gestora del Equipo Social (ficticio)" ;
+    role:basadoEn ex:persona-gestora-001 ;          # gestor_id (correo)
+    gestion:miembroDeEquipo gestion:EquipoSocial .
+
+# --- Evidencia ----------------------------------------------------------------
+
+ex:evidencia-001 a gestion:EvidenciaArchivo ;
+    rdfs:label "Formato FO-GGOL-036 diligenciado (ficticio)" ;
+    gestion:rutaArchivo "gestiones_Files_/EJEMPLO-0001.actividad_evidencia_archivo.pdf" .
+
+# --- La gestion: una Visita Administrativa con sus conexiones explicitas ------
+
+ex:gestion-001 a gestion:VisitaAdministrativa ;
+    rdfs:label "Visita administrativa al puesto de Carlos Restrepo (ficticia)" ;
+    gestion:fechaGestion "2026-03-16"^^xsd:date ;   # actividad_fecha
+    gestion:realizadaPorEquipo gestion:EquipoSocial ;
+    gestion:realizadaPorGestor ex:gestor-001 ;
+    gestion:atiendeVendedor ex:persona-002 ;        # -> core:PersonaNatural
+    gestion:enPuestoVenta ex:puesto-001 ;           # -> core:PuestoVenta
+    gestion:tieneEvidencia ex:evidencia-001 .       # -> gestion:EvidenciaArchivo

@@ -1,0 +1,54 @@
+@prefix :        <https://w3id.org/medellin/espacio-publico/base#> .
+@prefix tst:   <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal#> .
+@prefix core:    <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo:    <http://purl.org/ontology/bibo/> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+
+# #############################################################################
+# BASE AISLADA E INTERCONECTADA
+# Persona Natural  +  Lugar/PuestoVenta  +  Tramite de Autorizacion Temporal
+# #############################################################################
+# Punto de entrada UNICO de la base solicitada: importa exactamente los tres
+# pilares interconectados por la espina dorsal, AISLADOS del resto de dominios
+# (propaganda electoral, gestiones, etc.).
+#
+#   [QUIEN]  core/persona-natural
+#   [DONDE]  core/lugar-puestoventa-vivienda
+#   [QUE]    aprovechamiento (tramite SUIT 26521 + sus categorias)
+#   espina   core/espina-persona-lugar-tramite  (los conecta)
+#
+# Cargar SOLO este archivo para trabajar la base. Para validar localmente sin
+# resolver IRIs por red, usar el catalogo ontologies/catalog-v001.xml en Protege
+# o cargar los .ttl locales en rdflib.
+# #############################################################################
+
+<https://w3id.org/medellin/espacio-publico/base-tramite-solicitud-temporal>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/base-tramite-solicitud-temporal/0.2.0> ;
+    dcterms:title "Espacio Publico - Base (Persona + Lugar + Tramite de aprovechamiento)"@es ;
+    dcterms:description """Base aislada e interconectada de la ontologia de espacio publico:
+    los pilares PersonaNatural y Lugar/PuestoVenta, y el tramite de autorizacion temporal de
+    aprovechamiento economico (SUIT 26521) con sus categorias, unidos por la espina dorsal
+    Persona/Tramite/Lugar. No incluye otros dominios."""@es ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    dcterms:created "2026-06-17"^^xsd:date ;
+    dcterms:modified "2026-06-17"^^xsd:date ;
+    bibo:status "draft"@en ;
+    owl:versionInfo "0.2.0" ;
+    vann:preferredNamespacePrefix "base" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/base#" ;
+
+    # --- Pilar QUIEN + pilar DONDE (places) ---
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/persona-natural> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda> ;
+
+    # --- Pilar QUE: tramite AISLADO + categorias (solo se conecta a los pilares de arriba) ---
+    owl:imports <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal/categoria-venta-informal> .

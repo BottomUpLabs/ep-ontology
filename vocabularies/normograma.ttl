@@ -1,0 +1,160 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vocab: <https://w3id.org/medellin/espacio-publico/vocab/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# VOCABULARIO: Normograma del Espacio Publico de Medellin
+# =============================================================================
+# Marco normativo que rige la gestion del espacio publico: ocupacion, vendedores
+# informales, publicidad exterior visual, propaganda electoral, control policivo y
+# procedimientos internos. Cada norma es un skos:Concept con su expedidor, ano y
+# alcance. Derivado de las fuentes citadas en los documentos de concepto y contexto.
+# =============================================================================
+
+vocab:normograma a skos:ConceptScheme , owl:Ontology ;
+    dcterms:title "Normograma del Espacio Publico de Medellin"@es ;
+    dcterms:title "Public Space Legal Framework - Medellin"@en ;
+    dcterms:description """Vocabulario del marco normativo aplicable a la gestion del
+    espacio publico en Medellin, organizado en normas nacionales, normas distritales
+    y procedimientos / metodologias internas. Provee la lista controlada para la
+    propiedad dcterms:source / dcterms:references usada por las ontologias de dominio."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:source "concepts/control/intervencion_ep.md; concepts/pev/publicidad_exterior_visual.md; concepts/formal_commerce/aprovechamiento_economico.md; concepts/regulated/novedades_regulados.md" ;
+    dcterms:created "2026-05-31"^^xsd:date ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    vann:preferredNamespacePrefix "vocab" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/vocab/" ;
+    owl:versionInfo "0.1.0" ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/vocab/normograma/0.1.0> ;
+    skos:hasTopConcept vocab:norma-nacional , vocab:norma-distrital , vocab:procedimiento-interno .
+
+# --- Categorias ---
+
+vocab:norma-nacional a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:topConceptOf vocab:normograma ;
+    skos:prefLabel "Norma nacional"@es ; skos:prefLabel "National regulation"@en ;
+    skos:definition "Leyes y decretos del orden nacional aplicables al espacio publico."@es .
+
+vocab:norma-distrital a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:topConceptOf vocab:normograma ;
+    skos:prefLabel "Norma distrital"@es ; skos:prefLabel "District regulation"@en ;
+    skos:definition "Acuerdos del Concejo y decretos de la Alcaldia de Medellin."@es .
+
+vocab:procedimiento-interno a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:topConceptOf vocab:normograma ;
+    skos:prefLabel "Procedimiento o metodologia interna"@es ; skos:prefLabel "Internal procedure"@en ;
+    skos:definition "Procedimientos (PR-*), metodologias (DE-*) y formatos (FO-*) del sistema de gestion de la Subsecretaria."@es .
+
+# --- Normas nacionales ---
+
+vocab:ley-1801-2016 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-nacional ;
+    skos:prefLabel "Ley 1801 de 2016 - Codigo Nacional de Seguridad y Convivencia"@es ;
+    skos:notation "LEY-1801-2016" ; dcterms:issued "2016"^^xsd:gYear ;
+    skos:scopeNote "Habilita comparendos, medidas correctivas e incautaciones por ocupacion indebida del espacio publico."@es .
+
+vocab:ley-1437-2011 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-nacional ;
+    skos:prefLabel "Ley 1437 de 2011 - CPACA"@es ;
+    skos:notation "LEY-1437-2011" ; dcterms:issued "2011"^^xsd:gYear ;
+    skos:scopeNote "Codigo de Procedimiento Administrativo y de lo Contencioso Administrativo; rige tramites, resoluciones y recursos."@es .
+
+vocab:ley-1755-2015 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-nacional ;
+    skos:prefLabel "Ley 1755 de 2015 - Derecho de Peticion"@es ;
+    skos:notation "LEY-1755-2015" ; dcterms:issued "2015"^^xsd:gYear ;
+    skos:scopeNote "Regula el derecho de peticion y los plazos de respuesta de las PQRSD."@es .
+
+vocab:ley-1475-2011 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-nacional ;
+    skos:prefLabel "Ley 1475 de 2011 - Estatuto de Partidos"@es ;
+    skos:notation "LEY-1475-2011" ; dcterms:issued "2011"^^xsd:gYear ;
+    skos:scopeNote "Marco de partidos, movimientos politicos y campanas; base de la propaganda electoral."@es .
+
+vocab:decreto-2148-2015 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-nacional ;
+    skos:prefLabel "Decreto 2148 de 2015"@es ;
+    skos:notation "DEC-2148-2015" ; dcterms:issued "2015"^^xsd:gYear ;
+    skos:scopeNote "Disposiciones aplicables a la gestion y control del espacio publico."@es .
+
+vocab:decreto-2229-2019 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-nacional ;
+    skos:prefLabel "Decreto 2229 de 2019"@es ;
+    skos:notation "DEC-2229-2019" ; dcterms:issued "2019"^^xsd:gYear ;
+    skos:scopeNote "Disposiciones relacionadas con publicidad exterior visual."@es .
+
+# --- Normas distritales (Medellin) ---
+
+vocab:acuerdo-048-2014 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-distrital ;
+    skos:prefLabel "Acuerdo 048 de 2014 - Politica de Espacio Publico"@es ;
+    skos:notation "ACU-048-2014" ; dcterms:issued "2014"^^xsd:gYear ;
+    skos:scopeNote "Politica publica de espacio publico y base del aprovechamiento economico."@es .
+
+vocab:acuerdo-076-2014 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-distrital ;
+    skos:prefLabel "Acuerdo 076 de 2014 - Politica Publica de Vendedores Informales"@es ;
+    skos:notation "ACU-076-2014" ; dcterms:issued "2014"^^xsd:gYear ;
+    skos:scopeNote "Politica publica para vendedores informales del espacio publico."@es .
+
+vocab:acuerdo-036-2017 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-distrital ;
+    skos:prefLabel "Acuerdo 036 de 2017 - Publicidad Exterior Visual"@es ;
+    skos:notation "ACU-036-2017" ; dcterms:issued "2017"^^xsd:gYear ;
+    skos:scopeNote "Regula la publicidad exterior visual en Medellin (registro, verificacion y control)."@es .
+
+vocab:decreto-883-2015 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-distrital ;
+    skos:prefLabel "Decreto 883 de 2015"@es ;
+    skos:notation "DEC-883-2015" ; dcterms:issued "2015"^^xsd:gYear ;
+    skos:scopeNote "Reglamenta la ocupacion y el aprovechamiento del espacio publico en Medellin."@es .
+
+vocab:decreto-288-2018 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-distrital ;
+    skos:prefLabel "Decreto 288 de 2018"@es ;
+    skos:notation "DEC-288-2018" ; dcterms:issued "2018"^^xsd:gYear ;
+    skos:scopeNote "Ajusta el regimen de aprovechamiento economico y publicidad exterior visual."@es .
+
+vocab:resolucion-202250081102-2022 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:norma-distrital ;
+    skos:prefLabel "Resolucion 202250081102 de 2022"@es ;
+    skos:notation "RES-202250081102-2022" ; dcterms:issued "2022"^^xsd:gYear ;
+    skos:scopeNote "Lineamientos para la gestion de novedades de vendedores regulados."@es .
+
+# --- Procedimientos internos ---
+
+vocab:pr-ggol-011 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:procedimiento-interno ;
+    skos:prefLabel "PR-GGOL-011 - Intervencion del espacio publico"@es ;
+    skos:notation "PR-GGOL-011" ;
+    skos:scopeNote "Procedimiento operativo de intervencion y recuperacion del espacio publico."@es .
+
+vocab:pr-ggol-012 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:procedimiento-interno ;
+    skos:prefLabel "PR-GGOL-012 - Novedades de venteros regulados"@es ;
+    skos:notation "PR-GGOL-012" ;
+    skos:scopeNote "Procedimiento para gestionar novedades de vendedores regulados."@es .
+
+vocab:pr-ggol-019 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:procedimiento-interno ;
+    skos:prefLabel "PR-GGOL-019 - Aprovechamiento economico"@es ;
+    skos:notation "PR-GGOL-019" ;
+    skos:scopeNote "Procedimiento de autorizacion del aprovechamiento economico del espacio publico."@es .
+
+vocab:pr-ggol-020 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:procedimiento-interno ;
+    skos:prefLabel "PR-GGOL-020 - Publicidad exterior visual"@es ;
+    skos:notation "PR-GGOL-020" ;
+    skos:scopeNote "Procedimiento de registro, verificacion y control de publicidad exterior visual."@es .
+
+vocab:de-ggol-007 a skos:Concept ;
+    skos:inScheme vocab:normograma ; skos:broader vocab:procedimiento-interno ;
+    skos:prefLabel "DE-GGOL-007 - Metodologia de valoracion socioeconomica"@es ;
+    skos:notation "DE-GGOL-007" ;
+    skos:scopeNote "Metodologia para el analisis de vulnerabilidad y conceptos socioeconomicos."@es .

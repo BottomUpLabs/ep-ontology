@@ -1,0 +1,1838 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/core/rule-names#> .
+@prefix rn: <https://w3id.org/medellin/espacio-publico/core/rule-names#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# ONTOLOGIA: Rule Names Vocabulary - Espacio Publico
+# =============================================================================
+# SKOS Vocabulary of valid rule names for DMP quality enforcement.
+# Generated automatically from metadata_sys master tables and dmp_tentative.
+#
+# Rule Types:
+#   - vocab_{name}: Controlled vocabulary rules (a2_listas)
+#   - format_{name}: Syntactic format rules (a3_formatos)
+#   - regulacion_vocab_{name}: Vocabulary rules from regulacion_v1 DMP tentative
+#   - regulacion_format_{name}: Format rules from regulacion_v1 DMP tentative
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/core/rule-names> a owl:Ontology, skos:ConceptScheme ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/core/rule-names/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "DMP Rule Names Vocabulary"@es ;
+    dcterms:title "DMP Rule Names Vocabulary"@en ;
+    dcterms:description """Vocabulario controlado de nombres de reglas para el sistema
+    de gestion de calidad de datos (DMP). Incluye reglas de vocabulario controlado
+    (vocab_*) y reglas de formato sintactico (format_*), asi como reglas especificas
+    para el procedimiento de regulacion de vendedores informales (regulacion_*).
+    
+    Este archivo se genera automaticamente desde las tablas maestras:
+    - main_metadata.controlled_vocabulary_list
+    - main_metadata.syntactic_format_type
+    - data/dmp_tentative/a2/regulacion_v1_dmp_a2_listas.csv
+    - data/dmp_tentative/a3/regulacion_v1_dmp_a3_formatos.csv"""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:created "2026-01-09"^^xsd:date ;
+    dcterms:modified "2026-01-09"^^xsd:date ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    owl:versionInfo "0.1.0" ;
+    skos:hasTopConcept :VocabularyRule, :FormatRule, :RegulacionVocabularyRule, :RegulacionFormatRule .
+
+# =============================================================================
+# TOP CONCEPTS: Rule Type Categories
+# =============================================================================
+
+:VocabularyRule a skos:Concept ;
+    skos:prefLabel "Vocabulary Rule"@en ;
+    skos:prefLabel "Regla de Vocabulario"@es ;
+    skos:definition "Rule that validates values against a controlled vocabulary list"@en ;
+    skos:definition "Regla que valida valores contra una lista de vocabulario controlado"@es ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> ;
+    skos:topConceptOf <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:FormatRule a skos:Concept ;
+    skos:prefLabel "Format Rule"@en ;
+    skos:prefLabel "Regla de Formato"@es ;
+    skos:definition "Rule that validates syntactic format patterns (regex, type constraints)"@en ;
+    skos:definition "Regla que valida patrones de formato sintactico (regex, restricciones de tipo)"@es ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> ;
+    skos:topConceptOf <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:RegulacionVocabularyRule a skos:Concept ;
+    skos:prefLabel "Regulacion Vocabulary Rule"@en ;
+    skos:prefLabel "Regla de Vocabulario de Regulacion"@es ;
+    skos:definition "Vocabulary rule specific to the vendor regulation (regulados) procedure"@en ;
+    skos:definition "Regla de vocabulario especifica para el procedimiento de regulacion de vendedores informales"@es ;
+    skos:scopeNote "Sourced from regulacion_v1 DMP tentative a2_listas"@en ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> ;
+    skos:topConceptOf <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:RegulacionFormatRule a skos:Concept ;
+    skos:prefLabel "Regulacion Format Rule"@en ;
+    skos:prefLabel "Regla de Formato de Regulacion"@es ;
+    skos:definition "Format rule specific to the vendor regulation (regulados) procedure"@en ;
+    skos:definition "Regla de formato especifica para el procedimiento de regulacion de vendedores informales"@es ;
+    skos:scopeNote "Sourced from regulacion_v1 DMP tentative a3_formatos"@en ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> ;
+    skos:topConceptOf <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+# =============================================================================
+# RULE NAME CONCEPTS
+# =============================================================================
+
+:format_blood_type_rh a skos:Concept ;
+    skos:prefLabel "format_blood_type_rh"@en ;
+    skos:prefLabel "format_blood_type_rh"@es ;
+    skos:altLabel "Blood Type Rh"@es ;
+    skos:notation "format_blood_type_rh" ;
+    skos:definition "Syntactic format rule for blood type rh"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_boolean a skos:Concept ;
+    skos:prefLabel "format_boolean"@en ;
+    skos:prefLabel "format_boolean"@es ;
+    skos:altLabel "Boolean"@es ;
+    skos:notation "format_boolean" ;
+    skos:definition "Syntactic format rule for boolean"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_colombian_address a skos:Concept ;
+    skos:prefLabel "format_colombian_address"@en ;
+    skos:prefLabel "format_colombian_address"@es ;
+    skos:altLabel "Colombian Address"@es ;
+    skos:notation "format_colombian_address" ;
+    skos:definition "Syntactic format rule for colombian address"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_colombian_id a skos:Concept ;
+    skos:prefLabel "format_colombian_id"@en ;
+    skos:prefLabel "format_colombian_id"@es ;
+    skos:altLabel "Colombian Id"@es ;
+    skos:notation "format_colombian_id" ;
+    skos:definition "Syntactic format rule for colombian id"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_colombian_id_permissive a skos:Concept ;
+    skos:prefLabel "format_colombian_id_permissive"@en ;
+    skos:prefLabel "format_colombian_id_permissive"@es ;
+    skos:altLabel "Colombian Id Permissive"@es ;
+    skos:notation "format_colombian_id_permissive" ;
+    skos:definition "Syntactic format rule for colombian id permissive"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_colombian_phone a skos:Concept ;
+    skos:prefLabel "format_colombian_phone"@en ;
+    skos:prefLabel "format_colombian_phone"@es ;
+    skos:altLabel "Colombian Phone"@es ;
+    skos:notation "format_colombian_phone" ;
+    skos:definition "Syntactic format rule for colombian phone"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_currency a skos:Concept ;
+    skos:prefLabel "format_currency"@en ;
+    skos:prefLabel "format_currency"@es ;
+    skos:altLabel "Currency"@es ;
+    skos:notation "format_currency" ;
+    skos:definition "Syntactic format rule for currency"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_decimal a skos:Concept ;
+    skos:prefLabel "format_decimal"@en ;
+    skos:prefLabel "format_decimal"@es ;
+    skos:altLabel "Decimal"@es ;
+    skos:notation "format_decimal" ;
+    skos:definition "Syntactic format rule for decimal"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_divipola a skos:Concept ;
+    skos:prefLabel "format_divipola"@en ;
+    skos:prefLabel "format_divipola"@es ;
+    skos:altLabel "Divipola"@es ;
+    skos:notation "format_divipola" ;
+    skos:definition "Syntactic format rule for divipola"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_email a skos:Concept ;
+    skos:prefLabel "format_email"@en ;
+    skos:prefLabel "format_email"@es ;
+    skos:altLabel "Email"@es ;
+    skos:notation "format_email" ;
+    skos:definition "Syntactic format rule for email"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_hex_color a skos:Concept ;
+    skos:prefLabel "format_hex_color"@en ;
+    skos:prefLabel "format_hex_color"@es ;
+    skos:altLabel "Hex Color"@es ;
+    skos:notation "format_hex_color" ;
+    skos:definition "Syntactic format rule for hex color"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_integer a skos:Concept ;
+    skos:prefLabel "format_integer"@en ;
+    skos:prefLabel "format_integer"@es ;
+    skos:altLabel "Integer"@es ;
+    skos:notation "format_integer" ;
+    skos:definition "Syntactic format rule for integer"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_ipv4 a skos:Concept ;
+    skos:prefLabel "format_ipv4"@en ;
+    skos:prefLabel "format_ipv4"@es ;
+    skos:altLabel "Ipv4"@es ;
+    skos:notation "format_ipv4" ;
+    skos:definition "Syntactic format rule for ipv4"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_ipv6 a skos:Concept ;
+    skos:prefLabel "format_ipv6"@en ;
+    skos:prefLabel "format_ipv6"@es ;
+    skos:altLabel "Ipv6"@es ;
+    skos:notation "format_ipv6" ;
+    skos:definition "Syntactic format rule for ipv6"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_iso_date a skos:Concept ;
+    skos:prefLabel "format_iso_date"@en ;
+    skos:prefLabel "format_iso_date"@es ;
+    skos:altLabel "Iso Date"@es ;
+    skos:notation "format_iso_date" ;
+    skos:definition "Syntactic format rule for iso date"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_iso_datetime a skos:Concept ;
+    skos:prefLabel "format_iso_datetime"@en ;
+    skos:prefLabel "format_iso_datetime"@es ;
+    skos:altLabel "Iso Datetime"@es ;
+    skos:notation "format_iso_datetime" ;
+    skos:definition "Syntactic format rule for iso datetime"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_json a skos:Concept ;
+    skos:prefLabel "format_json"@en ;
+    skos:prefLabel "format_json"@es ;
+    skos:altLabel "Json"@es ;
+    skos:notation "format_json" ;
+    skos:definition "Syntactic format rule for json"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_latitude_decimal a skos:Concept ;
+    skos:prefLabel "format_latitude_decimal"@en ;
+    skos:prefLabel "format_latitude_decimal"@es ;
+    skos:altLabel "Latitude Decimal"@es ;
+    skos:notation "format_latitude_decimal" ;
+    skos:definition "Syntactic format rule for latitude decimal"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_latlon_decimal_deg a skos:Concept ;
+    skos:prefLabel "format_latlon_decimal_deg"@en ;
+    skos:prefLabel "format_latlon_decimal_deg"@es ;
+    skos:altLabel "Latlon Decimal Deg"@es ;
+    skos:notation "format_latlon_decimal_deg" ;
+    skos:definition "Syntactic format rule for latlon decimal deg"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_license_plate_co a skos:Concept ;
+    skos:prefLabel "format_license_plate_co"@en ;
+    skos:prefLabel "format_license_plate_co"@es ;
+    skos:altLabel "License Plate Co"@es ;
+    skos:notation "format_license_plate_co" ;
+    skos:definition "Syntactic format rule for license plate co"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_longitude_decimal a skos:Concept ;
+    skos:prefLabel "format_longitude_decimal"@en ;
+    skos:prefLabel "format_longitude_decimal"@es ;
+    skos:altLabel "Longitude Decimal"@es ;
+    skos:notation "format_longitude_decimal" ;
+    skos:definition "Syntactic format rule for longitude decimal"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_matricula_inmobiliaria a skos:Concept ;
+    skos:prefLabel "format_matricula_inmobiliaria"@en ;
+    skos:prefLabel "format_matricula_inmobiliaria"@es ;
+    skos:altLabel "Matricula Inmobiliaria"@es ;
+    skos:notation "format_matricula_inmobiliaria" ;
+    skos:definition "Syntactic format rule for matricula inmobiliaria"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_name a skos:Concept ;
+    skos:prefLabel "format_name"@en ;
+    skos:prefLabel "format_name"@es ;
+    skos:altLabel "Name"@es ;
+    skos:notation "format_name" ;
+    skos:definition "Syntactic format rule for name"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_percentage a skos:Concept ;
+    skos:prefLabel "format_percentage"@en ;
+    skos:prefLabel "format_percentage"@es ;
+    skos:altLabel "Percentage"@es ;
+    skos:notation "format_percentage" ;
+    skos:definition "Syntactic format rule for percentage"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_postal_code a skos:Concept ;
+    skos:prefLabel "format_postal_code"@en ;
+    skos:prefLabel "format_postal_code"@es ;
+    skos:altLabel "Postal Code"@es ;
+    skos:notation "format_postal_code" ;
+    skos:definition "Syntactic format rule for postal code"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_sisbene_iv_group a skos:Concept ;
+    skos:prefLabel "format_sisbene_iv_group"@en ;
+    skos:prefLabel "format_sisbene_iv_group"@es ;
+    skos:altLabel "Sisbene Iv Group"@es ;
+    skos:notation "format_sisbene_iv_group" ;
+    skos:definition "Syntactic format rule for sisbene iv group"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_time_hhmmss a skos:Concept ;
+    skos:prefLabel "format_time_hhmmss"@en ;
+    skos:prefLabel "format_time_hhmmss"@es ;
+    skos:altLabel "Time Hhmmss"@es ;
+    skos:notation "format_time_hhmmss" ;
+    skos:definition "Syntactic format rule for time hhmmss"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_url a skos:Concept ;
+    skos:prefLabel "format_url"@en ;
+    skos:prefLabel "format_url"@es ;
+    skos:altLabel "Url"@es ;
+    skos:notation "format_url" ;
+    skos:definition "Syntactic format rule for url"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:format_uuid a skos:Concept ;
+    skos:prefLabel "format_uuid"@en ;
+    skos:prefLabel "format_uuid"@es ;
+    skos:altLabel "Uuid"@es ;
+    skos:notation "format_uuid" ;
+    skos:definition "Syntactic format rule for uuid"@es ;
+    skos:broader :FormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_boolean a skos:Concept ;
+    skos:prefLabel "regulacion_format_boolean"@en ;
+    skos:prefLabel "regulacion_format_boolean"@es ;
+    skos:altLabel "Boolean"@es ;
+    skos:notation "regulacion_format_boolean" ;
+    skos:definition "Format constraint for regulacion procedure: boolean"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_colombian_address a skos:Concept ;
+    skos:prefLabel "regulacion_format_colombian_address"@en ;
+    skos:prefLabel "regulacion_format_colombian_address"@es ;
+    skos:altLabel "Colombian Address"@es ;
+    skos:notation "regulacion_format_colombian_address" ;
+    skos:definition "Format constraint for regulacion procedure: colombian address"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_colombian_id a skos:Concept ;
+    skos:prefLabel "regulacion_format_colombian_id"@en ;
+    skos:prefLabel "regulacion_format_colombian_id"@es ;
+    skos:altLabel "Colombian Id"@es ;
+    skos:notation "regulacion_format_colombian_id" ;
+    skos:definition "Format constraint for regulacion procedure: colombian id"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_colombian_phone a skos:Concept ;
+    skos:prefLabel "regulacion_format_colombian_phone"@en ;
+    skos:prefLabel "regulacion_format_colombian_phone"@es ;
+    skos:altLabel "Colombian Phone"@es ;
+    skos:notation "regulacion_format_colombian_phone" ;
+    skos:definition "Format constraint for regulacion procedure: colombian phone"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_consecutivo_mercurio a skos:Concept ;
+    skos:prefLabel "regulacion_format_consecutivo_mercurio"@en ;
+    skos:prefLabel "regulacion_format_consecutivo_mercurio"@es ;
+    skos:altLabel "Consecutivo Mercurio"@es ;
+    skos:notation "regulacion_format_consecutivo_mercurio" ;
+    skos:definition "Format constraint for regulacion procedure: consecutivo mercurio"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_integer a skos:Concept ;
+    skos:prefLabel "regulacion_format_integer"@en ;
+    skos:prefLabel "regulacion_format_integer"@es ;
+    skos:altLabel "Integer"@es ;
+    skos:notation "regulacion_format_integer" ;
+    skos:definition "Format constraint for regulacion procedure: integer"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_iso_date a skos:Concept ;
+    skos:prefLabel "regulacion_format_iso_date"@en ;
+    skos:prefLabel "regulacion_format_iso_date"@es ;
+    skos:altLabel "Iso Date"@es ;
+    skos:notation "regulacion_format_iso_date" ;
+    skos:definition "Format constraint for regulacion procedure: iso date"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_latlon_decimal_deg a skos:Concept ;
+    skos:prefLabel "regulacion_format_latlon_decimal_deg"@en ;
+    skos:prefLabel "regulacion_format_latlon_decimal_deg"@es ;
+    skos:altLabel "Latlon Decimal Deg"@es ;
+    skos:notation "regulacion_format_latlon_decimal_deg" ;
+    skos:definition "Format constraint for regulacion procedure: latlon decimal deg"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_moneda_colombiana a skos:Concept ;
+    skos:prefLabel "regulacion_format_moneda_colombiana"@en ;
+    skos:prefLabel "regulacion_format_moneda_colombiana"@es ;
+    skos:altLabel "Moneda Colombiana"@es ;
+    skos:notation "regulacion_format_moneda_colombiana" ;
+    skos:definition "Format constraint for regulacion procedure: moneda colombiana"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_name a skos:Concept ;
+    skos:prefLabel "regulacion_format_name"@en ;
+    skos:prefLabel "regulacion_format_name"@es ;
+    skos:altLabel "Name"@es ;
+    skos:notation "regulacion_format_name" ;
+    skos:definition "Format constraint for regulacion procedure: name"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_texto_libre a skos:Concept ;
+    skos:prefLabel "regulacion_format_texto_libre"@en ;
+    skos:prefLabel "regulacion_format_texto_libre"@es ;
+    skos:altLabel "Texto Libre"@es ;
+    skos:notation "regulacion_format_texto_libre" ;
+    skos:definition "Format constraint for regulacion procedure: texto libre"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_format_uuid a skos:Concept ;
+    skos:prefLabel "regulacion_format_uuid"@en ;
+    skos:prefLabel "regulacion_format_uuid"@es ;
+    skos:altLabel "Uuid"@es ;
+    skos:notation "regulacion_format_uuid" ;
+    skos:definition "Format constraint for regulacion procedure: uuid"@es ;
+    dcterms:source "regulacion_v1_dmp_a3_formatos" ;
+    skos:broader :RegulacionFormatRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_vocab_clase_venta a skos:Concept ;
+    skos:prefLabel "regulacion_vocab_clase_venta"@en ;
+    skos:prefLabel "regulacion_vocab_clase_venta"@es ;
+    skos:altLabel "Clase Venta"@es ;
+    skos:notation "regulacion_vocab_clase_venta" ;
+    skos:definition "Controlled vocabulary for regulacion procedure: clase venta"@es ;
+    dcterms:source "regulacion_v1_dmp_a2_listas" ;
+    skos:broader :RegulacionVocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_vocab_comuna a skos:Concept ;
+    skos:prefLabel "regulacion_vocab_comuna"@en ;
+    skos:prefLabel "regulacion_vocab_comuna"@es ;
+    skos:altLabel "Comuna"@es ;
+    skos:notation "regulacion_vocab_comuna" ;
+    skos:definition "Controlled vocabulary for regulacion procedure: comuna"@es ;
+    dcterms:source "regulacion_v1_dmp_a2_listas" ;
+    skos:broader :RegulacionVocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_vocab_municipio a skos:Concept ;
+    skos:prefLabel "regulacion_vocab_municipio"@en ;
+    skos:prefLabel "regulacion_vocab_municipio"@es ;
+    skos:altLabel "Municipio"@es ;
+    skos:notation "regulacion_vocab_municipio" ;
+    skos:definition "Controlled vocabulary for regulacion procedure: municipio"@es ;
+    dcterms:source "regulacion_v1_dmp_a2_listas" ;
+    skos:broader :RegulacionVocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_vocab_nomenclatura_vial a skos:Concept ;
+    skos:prefLabel "regulacion_vocab_nomenclatura_vial"@en ;
+    skos:prefLabel "regulacion_vocab_nomenclatura_vial"@es ;
+    skos:altLabel "Nomenclatura Vial"@es ;
+    skos:notation "regulacion_vocab_nomenclatura_vial" ;
+    skos:definition "Controlled vocabulary for regulacion procedure: nomenclatura vial"@es ;
+    dcterms:source "regulacion_v1_dmp_a2_listas" ;
+    skos:broader :RegulacionVocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_vocab_orientacion a skos:Concept ;
+    skos:prefLabel "regulacion_vocab_orientacion"@en ;
+    skos:prefLabel "regulacion_vocab_orientacion"@es ;
+    skos:altLabel "Orientacion"@es ;
+    skos:notation "regulacion_vocab_orientacion" ;
+    skos:definition "Controlled vocabulary for regulacion procedure: orientacion"@es ;
+    dcterms:source "regulacion_v1_dmp_a2_listas" ;
+    skos:broader :RegulacionVocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_vocab_sexo a skos:Concept ;
+    skos:prefLabel "regulacion_vocab_sexo"@en ;
+    skos:prefLabel "regulacion_vocab_sexo"@es ;
+    skos:altLabel "Sexo"@es ;
+    skos:notation "regulacion_vocab_sexo" ;
+    skos:definition "Controlled vocabulary for regulacion procedure: sexo"@es ;
+    dcterms:source "regulacion_v1_dmp_a2_listas" ;
+    skos:broader :RegulacionVocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_vocab_tipo_documento a skos:Concept ;
+    skos:prefLabel "regulacion_vocab_tipo_documento"@en ;
+    skos:prefLabel "regulacion_vocab_tipo_documento"@es ;
+    skos:altLabel "Tipo Documento"@es ;
+    skos:notation "regulacion_vocab_tipo_documento" ;
+    skos:definition "Controlled vocabulary for regulacion procedure: tipo documento"@es ;
+    dcterms:source "regulacion_v1_dmp_a2_listas" ;
+    skos:broader :RegulacionVocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:regulacion_vocab_tipo_via_letra a skos:Concept ;
+    skos:prefLabel "regulacion_vocab_tipo_via_letra"@en ;
+    skos:prefLabel "regulacion_vocab_tipo_via_letra"@es ;
+    skos:altLabel "Tipo Via Letra"@es ;
+    skos:notation "regulacion_vocab_tipo_via_letra" ;
+    skos:definition "Controlled vocabulary for regulacion procedure: tipo via letra"@es ;
+    dcterms:source "regulacion_v1_dmp_a2_listas" ;
+    skos:broader :RegulacionVocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_actividad_economica_tipologica a skos:Concept ;
+    skos:prefLabel "vocab_actividad_economica_tipologica"@en ;
+    skos:prefLabel "vocab_actividad_economica_tipologica"@es ;
+    skos:altLabel "Actividad Economica Tipologica"@es ;
+    skos:notation "vocab_actividad_economica_tipologica" ;
+    skos:definition "Controlled vocabulary rule for actividad economica tipologica"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_actividad_operativa a skos:Concept ;
+    skos:prefLabel "vocab_actividad_operativa"@en ;
+    skos:prefLabel "vocab_actividad_operativa"@es ;
+    skos:altLabel "Actividad Operativa"@es ;
+    skos:notation "vocab_actividad_operativa" ;
+    skos:definition "Controlled vocabulary rule for actividad operativa"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_actividad_prohibida a skos:Concept ;
+    skos:prefLabel "vocab_actividad_prohibida"@en ;
+    skos:prefLabel "vocab_actividad_prohibida"@es ;
+    skos:altLabel "Actividad Prohibida"@es ;
+    skos:notation "vocab_actividad_prohibida" ;
+    skos:definition "Controlled vocabulary rule for actividad prohibida"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_actividades_participacion a skos:Concept ;
+    skos:prefLabel "vocab_actividades_participacion"@en ;
+    skos:prefLabel "vocab_actividades_participacion"@es ;
+    skos:altLabel "Actividades Participacion"@es ;
+    skos:notation "vocab_actividades_participacion" ;
+    skos:definition "Controlled vocabulary rule for actividades participacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_adicionales_amoblamiento a skos:Concept ;
+    skos:prefLabel "vocab_adicionales_amoblamiento"@en ;
+    skos:prefLabel "vocab_adicionales_amoblamiento"@es ;
+    skos:altLabel "Adicionales Amoblamiento"@es ;
+    skos:notation "vocab_adicionales_amoblamiento" ;
+    skos:definition "Controlled vocabulary rule for adicionales amoblamiento"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_alerta_renovacion_mesas a skos:Concept ;
+    skos:prefLabel "vocab_alerta_renovacion_mesas"@en ;
+    skos:prefLabel "vocab_alerta_renovacion_mesas"@es ;
+    skos:altLabel "Alerta Renovacion Mesas"@es ;
+    skos:notation "vocab_alerta_renovacion_mesas" ;
+    skos:definition "Controlled vocabulary rule for alerta renovacion mesas"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_artes_oficios a skos:Concept ;
+    skos:prefLabel "vocab_artes_oficios"@en ;
+    skos:prefLabel "vocab_artes_oficios"@es ;
+    skos:altLabel "Artes Oficios"@es ;
+    skos:notation "vocab_artes_oficios" ;
+    skos:definition "Controlled vocabulary rule for artes oficios"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_asociaciones a skos:Concept ;
+    skos:prefLabel "vocab_asociaciones"@en ;
+    skos:prefLabel "vocab_asociaciones"@es ;
+    skos:altLabel "Asociaciones"@es ;
+    skos:notation "vocab_asociaciones" ;
+    skos:definition "Controlled vocabulary rule for asociaciones"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_aviso_publicitario a skos:Concept ;
+    skos:prefLabel "vocab_aviso_publicitario"@en ;
+    skos:prefLabel "vocab_aviso_publicitario"@es ;
+    skos:altLabel "Aviso Publicitario"@es ;
+    skos:notation "vocab_aviso_publicitario" ;
+    skos:definition "Controlled vocabulary rule for aviso publicitario"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_aviso_publicitario_apro_economico a skos:Concept ;
+    skos:prefLabel "vocab_aviso_publicitario_apro_economico"@en ;
+    skos:prefLabel "vocab_aviso_publicitario_apro_economico"@es ;
+    skos:altLabel "Aviso Publicitario Apro Economico"@es ;
+    skos:notation "vocab_aviso_publicitario_apro_economico" ;
+    skos:definition "Controlled vocabulary rule for aviso publicitario apro economico"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_barrio a skos:Concept ;
+    skos:prefLabel "vocab_barrio"@en ;
+    skos:prefLabel "vocab_barrio"@es ;
+    skos:altLabel "Barrio"@es ;
+    skos:notation "vocab_barrio" ;
+    skos:definition "Controlled vocabulary rule for barrio"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_beneficiario_programa_estatal a skos:Concept ;
+    skos:prefLabel "vocab_beneficiario_programa_estatal"@en ;
+    skos:prefLabel "vocab_beneficiario_programa_estatal"@es ;
+    skos:altLabel "Beneficiario Programa Estatal"@es ;
+    skos:notation "vocab_beneficiario_programa_estatal" ;
+    skos:definition "Controlled vocabulary rule for beneficiario programa estatal"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_campesino a skos:Concept ;
+    skos:prefLabel "vocab_campesino"@en ;
+    skos:prefLabel "vocab_campesino"@es ;
+    skos:altLabel "Campesino"@es ;
+    skos:notation "vocab_campesino" ;
+    skos:definition "Controlled vocabulary rule for campesino"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_capacidad_diferencial a skos:Concept ;
+    skos:prefLabel "vocab_capacidad_diferencial"@en ;
+    skos:prefLabel "vocab_capacidad_diferencial"@es ;
+    skos:altLabel "Capacidad Diferencial"@es ;
+    skos:notation "vocab_capacidad_diferencial" ;
+    skos:definition "Controlled vocabulary rule for capacidad diferencial"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_categoria_aeep a skos:Concept ;
+    skos:prefLabel "vocab_categoria_aeep"@en ;
+    skos:prefLabel "vocab_categoria_aeep"@es ;
+    skos:altLabel "Categoria Aeep"@es ;
+    skos:notation "vocab_categoria_aeep" ;
+    skos:definition "Controlled vocabulary rule for categoria aeep"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_categoria_enfermedad a skos:Concept ;
+    skos:prefLabel "vocab_categoria_enfermedad"@en ;
+    skos:prefLabel "vocab_categoria_enfermedad"@es ;
+    skos:altLabel "Categoria Enfermedad"@es ;
+    skos:notation "vocab_categoria_enfermedad" ;
+    skos:definition "Controlled vocabulary rule for categoria enfermedad"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_causal_estudio a skos:Concept ;
+    skos:prefLabel "vocab_causal_estudio"@en ;
+    skos:prefLabel "vocab_causal_estudio"@es ;
+    skos:altLabel "Causal Estudio"@es ;
+    skos:notation "vocab_causal_estudio" ;
+    skos:definition "Controlled vocabulary rule for causal estudio"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_clase_venta a skos:Concept ;
+    skos:prefLabel "vocab_clase_venta"@en ;
+    skos:prefLabel "vocab_clase_venta"@es ;
+    skos:altLabel "Clase Venta"@es ;
+    skos:notation "vocab_clase_venta" ;
+    skos:definition "Controlled vocabulary rule for clase venta"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_codigo_ciiu a skos:Concept ;
+    skos:prefLabel "vocab_codigo_ciiu"@en ;
+    skos:prefLabel "vocab_codigo_ciiu"@es ;
+    skos:altLabel "Codigo Ciiu"@es ;
+    skos:notation "vocab_codigo_ciiu" ;
+    skos:definition "Controlled vocabulary rule for codigo ciiu"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_comuna a skos:Concept ;
+    skos:prefLabel "vocab_comuna"@en ;
+    skos:prefLabel "vocab_comuna"@es ;
+    skos:altLabel "Comuna"@es ;
+    skos:notation "vocab_comuna" ;
+    skos:definition "Controlled vocabulary rule for comuna"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_concepto_aeep a skos:Concept ;
+    skos:prefLabel "vocab_concepto_aeep"@en ;
+    skos:prefLabel "vocab_concepto_aeep"@es ;
+    skos:altLabel "Concepto Aeep"@es ;
+    skos:notation "vocab_concepto_aeep" ;
+    skos:definition "Controlled vocabulary rule for concepto aeep"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_condiciones_especiales_mujer a skos:Concept ;
+    skos:prefLabel "vocab_condiciones_especiales_mujer"@en ;
+    skos:prefLabel "vocab_condiciones_especiales_mujer"@es ;
+    skos:altLabel "Condiciones Especiales Mujer"@es ;
+    skos:notation "vocab_condiciones_especiales_mujer" ;
+    skos:definition "Controlled vocabulary rule for condiciones especiales mujer"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_consumo_sustancias a skos:Concept ;
+    skos:prefLabel "vocab_consumo_sustancias"@en ;
+    skos:prefLabel "vocab_consumo_sustancias"@es ;
+    skos:altLabel "Consumo Sustancias"@es ;
+    skos:notation "vocab_consumo_sustancias" ;
+    skos:definition "Controlled vocabulary rule for consumo sustancias"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_convenio a skos:Concept ;
+    skos:prefLabel "vocab_convenio"@en ;
+    skos:prefLabel "vocab_convenio"@es ;
+    skos:altLabel "Convenio"@es ;
+    skos:notation "vocab_convenio" ;
+    skos:definition "Controlled vocabulary rule for convenio"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_cubierta a skos:Concept ;
+    skos:prefLabel "vocab_cubierta"@en ;
+    skos:prefLabel "vocab_cubierta"@es ;
+    skos:altLabel "Cubierta"@es ;
+    skos:notation "vocab_cubierta" ;
+    skos:definition "Controlled vocabulary rule for cubierta"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_decision_pev a skos:Concept ;
+    skos:prefLabel "vocab_decision_pev"@en ;
+    skos:prefLabel "vocab_decision_pev"@es ;
+    skos:altLabel "Decision Pev"@es ;
+    skos:notation "vocab_decision_pev" ;
+    skos:definition "Controlled vocabulary rule for decision pev"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_departamentos a skos:Concept ;
+    skos:prefLabel "vocab_departamentos"@en ;
+    skos:prefLabel "vocab_departamentos"@es ;
+    skos:altLabel "Departamentos"@es ;
+    skos:notation "vocab_departamentos" ;
+    skos:definition "Controlled vocabulary rule for departamentos"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_dia_semana a skos:Concept ;
+    skos:prefLabel "vocab_dia_semana"@en ;
+    skos:prefLabel "vocab_dia_semana"@es ;
+    skos:altLabel "Dia Semana"@es ;
+    skos:notation "vocab_dia_semana" ;
+    skos:definition "Controlled vocabulary rule for dia semana"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_elemento_medicion a skos:Concept ;
+    skos:prefLabel "vocab_elemento_medicion"@en ;
+    skos:prefLabel "vocab_elemento_medicion"@es ;
+    skos:altLabel "Elemento Medicion"@es ;
+    skos:notation "vocab_elemento_medicion" ;
+    skos:definition "Controlled vocabulary rule for elemento medicion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_enfermedad_cronica a skos:Concept ;
+    skos:prefLabel "vocab_enfermedad_cronica"@en ;
+    skos:prefLabel "vocab_enfermedad_cronica"@es ;
+    skos:altLabel "Enfermedad Cronica"@es ;
+    skos:notation "vocab_enfermedad_cronica" ;
+    skos:definition "Controlled vocabulary rule for enfermedad cronica"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_entidad_apoyo_operativa a skos:Concept ;
+    skos:prefLabel "vocab_entidad_apoyo_operativa"@en ;
+    skos:prefLabel "vocab_entidad_apoyo_operativa"@es ;
+    skos:altLabel "Entidad Apoyo Operativa"@es ;
+    skos:notation "vocab_entidad_apoyo_operativa" ;
+    skos:definition "Controlled vocabulary rule for entidad apoyo operativa"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_entidad_jubilacion a skos:Concept ;
+    skos:prefLabel "vocab_entidad_jubilacion"@en ;
+    skos:prefLabel "vocab_entidad_jubilacion"@es ;
+    skos:altLabel "Entidad Jubilacion"@es ;
+    skos:notation "vocab_entidad_jubilacion" ;
+    skos:definition "Controlled vocabulary rule for entidad jubilacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_eps a skos:Concept ;
+    skos:prefLabel "vocab_eps"@en ;
+    skos:prefLabel "vocab_eps"@es ;
+    skos:altLabel "Eps"@es ;
+    skos:notation "vocab_eps" ;
+    skos:definition "Controlled vocabulary rule for eps"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_escolaridad a skos:Concept ;
+    skos:prefLabel "vocab_escolaridad"@en ;
+    skos:prefLabel "vocab_escolaridad"@es ;
+    skos:altLabel "Escolaridad"@es ;
+    skos:notation "vocab_escolaridad" ;
+    skos:definition "Controlled vocabulary rule for escolaridad"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_espacio_aeep a skos:Concept ;
+    skos:prefLabel "vocab_espacio_aeep"@en ;
+    skos:prefLabel "vocab_espacio_aeep"@es ;
+    skos:altLabel "Espacio Aeep"@es ;
+    skos:notation "vocab_espacio_aeep" ;
+    skos:definition "Controlled vocabulary rule for espacio aeep"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_estado a skos:Concept ;
+    skos:prefLabel "vocab_estado"@en ;
+    skos:prefLabel "vocab_estado"@es ;
+    skos:altLabel "Estado"@es ;
+    skos:notation "vocab_estado" ;
+    skos:definition "Controlled vocabulary rule for estado"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_estado_autorizacion a skos:Concept ;
+    skos:prefLabel "vocab_estado_autorizacion"@en ;
+    skos:prefLabel "vocab_estado_autorizacion"@es ;
+    skos:altLabel "Estado Autorizacion"@es ;
+    skos:notation "vocab_estado_autorizacion" ;
+    skos:definition "Controlled vocabulary rule for estado autorizacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_estado_civil a skos:Concept ;
+    skos:prefLabel "vocab_estado_civil"@en ;
+    skos:prefLabel "vocab_estado_civil"@es ;
+    skos:altLabel "Estado Civil"@es ;
+    skos:notation "vocab_estado_civil" ;
+    skos:definition "Controlled vocabulary rule for estado civil"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_estado_facturacion_mesas a skos:Concept ;
+    skos:prefLabel "vocab_estado_facturacion_mesas"@en ;
+    skos:prefLabel "vocab_estado_facturacion_mesas"@es ;
+    skos:altLabel "Estado Facturacion Mesas"@es ;
+    skos:notation "vocab_estado_facturacion_mesas" ;
+    skos:definition "Controlled vocabulary rule for estado facturacion mesas"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_estado_permiso_mesas a skos:Concept ;
+    skos:prefLabel "vocab_estado_permiso_mesas"@en ;
+    skos:prefLabel "vocab_estado_permiso_mesas"@es ;
+    skos:altLabel "Estado Permiso Mesas"@es ;
+    skos:notation "vocab_estado_permiso_mesas" ;
+    skos:definition "Controlled vocabulary rule for estado permiso mesas"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_estado_recurso a skos:Concept ;
+    skos:prefLabel "vocab_estado_recurso"@en ;
+    skos:prefLabel "vocab_estado_recurso"@es ;
+    skos:altLabel "Estado Recurso"@es ;
+    skos:notation "vocab_estado_recurso" ;
+    skos:definition "Controlled vocabulary rule for estado recurso"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_estado_solicitud_pev a skos:Concept ;
+    skos:prefLabel "vocab_estado_solicitud_pev"@en ;
+    skos:prefLabel "vocab_estado_solicitud_pev"@es ;
+    skos:altLabel "Estado Solicitud Pev"@es ;
+    skos:notation "vocab_estado_solicitud_pev" ;
+    skos:definition "Controlled vocabulary rule for estado solicitud pev"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_etapa_ciclo_vital a skos:Concept ;
+    skos:prefLabel "vocab_etapa_ciclo_vital"@en ;
+    skos:prefLabel "vocab_etapa_ciclo_vital"@es ;
+    skos:altLabel "Etapa Ciclo Vital"@es ;
+    skos:notation "vocab_etapa_ciclo_vital" ;
+    skos:definition "Controlled vocabulary rule for etapa ciclo vital"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_etnia a skos:Concept ;
+    skos:prefLabel "vocab_etnia"@en ;
+    skos:prefLabel "vocab_etnia"@es ;
+    skos:altLabel "Etnia"@es ;
+    skos:notation "vocab_etnia" ;
+    skos:definition "Controlled vocabulary rule for etnia"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_exento_retribucion a skos:Concept ;
+    skos:prefLabel "vocab_exento_retribucion"@en ;
+    skos:prefLabel "vocab_exento_retribucion"@es ;
+    skos:altLabel "Exento Retribucion"@es ;
+    skos:notation "vocab_exento_retribucion" ;
+    skos:definition "Controlled vocabulary rule for exento retribucion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_finalidad_valla a skos:Concept ;
+    skos:prefLabel "vocab_finalidad_valla"@en ;
+    skos:prefLabel "vocab_finalidad_valla"@es ;
+    skos:altLabel "Finalidad Valla"@es ;
+    skos:notation "vocab_finalidad_valla" ;
+    skos:definition "Controlled vocabulary rule for finalidad valla"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_fondo_pension a skos:Concept ;
+    skos:prefLabel "vocab_fondo_pension"@en ;
+    skos:prefLabel "vocab_fondo_pension"@es ;
+    skos:altLabel "Fondo Pension"@es ;
+    skos:notation "vocab_fondo_pension" ;
+    skos:definition "Controlled vocabulary rule for fondo pension"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_franja_horaria a skos:Concept ;
+    skos:prefLabel "vocab_franja_horaria"@en ;
+    skos:prefLabel "vocab_franja_horaria"@es ;
+    skos:altLabel "Franja Horaria"@es ;
+    skos:notation "vocab_franja_horaria" ;
+    skos:definition "Controlled vocabulary rule for franja horaria"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_gestion_permiso_mesas a skos:Concept ;
+    skos:prefLabel "vocab_gestion_permiso_mesas"@en ;
+    skos:prefLabel "vocab_gestion_permiso_mesas"@es ;
+    skos:altLabel "Gestion Permiso Mesas"@es ;
+    skos:notation "vocab_gestion_permiso_mesas" ;
+    skos:definition "Controlled vocabulary rule for gestion permiso mesas"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_grupo_comunitario a skos:Concept ;
+    skos:prefLabel "vocab_grupo_comunitario"@en ;
+    skos:prefLabel "vocab_grupo_comunitario"@es ;
+    skos:altLabel "Grupo Comunitario"@es ;
+    skos:notation "vocab_grupo_comunitario" ;
+    skos:definition "Controlled vocabulary rule for grupo comunitario"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_grupo_sisben a skos:Concept ;
+    skos:prefLabel "vocab_grupo_sisben"@en ;
+    skos:prefLabel "vocab_grupo_sisben"@es ;
+    skos:altLabel "Grupo Sisben"@es ;
+    skos:notation "vocab_grupo_sisben" ;
+    skos:definition "Controlled vocabulary rule for grupo sisben"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_indicador_parametro a skos:Concept ;
+    skos:prefLabel "vocab_indicador_parametro"@en ;
+    skos:prefLabel "vocab_indicador_parametro"@es ;
+    skos:altLabel "Indicador Parametro"@es ;
+    skos:notation "vocab_indicador_parametro" ;
+    skos:definition "Controlled vocabulary rule for indicador parametro"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_item_elemento_publicitario a skos:Concept ;
+    skos:prefLabel "vocab_item_elemento_publicitario"@en ;
+    skos:prefLabel "vocab_item_elemento_publicitario"@es ;
+    skos:altLabel "Item Elemento Publicitario"@es ;
+    skos:notation "vocab_item_elemento_publicitario" ;
+    skos:definition "Controlled vocabulary rule for item elemento publicitario"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_item_retenido a skos:Concept ;
+    skos:prefLabel "vocab_item_retenido"@en ;
+    skos:prefLabel "vocab_item_retenido"@es ;
+    skos:altLabel "Item Retenido"@es ;
+    skos:notation "vocab_item_retenido" ;
+    skos:definition "Controlled vocabulary rule for item retenido"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_item_valla a skos:Concept ;
+    skos:prefLabel "vocab_item_valla"@en ;
+    skos:prefLabel "vocab_item_valla"@es ;
+    skos:altLabel "Item Valla"@es ;
+    skos:notation "vocab_item_valla" ;
+    skos:definition "Controlled vocabulary rule for item valla"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_ixi_anexo a skos:Concept ;
+    skos:prefLabel "vocab_ixi_anexo"@en ;
+    skos:prefLabel "vocab_ixi_anexo"@es ;
+    skos:altLabel "Ixi Anexo"@es ;
+    skos:notation "vocab_ixi_anexo" ;
+    skos:definition "Controlled vocabulary rule for ixi anexo"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_jornada a skos:Concept ;
+    skos:prefLabel "vocab_jornada"@en ;
+    skos:prefLabel "vocab_jornada"@es ;
+    skos:altLabel "Jornada"@es ;
+    skos:notation "vocab_jornada" ;
+    skos:definition "Controlled vocabulary rule for jornada"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_labor_vendedor a skos:Concept ;
+    skos:prefLabel "vocab_labor_vendedor"@en ;
+    skos:prefLabel "vocab_labor_vendedor"@es ;
+    skos:altLabel "Labor Vendedor"@es ;
+    skos:notation "vocab_labor_vendedor" ;
+    skos:definition "Controlled vocabulary rule for labor vendedor"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_material_amueblamiento a skos:Concept ;
+    skos:prefLabel "vocab_material_amueblamiento"@en ;
+    skos:prefLabel "vocab_material_amueblamiento"@es ;
+    skos:altLabel "Material Amueblamiento"@es ;
+    skos:notation "vocab_material_amueblamiento" ;
+    skos:definition "Controlled vocabulary rule for material amueblamiento"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_material_pared a skos:Concept ;
+    skos:prefLabel "vocab_material_pared"@en ;
+    skos:prefLabel "vocab_material_pared"@es ;
+    skos:altLabel "Material Pared"@es ;
+    skos:notation "vocab_material_pared" ;
+    skos:definition "Controlled vocabulary rule for material pared"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_material_piso a skos:Concept ;
+    skos:prefLabel "vocab_material_piso"@en ;
+    skos:prefLabel "vocab_material_piso"@es ;
+    skos:altLabel "Material Piso"@es ;
+    skos:notation "vocab_material_piso" ;
+    skos:definition "Controlled vocabulary rule for material piso"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_material_techo a skos:Concept ;
+    skos:prefLabel "vocab_material_techo"@en ;
+    skos:prefLabel "vocab_material_techo"@es ;
+    skos:altLabel "Material Techo"@es ;
+    skos:notation "vocab_material_techo" ;
+    skos:definition "Controlled vocabulary rule for material techo"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_modalidad_espacio_mesas a skos:Concept ;
+    skos:prefLabel "vocab_modalidad_espacio_mesas"@en ;
+    skos:prefLabel "vocab_modalidad_espacio_mesas"@es ;
+    skos:altLabel "Modalidad Espacio Mesas"@es ;
+    skos:notation "vocab_modalidad_espacio_mesas" ;
+    skos:definition "Controlled vocabulary rule for modalidad espacio mesas"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_modulo_pev a skos:Concept ;
+    skos:prefLabel "vocab_modulo_pev"@en ;
+    skos:prefLabel "vocab_modulo_pev"@es ;
+    skos:altLabel "Modulo Pev"@es ;
+    skos:notation "vocab_modulo_pev" ;
+    skos:definition "Controlled vocabulary rule for modulo pev"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_motivo_autorizacion a skos:Concept ;
+    skos:prefLabel "vocab_motivo_autorizacion"@en ;
+    skos:prefLabel "vocab_motivo_autorizacion"@es ;
+    skos:altLabel "Motivo Autorizacion"@es ;
+    skos:notation "vocab_motivo_autorizacion" ;
+    skos:definition "Controlled vocabulary rule for motivo autorizacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_motivo_intervencion_infraestructura a skos:Concept ;
+    skos:prefLabel "vocab_motivo_intervencion_infraestructura"@en ;
+    skos:prefLabel "vocab_motivo_intervencion_infraestructura"@es ;
+    skos:altLabel "Motivo Intervencion Infraestructura"@es ;
+    skos:notation "vocab_motivo_intervencion_infraestructura" ;
+    skos:definition "Controlled vocabulary rule for motivo intervencion infraestructura"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_motivo_labora_espacio_publico a skos:Concept ;
+    skos:prefLabel "vocab_motivo_labora_espacio_publico"@en ;
+    skos:prefLabel "vocab_motivo_labora_espacio_publico"@es ;
+    skos:altLabel "Motivo Labora Espacio Publico"@es ;
+    skos:notation "vocab_motivo_labora_espacio_publico" ;
+    skos:definition "Controlled vocabulary rule for motivo labora espacio publico"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_motivo_recuperacion a skos:Concept ;
+    skos:prefLabel "vocab_motivo_recuperacion"@en ;
+    skos:prefLabel "vocab_motivo_recuperacion"@es ;
+    skos:altLabel "Motivo Recuperacion"@es ;
+    skos:notation "vocab_motivo_recuperacion" ;
+    skos:definition "Controlled vocabulary rule for motivo recuperacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_municipio a skos:Concept ;
+    skos:prefLabel "vocab_municipio"@en ;
+    skos:prefLabel "vocab_municipio"@es ;
+    skos:altLabel "Municipio"@es ;
+    skos:notation "vocab_municipio" ;
+    skos:definition "Controlled vocabulary rule for municipio"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_nacionalidad a skos:Concept ;
+    skos:prefLabel "vocab_nacionalidad"@en ;
+    skos:prefLabel "vocab_nacionalidad"@es ;
+    skos:altLabel "Nacionalidad"@es ;
+    skos:notation "vocab_nacionalidad" ;
+    skos:definition "Controlled vocabulary rule for nacionalidad"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_niveles_sisben a skos:Concept ;
+    skos:prefLabel "vocab_niveles_sisben"@en ;
+    skos:prefLabel "vocab_niveles_sisben"@es ;
+    skos:altLabel "Niveles Sisben"@es ;
+    skos:notation "vocab_niveles_sisben" ;
+    skos:definition "Controlled vocabulary rule for niveles sisben"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_nomenclatura_vial a skos:Concept ;
+    skos:prefLabel "vocab_nomenclatura_vial"@en ;
+    skos:prefLabel "vocab_nomenclatura_vial"@es ;
+    skos:altLabel "Nomenclatura Vial"@es ;
+    skos:notation "vocab_nomenclatura_vial" ;
+    skos:definition "Controlled vocabulary rule for nomenclatura vial"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_obtencion_propiedad a skos:Concept ;
+    skos:prefLabel "vocab_obtencion_propiedad"@en ;
+    skos:prefLabel "vocab_obtencion_propiedad"@es ;
+    skos:altLabel "Obtencion Propiedad"@es ;
+    skos:notation "vocab_obtencion_propiedad" ;
+    skos:definition "Controlled vocabulary rule for obtencion propiedad"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_ocupacion a skos:Concept ;
+    skos:prefLabel "vocab_ocupacion"@en ;
+    skos:prefLabel "vocab_ocupacion"@es ;
+    skos:altLabel "Ocupacion"@es ;
+    skos:notation "vocab_ocupacion" ;
+    skos:definition "Controlled vocabulary rule for ocupacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_orientacion a skos:Concept ;
+    skos:prefLabel "vocab_orientacion"@en ;
+    skos:prefLabel "vocab_orientacion"@es ;
+    skos:altLabel "Orientacion"@es ;
+    skos:notation "vocab_orientacion" ;
+    skos:definition "Controlled vocabulary rule for orientacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_parentesco a skos:Concept ;
+    skos:prefLabel "vocab_parentesco"@en ;
+    skos:prefLabel "vocab_parentesco"@es ;
+    skos:altLabel "Parentesco"@es ;
+    skos:notation "vocab_parentesco" ;
+    skos:definition "Controlled vocabulary rule for parentesco"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_persona_atiende a skos:Concept ;
+    skos:prefLabel "vocab_persona_atiende"@en ;
+    skos:prefLabel "vocab_persona_atiende"@es ;
+    skos:altLabel "Persona Atiende"@es ;
+    skos:notation "vocab_persona_atiende" ;
+    skos:definition "Controlled vocabulary rule for persona atiende"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_problemas_aspectos_venta a skos:Concept ;
+    skos:prefLabel "vocab_problemas_aspectos_venta"@en ;
+    skos:prefLabel "vocab_problemas_aspectos_venta"@es ;
+    skos:altLabel "Problemas Aspectos Venta"@es ;
+    skos:notation "vocab_problemas_aspectos_venta" ;
+    skos:definition "Controlled vocabulary rule for problemas aspectos venta"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_programa_o_entidad a skos:Concept ;
+    skos:prefLabel "vocab_programa_o_entidad"@en ;
+    skos:prefLabel "vocab_programa_o_entidad"@es ;
+    skos:altLabel "Programa O Entidad"@es ;
+    skos:notation "vocab_programa_o_entidad" ;
+    skos:definition "Controlled vocabulary rule for programa o entidad"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_programa_reubicacion a skos:Concept ;
+    skos:prefLabel "vocab_programa_reubicacion"@en ;
+    skos:prefLabel "vocab_programa_reubicacion"@es ;
+    skos:altLabel "Programa Reubicacion"@es ;
+    skos:notation "vocab_programa_reubicacion" ;
+    skos:definition "Controlled vocabulary rule for programa reubicacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_proteccion_constitucional a skos:Concept ;
+    skos:prefLabel "vocab_proteccion_constitucional"@en ;
+    skos:prefLabel "vocab_proteccion_constitucional"@es ;
+    skos:altLabel "Proteccion Constitucional"@es ;
+    skos:notation "vocab_proteccion_constitucional" ;
+    skos:definition "Controlled vocabulary rule for proteccion constitucional"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_puntos_referencia a skos:Concept ;
+    skos:prefLabel "vocab_puntos_referencia"@en ;
+    skos:prefLabel "vocab_puntos_referencia"@es ;
+    skos:altLabel "Puntos Referencia"@es ;
+    skos:notation "vocab_puntos_referencia" ;
+    skos:definition "Controlled vocabulary rule for puntos referencia"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_rango_ingreso_mensual a skos:Concept ;
+    skos:prefLabel "vocab_rango_ingreso_mensual"@en ;
+    skos:prefLabel "vocab_rango_ingreso_mensual"@es ;
+    skos:altLabel "Rango Ingreso Mensual"@es ;
+    skos:notation "vocab_rango_ingreso_mensual" ;
+    skos:definition "Controlled vocabulary rule for rango ingreso mensual"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_remision_oferta a skos:Concept ;
+    skos:prefLabel "vocab_remision_oferta"@en ;
+    skos:prefLabel "vocab_remision_oferta"@es ;
+    skos:altLabel "Remision Oferta"@es ;
+    skos:notation "vocab_remision_oferta" ;
+    skos:definition "Controlled vocabulary rule for remision oferta"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_resuelve_resolucion a skos:Concept ;
+    skos:prefLabel "vocab_resuelve_resolucion"@en ;
+    skos:prefLabel "vocab_resuelve_resolucion"@es ;
+    skos:altLabel "Resuelve Resolucion"@es ;
+    skos:notation "vocab_resuelve_resolucion" ;
+    skos:definition "Controlled vocabulary rule for resuelve resolucion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_resultado_visita_pev a skos:Concept ;
+    skos:prefLabel "vocab_resultado_visita_pev"@en ;
+    skos:prefLabel "vocab_resultado_visita_pev"@es ;
+    skos:altLabel "Resultado Visita Pev"@es ;
+    skos:notation "vocab_resultado_visita_pev" ;
+    skos:definition "Controlled vocabulary rule for resultado visita pev"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_sector_modulos a skos:Concept ;
+    skos:prefLabel "vocab_sector_modulos"@en ;
+    skos:prefLabel "vocab_sector_modulos"@es ;
+    skos:altLabel "Sector Modulos"@es ;
+    skos:notation "vocab_sector_modulos" ;
+    skos:definition "Controlled vocabulary rule for sector modulos"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_seguimiento_estado_pev a skos:Concept ;
+    skos:prefLabel "vocab_seguimiento_estado_pev"@en ;
+    skos:prefLabel "vocab_seguimiento_estado_pev"@es ;
+    skos:altLabel "Seguimiento Estado Pev"@es ;
+    skos:notation "vocab_seguimiento_estado_pev" ;
+    skos:definition "Controlled vocabulary rule for seguimiento estado pev"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_servicio_publico a skos:Concept ;
+    skos:prefLabel "vocab_servicio_publico"@en ;
+    skos:prefLabel "vocab_servicio_publico"@es ;
+    skos:altLabel "Servicio Publico"@es ;
+    skos:notation "vocab_servicio_publico" ;
+    skos:definition "Controlled vocabulary rule for servicio publico"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_sexo a skos:Concept ;
+    skos:prefLabel "vocab_sexo"@en ;
+    skos:prefLabel "vocab_sexo"@es ;
+    skos:altLabel "Sexo"@es ;
+    skos:notation "vocab_sexo" ;
+    skos:definition "Controlled vocabulary rule for sexo"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_sitio_prohibido a skos:Concept ;
+    skos:prefLabel "vocab_sitio_prohibido"@en ;
+    skos:prefLabel "vocab_sitio_prohibido"@es ;
+    skos:altLabel "Sitio Prohibido"@es ;
+    skos:notation "vocab_sitio_prohibido" ;
+    skos:definition "Controlled vocabulary rule for sitio prohibido"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_situacion_vendedor a skos:Concept ;
+    skos:prefLabel "vocab_situacion_vendedor"@en ;
+    skos:prefLabel "vocab_situacion_vendedor"@es ;
+    skos:altLabel "Situacion Vendedor"@es ;
+    skos:notation "vocab_situacion_vendedor" ;
+    skos:definition "Controlled vocabulary rule for situacion vendedor"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_subcategoria_aeep a skos:Concept ;
+    skos:prefLabel "vocab_subcategoria_aeep"@en ;
+    skos:prefLabel "vocab_subcategoria_aeep"@es ;
+    skos:altLabel "Subcategoria Aeep"@es ;
+    skos:notation "vocab_subcategoria_aeep" ;
+    skos:definition "Controlled vocabulary rule for subcategoria aeep"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tenencia_propiedad a skos:Concept ;
+    skos:prefLabel "vocab_tenencia_propiedad"@en ;
+    skos:prefLabel "vocab_tenencia_propiedad"@es ;
+    skos:altLabel "Tenencia Propiedad"@es ;
+    skos:notation "vocab_tenencia_propiedad" ;
+    skos:definition "Controlled vocabulary rule for tenencia propiedad"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tenencia_vivienda a skos:Concept ;
+    skos:prefLabel "vocab_tenencia_vivienda"@en ;
+    skos:prefLabel "vocab_tenencia_vivienda"@es ;
+    skos:altLabel "Tenencia Vivienda"@es ;
+    skos:notation "vocab_tenencia_vivienda" ;
+    skos:definition "Controlled vocabulary rule for tenencia vivienda"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_territorio a skos:Concept ;
+    skos:prefLabel "vocab_territorio"@en ;
+    skos:prefLabel "vocab_territorio"@es ;
+    skos:altLabel "Territorio"@es ;
+    skos:notation "vocab_territorio" ;
+    skos:definition "Controlled vocabulary rule for territorio"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_acueducto a skos:Concept ;
+    skos:prefLabel "vocab_tipo_acueducto"@en ;
+    skos:prefLabel "vocab_tipo_acueducto"@es ;
+    skos:altLabel "Tipo Acueducto"@es ;
+    skos:notation "vocab_tipo_acueducto" ;
+    skos:definition "Controlled vocabulary rule for tipo acueducto"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_afiliacion a skos:Concept ;
+    skos:prefLabel "vocab_tipo_afiliacion"@en ;
+    skos:prefLabel "vocab_tipo_afiliacion"@es ;
+    skos:altLabel "Tipo Afiliacion"@es ;
+    skos:notation "vocab_tipo_afiliacion" ;
+    skos:definition "Controlled vocabulary rule for tipo afiliacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_asociacion a skos:Concept ;
+    skos:prefLabel "vocab_tipo_asociacion"@en ;
+    skos:prefLabel "vocab_tipo_asociacion"@es ;
+    skos:altLabel "Tipo Asociacion"@es ;
+    skos:notation "vocab_tipo_asociacion" ;
+    skos:definition "Controlled vocabulary rule for tipo asociacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_capacidad_diferencial a skos:Concept ;
+    skos:prefLabel "vocab_tipo_capacidad_diferencial"@en ;
+    skos:prefLabel "vocab_tipo_capacidad_diferencial"@es ;
+    skos:altLabel "Tipo Capacidad Diferencial"@es ;
+    skos:notation "vocab_tipo_capacidad_diferencial" ;
+    skos:definition "Controlled vocabulary rule for tipo capacidad diferencial"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_comerciante a skos:Concept ;
+    skos:prefLabel "vocab_tipo_comerciante"@en ;
+    skos:prefLabel "vocab_tipo_comerciante"@es ;
+    skos:altLabel "Tipo Comerciante"@es ;
+    skos:notation "vocab_tipo_comerciante" ;
+    skos:definition "Controlled vocabulary rule for tipo comerciante"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_conexion_alcantarillado a skos:Concept ;
+    skos:prefLabel "vocab_tipo_conexion_alcantarillado"@en ;
+    skos:prefLabel "vocab_tipo_conexion_alcantarillado"@es ;
+    skos:altLabel "Tipo Conexion Alcantarillado"@es ;
+    skos:notation "vocab_tipo_conexion_alcantarillado" ;
+    skos:definition "Controlled vocabulary rule for tipo conexion alcantarillado"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_conexion_energia a skos:Concept ;
+    skos:prefLabel "vocab_tipo_conexion_energia"@en ;
+    skos:prefLabel "vocab_tipo_conexion_energia"@es ;
+    skos:altLabel "Tipo Conexion Energia"@es ;
+    skos:notation "vocab_tipo_conexion_energia" ;
+    skos:definition "Controlled vocabulary rule for tipo conexion energia"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_conexion_gas a skos:Concept ;
+    skos:prefLabel "vocab_tipo_conexion_gas"@en ;
+    skos:prefLabel "vocab_tipo_conexion_gas"@es ;
+    skos:altLabel "Tipo Conexion Gas"@es ;
+    skos:notation "vocab_tipo_conexion_gas" ;
+    skos:definition "Controlled vocabulary rule for tipo conexion gas"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_conexion_servicio a skos:Concept ;
+    skos:prefLabel "vocab_tipo_conexion_servicio"@en ;
+    skos:prefLabel "vocab_tipo_conexion_servicio"@es ;
+    skos:altLabel "Tipo Conexion Servicio"@es ;
+    skos:notation "vocab_tipo_conexion_servicio" ;
+    skos:definition "Controlled vocabulary rule for tipo conexion servicio"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_conocimiento a skos:Concept ;
+    skos:prefLabel "vocab_tipo_conocimiento"@en ;
+    skos:prefLabel "vocab_tipo_conocimiento"@es ;
+    skos:altLabel "Tipo Conocimiento"@es ;
+    skos:notation "vocab_tipo_conocimiento" ;
+    skos:definition "Controlled vocabulary rule for tipo conocimiento"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_cotiza a skos:Concept ;
+    skos:prefLabel "vocab_tipo_cotiza"@en ;
+    skos:prefLabel "vocab_tipo_cotiza"@es ;
+    skos:altLabel "Tipo Cotiza"@es ;
+    skos:notation "vocab_tipo_cotiza" ;
+    skos:definition "Controlled vocabulary rule for tipo cotiza"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_documento a skos:Concept ;
+    skos:prefLabel "vocab_tipo_documento"@en ;
+    skos:prefLabel "vocab_tipo_documento"@es ;
+    skos:altLabel "Tipo Documento"@es ;
+    skos:notation "vocab_tipo_documento" ;
+    skos:definition "Controlled vocabulary rule for tipo documento"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_evidencia a skos:Concept ;
+    skos:prefLabel "vocab_tipo_evidencia"@en ;
+    skos:prefLabel "vocab_tipo_evidencia"@es ;
+    skos:altLabel "Tipo Evidencia"@es ;
+    skos:notation "vocab_tipo_evidencia" ;
+    skos:definition "Controlled vocabulary rule for tipo evidencia"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_infraccion a skos:Concept ;
+    skos:prefLabel "vocab_tipo_infraccion"@en ;
+    skos:prefLabel "vocab_tipo_infraccion"@es ;
+    skos:altLabel "Tipo Infraccion"@es ;
+    skos:notation "vocab_tipo_infraccion" ;
+    skos:definition "Controlled vocabulary rule for tipo infraccion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_instalacion a skos:Concept ;
+    skos:prefLabel "vocab_tipo_instalacion"@en ;
+    skos:prefLabel "vocab_tipo_instalacion"@es ;
+    skos:altLabel "Tipo Instalacion"@es ;
+    skos:notation "vocab_tipo_instalacion" ;
+    skos:definition "Controlled vocabulary rule for tipo instalacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_miembro_sector_interno a skos:Concept ;
+    skos:prefLabel "vocab_tipo_miembro_sector_interno"@en ;
+    skos:prefLabel "vocab_tipo_miembro_sector_interno"@es ;
+    skos:altLabel "Tipo Miembro Sector Interno"@es ;
+    skos:notation "vocab_tipo_miembro_sector_interno" ;
+    skos:definition "Controlled vocabulary rule for tipo miembro sector interno"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_misional a skos:Concept ;
+    skos:prefLabel "vocab_tipo_misional"@en ;
+    skos:prefLabel "vocab_tipo_misional"@es ;
+    skos:altLabel "Tipo Misional"@es ;
+    skos:notation "vocab_tipo_misional" ;
+    skos:definition "Controlled vocabulary rule for tipo misional"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_mixtura_suelo a skos:Concept ;
+    skos:prefLabel "vocab_tipo_mixtura_suelo"@en ;
+    skos:prefLabel "vocab_tipo_mixtura_suelo"@es ;
+    skos:altLabel "Tipo Mixtura Suelo"@es ;
+    skos:notation "vocab_tipo_mixtura_suelo" ;
+    skos:definition "Controlled vocabulary rule for tipo mixtura suelo"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_modulo a skos:Concept ;
+    skos:prefLabel "vocab_tipo_modulo"@en ;
+    skos:prefLabel "vocab_tipo_modulo"@es ;
+    skos:altLabel "Tipo Modulo"@es ;
+    skos:notation "vocab_tipo_modulo" ;
+    skos:definition "Controlled vocabulary rule for tipo modulo"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_modulo_otro a skos:Concept ;
+    skos:prefLabel "vocab_tipo_modulo_otro"@en ;
+    skos:prefLabel "vocab_tipo_modulo_otro"@es ;
+    skos:altLabel "Tipo Modulo Otro"@es ;
+    skos:notation "vocab_tipo_modulo_otro" ;
+    skos:definition "Controlled vocabulary rule for tipo modulo otro"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_necesidad a skos:Concept ;
+    skos:prefLabel "vocab_tipo_necesidad"@en ;
+    skos:prefLabel "vocab_tipo_necesidad"@es ;
+    skos:altLabel "Tipo Necesidad"@es ;
+    skos:notation "vocab_tipo_necesidad" ;
+    skos:definition "Controlled vocabulary rule for tipo necesidad"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_notificacion a skos:Concept ;
+    skos:prefLabel "vocab_tipo_notificacion"@en ;
+    skos:prefLabel "vocab_tipo_notificacion"@es ;
+    skos:altLabel "Tipo Notificacion"@es ;
+    skos:notation "vocab_tipo_notificacion" ;
+    skos:definition "Controlled vocabulary rule for tipo notificacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_ocupacion a skos:Concept ;
+    skos:prefLabel "vocab_tipo_ocupacion"@en ;
+    skos:prefLabel "vocab_tipo_ocupacion"@es ;
+    skos:altLabel "Tipo Ocupacion"@es ;
+    skos:notation "vocab_tipo_ocupacion" ;
+    skos:definition "Controlled vocabulary rule for tipo ocupacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_oferta a skos:Concept ;
+    skos:prefLabel "vocab_tipo_oferta"@en ;
+    skos:prefLabel "vocab_tipo_oferta"@es ;
+    skos:altLabel "Tipo Oferta"@es ;
+    skos:notation "vocab_tipo_oferta" ;
+    skos:definition "Controlled vocabulary rule for tipo oferta"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_permanencia a skos:Concept ;
+    skos:prefLabel "vocab_tipo_permanencia"@en ;
+    skos:prefLabel "vocab_tipo_permanencia"@es ;
+    skos:altLabel "Tipo Permanencia"@es ;
+    skos:notation "vocab_tipo_permanencia" ;
+    skos:definition "Controlled vocabulary rule for tipo permanencia"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_persona a skos:Concept ;
+    skos:prefLabel "vocab_tipo_persona"@en ;
+    skos:prefLabel "vocab_tipo_persona"@es ;
+    skos:altLabel "Tipo Persona"@es ;
+    skos:notation "vocab_tipo_persona" ;
+    skos:definition "Controlled vocabulary rule for tipo persona"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_pobreza a skos:Concept ;
+    skos:prefLabel "vocab_tipo_pobreza"@en ;
+    skos:prefLabel "vocab_tipo_pobreza"@es ;
+    skos:altLabel "Tipo Pobreza"@es ;
+    skos:notation "vocab_tipo_pobreza" ;
+    skos:definition "Controlled vocabulary rule for tipo pobreza"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_proteccion_constitucional a skos:Concept ;
+    skos:prefLabel "vocab_tipo_proteccion_constitucional"@en ;
+    skos:prefLabel "vocab_tipo_proteccion_constitucional"@es ;
+    skos:altLabel "Tipo Proteccion Constitucional"@es ;
+    skos:notation "vocab_tipo_proteccion_constitucional" ;
+    skos:definition "Controlled vocabulary rule for tipo proteccion constitucional"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_publicidad a skos:Concept ;
+    skos:prefLabel "vocab_tipo_publicidad"@en ;
+    skos:prefLabel "vocab_tipo_publicidad"@es ;
+    skos:altLabel "Tipo Publicidad"@es ;
+    skos:notation "vocab_tipo_publicidad" ;
+    skos:definition "Controlled vocabulary rule for tipo publicidad"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_recurso a skos:Concept ;
+    skos:prefLabel "vocab_tipo_recurso"@en ;
+    skos:prefLabel "vocab_tipo_recurso"@es ;
+    skos:altLabel "Tipo Recurso"@es ;
+    skos:notation "vocab_tipo_recurso" ;
+    skos:definition "Controlled vocabulary rule for tipo recurso"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_sensibilizacion a skos:Concept ;
+    skos:prefLabel "vocab_tipo_sensibilizacion"@en ;
+    skos:prefLabel "vocab_tipo_sensibilizacion"@es ;
+    skos:altLabel "Tipo Sensibilizacion"@es ;
+    skos:notation "vocab_tipo_sensibilizacion" ;
+    skos:definition "Controlled vocabulary rule for tipo sensibilizacion"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_solicitud a skos:Concept ;
+    skos:prefLabel "vocab_tipo_solicitud"@en ;
+    skos:prefLabel "vocab_tipo_solicitud"@es ;
+    skos:altLabel "Tipo Solicitud"@es ;
+    skos:notation "vocab_tipo_solicitud" ;
+    skos:definition "Controlled vocabulary rule for tipo solicitud"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_vehiculo a skos:Concept ;
+    skos:prefLabel "vocab_tipo_vehiculo"@en ;
+    skos:prefLabel "vocab_tipo_vehiculo"@es ;
+    skos:altLabel "Tipo Vehiculo"@es ;
+    skos:notation "vocab_tipo_vehiculo" ;
+    skos:definition "Controlled vocabulary rule for tipo vehiculo"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_via_letra a skos:Concept ;
+    skos:prefLabel "vocab_tipo_via_letra"@en ;
+    skos:prefLabel "vocab_tipo_via_letra"@es ;
+    skos:altLabel "Tipo Via Letra"@es ;
+    skos:notation "vocab_tipo_via_letra" ;
+    skos:definition "Controlled vocabulary rule for tipo via letra"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_visita a skos:Concept ;
+    skos:prefLabel "vocab_tipo_visita"@en ;
+    skos:prefLabel "vocab_tipo_visita"@es ;
+    skos:altLabel "Tipo Visita"@es ;
+    skos:notation "vocab_tipo_visita" ;
+    skos:definition "Controlled vocabulary rule for tipo visita"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipo_vivienda a skos:Concept ;
+    skos:prefLabel "vocab_tipo_vivienda"@en ;
+    skos:prefLabel "vocab_tipo_vivienda"@es ;
+    skos:altLabel "Tipo Vivienda"@es ;
+    skos:notation "vocab_tipo_vivienda" ;
+    skos:definition "Controlled vocabulary rule for tipo vivienda"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipologia_familiar a skos:Concept ;
+    skos:prefLabel "vocab_tipologia_familiar"@en ;
+    skos:prefLabel "vocab_tipologia_familiar"@es ;
+    skos:altLabel "Tipologia Familiar"@es ;
+    skos:notation "vocab_tipologia_familiar" ;
+    skos:definition "Controlled vocabulary rule for tipologia familiar"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipologia_original a skos:Concept ;
+    skos:prefLabel "vocab_tipologia_original"@en ;
+    skos:prefLabel "vocab_tipologia_original"@es ;
+    skos:altLabel "Tipologia Original"@es ;
+    skos:notation "vocab_tipologia_original" ;
+    skos:definition "Controlled vocabulary rule for tipologia original"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_tipologia_transitoria a skos:Concept ;
+    skos:prefLabel "vocab_tipologia_transitoria"@en ;
+    skos:prefLabel "vocab_tipologia_transitoria"@es ;
+    skos:altLabel "Tipologia Transitoria"@es ;
+    skos:notation "vocab_tipologia_transitoria" ;
+    skos:definition "Controlled vocabulary rule for tipologia transitoria"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+:vocab_valores_apgar a skos:Concept ;
+    skos:prefLabel "vocab_valores_apgar"@en ;
+    skos:prefLabel "vocab_valores_apgar"@es ;
+    skos:altLabel "Valores Apgar"@es ;
+    skos:notation "vocab_valores_apgar" ;
+    skos:definition "Controlled vocabulary rule for valores apgar"@es ;
+    skos:broader :VocabularyRule ;
+    skos:inScheme <https://w3id.org/medellin/espacio-publico/core/rule-names> .
+
+# =============================================================================
+# COLLECTIONS: Grouped Views
+# =============================================================================
+
+:AllRuleNames a skos:Collection ;
+    skos:prefLabel "All Rule Names"@en ;
+    skos:prefLabel "Todos los Nombres de Regla"@es ;
+    skos:member :format_blood_type_rh, :format_boolean, :format_colombian_address, :format_colombian_id, :format_colombian_id_permissive, :format_colombian_phone, :format_currency, :format_decimal, :format_divipola, :format_email,
+        :format_hex_color, :format_integer, :format_ipv4, :format_ipv6, :format_iso_date, :format_iso_datetime, :format_json, :format_latitude_decimal, :format_latlon_decimal_deg, :format_license_plate_co,
+        :format_longitude_decimal, :format_matricula_inmobiliaria, :format_name, :format_percentage, :format_postal_code, :format_sisbene_iv_group, :format_time_hhmmss, :format_url, :format_uuid, :regulacion_format_boolean,
+        :regulacion_format_colombian_address, :regulacion_format_colombian_id, :regulacion_format_colombian_phone, :regulacion_format_consecutivo_mercurio, :regulacion_format_integer, :regulacion_format_iso_date, :regulacion_format_latlon_decimal_deg, :regulacion_format_moneda_colombiana, :regulacion_format_name, :regulacion_format_texto_libre,
+        :regulacion_format_uuid, :regulacion_vocab_clase_venta, :regulacion_vocab_comuna, :regulacion_vocab_municipio, :regulacion_vocab_nomenclatura_vial, :regulacion_vocab_orientacion, :regulacion_vocab_sexo, :regulacion_vocab_tipo_documento, :regulacion_vocab_tipo_via_letra, :vocab_actividad_economica_tipologica,
+        :vocab_actividad_operativa, :vocab_actividad_prohibida, :vocab_actividades_participacion, :vocab_adicionales_amoblamiento, :vocab_alerta_renovacion_mesas, :vocab_artes_oficios, :vocab_asociaciones, :vocab_aviso_publicitario, :vocab_aviso_publicitario_apro_economico, :vocab_barrio,
+        :vocab_beneficiario_programa_estatal, :vocab_campesino, :vocab_capacidad_diferencial, :vocab_categoria_aeep, :vocab_categoria_enfermedad, :vocab_causal_estudio, :vocab_clase_venta, :vocab_codigo_ciiu, :vocab_comuna, :vocab_concepto_aeep,
+        :vocab_condiciones_especiales_mujer, :vocab_consumo_sustancias, :vocab_convenio, :vocab_cubierta, :vocab_decision_pev, :vocab_departamentos, :vocab_dia_semana, :vocab_elemento_medicion, :vocab_enfermedad_cronica, :vocab_entidad_apoyo_operativa,
+        :vocab_entidad_jubilacion, :vocab_eps, :vocab_escolaridad, :vocab_espacio_aeep, :vocab_estado, :vocab_estado_autorizacion, :vocab_estado_civil, :vocab_estado_facturacion_mesas, :vocab_estado_permiso_mesas, :vocab_estado_recurso,
+        :vocab_estado_solicitud_pev, :vocab_etapa_ciclo_vital, :vocab_etnia, :vocab_exento_retribucion, :vocab_finalidad_valla, :vocab_fondo_pension, :vocab_franja_horaria, :vocab_gestion_permiso_mesas, :vocab_grupo_comunitario, :vocab_grupo_sisben,
+        :vocab_indicador_parametro, :vocab_item_elemento_publicitario, :vocab_item_retenido, :vocab_item_valla, :vocab_ixi_anexo, :vocab_jornada, :vocab_labor_vendedor, :vocab_material_amueblamiento, :vocab_material_pared, :vocab_material_piso,
+        :vocab_material_techo, :vocab_modalidad_espacio_mesas, :vocab_modulo_pev, :vocab_motivo_autorizacion, :vocab_motivo_intervencion_infraestructura, :vocab_motivo_labora_espacio_publico, :vocab_motivo_recuperacion, :vocab_municipio, :vocab_nacionalidad, :vocab_niveles_sisben,
+        :vocab_nomenclatura_vial, :vocab_obtencion_propiedad, :vocab_ocupacion, :vocab_orientacion, :vocab_parentesco, :vocab_persona_atiende, :vocab_problemas_aspectos_venta, :vocab_programa_o_entidad, :vocab_programa_reubicacion, :vocab_proteccion_constitucional,
+        :vocab_puntos_referencia, :vocab_rango_ingreso_mensual, :vocab_remision_oferta, :vocab_resuelve_resolucion, :vocab_resultado_visita_pev, :vocab_sector_modulos, :vocab_seguimiento_estado_pev, :vocab_servicio_publico, :vocab_sexo, :vocab_sitio_prohibido,
+        :vocab_situacion_vendedor, :vocab_subcategoria_aeep, :vocab_tenencia_propiedad, :vocab_tenencia_vivienda, :vocab_territorio, :vocab_tipo_acueducto, :vocab_tipo_afiliacion, :vocab_tipo_asociacion, :vocab_tipo_capacidad_diferencial, :vocab_tipo_comerciante,
+        :vocab_tipo_conexion_alcantarillado, :vocab_tipo_conexion_energia, :vocab_tipo_conexion_gas, :vocab_tipo_conexion_servicio, :vocab_tipo_conocimiento, :vocab_tipo_cotiza, :vocab_tipo_documento, :vocab_tipo_evidencia, :vocab_tipo_infraccion, :vocab_tipo_instalacion,
+        :vocab_tipo_miembro_sector_interno, :vocab_tipo_misional, :vocab_tipo_mixtura_suelo, :vocab_tipo_modulo, :vocab_tipo_modulo_otro, :vocab_tipo_necesidad, :vocab_tipo_notificacion, :vocab_tipo_ocupacion, :vocab_tipo_oferta, :vocab_tipo_permanencia,
+        :vocab_tipo_persona, :vocab_tipo_pobreza, :vocab_tipo_proteccion_constitucional, :vocab_tipo_publicidad, :vocab_tipo_recurso, :vocab_tipo_sensibilizacion, :vocab_tipo_solicitud, :vocab_tipo_vehiculo, :vocab_tipo_via_letra, :vocab_tipo_visita,
+        :vocab_tipo_vivienda, :vocab_tipologia_familiar, :vocab_tipologia_original, :vocab_tipologia_transitoria, :vocab_valores_apgar .
+
+:VocabularyRuleNames a skos:Collection ;
+    skos:prefLabel "Vocabulary Rule Names"@en ;
+    skos:prefLabel "Nombres de Regla de Vocabulario"@es ;
+    skos:member :vocab_actividad_economica_tipologica, :vocab_actividad_operativa, :vocab_actividad_prohibida, :vocab_actividades_participacion, :vocab_adicionales_amoblamiento, :vocab_alerta_renovacion_mesas, :vocab_artes_oficios, :vocab_asociaciones, :vocab_aviso_publicitario, :vocab_aviso_publicitario_apro_economico,
+        :vocab_barrio, :vocab_beneficiario_programa_estatal, :vocab_campesino, :vocab_capacidad_diferencial, :vocab_categoria_aeep, :vocab_categoria_enfermedad, :vocab_causal_estudio, :vocab_clase_venta, :vocab_codigo_ciiu, :vocab_comuna,
+        :vocab_concepto_aeep, :vocab_condiciones_especiales_mujer, :vocab_consumo_sustancias, :vocab_convenio, :vocab_cubierta, :vocab_decision_pev, :vocab_departamentos, :vocab_dia_semana, :vocab_elemento_medicion, :vocab_enfermedad_cronica,
+        :vocab_entidad_apoyo_operativa, :vocab_entidad_jubilacion, :vocab_eps, :vocab_escolaridad, :vocab_espacio_aeep, :vocab_estado, :vocab_estado_autorizacion, :vocab_estado_civil, :vocab_estado_facturacion_mesas, :vocab_estado_permiso_mesas,
+        :vocab_estado_recurso, :vocab_estado_solicitud_pev, :vocab_etapa_ciclo_vital, :vocab_etnia, :vocab_exento_retribucion, :vocab_finalidad_valla, :vocab_fondo_pension, :vocab_franja_horaria, :vocab_gestion_permiso_mesas, :vocab_grupo_comunitario,
+        :vocab_grupo_sisben, :vocab_indicador_parametro, :vocab_item_elemento_publicitario, :vocab_item_retenido, :vocab_item_valla, :vocab_ixi_anexo, :vocab_jornada, :vocab_labor_vendedor, :vocab_material_amueblamiento, :vocab_material_pared,
+        :vocab_material_piso, :vocab_material_techo, :vocab_modalidad_espacio_mesas, :vocab_modulo_pev, :vocab_motivo_autorizacion, :vocab_motivo_intervencion_infraestructura, :vocab_motivo_labora_espacio_publico, :vocab_motivo_recuperacion, :vocab_municipio, :vocab_nacionalidad,
+        :vocab_niveles_sisben, :vocab_nomenclatura_vial, :vocab_obtencion_propiedad, :vocab_ocupacion, :vocab_orientacion, :vocab_parentesco, :vocab_persona_atiende, :vocab_problemas_aspectos_venta, :vocab_programa_o_entidad, :vocab_programa_reubicacion,
+        :vocab_proteccion_constitucional, :vocab_puntos_referencia, :vocab_rango_ingreso_mensual, :vocab_remision_oferta, :vocab_resuelve_resolucion, :vocab_resultado_visita_pev, :vocab_sector_modulos, :vocab_seguimiento_estado_pev, :vocab_servicio_publico, :vocab_sexo,
+        :vocab_sitio_prohibido, :vocab_situacion_vendedor, :vocab_subcategoria_aeep, :vocab_tenencia_propiedad, :vocab_tenencia_vivienda, :vocab_territorio, :vocab_tipo_acueducto, :vocab_tipo_afiliacion, :vocab_tipo_asociacion, :vocab_tipo_capacidad_diferencial,
+        :vocab_tipo_comerciante, :vocab_tipo_conexion_alcantarillado, :vocab_tipo_conexion_energia, :vocab_tipo_conexion_gas, :vocab_tipo_conexion_servicio, :vocab_tipo_conocimiento, :vocab_tipo_cotiza, :vocab_tipo_documento, :vocab_tipo_evidencia, :vocab_tipo_infraccion,
+        :vocab_tipo_instalacion, :vocab_tipo_miembro_sector_interno, :vocab_tipo_misional, :vocab_tipo_mixtura_suelo, :vocab_tipo_modulo, :vocab_tipo_modulo_otro, :vocab_tipo_necesidad, :vocab_tipo_notificacion, :vocab_tipo_ocupacion, :vocab_tipo_oferta,
+        :vocab_tipo_permanencia, :vocab_tipo_persona, :vocab_tipo_pobreza, :vocab_tipo_proteccion_constitucional, :vocab_tipo_publicidad, :vocab_tipo_recurso, :vocab_tipo_sensibilizacion, :vocab_tipo_solicitud, :vocab_tipo_vehiculo, :vocab_tipo_via_letra,
+        :vocab_tipo_visita, :vocab_tipo_vivienda, :vocab_tipologia_familiar, :vocab_tipologia_original, :vocab_tipologia_transitoria, :vocab_valores_apgar .
+
+:FormatRuleNames a skos:Collection ;
+    skos:prefLabel "Format Rule Names"@en ;
+    skos:prefLabel "Nombres de Regla de Formato"@es ;
+    skos:member :format_blood_type_rh, :format_boolean, :format_colombian_address, :format_colombian_id, :format_colombian_id_permissive, :format_colombian_phone, :format_currency, :format_decimal, :format_divipola, :format_email,
+        :format_hex_color, :format_integer, :format_ipv4, :format_ipv6, :format_iso_date, :format_iso_datetime, :format_json, :format_latitude_decimal, :format_latlon_decimal_deg, :format_license_plate_co,
+        :format_longitude_decimal, :format_matricula_inmobiliaria, :format_name, :format_percentage, :format_postal_code, :format_sisbene_iv_group, :format_time_hhmmss, :format_url, :format_uuid .
+
+:RegulacionVocabularyRuleNames a skos:Collection ;
+    skos:prefLabel "Regulacion Vocabulary Rule Names"@en ;
+    skos:prefLabel "Nombres de Regla de Vocabulario de Regulacion"@es ;
+    skos:scopeNote "Rules from regulacion_v1 DMP tentative a2_listas for vendor regulation procedure"@en ;
+    skos:member :regulacion_vocab_clase_venta, :regulacion_vocab_comuna, :regulacion_vocab_municipio, :regulacion_vocab_nomenclatura_vial, :regulacion_vocab_orientacion, :regulacion_vocab_sexo, :regulacion_vocab_tipo_documento, :regulacion_vocab_tipo_via_letra .
+
+:RegulacionFormatRuleNames a skos:Collection ;
+    skos:prefLabel "Regulacion Format Rule Names"@en ;
+    skos:prefLabel "Nombres de Regla de Formato de Regulacion"@es ;
+    skos:scopeNote "Rules from regulacion_v1 DMP tentative a3_formatos for vendor regulation procedure"@en ;
+    skos:member :regulacion_format_boolean, :regulacion_format_colombian_address, :regulacion_format_colombian_id, :regulacion_format_colombian_phone, :regulacion_format_consecutivo_mercurio, :regulacion_format_integer, :regulacion_format_iso_date, :regulacion_format_latlon_decimal_deg, :regulacion_format_moneda_colombiana, :regulacion_format_name,
+        :regulacion_format_texto_libre, :regulacion_format_uuid .

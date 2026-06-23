@@ -1,0 +1,527 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <https://schema.org/> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+
+# EP Modeling Namespaces
+@prefix ep: <https://w3id.org/medellin/ep/> .
+@prefix epp: <https://w3id.org/medellin/ep/property/> .
+@prefix epd: <https://w3id.org/medellin/ep/domain/> .
+@prefix epd-fam: <https://w3id.org/medellin/ep/domain/familias/> .
+@prefix epd-fam-prop: <https://w3id.org/medellin/ep/domain/familias/property/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# ============================================================================
+# ONTOLOGY METADATA
+# ============================================================================
+
+<https://w3id.org/medellin/ep/domain/familias>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/ep/domain/familias/0.1.0> ;
+    dct:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dct:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    owl:versionInfo "0.1.0" ;
+    dct:title "Composición Familiar de Vendedores Informales"@es ;
+    dct:description "Ontología complementaria para el dominio familias_v1. Describe la estructura y composición de familias de vendedores informales"@es ;
+    dct:creator "EP Modeling Team" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    dct:modified "2026-01-11"^^xsd:date ;
+    dct:source "DMP familias_v1 dataset - Complementary to caracterizacion_v1" ;
+    dct:license "CC-BY-4.0" ;
+    owl:imports <https://w3id.org/medellin/ep/domain/caracterizacion> ;
+    rdfs:comment "Describe miembros de familia, roles, relaciones de parentesco y composición de unidades familiares de vendedores"@es .
+
+# ============================================================================
+# CORE CLASSES: FAMILIAS DOMAIN
+# ============================================================================
+
+# --- FAMILY UNIT (Inherited from caracterizacion) ---
+
+epd-fam:UnidadFamiliarCompleta
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf ep:UnidadFamiliar ;
+    rdfs:label "Unidad Familiar Completa"@es ;
+    skos:prefLabel "Unidad Familiar Caracterizada"@es ;
+    skos:definition "Unidad familiar cuya composición ha sido registrada detalladamente con información de cada miembro a través del formulario familias_v1"@es ;
+    skos:scopeNote "Combina información de caracterizacion_v1 (cabeza hogar) con detalle de miembros en familias_v1"@es ;
+    rdfs:comment "Grano: Una unidad familiar por vendedor caracterizado. Puede contener 1-N miembros"@es ;
+    dct:source "Tabla familias_v1 en dataset caracterizacion" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-fam-prop:contieneMiembro ;
+        owl:minCardinality 1
+    ] ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-fam-prop:tieneCabezaFamiliar ;
+        owl:cardinality 1
+    ] .
+
+# --- FAMILY MEMBER (Core entity) ---
+
+epd-fam:MiembroFamiliar
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf foaf:Person ;
+    rdfs:label "Miembro Familiar"@es ;
+    skos:prefLabel "Miembro de la Familia"@es ;
+    skos:altLabel "Dependiente del Vendedor"@es ;
+    skos:definition "Persona que cohabita en la misma vivienda que el vendedor informal y forma parte de su unidad familiar"@es ;
+    skos:scopeNote "Puede ser cónyuge, hijo, padre, hermano, otro pariente o no pariente"@es ;
+    skos:example "María García (esposa de vendedor), Carlos García (hijo de 8 años), Rosa García (madre del vendedor)"@es ;
+    rdfs:comment "Información de dependientes economicos; incluye datos de edad, educación, situación económica"@es ;
+    dct:source "DMP familias_v1 - Tabla de miembros familiares" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-fam-prop:tipoMiembroFamiliar ;
+        owl:cardinality 1
+    ] ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-fam-prop:edadMiembro ;
+        owl:cardinality 1
+    ] .
+
+# --- HEAD OF HOUSEHOLD ---
+
+epd-fam:CabezaFamiliar
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-fam:MiembroFamiliar ;
+    rdfs:label "Cabeza de Familia"@es ;
+    skos:prefLabel "Principal Responsable Económico"@es ;
+    skos:definition "Miembro familiar que es el principal responsable económico y líder de la unidad familiar"@es ;
+    skos:scopeNote "Típicamente el vendedor caracterizado, aunque puede ser otra persona en la familia"@es ;
+    rdfs:comment "Rol único por familia; información de estrato económico refleja a esta persona"@es ;
+    dct:source "DMP a1_diccionario - vendor_es_cabeza_hogar y relación con familias_v1" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-fam-prop:esResponsableEconomicoDe ;
+        owl:minCardinality 0
+    ] .
+
+# --- CHILD (Vulnerable population) ---
+
+epd-fam:NinoEnFamilia
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-fam:MiembroFamiliar ;
+    rdfs:label "Niño en Familia"@es ;
+    skos:prefLabel "Niño o Menor de Edad"@es ;
+    skos:definition "Miembro de familia menor de 18 años bajo responsabilidad del vendedor"@es ;
+    skos:scopeNote "Población especial: requiere educación, protección, oportunidades"@es ;
+    rdfs:comment "Información de dependencia económica, educación, acceso a servicios"@es ;
+    dct:source "familias_v1 - edad < 18" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-fam-prop:edadMiembro ;
+        owl:allValuesFrom [
+            a rdfs:Datatype ;
+            owl:onDatatype xsd:integer ;
+            xsd:maxInclusive 17
+        ]
+    ] .
+
+epd-fam:NinoEnEdadEscolar
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-fam:NinoEnFamilia ;
+    skos:prefLabel "Niño en Edad Escolar"@es ;
+    skos:definition "Menor entre 5 y 17 años que debería estar en educación formal"@es ;
+    dct:source "familias_v1 - edad 5-17" .
+
+epd-fam:NinoPreescolar
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-fam:NinoEnFamilia ;
+    skos:prefLabel "Niño en Edad Preescolar"@es ;
+    skos:definition "Menor entre 0 y 4 años que requiere cuidado especializado"@es ;
+    dct:source "familias_v1 - edad 0-4" .
+
+# --- SPOUSE/PARTNER ---
+
+epd-fam:ConyugeOPareja
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-fam:MiembroFamiliar ;
+    rdfs:label "Cónyuge u Otra Pareja"@es ;
+    skos:prefLabel "Pareja del Vendedor"@es ;
+    skos:definition "Persona casada, en unión libre o pareja del vendedor que convive en la misma vivienda"@es ;
+    rdfs:comment "Puede ser casado oficialmente o en unión libre; información de estado civil y ocupación"@es ;
+    dct:source "familias_v1 - relacion_parentesco = cónyuge/pareja" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-fam-prop:esParejaDe ;
+        owl:cardinality 1
+    ] .
+
+# --- DEPENDENT POPULATION ---
+
+epd-fam:PersonaDependiente
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-fam:MiembroFamiliar ;
+    rdfs:label "Persona Dependiente"@es ;
+    skos:prefLabel "Dependiente Económico"@es ;
+    skos:definition "Miembro familiar que depende económicamente del vendedor por edad, incapacidad o falta de empleo"@es ;
+    rdfs:comment "Incluye menores de edad, ancianos sin pensión, personas con discapacidad"@es ;
+    dcat:keyword "dependent"@en, "dependiente"@es .
+
+# --- CHILD IN LABORING SITUATION ---
+
+epd-fam:NinoEnSituacionDeLabor
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-fam:NinoEnFamilia ;
+    rdfs:label "Niño en Situación de Labor"@es ;
+    skos:prefLabel "Niño Trabajador"@es ;
+    skos:definition "Menor de edad que realiza actividad laboral o económica (potencialmente trabajo infantil)"@es ;
+    skos:scopeNote "Población especial: protección por ILO Convenio 182"@es ;
+    rdfs:comment "Información sensible; requiere investigación y apoyo institucional"@es ;
+    dct:source "familias_v1 - actividad_miembro = actividad laboral para menores" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-fam-prop:realizaActividadLaboral ;
+        owl:minCardinality 1
+    ] .
+
+# --- EDUCATION STATUS ---
+
+epd-fam:SituacionEducativa
+    a owl:Class, skos:Concept ;
+    rdfs:label "Situación Educativa"@es ;
+    skos:prefLabel "Estatus Educativo de Miembro"@es ;
+    skos:definition "Estado de asistencia y nivel de escolaridad de un miembro familiar"@es ;
+    skos:scopeNote "Indica si está en educación formal, nivel alcanzado, tipo de institución"@es ;
+    rdfs:comment "Información de cobertura educativa para menores de la familia"@es ;
+    dct:source "familias_v1 - educacion_miembro" .
+
+# --- HEALTH CONDITIONS ---
+
+epd-fam:CondicionDeSaludMiembro
+    a owl:Class, skos:Concept ;
+    rdfs:label "Condición de Salud del Miembro"@es ;
+    skos:prefLabel "Estado de Salud"@es ;
+    skos:definition "Condición de salud, discapacidad o necesidad de cuidados especiales de un miembro familiar"@es ;
+    rdfs:comment "Información sensible; necesaria para diseñar programas de salud dirigidos"@es ;
+    dct:source "familias_v1 - salud_miembro, discapacidad_miembro" .
+
+# --- EMPLOYMENT/ECONOMIC ACTIVITY ---
+
+epd-fam:ActividadEconomicaMiembro
+    a owl:Class, skos:Concept ;
+    rdfs:label "Actividad Económica del Miembro"@es ;
+    skos:prefLabel "Ocupación o Actividad Laboral"@es ;
+    skos:definition "Actividad económica, empleo o labor realizada por un miembro familiar"@es ;
+    skos:scopeNote "Identifica si trabaja, en qué sector, si es formal o informal"@es ;
+    rdfs:comment "Información de diversificación de ingresos familiares"@es ;
+    dct:source "familias_v1 - ocupacion_miembro, actividad_miembro" .
+
+# --- TRANSACTION TABLE ---
+
+epd-fam:RegistroMiembroFamiliar
+    a owl:Class, skos:Concept ;
+    rdfs:label "Registro de Miembro Familiar"@es ;
+    skos:prefLabel "Fila de Familias"@es ;
+    skos:definition "Registro individual (fila) en tabla familias_v1 que representa un miembro de una familia caracterizada"@es ;
+    skos:scopeNote "Grano: Un registro por miembro por familia. Relación 1:N entre caracterizacion y familias"@es ;
+    rdfs:comment "Tabla transaccional: trx_familias_v1"@es ;
+    dct:source "Tabla transaccional: trx_familias_v1" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-fam-prop:familiaRegistroPertenece ;
+        owl:cardinality 1
+    ] .
+
+# --- STAGING LAYER ---
+
+epd-fam:MiembroFamiliarEstandarizado
+    a owl:Class, skos:Concept ;
+    rdfs:label "Miembro Familiar Estandarizado"@es ;
+    skos:prefLabel "Registro de Miembro Limpio"@es ;
+    skos:definition "Registro de miembro familiar que ha sido limpiado, validado y estandarizado conforme a DMP"@es ;
+    skos:scopeNote "Equivalente a fila en stg_familias_v1 staging table. Datos de calidad listos para análisis"@es ;
+    dct:source "Tabla staging: stg_familias_v1" ;
+    rdfs:subClassOf epd-fam:RegistroMiembroFamiliar .
+
+# ============================================================================
+# PROPERTIES (Object & Datatype)
+# ============================================================================
+
+# --- FAMILY COMPOSITION PROPERTIES ---
+
+epd-fam-prop:contieneMiembro
+    a owl:ObjectProperty ;
+    rdfs:label "Contiene Miembro"@es ;
+    rdfs:domain epd-fam:UnidadFamiliarCompleta ;
+    rdfs:range epd-fam:MiembroFamiliar ;
+    skos:definition "Relación de composición: familia contiene miembros"@es ;
+    owl:inverseOf epd-fam-prop:perteneceFamiliaDesde ;
+    dcat:keyword "family_composition"@en .
+
+epd-fam-prop:perteneceFamiliaDesde
+    a owl:ObjectProperty ;
+    rdfs:label "Pertenece Familia Desde"@es ;
+    rdfs:domain epd-fam:MiembroFamiliar ;
+    rdfs:range epd-fam:UnidadFamiliarCompleta ;
+    owl:inverseOf epd-fam-prop:contieneMiembro .
+
+epd-fam-prop:tieneCabezaFamiliar
+    a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "Tiene Cabeza Familiar"@es ;
+    rdfs:domain epd-fam:UnidadFamiliarCompleta ;
+    rdfs:range epd-fam:CabezaFamiliar ;
+    skos:definition "Relación funcional: cada familia tiene un cabeza de hogar"@es ;
+    owl:inverseOf epd-fam-prop:esCabezaDeFamilia ;
+    dcat:keyword "household_head"@en .
+
+epd-fam-prop:esCabezaDeFamilia
+    a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "Es Cabeza de Familia"@es ;
+    rdfs:domain epd-fam:CabezaFamiliar ;
+    rdfs:range epd-fam:UnidadFamiliarCompleta ;
+    owl:inverseOf epd-fam-prop:tieneCabezaFamiliar .
+
+# --- MEMBER IDENTIFICATION ---
+
+epd-fam-prop:tipoMiembroFamiliar
+    a owl:ObjectProperty ;
+    rdfs:label "Tipo de Miembro Familiar"@es ;
+    rdfs:domain epd-fam:MiembroFamiliar ;
+    rdfs:range skos:Concept ;
+    skos:definition "Relación de parentesco o tipo de vínculo: hijo, cónyuge, padre, hermano, otro"@es ;
+    dct:source "DMP familias_v1 - relacion_parentesco" ;
+    dcat:keyword "relationship"@en, "parentesco"@es ;
+    rdfs:comment "Vocabulario controlado: hijo/hija, cónyuge/pareja, padre/madre, hermano/a, abuelo/a, otro pariente, no pariente"@es .
+
+epd-fam-prop:edadMiembro
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "Edad del Miembro"@es ;
+    rdfs:domain epd-fam:MiembroFamiliar ;
+    rdfs:range xsd:integer ;
+    skos:definition "Edad en años cumplidos del miembro familiar"@es ;
+    dct:source "DMP familias_v1 - edad_miembro" ;
+    dcat:keyword "age"@en, "edad"@es ;
+    rdfs:comment "Rango típico: 0-100; derivable de fechaNacimiento si se proporciona"@es .
+
+epd-fam-prop:sexoMiembro
+    a owl:ObjectProperty ;
+    rdfs:label "Sexo del Miembro"@es ;
+    rdfs:domain epd-fam:MiembroFamiliar ;
+    rdfs:range skos:Concept ;
+    skos:definition "Sexo con el que se identifica el miembro familiar"@es ;
+    dct:source "DMP familias_v1 - sexo_miembro (si aplica)" ;
+    dcat:keyword "gender"@en, "sexo"@es ;
+    rdfs:comment "Clasificación DANE; información sensible"@es .
+
+# --- SPOUSAL/PARTNERSHIP PROPERTIES ---
+
+epd-fam-prop:esParejaDe
+    a owl:ObjectProperty, owl:InverseFunctionalProperty ;
+    rdfs:label "Es Pareja De"@es ;
+    rdfs:domain epd-fam:ConyugeOPareja ;
+    rdfs:range epd-fam:MiembroFamiliar ;
+    skos:definition "Vinculación de pareja con otro miembro (típicamente cabeza de hogar)"@es ;
+    dcat:keyword "spouse_of"@en ;
+    rdfs:comment "Relación simétrica; cada persona tiene a lo más una pareja"@es .
+
+# --- PARENTAL RELATIONSHIPS ---
+
+epd-fam-prop:esHijoDe
+    a owl:ObjectProperty ;
+    rdfs:label "Es Hijo De"@es ;
+    rdfs:domain epd-fam:NinoEnFamilia ;
+    rdfs:range epd-fam:MiembroFamiliar ;
+    skos:definition "Relación de filiación: es hijo/a de miembro"@es ;
+    dcat:keyword "child_of"@en ;
+    owl:inverseOf epd-fam-prop:tienePadreO ; 
+    
+    # Constraint: Parents should be adults
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-fam-prop:esHijoDe ;
+        owl:minCardinality 0 ;
+        owl:maxCardinality 2
+    ] .
+
+epd-fam-prop:tienePadreO
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Padre u Otro"@es ;
+    rdfs:domain epd-fam:MiembroFamiliar ;
+    rdfs:range epd-fam:NinoEnFamilia ;
+    owl:inverseOf epd-fam-prop:esHijoDe .
+
+# --- DEPENDENCY ---
+
+epd-fam-prop:esResponsableEconomicoDe
+    a owl:ObjectProperty ;
+    rdfs:label "Es Responsable Económico De"@es ;
+    rdfs:domain epd-fam:CabezaFamiliar ;
+    rdfs:range epd-fam:PersonaDependiente ;
+    skos:definition "Cabeza familiar es responsable económico de dependientes"@es ;
+    dcat:keyword "supports"@en, "sustenta"@es ;
+    owl:inverseOf epd-fam-prop:dependeDe .
+
+epd-fam-prop:dependeDe
+    a owl:ObjectProperty ;
+    rdfs:label "Depende De"@es ;
+    rdfs:domain epd-fam:PersonaDependiente ;
+    rdfs:range epd-fam:CabezaFamiliar ;
+    owl:inverseOf epd-fam-prop:esResponsableEconomicoDe .
+
+# --- EDUCATION PROPERTIES ---
+
+epd-fam-prop:tieneEstatusEducativo
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Estatus Educativo"@es ;
+    rdfs:domain epd-fam:MiembroFamiliar ;
+    rdfs:range epd-fam:SituacionEducativa ;
+    skos:definition "Situación educativa actual del miembro"@es ;
+    dcat:keyword "education_status"@en .
+
+epd-fam-prop:asistenciaEscolar
+    a owl:DatatypeProperty ;
+    rdfs:label "Asistencia Escolar"@es ;
+    rdfs:domain epd-fam:SituacionEducativa ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si el miembro asiste actualmente a institución educativa"@es ;
+    dcat:keyword "school_attendance"@en .
+
+epd-fam-prop:nivelEducacionMiembro
+    a owl:ObjectProperty ;
+    rdfs:label "Nivel de Educación"@es ;
+    rdfs:domain epd-fam:SituacionEducativa ;
+    rdfs:range skos:Concept ;
+    skos:definition "Máximo nivel de escolaridad alcanzado"@es ;
+    dct:source "DMP familias_v1 - educacion_miembro" ;
+    dcat:keyword "education_level"@en ;
+    rdfs:comment "Clasificación DANE: preescolar, básica, media, superior"@es .
+
+# --- HEALTH PROPERTIES ---
+
+epd-fam-prop:tieneCondicionSalud
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Condición de Salud"@es ;
+    rdfs:domain epd-fam:MiembroFamiliar ;
+    rdfs:range epd-fam:CondicionDeSaludMiembro ;
+    skos:definition "Condiciones de salud específicas del miembro"@es ;
+    dcat:keyword "health_condition"@en .
+
+epd-fam-prop:tieneDiscapacidadMiembro
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Discapacidad"@es ;
+    rdfs:domain epd-fam:CondicionDeSaludMiembro ;
+    rdfs:range skos:Concept ;
+    skos:definition "Tipo de discapacidad o capacidad diferencial"@es ;
+    dcat:keyword "disability"@en, "discapacidad"@es ;
+    rdfs:comment "Información sensible; clasificación: auditiva, visual, motriz, cognitiva"@es .
+
+# --- ECONOMIC ACTIVITY PROPERTIES ---
+
+epd-fam-prop:realizaActividadLaboral
+    a owl:DatatypeProperty ;
+    rdfs:label "Realiza Actividad Laboral"@es ;
+    rdfs:domain epd-fam:MiembroFamiliar ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si el miembro realiza alguna actividad laboral o económica"@es ;
+    dcat:keyword "works"@en, "trabaja"@es ;
+    rdfs:comment "Crítico para identificar trabajo infantil en niños"@es .
+
+epd-fam-prop:tieneActividadEconomica
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Actividad Económica"@es ;
+    rdfs:domain epd-fam:MiembroFamiliar ;
+    rdfs:range epd-fam:ActividadEconomicaMiembro ;
+    skos:definition "Actividad laboral u ocupación principal"@es ;
+    dcat:keyword "economic_activity"@en ;
+    owl:inverseOf epd-fam-prop:esRealizadaPorMiembro .
+
+epd-fam-prop:esRealizadaPorMiembro
+    a owl:ObjectProperty ;
+    rdfs:label "Es Realizada Por Miembro"@es ;
+    rdfs:domain epd-fam:ActividadEconomicaMiembro ;
+    rdfs:range epd-fam:MiembroFamiliar ;
+    owl:inverseOf epd-fam-prop:tieneActividadEconomica .
+
+epd-fam-prop:ocupacionMiembro
+    a owl:ObjectProperty ;
+    rdfs:label "Ocupación"@es ;
+    rdfs:domain epd-fam:ActividadEconomicaMiembro ;
+    rdfs:range skos:Concept ;
+    skos:definition "Tipo de ocupación: empleado formal, autoempleado, sin empleo, estudiante, ama de casa, etc."@es ;
+    dct:source "DMP familias_v1 - ocupacion_miembro" ;
+    dcat:keyword "occupation"@en .
+
+# --- TRANSACTIONAL PROPERTIES ---
+
+epd-fam-prop:familiaRegistroPertenece
+    a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "Familia del Registro Pertenece"@es ;
+    rdfs:domain epd-fam:RegistroMiembroFamiliar ;
+    rdfs:range epd-fam:UnidadFamiliarCompleta ;
+    skos:definition "Relación entre registro transaccional y familia"@es ;
+    dct:source "Tabla familias_v1 - foreign key a caracterizacion" ;
+    owl:inverseOf epd-fam-prop:generaRegistroMiembro .
+
+epd-fam-prop:generaRegistroMiembro
+    a owl:ObjectProperty ;
+    rdfs:label "Genera Registro de Miembro"@es ;
+    rdfs:domain epd-fam:UnidadFamiliarCompleta ;
+    rdfs:range epd-fam:RegistroMiembroFamiliar ;
+    owl:inverseOf epd-fam-prop:familiaRegistroPertenece .
+
+epd-fam-prop:registroIdFamilias
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "ID de Registro (Familias)"@es ;
+    rdfs:domain epd-fam:RegistroMiembroFamiliar ;
+    rdfs:range xsd:string ;
+    skos:definition "Identificador único del registro en familias_v1"@es ;
+    dct:source "DMP familias_v1 - primary key" ;
+    dcat:keyword "primary_key"@en ;
+    rdfs:comment "Sistema generado; único y no nulo"@es .
+
+# ============================================================================
+# ANNOTATIONS
+# ============================================================================
+
+epd-fam:MiembroFamiliar
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:familias ;
+    dcat:theme epd:derechos_humanos .
+
+epd-fam:UnidadFamiliarCompleta
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:familias ;
+    dcat:theme epd:caracterizacion .
+
+epd-fam:NinoEnFamilia
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:familias ;
+    dcat:theme epd:derechos_humanos ;
+    dcat:theme epd:educacion ;
+    skos:scopeNote "Población especial que requiere protección constitucional y acceso a educación"@es .
+
+epd-fam:NinoEnSituacionDeLabor
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:familias ;
+    dcat:theme epd:derechos_humanos ;
+    skos:scopeNote "Cumplimiento de estándares ILO Convenio 182 sobre formas de trabajo infantil más graves"@es .
+
+epd-fam:SituacionEducativa
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:familias ;
+    dcat:theme epd:educacion ;
+    skos:scopeNote "Información de acceso y calidad educativa de dependientes"@es .
+
+epd-fam:CondicionDeSaludMiembro
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:familias ;
+    dcat:theme epd:salud ;
+    skos:scopeNote "Información sensible con protección PII para diseño de políticas de salud"@es .

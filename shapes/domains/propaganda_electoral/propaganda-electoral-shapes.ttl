@@ -1,0 +1,475 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/propaganda-electoral/shapes#> .
+@prefix pe: <https://w3id.org/medellin/espacio-publico/propaganda-electoral#> .
+@prefix pep: <https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#> .
+@prefix vocab: <https://w3id.org/medellin/espacio-publico/propaganda-electoral/vocab#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# =============================================================================
+# SHACL SHAPES: Propaganda Electoral
+# =============================================================================
+# Restricciones de validacion para las entidades del dominio de propaganda
+# electoral. Basado en los campos obligatorios del sistema transaccional.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/propaganda-electoral/shapes> a sh:Shapesraph ;
+    dcterms:title "SHACL Shapes para Propaganda Electoral"@es ;
+    dcterms:description "Restricciones de validacion para entidades de propaganda electoral"@es ;
+    dcterms:created "2026-01-09"^^xsd:date ;
+    dcterms:source "base_propaganda_electoral_schema.yml"@es .
+
+# =============================================================================
+# SHAPE: Partido Politico
+# =============================================================================
+
+:PartidoPoliticoShape a sh:NodeShape ;
+    sh:targetClass pe:PartidoPolitico ;
+    rdfs:label "Validacion de Partido Politico"@es ;
+    sh:description "Restricciones para registro de partidos politicos"@es ;
+    
+    # Identificador obligatorio
+    sh:property [
+        sh:path pep:partidoNombre ;
+        sh:name "Nombre del Partido"@es ;
+        sh:description "Nombre oficial del partido politico"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minLength 3 ;
+        sh:maxLength 200 ;
+        sh:message "El nombre del partido es obligatorio y debe tener entre 3 y 200 caracteres"@es
+    ] ;
+    
+    # Indicador de coalicion
+    sh:property [
+        sh:path pep:esCoalicion ;
+        sh:name "Es Coalicion"@es ;
+        sh:datatype xsd:boolean ;
+        sh:maxCount 1 ;
+        sh:message "Indicador de coalicion debe ser verdadero o falso"@es
+    ] ;
+    
+    # Representante legal
+    sh:property [
+        sh:path pep:representanteNombre ;
+        sh:name "Representante Legal"@es ;
+        sh:description "Nombre del representante legal del partido"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxLength 150 ;
+        sh:message "El nombre del representante legal es obligatorio"@es
+    ] ;
+    
+    # Documento representante
+    sh:property [
+        sh:path pep:representanteDocumento ;
+        sh:name "Documento del Representante"@es ;
+        sh:datatype xsd:string ;
+        sh:pattern "^[0-9]{5,15}$" ;
+        sh:message "El documento del representante debe tener entre 5 y 15 digitos"@es
+    ] ;
+    
+    # Archivo E6 requerido
+    sh:property [
+        sh:path pep:archivoFormularioE6 ;
+        sh:name "Formulario E6"@es ;
+        sh:description "Archivo del formulario E6 de inscripcion de candidatos"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "El formulario E6 es obligatorio para inscripcion de partido"@es
+    ] .
+
+# =============================================================================
+# SHAPE: Candidato
+# =============================================================================
+
+:CandidatoShape a sh:NodeShape ;
+    sh:targetClass pe:Candidato ;
+    rdfs:label "Validacion de Candidato"@es ;
+    sh:description "Restricciones para registro de candidatos"@es ;
+    
+    # Nombres obligatorios
+    sh:property [
+        sh:path pep:candidatoNombres ;
+        sh:name "Nombres del Candidato"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:minLength 2 ;
+        sh:maxLength 100 ;
+        sh:message "Los nombres del candidato son obligatorios"@es
+    ] ;
+    
+    # Apellidos obligatorios
+    sh:property [
+        sh:path pep:candidatoApellidos ;
+        sh:name "Apellidos del Candidato"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:minLength 2 ;
+        sh:maxLength 100 ;
+        sh:message "Los apellidos del candidato son obligatorios"@es
+    ] ;
+    
+    # Documento obligatorio
+    sh:property [
+        sh:path pep:candidatoDocumento ;
+        sh:name "Documento del Candidato"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[0-9]{5,15}$" ;
+        sh:message "El documento del candidato es obligatorio y debe tener entre 5 y 15 digitos"@es
+    ] ;
+    
+    # Partido obligatorio
+    sh:property [
+        sh:path pep:esPostuladoPor ;
+        sh:name "Partido Postulante"@es ;
+        sh:class pe:PartidoPolitico ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "El candidato debe estar vinculado a un partido politico"@es
+    ] .
+
+# =============================================================================
+# SHAPE: Solicitud de Propaganda (Radicado)
+# =============================================================================
+
+:SolicitudPropagandaShape a sh:NodeShape ;
+    sh:targetClass pe:SolicitudPropaganda ;
+    rdfs:label "Validacion de Solicitud de Propaganda"@es ;
+    sh:description "Restricciones para radicados de solicitud"@es ;
+    
+    # Numero de radicado obligatorio
+    sh:property [
+        sh:path pep:radicadoNumero ;
+        sh:name "Numero de Radicado"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[A-Z0-9\\-]+$" ;
+        sh:message "El numero de radicado es obligatorio y debe tener formato valido"@es
+    ] ;
+    
+    # Partido obligatorio
+    sh:property [
+        sh:path pep:esPresentadaPor ;
+        sh:name "Partido Solicitante"@es ;
+        sh:class pe:PartidoPolitico ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "La solicitud debe estar vinculada a un partido politico"@es
+    ] ;
+    
+    # Periodo electoral obligatorio
+    sh:property [
+        sh:path pep:periodoElectoralAnio ;
+        sh:name "Periodo Electoral"@es ;
+        sh:datatype xsd:gYear ;
+        sh:minCount 1 ;
+        sh:minInclusive "2020"^^xsd:gYear ;
+        sh:maxInclusive "2030"^^xsd:gYear ;
+        sh:message "El periodo electoral es obligatorio y debe estar entre 2020 y 2030"@es
+    ] ;
+    
+    # Tipo de eleccion obligatorio
+    sh:property [
+        sh:path pep:tipoEleccionTexto ;
+        sh:name "Tipo de Eleccion"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:in ("PRESIDENCIAL" "LEGISLATIVA" "TERRITORIAL" "CONSULTA" "REVOCATORIA") ;
+        sh:message "El tipo de eleccion es obligatorio y debe ser un valor valido"@es
+    ] ;
+    
+    # Al menos un elemento publicitario
+    sh:property [
+        sh:path pep:contieneElemento ;
+        sh:name "Elementos Solicitados"@es ;
+        sh:class pe:ElementoPublicitario ;
+        sh:minCount 1 ;
+        sh:message "La solicitud debe contener al menos un elemento publicitario"@es
+    ] ;
+    
+    # Estado obligatorio
+    sh:property [
+        sh:path pep:estadoCodigo ;
+        sh:name "Estado del Radicado"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:in ("RADICADO" "EN_EVALUACION" "REQUERIMIENTO" "AUTORIZADO" "AUTORIZADO_PARCIAL" "NEGADO" "DESISTIDO" "ARCHIVADO") ;
+        sh:message "El estado del radicado es obligatorio"@es
+    ] .
+
+# =============================================================================
+# SHAPE: Elemento Publicitario
+# =============================================================================
+
+:ElementoPublicitarioShape a sh:NodeShape ;
+    sh:targetClass pe:ElementoPublicitario ;
+    rdfs:label "Validacion de Elemento Publicitario"@es ;
+    sh:description "Restricciones para elementos de propaganda"@es ;
+    
+    # Tipo de elemento obligatorio
+    sh:property [
+        sh:path pep:elementoTipo ;
+        sh:name "Tipo de Elemento"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:in ("PENDON" "PASACALLE" "VALLA" "AFICHE" "MURAL" "BANDERA" "CARTEL" "OTRO") ;
+        sh:message "El tipo de elemento es obligatorio y debe ser un valor valido"@es
+    ] ;
+    
+    # Dimensiones
+    sh:property [
+        sh:path pep:dimensionAlto ;
+        sh:name "Alto del Elemento"@es ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 5000 ;
+        sh:message "El alto debe estar entre 0 y 5000 centimetros"@es
+    ] ;
+    
+    sh:property [
+        sh:path pep:dimensionAncho ;
+        sh:name "Ancho del Elemento"@es ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 10000 ;
+        sh:message "El ancho debe estar entre 0 y 10000 centimetros"@es
+    ] ;
+    
+    # Solicitud padre obligatoria
+    sh:property [
+        sh:path pep:perteneceASolicitud ;
+        sh:name "Solicitud Padre"@es ;
+        sh:class pe:SolicitudPropaganda ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "El elemento debe pertenecer a una solicitud"@es
+    ] ;
+    
+    # Ubicacion solicitada obligatoria
+    sh:property [
+        sh:path pep:tieneUbicacionSolicitada ;
+        sh:name "Ubicacion Solicitada"@es ;
+        sh:class pe:UbicacionPropaganda ;
+        sh:minCount 1 ;
+        sh:message "El elemento debe tener ubicacion solicitada"@es
+    ] ;
+    
+    # Estado de autorizacion
+    sh:property [
+        sh:path pep:autorizacionEstado ;
+        sh:name "Estado de Autorizacion"@es ;
+        sh:datatype xsd:string ;
+        sh:in ("PENDIENTE" "APROBADO" "RECHAZADO" "INSTALADO" "RETIRADO" "INCUMPLIMIENTO") ;
+        sh:message "El estado de autorizacion debe ser un valor valido"@es
+    ] .
+
+# =============================================================================
+# SHAPE: Ubicacion de Propaganda
+# =============================================================================
+
+:UbicacionPropagandaShape a sh:NodeShape ;
+    sh:targetClass pe:UbicacionPropaganda ;
+    rdfs:label "Validacion de Ubicacion de Propaganda"@es ;
+    sh:description "Restricciones para ubicaciones de instalacion"@es ;
+    
+    # Ciudad obligatoria
+    sh:property [
+        sh:path pep:ciudad ;
+        sh:name "Ciudad"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:minLength 3 ;
+        sh:message "La ciudad es obligatoria"@es
+    ] ;
+    
+    # Barrio o direccion obligatorio
+    sh:or (
+        [
+            sh:property [
+                sh:path pep:barrio ;
+                sh:minCount 1
+            ]
+        ]
+        [
+            sh:property [
+                sh:path pep:direccion ;
+                sh:minCount 1
+            ]
+        ]
+    ) ;
+    sh:message "Debe especificar barrio o direccion de la ubicacion"@es ;
+    
+    # Titular de inmueble (para vallas en predios privados)
+    sh:property [
+        sh:path pep:titularInmuebleNombre ;
+        sh:name "Titular del Inmueble"@es ;
+        sh:datatype xsd:string ;
+        sh:maxLength 200 ;
+        sh:message "El nombre del titular no puede exceder 200 caracteres"@es
+    ] .
+
+# =============================================================================
+# SHAPE: Infraccion Electoral
+# =============================================================================
+
+:InfraccionElectoralShape a sh:NodeShape ;
+    sh:targetClass pe:InfraccionElectoral ;
+    rdfs:label "Validacion de Infraccion Electoral"@es ;
+    sh:description "Restricciones para registro de infracciones"@es ;
+    
+    # Codigo de infraccion obligatorio
+    sh:property [
+        sh:path pep:infraccionCodigo ;
+        sh:name "Codigo de Infraccion"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:pattern "^[A-Z0-9\\-]+$" ;
+        sh:message "El codigo de infraccion es obligatorio"@es
+    ] ;
+    
+    # Partido infractor obligatorio
+    sh:property [
+        sh:path pep:infraccioRegistradaContra ;
+        sh:name "Partido Infractor"@es ;
+        sh:class pe:PartidoPolitico ;
+        sh:minCount 1 ;
+        sh:message "La infraccion debe estar vinculada a un partido politico"@es
+    ] ;
+    
+    # Tipo de elemento obligatorio
+    sh:property [
+        sh:path pep:elementoTipo ;
+        sh:name "Tipo de Elemento Infractor"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "Debe especificar el tipo de elemento publicitario infractor"@es
+    ] ;
+    
+    # Direccion obligatoria
+    sh:property [
+        sh:path pep:direccion ;
+        sh:name "Direccion de la Infraccion"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "La direccion de la infraccion es obligatoria"@es
+    ] ;
+    
+    # Al menos una foto de evidencia
+    sh:property [
+        sh:path pep:infraccionFoto ;
+        sh:name "Foto de Evidencia"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "La infraccion debe tener al menos una foto de evidencia"@es
+    ] ;
+    
+    # Fecha de ingreso obligatoria
+    sh:property [
+        sh:path pep:ingresoFechaHora ;
+        sh:name "Fecha de Registro"@es ;
+        sh:datatype xsd:dateTime ;
+        sh:minCount 1 ;
+        sh:message "La fecha de registro de la infraccion es obligatoria"@es
+    ] ;
+    
+    # Periodo electoral obligatorio
+    sh:property [
+        sh:path pep:periodoElectoralAnio ;
+        sh:name "Periodo Electoral"@es ;
+        sh:datatype xsd:gYear ;
+        sh:minCount 1 ;
+        sh:message "El periodo electoral es obligatorio"@es
+    ] .
+
+# =============================================================================
+# SHAPE: Resolucion Administrativa
+# =============================================================================
+
+:ResolucionAdministrativaShape a sh:NodeShape ;
+    sh:targetClass pe:ResolucionAdministrativa ;
+    rdfs:label "Validacion de Resolucion"@es ;
+    sh:description "Restricciones para actos administrativos"@es ;
+    
+    # Numero de resolucion obligatorio
+    sh:property [
+        sh:path pep:resolucionNumero ;
+        sh:name "Numero de Resolucion"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[A-Z0-9\\-\\.]+$" ;
+        sh:message "El numero de resolucion es obligatorio"@es
+    ] ;
+    
+    # Fecha de resolucion obligatoria
+    sh:property [
+        sh:path pep:resolucionFecha ;
+        sh:name "Fecha de Resolucion"@es ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:message "La fecha de la resolucion es obligatoria"@es
+    ] ;
+    
+    # Solicitud resuelta obligatoria
+    sh:property [
+        sh:path pep:resuelveSolicitud ;
+        sh:name "Solicitud Resuelta"@es ;
+        sh:class pe:SolicitudPropaganda ;
+        sh:minCount 1 ;
+        sh:message "La resolucion debe estar vinculada a una solicitud"@es
+    ] .
+
+# =============================================================================
+# SHAPE: Requerimiento
+# =============================================================================
+
+:RequerimientoShape a sh:NodeShape ;
+    sh:targetClass pe:Requerimiento ;
+    rdfs:label "Validacion de Requerimiento"@es ;
+    sh:description "Restricciones para requerimientos documentales"@es ;
+    
+    # Codigo obligatorio
+    sh:property [
+        sh:path pep:requerimientoCodigo ;
+        sh:name "Codigo de Requerimiento"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:message "El codigo del requerimiento es obligatorio"@es
+    ] ;
+    
+    # Solicitud padre obligatoria
+    sh:property [
+        sh:path pep:derivaDeSolicitud ;
+        sh:name "Solicitud Padre"@es ;
+        sh:class pe:SolicitudPropaganda ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "El requerimiento debe derivar de una solicitud"@es
+    ] ;
+    
+    # Requisitos solicitados obligatorios
+    sh:property [
+        sh:path pep:requisitosSolicitados ;
+        sh:name "Requisitos Solicitados"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:minLength 10 ;
+        sh:message "Debe especificar los requisitos solicitados"@es
+    ] ;
+    
+    # Estado obligatorio
+    sh:property [
+        sh:path pep:requerimientoEstado ;
+        sh:name "Estado del Requerimiento"@es ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:in ("PENDIENTE" "RESPONDIDO" "VENCIDO") ;
+        sh:message "El estado del requerimiento es obligatorio"@es
+    ] .
+

@@ -1,0 +1,379 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+# EP Modeling Namespaces
+@prefix epd-fam-vocab: <https://w3id.org/medellin/ep/domain/familias/vocabulary/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# ============================================================================
+# CONTROLLED VOCABULARIES FOR FAMILIAS DOMAIN
+# ============================================================================
+
+# --- RELACION DE PARENTESCO (Family Relationship) ---
+
+epd-fam-vocab:RelacionParentescoScheme
+    a skos:ConceptScheme ;
+    dct:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dct:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dct:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    skos:prefLabel "Relación de Parentesco"@es ;
+    dct:title "Tipos de Parentesco en Familia"@es ;
+    dct:description "Clasificación de relaciones de parentesco o vínculo familiar"@es ;
+    dct:source "DMP familias_v1 - relacion_parentesco" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Enumera todos los tipos de relación posibles entre miembro y cabeza de hogar"@es .
+
+epd-fam-vocab:hijohija
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:RelacionParentescoScheme ;
+    skos:prefLabel "Hijo/Hija"@es ;
+    skos:notation "HIJ" ;
+    skos:hiddenLabel "hijo"@es ;
+    skos:hiddenLabel "hija"@es ;
+    skos:definition "Relación de filiación directa (hijo/a del cabeza de hogar)"@es ;
+    skos:topConceptOf epd-fam-vocab:RelacionParentescoScheme ;
+    dct:source "Categoría de parentesco directo" .
+
+epd-fam-vocab:conyugepareja
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:RelacionParentescoScheme ;
+    skos:prefLabel "Cónyuge/Pareja"@es ;
+    skos:notation "CÓN" ;
+    skos:hiddenLabel "pareja"@es ;
+    skos:hiddenLabel "esposa"@es ;
+    skos:hiddenLabel "esposo"@es ;
+    skos:hiddenLabel "unión libre"@es ;
+    skos:definition "Cónyuge (matrimonio) o pareja (unión libre)"@es ;
+    skos:topConceptOf epd-fam-vocab:RelacionParentescoScheme ;
+    dct:source "Categoría de parentesco directo" .
+
+epd-fam-vocab:padremadre
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:RelacionParentescoScheme ;
+    skos:prefLabel "Padre/Madre"@es ;
+    skos:notation "PAD" ;
+    skos:hiddenLabel "padre"@es ;
+    skos:hiddenLabel "madre"@es ;
+    skos:definition "Progenitor (padre o madre del cabeza de hogar)"@es ;
+    skos:topConceptOf epd-fam-vocab:RelacionParentescoScheme ;
+    dct:source "Categoría de parentesco directo" .
+
+epd-fam-vocab:hermanoirmana
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:RelacionParentescoScheme ;
+    skos:prefLabel "Hermano/Hermana"@es ;
+    skos:notation "HER" ;
+    skos:hiddenLabel "hermano"@es ;
+    skos:hiddenLabel "hermana"@es ;
+    skos:definition "Hermano o hermana del cabeza de hogar"@es ;
+    skos:topConceptOf epd-fam-vocab:RelacionParentescoScheme ;
+    dct:source "Categoría de parentesco colateral" .
+
+epd-fam-vocab:abuelo
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:RelacionParentescoScheme ;
+    skos:prefLabel "Abuelo/Abuela"@es ;
+    skos:notation "ABU" ;
+    skos:hiddenLabel "abuelo"@es ;
+    skos:hiddenLabel "abuela"@es ;
+    skos:definition "Abuelo/a del cabeza de hogar"@es ;
+    skos:topConceptOf epd-fam-vocab:RelacionParentescoScheme ;
+    dct:source "Categoría de parentesco ascendente" .
+
+epd-fam-vocab:nieto
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:RelacionParentescoScheme ;
+    skos:prefLabel "Nieto/Nieta"@es ;
+    skos:notation "NIE" ;
+    skos:hiddenLabel "nieto"@es ;
+    skos:hiddenLabel "nieta"@es ;
+    skos:definition "Nieto/a del cabeza de hogar"@es ;
+    skos:topConceptOf epd-fam-vocab:RelacionParentescoScheme ;
+    dct:source "Categoría de parentesco descendente" .
+
+epd-fam-vocab:yerno
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:RelacionParentescoScheme ;
+    skos:prefLabel "Yerno/Nuera"@es ;
+    skos:notation "YER" ;
+    skos:hiddenLabel "yerno"@es ;
+    skos:hiddenLabel "nuera"@es ;
+    skos:definition "Esposo de hija o pareja de hijo del cabeza de hogar"@es ;
+    skos:topConceptOf epd-fam-vocab:RelacionParentescoScheme ;
+    dct:source "Categoría de parentesco por afinidad" .
+
+epd-fam-vocab:otropariente
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:RelacionParentescoScheme ;
+    skos:prefLabel "Otro Pariente"@es ;
+    skos:notation "OTP" ;
+    skos:hiddenLabel "tío"@es ;
+    skos:hiddenLabel "tía"@es ;
+    skos:hiddenLabel "primo"@es ;
+    skos:hiddenLabel "cuñado"@es ;
+    skos:definition "Otro tipo de pariente (tío, primo, cuñado, etc.)"@es ;
+    skos:topConceptOf epd-fam-vocab:RelacionParentescoScheme ;
+    dct:source "Categoría de parentesco otra" .
+
+epd-fam-vocab:nopariente
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:RelacionParentescoScheme ;
+    skos:prefLabel "No Pariente"@es ;
+    skos:notation "NPR" ;
+    skos:hiddenLabel "allegado"@es ;
+    skos:hiddenLabel "arrendatario"@es ;
+    skos:definition "Persona sin vínculo de parentesco que cohabita en la vivienda"@es ;
+    skos:topConceptOf epd-fam-vocab:RelacionParentescoScheme ;
+    dct:source "Categoría de no consanguinidad" .
+
+# --- TIPOLOGIA FAMILIAR (Family Structure) ---
+
+epd-fam-vocab:TipologiaFamiliarScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Tipología Familiar"@es ;
+    dct:title "Clasificación de Estructura Familiar - DANE"@es ;
+    dct:description "Clasificación de la composición y estructura de unidades familiares"@es ;
+    dct:source "DMP familias_v1 - tipologia_familiar" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Clasificación DANE de estructuras familiares"@es .
+
+epd-fam-vocab:nuclear
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:TipologiaFamiliarScheme ;
+    skos:prefLabel "Nuclear"@es ;
+    skos:notation "NUC" ;
+    skos:definition "Familia compuesta por padres e hijos, sin otros parientes"@es ;
+    skos:example "Vendedor + cónyuge + 2 hijos menores"@es ;
+    skos:topConceptOf epd-fam-vocab:TipologiaFamiliarScheme ;
+    dct:source "DANE" .
+
+epd-fam-vocab:extensa
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:TipologiaFamiliarScheme ;
+    skos:prefLabel "Extensa"@es ;
+    skos:notation "EXT" ;
+    skos:definition "Familia que incluye a otros parientes además de núcleo familiar"@es ;
+    skos:example "Vendedor + cónyuge + hijos + abuelos + tíos"@es ;
+    skos:topConceptOf epd-fam-vocab:TipologiaFamiliarScheme ;
+    dct:source "DANE" .
+
+epd-fam-vocab:monoparental
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:TipologiaFamiliarScheme ;
+    skos:prefLabel "Monoparental"@es ;
+    skos:notation "MON" ;
+    skos:definition "Familia encabezada por una sola persona (generalmente madre o padre sin pareja)"@es ;
+    skos:example "Madre vendedora + 3 hijos"@es ;
+    skos:topConceptOf epd-fam-vocab:TipologiaFamiliarScheme ;
+    dct:source "DANE" .
+
+epd-fam-vocab:unipersonal
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:TipologiaFamiliarScheme ;
+    skos:prefLabel "Unipersonal"@es ;
+    skos:notation "UNI" ;
+    skos:definition "Persona que vive sola, sin núcleo familiar"@es ;
+    skos:topConceptOf epd-fam-vocab:TipologiaFamiliarScheme ;
+    dct:source "DANE" .
+
+epd-fam-vocab:sinFamilia
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:TipologiaFamiliarScheme ;
+    skos:prefLabel "Sin Núcleo Familiar"@es ;
+    skos:notation "SIN" ;
+    skos:definition "Familia sin estructura clara de parentesco (personas no relacionadas que cohabitan)"@es ;
+    skos:topConceptOf epd-fam-vocab:TipologiaFamiliarScheme ;
+    dct:source "DANE" .
+
+# --- OCUPACION (Occupation) ---
+
+epd-fam-vocab:OcupacionScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Ocupación del Miembro"@es ;
+    dct:title "Clasificación de Ocupaciones Familiares"@es ;
+    dct:description "Tipos de ocupación o situación laboral de miembros familiares"@es ;
+    dct:source "DMP familias_v1 - ocupacion_miembro" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Categorías de ocupación para análisis de diversificación de ingresos familiares"@es .
+
+epd-fam-vocab:empleadoFormal
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:OcupacionScheme ;
+    skos:prefLabel "Empleado Formal"@es ;
+    skos:notation "EF" ;
+    skos:hiddenLabel "empleado"@es ;
+    skos:hiddenLabel "empleo formal"@es ;
+    skos:definition "Persona con empleo formalizado (contrato, afiliaciones)"@es ;
+    skos:topConceptOf epd-fam-vocab:OcupacionScheme ;
+    dct:source "Clasificación laboral" .
+
+epd-fam-vocab:empleadoInformal
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:OcupacionScheme ;
+    skos:prefLabel "Empleado Informal"@es ;
+    skos:notation "EI" ;
+    skos:hiddenLabel "empleado informal"@es ;
+    skos:definition "Persona con empleo sin formalizar (día a día, sin contrato)"@es ;
+    skos:topConceptOf epd-fam-vocab:OcupacionScheme ;
+    dct:source "Clasificación laboral" .
+
+epd-fam-vocab:autoempleado
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:OcupacionScheme ;
+    skos:prefLabel "Autoempleado"@es ;
+    skos:notation "AE" ;
+    skos:hiddenLabel "negocio propio"@es ;
+    skos:hiddenLabel "independiente"@es ;
+    skos:definition "Persona que trabaja por cuenta propia con negocio propio"@es ;
+    skos:topConceptOf epd-fam-vocab:OcupacionScheme ;
+    dct:source "Clasificación laboral" .
+
+epd-fam-vocab:sinempleo
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:OcupacionScheme ;
+    skos:prefLabel "Sin Empleo"@es ;
+    skos:notation "SE" ;
+    skos:hiddenLabel "desempleado"@es ;
+    skos:hiddenLabel "cesante"@es ;
+    skos:definition "Persona sin empleo remunerado"@es ;
+    skos:topConceptOf epd-fam-vocab:OcupacionScheme ;
+    dct:source "Clasificación laboral" .
+
+epd-fam-vocab:estudiante
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:OcupacionScheme ;
+    skos:prefLabel "Estudiante"@es ;
+    skos:notation "EST" ;
+    skos:hiddenLabel "estudiando"@es ;
+    skos:definition "Persona que se dedica principalmente a estudiar"@es ;
+    skos:topConceptOf epd-fam-vocab:OcupacionScheme ;
+    dct:source "Clasificación laboral" .
+
+epd-fam-vocab:amadeCAsa
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:OcupacionScheme ;
+    skos:prefLabel "Ama de Casa"@es ;
+    skos:notation "AC" ;
+    skos:hiddenLabel "hogar"@es ;
+    skos:definition "Persona cuya ocupación principal es el cuidado del hogar"@es ;
+    skos:topConceptOf epd-fam-vocab:OcupacionScheme ;
+    dct:source "Clasificación laboral" .
+
+epd-fam-vocab:jubilado
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:OcupacionScheme ;
+    skos:prefLabel "Jubilado/Pensionado"@es ;
+    skos:notation "JUB" ;
+    skos:hiddenLabel "jubilado"@es ;
+    skos:hiddenLabel "pensionado"@es ;
+    skos:definition "Persona que ha dejado de trabajar y recibe pensión"@es ;
+    skos:topConceptOf epd-fam-vocab:OcupacionScheme ;
+    dct:source "Clasificación laboral" .
+
+epd-fam-vocab:incapacitado
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:OcupacionScheme ;
+    skos:prefLabel "Incapacitado para Trabajar"@es ;
+    skos:notation "INC" ;
+    skos:hiddenLabel "discapacitado"@es ;
+    skos:hiddenLabel "incapacidad"@es ;
+    skos:definition "Persona con incapacidad física o mental que le impide trabajar"@es ;
+    skos:topConceptOf epd-fam-vocab:OcupacionScheme ;
+    dct:source "Clasificación laboral" .
+
+# --- NIVEL EDUCATIVO (Education Level) ---
+
+epd-fam-vocab:NivelEducativoMiembroScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Nivel Educativo - Miembro Familiar"@es ;
+    dct:title "Niveles de Educación por Miembro - DANE"@es ;
+    dct:description "Clasificación de niveles educativos alcanzados por miembros familiares"@es ;
+    dct:source "DMP familias_v1 - educacion_miembro" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Escala DANE de educación, adaptada para caracterizar miembros familiares"@es .
+
+# (Reuse concepts from caracterizacion-vocabularios.ttl)
+# educacion_miembro uses same DANE scale as vendor nivel_educacion
+
+epd-fam-vocab:NoRecibioEducacionFormal
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:NivelEducativoMiembroScheme ;
+    skos:prefLabel "No Recibió Educación Formal"@es ;
+    skos:notation "NRE" ;
+    skos:definition "Miembro que nunca asistió a institución educativa"@es ;
+    skos:topConceptOf epd-fam-vocab:NivelEducativoMiembroScheme ;
+    dct:source "DANE" .
+
+# --- DISCAPACIDAD MIEMBRO ---
+
+epd-fam-vocab:DiscapacidadMiembroScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Tipo de Discapacidad - Miembro"@es ;
+    dct:title "Discapacidades o Capacidades Diferentes"@es ;
+    dct:description "Clasificación de tipos de discapacidad en miembros familiares"@es ;
+    dct:source "DMP familias_v1 - discapacidad_miembro" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Información sensible; clasificación según Ministerio de Salud"@es .
+
+epd-fam-vocab:auditiva
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:DiscapacidadMiembroScheme ;
+    skos:prefLabel "Discapacidad Auditiva"@es ;
+    skos:notation "AUD" ;
+    skos:hiddenLabel "sordera"@es ;
+    skos:hiddenLabel "hipoacusia"@es ;
+    skos:definition "Pérdida total o parcial de audición"@es ;
+    skos:topConceptOf epd-fam-vocab:DiscapacidadMiembroScheme ;
+    dct:source "Ministerio de Salud" .
+
+epd-fam-vocab:visual
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:DiscapacidadMiembroScheme ;
+    skos:prefLabel "Discapacidad Visual"@es ;
+    skos:notation "VIS" ;
+    skos:hiddenLabel "ceguera"@es ;
+    skos:hiddenLabel "baja visión"@es ;
+    skos:definition "Pérdida total o parcial de visión"@es ;
+    skos:topConceptOf epd-fam-vocab:DiscapacidadMiembroScheme ;
+    dct:source "Ministerio de Salud" .
+
+epd-fam-vocab:motriz
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:DiscapacidadMiembroScheme ;
+    skos:prefLabel "Discapacidad Motriz"@es ;
+    skos:notation "MOT" ;
+    skos:hiddenLabel "parálisis"@es ;
+    skos:hiddenLabel "movilidad reducida"@es ;
+    skos:definition "Limitación en movilidad o función motora"@es ;
+    skos:topConceptOf epd-fam-vocab:DiscapacidadMiembroScheme ;
+    dct:source "Ministerio de Salud" .
+
+epd-fam-vocab:cognitiva
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:DiscapacidadMiembroScheme ;
+    skos:prefLabel "Discapacidad Cognitiva"@es ;
+    skos:notation "COG" ;
+    skos:hiddenLabel "intelectual"@es ;
+    skos:hiddenLabel "mental"@es ;
+    skos:definition "Limitación en funciones cognitivas o intelectuales"@es ;
+    skos:topConceptOf epd-fam-vocab:DiscapacidadMiembroScheme ;
+    dct:source "Ministerio de Salud" .
+
+epd-fam-vocab:psicosocial
+    a skos:Concept ;
+    skos:inScheme epd-fam-vocab:DiscapacidadMiembroScheme ;
+    skos:prefLabel "Discapacidad Psicosocial"@es ;
+    skos:notation "PSI" ;
+    skos:hiddenLabel "salud mental"@es ;
+    skos:definition "Limitación en salud mental o funcionamiento psicosocial"@es ;
+    skos:topConceptOf epd-fam-vocab:DiscapacidadMiembroScheme ;
+    dct:source "Ministerio de Salud" .

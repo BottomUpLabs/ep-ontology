@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pasos del tramite SUIT 26521 — etapas lineales colapsables</title>
+<script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
+<style>
+  :root { --bg:#0f1419; --panel:#1b2129; --ink:#e6edf3; --muted:#9aa7b2; --line:#2b333d; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  #app { display:grid; grid-template-columns:270px 1fr; grid-template-rows:auto 1fr; height:100vh; }
+  #app > aside, #app > .stage { min-width:0; min-height:0; }
+  header { grid-column:1 / 3; padding:12px 18px; border-bottom:1px solid var(--line);
+    background:var(--panel); display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+  header h1 { font-size:15px; margin:0; font-weight:650; }
+  header .sub { color:var(--muted); font-size:12px; }
+  header a { color:#8ab4f8; font-size:12px; margin-left:auto; }
+  aside { background:var(--panel); border-right:1px solid var(--line); overflow:auto; padding:14px; }
+  aside h2 { font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:0 0 8px; }
+  .leg { display:flex; align-items:center; gap:8px; font-size:12.5px; margin:4px 0; }
+  .dot { width:12px; height:12px; border-radius:3px; flex:0 0 auto; }
+  .controls { margin:14px 0; display:flex; flex-direction:column; gap:8px; }
+  .controls button { background:#222c36; color:var(--ink); border:1px solid var(--line);
+    border-radius:7px; padding:8px 10px; cursor:pointer; text-align:left; font-size:13px; }
+  .controls button:hover { background:#2b3742; }
+  .hint { color:var(--muted); font-size:12px; line-height:1.5; margin-top:8px; }
+  .stage { position:relative; }
+  #net { position:absolute; inset:0; }
+  #net svg { width:100%; height:100%; display:block; cursor:grab; }
+  #net svg:active { cursor:grabbing; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Pasos del tramite · Solicitud temporal de aprovechamiento del E.P. (SUIT 26521)</h1>
+    <span class="sub">Etapas lineales colapsables — categoria: venta informal</span>
+    <a href="tramite-pasos-tree.svg" target="_blank">version estatica (SVG) ↗</a>
+  </header>
+
+  <aside>
+    <h2>Leyenda</h2>
+    <div class="leg"><span class="dot" style="background:#6a1b9a"></span>Tramite (raiz)</div>
+    <div class="leg"><span class="dot" style="background:#37424d;border:1px dashed #9aa7b2"></span>Etapa (colapsable)</div>
+    <div class="leg"><span class="dot" style="background:#e53935"></span>Persona (solicitante)</div>
+    <div class="leg"><span class="dot" style="background:#fb8c00"></span>Solicitud / modalidad</div>
+    <div class="leg"><span class="dot" style="background:#43a047"></span>Procedimiento</div>
+    <div class="leg"><span class="dot" style="background:#00acc1"></span>Evento / visita</div>
+    <div class="leg"><span class="dot" style="background:#6d4c41"></span>Estudio</div>
+    <div class="leg"><span class="dot" style="background:#8e24aa"></span>Concepto tecnico</div>
+    <div class="leg"><span class="dot" style="background:#78909c"></span>Documento</div>
+    <div class="leg"><span class="dot" style="background:#d81b60"></span>Acto administrativo / entregable</div>
+    <div class="leg"><span class="dot" style="background:#2e7d32"></span>Accion favorable</div>
+    <div class="leg"><span class="dot" style="background:#c62828"></span>Accion desfavorable</div>
+    <div class="leg"><span class="dot" style="background:#ad1457"></span>Credencial</div>
+
+    <div class="controls">
+      <h2 style="margin-top:6px">Controles</h2>
+      <button id="bExpand">Expandir todo</button>
+      <button id="bStages">Colapsar etapas</button>
+      <button id="bFit">Centrar / ajustar</button>
+      <div class="hint">Clic en una <b>etapa</b> para expandirla; clic en la <b>−</b> de su
+        recuadro para volver a contraerla. Los enlaces entre etapas se muestran a nivel de
+        subcomponente solo cuando ambas etapas estan expandidas. Rueda = zoom · arrastrar = mover.</div>
+    </div>
+  </aside>
+
+  <div class="stage"><div id="net"></div></div>
+</div>
+
+<script>
+// ===== Modelo: etapas lineales con subcomponentes y enlaces internos =====
+const ROOT = { name:"Tramite SUIT 26521", sub:"Solicitud temporal AEEP · venta informal", group:"tramite" };
+
+const ETAPAS = [
+  { id:"e1", name:"1 · Radicacion", state:"radicado",
+    nodes:[
+      { id:"p_solic", name:"Solicitante (Persona)", sub:"radica FO-GGOL-026", group:"persona" },
+      { id:"docs", name:"Documento soporte", sub:"identidad · SISBEN · cuenta de servicios · plano · fotos · sanitario (si aplica)", group:"documento" },
+      { id:"m_amb", name:"Modalidad: semiestacionario / ambulante", group:"solicitud" },
+      { id:"m_mod", name:"Modalidad: vendedor en modulo", sub:"+ asignacion de modulo", group:"solicitud" }
+    ],
+    edges:[["p_solic","docs"],["docs","m_amb"],["docs","m_mod"]], entry:["p_solic"] },
+
+  { id:"e2", name:"2 · Revision de requisitos", state:"doc. incompleta / subsanado",
+    nodes:[
+      { id:"r_verif", name:"Verificacion documental", sub:"PR-GGOL-016", group:"proceso" },
+      { id:"r_subsan", name:"Requerimiento de subsanacion", sub:"si la documentacion esta incompleta", group:"proceso" }
+    ],
+    edges:[["r_verif","r_subsan"]], entry:["r_verif"] },
+
+  { id:"e3", name:"3 · Evaluacion", state:"en_evaluacion",
+    nodes:[
+      { id:"e_visdom", name:"Visita domiciliaria", sub:"FO-GGOL-028 → Vivienda", group:"evento" },
+      { id:"e_estudio", name:"Estudio socioeconomico", sub:"FO-GOOL-044", group:"estudio" },
+      { id:"c_cruce", name:"Cruce interinstitucional", sub:"FO-GGOL-022", group:"estudio" },
+      { id:"e_visadm", name:"Visita administrativa", sub:"FO-GGOL-036 → PuestoVenta", group:"evento" }
+    ],
+    edges:[["e_visdom","e_estudio"]], entry:["e_visdom","c_cruce","e_visadm"] },
+
+  { id:"e4", name:"4 · Concepto emitido", state:"concepto_emitido",
+    nodes:[
+      { id:"e_conc", name:"Conceptos tecnicos", group:"concepto" },
+      { id:"c_vuln", name:"Concepto Socioeconomico", sub:"FO-GGOL-016", group:"concepto" },
+      { id:"c_otros", name:"Legalidad · Urbano · Seguridad · Sanitario", group:"concepto" },
+      { id:"c_app", name:"Viabilidad APP", sub:"retribucion economica", group:"concepto" }
+    ],
+    edges:[["e_conc","c_vuln"],["e_conc","c_otros"],["e_conc","c_app"]], entry:["e_conc"] },
+
+  { id:"e5", name:"5 · Decision", state:"resuelto_aprobado / negado / desistido",
+    nodes:[
+      { id:"acto", name:"Acto administrativo", sub:"entregable · la respuesta", group:"acto" },
+      { id:"a_aprob", name:"Aprobacion de Permiso", sub:"accion · favorable", group:"accionFav" },
+      { id:"a_carnet", name:"Carnet del vendedor", sub:"credencial", group:"credencial" },
+      { id:"a_neg", name:"Negacion de Permiso", sub:"accion · desfavorable · PR-GGOL-012", group:"accionDesf" },
+      { id:"a_recurso", name:"Recurso de Apelacion", group:"proceso" },
+      { id:"a_reeval", name:"Reevaluacion y respuesta", group:"proceso" },
+      { id:"a_des", name:"Desistido", group:"estado" }
+    ],
+    edges:[["acto","a_aprob"],["a_aprob","a_carnet"],["acto","a_neg"],["a_neg","a_recurso"],["a_neg","a_reeval"],["acto","a_des"]], entry:["acto"] },
+
+  { id:"e6", name:"6 · Notificacion", state:"acto: notificado",
+    nodes:[
+      { id:"n_notif", name:"Notificacion del acto", sub:"personal / por aviso", group:"proceso" },
+      { id:"n_firme", name:"Firmeza / recursos de ley", group:"proceso" }
+    ],
+    edges:[["n_notif","n_firme"]], entry:["n_notif"] }
+];
+
+// Enlaces entre etapas, a nivel de subcomponente. CROSS[i] = frontera etapa[i] -> etapa[i+1]
+const CROSS = [
+  [["m_amb","r_verif"],["m_mod","r_verif"]],                       // 1 -> 2
+  [["r_verif","e_visdom"],["r_verif","c_cruce"],["r_verif","e_visadm"]], // 2 -> 3
+  [["e_estudio","c_vuln"],["c_cruce","c_vuln"],["e_visadm","e_conc"]],    // 3 -> 4
+  [["e_conc","acto"]],                                             // 4 -> 5
+  [["a_aprob","n_notif"],["a_neg","n_notif"]]                      // 5 -> 6
+];
+
+const COLORS = {
+  tramite:"#6a1b9a", etapa:"#37424d", persona:"#e53935", lugar:"#1e88e5",
+  solicitud:"#fb8c00", proceso:"#43a047", evento:"#00acc1", estudio:"#6d4c41",
+  concepto:"#8e24aa", documento:"#78909c", acto:"#d81b60",
+  accionFav:"#2e7d32", accionDesf:"#c62828", estado:"#546e7a", credencial:"#ad1457"
+};
+
+const COLW = 300, ROWH = 82, PADC = 16, HEADER = 26, MAXW = 220;
+
+// estado de colapso (?open=e1,e3 para abrir algunas al cargar)
+const collapsed = {};
+const preopen = (new URLSearchParams(location.search).get('open') || '').split(',').filter(Boolean);
+ETAPAS.forEach(e => collapsed[e.id] = !preopen.includes(e.id));
+
+// ===== util =====
+function wrap(str, max){
+  const words = String(str).split(/\s+/); const lines=[]; let cur='';
+  for(const w of words){
+    if(!cur) cur=w; else if((cur+' '+w).length<=max) cur+=' '+w; else { lines.push(cur); cur=w; }
+  }
+  if(cur) lines.push(cur); return lines;
+}
+function sized(o){
+  const nameLines = wrap(o.name, 22);
+  const subLines = o.sub ? wrap(o.sub, 30) : [];
+  const maxN = Math.max(...nameLines.map(l=>l.length));
+  const maxS = subLines.length ? Math.max(...subLines.map(l=>l.length)) : 0;
+  const w = Math.min(MAXW, Math.max(120, Math.max(maxN*7.1, maxS*6.0) + 26));
+  const h = nameLines.length*16 + (subLines.length ? subLines.length*13 + 4 : 0) + 18;
+  return { nameLines, subLines, w, h };
+}
+function depthsOf(e){
+  const dep = {}; e.nodes.forEach(n => dep[n.id]=0);
+  let changed=true, guard=0;
+  while(changed && guard++<60){ changed=false;
+    e.edges.forEach(([a,b]) => { if(dep[b] < dep[a]+1){ dep[b]=dep[a]+1; changed=true; } }); }
+  return dep;
+}
+
+// ===== layout =====
+function computeLayout(){
+  const V = {}, order = [], clusters = [];
+  // root
+  const r = Object.assign({ id:"root", x:0, y:0, kind:"root", data:ROOT, group:"tramite" }, sized(ROOT));
+  V["root"] = r; order.push(r);
+  let x = COLW;
+
+  ETAPAS.forEach(e => {
+    if(collapsed[e.id]){
+      const box = Object.assign({ id:e.id+"_box", x, y:0, kind:"etapaBox", etapa:e, group:"etapa",
+        name:e.name, sub:"["+e.state+"]" }, sized({ name:e.name, sub:"["+e.state+"]" }));
+      V[box.id] = box; order.push(box);
+      x += COLW;
+    } else {
+      const dep = depthsOf(e);
+      const maxD = Math.max(...Object.values(dep));
+      const byDepth = [];
+      for(let d=0; d<=maxD; d++) byDepth[d]=[];
+      e.nodes.forEach(n => byDepth[dep[n.id]].push(n));
+      let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+      byDepth.forEach((arr,d) => {
+        arr.forEach((n,j) => {
+          const s = sized(n);
+          const nx = x + d*COLW;
+          const ny = (j - (arr.length-1)/2) * ROWH;
+          const node = Object.assign({ id:n.id, x:nx, y:ny, kind:"node", group:n.group, data:n }, s);
+          V[n.id] = node; order.push(node);
+          minX=Math.min(minX,nx); maxX=Math.max(maxX,nx+s.w);
+          minY=Math.min(minY,ny-s.h/2); maxY=Math.max(maxY,ny+s.h/2);
+        });
+      });
+      clusters.push({ etapa:e, x:minX-PADC, y:minY-PADC-HEADER,
+        w:(maxX-minX)+2*PADC, h:(maxY-minY)+2*PADC+HEADER });
+      x += (maxD+1)*COLW;
+    }
+  });
+
+  // ---- aristas ----
+  const edges = [], seen = new Set();
+  const right = n => ({ x:n.x+n.w, y:n.y });
+  const left  = n => ({ x:n.x, y:n.y });
+  function srcEnd(e, id){ return collapsed[e.id] ? right(V[e.id+"_box"]) : right(V[id]); }
+  function tgtEnd(e, id){ return collapsed[e.id] ? left(V[e.id+"_box"]) : left(V[id]); }
+  function srcId(e, id){ return collapsed[e.id] ? e.id+"_box" : id; }
+  function tgtId(e, id){ return collapsed[e.id] ? e.id+"_box" : id; }
+  function add(a, b, p, q, kind){ const k=a+"|"+b; if(seen.has(k)) return; seen.add(k);
+    edges.push({ from:p, to:q, kind }); }
+
+  // root -> etapa 1
+  const e1 = ETAPAS[0];
+  if(collapsed[e1.id]) add("root", e1.id+"_box", right(V.root), left(V[e1.id+"_box"]), "cross");
+  else e1.entry.forEach(id => add("root", id, right(V.root), left(V[id]), "cross"));
+
+  // internas (solo etapas expandidas)
+  ETAPAS.forEach(e => { if(!collapsed[e.id]) e.edges.forEach(([a,b]) =>
+    add(a, b, right(V[a]), left(V[b]), "internal")); });
+
+  // entre etapas
+  for(let i=0;i<ETAPAS.length-1;i++){
+    const A=ETAPAS[i], B=ETAPAS[i+1];
+    CROSS[i].forEach(([u,v]) => add(srcId(A,u), tgtId(B,v), srcEnd(A,u), tgtEnd(B,v), "cross"));
+  }
+
+  return { V, order, clusters, edges };
+}
+
+// ===== render =====
+const stage = document.querySelector('.stage');
+const svg = d3.select('#net').append('svg');
+const defs = svg.append('defs');
+defs.append('marker').attr('id','arrow').attr('viewBox','0 0 10 10').attr('refX',9).attr('refY',5)
+  .attr('markerWidth',7).attr('markerHeight',7).attr('orient','auto-start-reverse')
+  .append('path').attr('d','M0,0 L10,5 L0,10 z').attr('fill','#7e8a96');
+const gZoom = svg.append('g');
+const gClusters = gZoom.append('g');
+const gLinks = gZoom.append('g');
+const gNodes = gZoom.append('g');
+const zoom = d3.zoom().scaleExtent([0.18, 2]).on('zoom', e => gZoom.attr('transform', e.transform));
+svg.call(zoom);
+
+let L;
+function render(){
+  L = computeLayout();
+
+  // clusters (etapas expandidas)
+  const cl = gClusters.selectAll('g.cluster').data(L.clusters, d=>d.etapa.id);
+  cl.exit().remove();
+  const clE = cl.enter().append('g').attr('class','cluster');
+  clE.append('rect').attr('class','bg');
+  clE.append('rect').attr('class','hdr').style('cursor','pointer')
+     .on('click', (ev,d)=>{ collapsed[d.etapa.id]=true; render(); fit(); });
+  clE.append('text').attr('class','lbl').style('pointer-events','none');
+  clE.append('text').attr('class','min').style('pointer-events','none');
+  const clM = clE.merge(cl);
+  clM.select('rect.bg').attr('x',d=>d.x).attr('y',d=>d.y).attr('width',d=>d.w).attr('height',d=>d.h)
+     .attr('rx',12).attr('fill','rgba(55,66,77,.35)').attr('stroke','#7e8a96')
+     .attr('stroke-dasharray','5,4').attr('stroke-width',1.2);
+  clM.select('rect.hdr').attr('x',d=>d.x).attr('y',d=>d.y).attr('width',d=>d.w).attr('height',HEADER)
+     .attr('rx',12).attr('fill','rgba(126,138,150,.16)');
+  clM.select('text.lbl').attr('x',d=>d.x+12).attr('y',d=>d.y+17)
+     .attr('fill','#e6edf3').attr('font-size','12.5px').attr('font-weight',650)
+     .text(d=>d.etapa.name+"  ["+d.etapa.state+"]");
+  clM.select('text.min').attr('x',d=>d.x+d.w-13).attr('y',d=>d.y+18).attr('text-anchor','middle')
+     .attr('fill','#e6edf3').attr('font-size','15px').attr('font-weight',700).text('−');
+
+  // links
+  gLinks.selectAll('path').data(L.edges).join('path')
+    .attr('fill','none')
+    .attr('stroke', d => d.kind==='cross' ? '#7e8a96' : '#4a5560')
+    .attr('stroke-width', d => d.kind==='cross' ? 1.7 : 1.2)
+    .attr('stroke-dasharray', d => d.kind==='internal' ? '4,4' : null)
+    .attr('marker-end','url(#arrow)')
+    .attr('d', d => { const s=d.from, t=d.to, mx=(s.x+t.x)/2;
+      return `M${s.x},${s.y}C${mx},${s.y} ${mx},${t.y} ${t.x},${t.y}`; });
+
+  // nodes (root, cajas de etapa colapsada, subcomponentes)
+  const node = gNodes.selectAll('g.node').data(L.order, d=>d.id).join(
+    enter => { const g=enter.append('g').attr('class','node');
+      g.append('rect'); g.append('text').attr('class','lbl'); g.append('g').attr('class','chip'); return g; }
+  );
+  node.attr('transform', d=>`translate(${d.x},${d.y})`)
+    .style('cursor', d => d.kind==='etapaBox' ? 'pointer' : 'default')
+    .on('click', (ev,d)=>{ if(d.kind==='etapaBox'){ collapsed[d.etapa.id]=false; render(); fit(); } });
+
+  node.select('rect')
+    .attr('x',0).attr('y',d=>-d.h/2).attr('width',d=>d.w).attr('height',d=>d.h).attr('rx',9)
+    .attr('fill', d => COLORS[d.group] || '#607d8b')
+    .attr('stroke', d => d.kind==='etapaBox' ? '#9aa7b2' : 'rgba(0,0,0,.28)')
+    .attr('stroke-width', d => d.kind==='etapaBox' ? 1.4 : 1)
+    .attr('stroke-dasharray', d => d.kind==='etapaBox' ? '5,4' : null);
+
+  node.select('text.lbl').each(function(d){
+    const t = d3.select(this).attr('text-anchor','middle').attr('x', d.w/2);
+    t.selectAll('*').remove();
+    const total = d.nameLines.length*16 + (d.subLines.length ? d.subLines.length*13+4 : 0);
+    let y = -total/2 + 13;
+    d.nameLines.forEach(ln => { t.append('tspan').attr('x',d.w/2).attr('y',y)
+      .attr('fill','#fff').attr('font-size','12.5px').attr('font-weight',600).text(ln); y+=16; });
+    if(d.subLines.length){ y+=2; d.subLines.forEach(ln => { t.append('tspan').attr('x',d.w/2).attr('y',y)
+      .attr('fill','#e6edf3').attr('opacity',.78).attr('font-size','10.5px').text(ln); y+=13; }); }
+  });
+
+  node.select('g.chip').each(function(d){
+    const g=d3.select(this); g.selectAll('*').remove();
+    if(d.kind!=='etapaBox') return;
+    g.attr('transform', `translate(${d.w},${-d.h/2})`);
+    g.append('circle').attr('r',9).attr('fill','#0f1419').attr('stroke','#9aa7b2').attr('stroke-width',1.2);
+    g.append('text').attr('text-anchor','middle').attr('dy','3.6')
+      .attr('fill','#e6edf3').attr('font-size','13px').attr('font-weight',700).text('+');
+  });
+}
+
+function fit(animate){
+  const xs=[], ys=[];
+  L.order.forEach(d=>{ xs.push(d.x, d.x+d.w); ys.push(d.y-d.h/2, d.y+d.h/2); });
+  L.clusters.forEach(d=>{ xs.push(d.x, d.x+d.w); ys.push(d.y, d.y+d.h); });
+  const minX=Math.min(...xs), maxX=Math.max(...xs), minY=Math.min(...ys), maxY=Math.max(...ys);
+  const w=maxX-minX, h=maxY-minY, cw=stage.clientWidth, ch=stage.clientHeight;
+  const scale=Math.min(cw/(w+90), ch/(h+90), 1.1);
+  const tx=cw/2 - scale*(minX+maxX)/2, ty=ch/2 - scale*(minY+maxY)/2;
+  const t = d3.zoomIdentity.translate(tx,ty).scale(scale);
+  if(animate) svg.transition().duration(420).call(zoom.transform, t);
+  else svg.call(zoom.transform, t);
+}
+
+document.getElementById('bExpand').onclick = () => { ETAPAS.forEach(e=>collapsed[e.id]=false); render(); fit(); };
+document.getElementById('bStages').onclick = () => { ETAPAS.forEach(e=>collapsed[e.id]=true); render(); fit(); };
+document.getElementById('bFit').onclick = () => fit();
+window.addEventListener('resize', fit);
+
+render(); fit();
+</script>
+</body>
+</html>

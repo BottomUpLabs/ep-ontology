@@ -1,0 +1,413 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/propaganda-electoral#> .
+@prefix pe: <https://w3id.org/medellin/espacio-publico/propaganda-electoral#> .
+@prefix pep: <https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <http://schema.org/> .
+@prefix iso11179: <http://purl.org/iso11179/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# ONTOLOGIA: Propaganda Electoral - Clases de Primer Orden
+# =============================================================================
+# Entidades del dominio de gestion de propaganda electoral en espacio publico.
+# Este dominio gestiona la autorizacion, control e infracciones de publicidad
+# politica durante periodos electorales.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/propaganda-electoral> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/propaganda-electoral/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Ontologia de Propaganda Electoral"@es ;
+    dcterms:title "Electoral Propaganda Ontology"@en ;
+    dcterms:description """Ontologia para la gestion de propaganda electoral en espacio publico.
+    Define las clases fundamentales: PartidoPolitico, Candidato, SolicitudPropaganda,
+    ElementoPublicitario, Infraccion, PeriodoElectoral, Resolucion, Requerimiento,
+    TipoEleccion y UbicacionPropaganda. Estas entidades permiten gestionar el ciclo
+    completo de autorizacion, instalacion y control de publicidad politica."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:created "2026-01-09"^^xsd:date ;
+    dcterms:modified "2026-01-09"^^xsd:date ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    dcterms:subject "Propaganda Electoral"@es , "Electoral Advertising"@en ;
+    owl:versionInfo "0.1.0" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/entidades-primer-orden> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/persona-natural> .
+
+# =============================================================================
+# PROPIEDADES DE ANOTACION PARA SEMANTIC LAYER
+# =============================================================================
+
+:semanticLayer a owl:AnnotationProperty ;
+    rdfs:label "capa semantica"@es ;
+    rdfs:comment "Indica la capa semantica a la que pertenece el elemento (identifiers, temporal, geodata, personal_data)"@es .
+
+:semanticType a owl:AnnotationProperty ;
+    rdfs:label "tipo semantico"@es ;
+    rdfs:comment "Tipo semantico especifico dentro de la capa (record_id, timestamp, direccion, nombre)"@es .
+
+:piiLevel a owl:AnnotationProperty ;
+    rdfs:label "nivel de PII"@es ;
+    rdfs:comment "Nivel de informacion personalmente identificable (high, medium, low)"@es .
+
+:columnaOrigen a owl:AnnotationProperty ;
+    rdfs:label "columna de origen"@es ;
+    rdfs:comment "Nombre de la columna en el modelo dbt de origen"@es .
+
+:grainLevel a owl:AnnotationProperty ;
+    rdfs:label "nivel de grano"@es ;
+    rdfs:comment "Granularidad del identificador (solicitud, infraccion, partido)"@es .
+
+# =============================================================================
+# CLASE 1: PartidoPolitico
+# =============================================================================
+# Organizacion politica que solicita autorizaciones de propaganda electoral
+
+pe:PartidoPolitico a owl:Class, skos:Concept ;
+    rdfs:label "Partido Politico"@es ;
+    rdfs:label "Political Party"@en ;
+    rdfs:subClassOf foaf:Organization ;
+    skos:inScheme pe:PropagandaElectoralScheme ;
+    skos:prefLabel "Partido Politico"@es ;
+    skos:altLabel "Movimiento Politico"@es ;
+    skos:altLabel "Organizacion Partidaria"@es ;
+    skos:altLabel "Coalicion Electoral"@es ;
+    skos:definition """Organizacion politica legalmente constituida que postula candidatos
+    a elecciones populares y solicita autorizaciones para instalar propaganda electoral
+    en el espacio publico. Incluye partidos tradicionales, movimientos ciudadanos y
+    coaliciones electorales registradas ante el Consejo Nacional Electoral (CNE)."""@es ;
+    skos:scopeNote """Entidad central del dominio electoral. Un partido puede:
+    - Registrar multiples candidatos por periodo electoral
+    - Presentar multiples solicitudes de propaganda
+    - Ser sujeto de infracciones por incumplimiento
+    Relacionado con: Candidato (tiene), SolicitudPropaganda (presenta), Infraccion (sujeto de)"""@es ;
+    skos:example "Partido Liberal Colombiano, Centro Democratico, Coalicion de la Esperanza"@es ;
+    dcterms:source "CNE - Registro de Partidos y Movimientos Politicos" ;
+    dcterms:source "Ley 1475 de 2011 - Estatuto de Partidos"@es ;
+    iso11179:objectClass "Partido_Politico" ;
+    :semanticLayer "identifiers" ;
+    :semanticType "organizacion" ;
+    :columnaOrigen "partido_politico_id" .
+
+# =============================================================================
+# CLASE 2: Candidato
+# =============================================================================
+# Persona postulada por un partido para eleccion popular
+
+pe:Candidato a owl:Class, skos:Concept ;
+    rdfs:label "Candidato Politico"@es ;
+    rdfs:label "Political Candidate"@en ;
+    rdfs:subClassOf core:PersonaNatural ;
+    skos:inScheme pe:PropagandaElectoralScheme ;
+    skos:prefLabel "Candidato"@es ;
+    skos:altLabel "Aspirante"@es ;
+    skos:altLabel "Postulado"@es ;
+    skos:altLabel "Candidato Electoral"@es ;
+    skos:definition """Persona natural postulada por un partido politico o movimiento
+    ciudadano para ocupar un cargo de eleccion popular. Es el beneficiario directo
+    de la propaganda electoral autorizada y puede ser sujeto de infracciones."""@es ;
+    skos:scopeNote """Heredero de PersonaNatural (foaf:Person). Captura:
+    - Datos de identificacion (documento, nombres)
+    - Vinculacion con partido politico
+    - Cargo al que aspira
+    - Periodo electoral activo"""@es ;
+    skos:example "Candidato a Alcaldia de Medellin 2027, Candidato al Concejo Municipal"@es ;
+    dcterms:source "CNE - Formulario E6 de inscripcion de candidatos" ;
+    iso11179:objectClass "Candidato_Politico" ;
+    :semanticLayer "personal_data" ;
+    :semanticType "persona" ;
+    :piiLevel "medium" ;
+    :columnaOrigen "candidato_id, candidato_nombre" .
+
+# =============================================================================
+# CLASE 3: SolicitudPropaganda (Radicado)
+# =============================================================================
+# Tramite administrativo de solicitud de autorizacion
+
+pe:SolicitudPropaganda a owl:Class, skos:Concept ;
+    rdfs:label "Solicitud de Propaganda Electoral"@es ;
+    rdfs:label "Electoral Propaganda Request"@en ;
+    rdfs:subClassOf prov:Activity ;
+    skos:inScheme pe:PropagandaElectoralScheme ;
+    skos:prefLabel "Solicitud de Propaganda"@es ;
+    skos:altLabel "Radicado de Solicitud"@es ;
+    skos:altLabel "Tramite de Propaganda"@es ;
+    skos:definition """Tramite administrativo mediante el cual un partido politico
+    solicita autorizacion para instalar elementos de propaganda electoral en el
+    espacio publico durante un periodo electoral. Incluye el proceso completo
+    desde radicacion hasta resolucion y posibles recursos."""@es ;
+    skos:scopeNote """Ciclo de vida del tramite:
+    1. Radicacion: Ingreso de la solicitud con documentos
+    2. Evaluacion: Revision tecnica de ubicaciones
+    3. Resolucion: Autorizacion o negacion
+    4. Recurso: Posible reposicion
+    5. Remision: A CNE o Inspeccion si aplica"""@es ;
+    skos:example "Radicado 2026-PE-001234 para instalacion de 50 pendones"@es ;
+    dcterms:source "Procedimiento de Autorizacion de Propaganda Electoral"@es ;
+    iso11179:objectClass "Solicitud_Propaganda_Electoral" ;
+    :semanticLayer "identifiers" ;
+    :semanticType "tramite" ;
+    :grainLevel "solicitud" ;
+    :columnaOrigen "radicado_solicitud_id, radicado_numero" .
+
+# =============================================================================
+# CLASE 4: ElementoPublicitario
+# =============================================================================
+# Pieza fisica de propaganda (pendon, pasacalle, valla, etc.)
+
+pe:ElementoPublicitario a owl:Class, skos:Concept ;
+    rdfs:label "Elemento Publicitario Electoral"@es ;
+    rdfs:label "Electoral Advertising Element"@en ;
+    skos:inScheme pe:PropagandaElectoralScheme ;
+    skos:prefLabel "Elemento Publicitario"@es ;
+    skos:altLabel "Pieza Publicitaria"@es ;
+    skos:altLabel "Material Electoral"@es ;
+    skos:altLabel "Propaganda"@es ;
+    skos:definition """Pieza fisica de publicidad politica instalada en el espacio
+    publico o en predios privados con visibilidad publica. Incluye pendones, pasacalles,
+    vallas, afiches, murales y cualquier otro elemento visual que promocione
+    candidatos o partidos durante campanas electorales."""@es ;
+    skos:scopeNote """Tipos principales:
+    - Pendon: Elemento vertical colgante
+    - Pasacalle: Elemento horizontal entre postes
+    - Valla: Estructura fija de gran formato
+    - Afiche: Cartel pegado en superficies
+    - Mural: Pintura sobre muros
+    Cada elemento tiene dimensiones, ubicacion y estado de autorizacion"""@es ;
+    skos:example "Pendon de 2m x 0.8m con imagen de candidato a alcaldia"@es ;
+    dcterms:source "Acuerdo 024 de 2020 - Reglamento de Propaganda Electoral"@es ;
+    iso11179:objectClass "Elemento_Publicitario_Electoral" ;
+    :semanticLayer "identifiers" ;
+    :semanticType "objeto_fisico" ;
+    :columnaOrigen "solicitud_propaganda_id, elemento_tipo" .
+
+# =============================================================================
+# CLASE 5: InfraccionElectoral
+# =============================================================================
+# Violacion a la normativa de propaganda electoral
+
+pe:InfraccionElectoral a owl:Class, skos:Concept ;
+    rdfs:label "Infraccion Electoral"@es ;
+    rdfs:label "Electoral Violation"@en ;
+    rdfs:subClassOf prov:Activity ;
+    skos:inScheme pe:PropagandaElectoralScheme ;
+    skos:prefLabel "Infraccion Electoral"@es ;
+    skos:altLabel "Violacion Electoral"@es ;
+    skos:altLabel "Falta Electoral"@es ;
+    skos:altLabel "Contravencion"@es ;
+    skos:definition """Accion u omision que contraviene la normativa de propaganda
+    electoral. Incluye instalacion sin autorizacion, exceso de dimensiones, ubicacion
+    en zonas prohibidas, permanencia despues de periodo permitido, y cualquier otra
+    violacion al reglamento de propaganda electoral."""@es ;
+    skos:scopeNote """Tipos de infracciones:
+    - Sin autorizacion: Propaganda no radicada
+    - Fuera de zona: Ubicacion no permitida
+    - Exceso dimensiones: Supera medidas autorizadas
+    - Temporalidad: Fuera de periodo electoral
+    - Deterioro espacio: Afectacion a bienes publicos"""@es ;
+    skos:example "Pasacalle instalado sin autorizacion en puente peatonal"@es ;
+    dcterms:source "Codigo Nacional de Policia - Art. 140"@es ;
+    dcterms:source "Ley 1801 de 2016"@es ;
+    iso11179:objectClass "Infraccion_Electoral" ;
+    :semanticLayer "identifiers" ;
+    :semanticType "evento_control" ;
+    :columnaOrigen "infraccion_solicitud_id, infraccion_codigo" .
+
+# =============================================================================
+# CLASE 6: PeriodoElectoral
+# =============================================================================
+# Marco temporal de una eleccion
+
+pe:PeriodoElectoral a owl:Class, skos:Concept ;
+    rdfs:label "Periodo Electoral"@es ;
+    rdfs:label "Electoral Period"@en ;
+    rdfs:subClassOf schema:Event ;
+    skos:inScheme pe:PropagandaElectoralScheme ;
+    skos:prefLabel "Periodo Electoral"@es ;
+    skos:altLabel "Campana Electoral"@es ;
+    skos:altLabel "Jornada Electoral"@es ;
+    skos:altLabel "Elecciones"@es ;
+    skos:definition """Marco temporal durante el cual se permite la instalacion
+    de propaganda electoral. Definido por la autoridad electoral (CNE) e incluye
+    las fechas de inicio y fin de campana, asi como el tipo de eleccion (presidencial,
+    legislativa, territorial)."""@es ;
+    skos:scopeNote """Estructura temporal:
+    - Fecha apertura inscripcion candidatos
+    - Fecha inicio campana oficial
+    - Fecha dia de eleccion
+    - Fecha limite retiro propaganda
+    Regula la temporalidad de todas las autorizaciones"""@es ;
+    skos:example "Elecciones Territoriales 2027 (Octubre 2027)"@es ;
+    dcterms:source "CNE - Calendario Electoral"@es ;
+    dcterms:source "Ley 1475 de 2011"@es ;
+    iso11179:objectClass "Periodo_Electoral" ;
+    :semanticLayer "temporal" ;
+    :semanticType "periodo" ;
+    :columnaOrigen "periodo_electoral" .
+
+# =============================================================================
+# CLASE 7: ResolucionAdministrativa
+# =============================================================================
+# Acto administrativo de autorizacion o negacion
+
+pe:ResolucionAdministrativa a owl:Class, skos:Concept ;
+    rdfs:label "Resolucion Administrativa"@es ;
+    rdfs:label "Administrative Resolution"@en ;
+    rdfs:subClassOf prov:Entity ;
+    skos:inScheme pe:PropagandaElectoralScheme ;
+    skos:prefLabel "Resolucion"@es ;
+    skos:altLabel "Acto Administrativo"@es ;
+    skos:altLabel "Resolucion de Autorizacion"@es ;
+    skos:definition """Acto administrativo expedido por la autoridad competente
+    que autoriza, niega o condiciona la instalacion de propaganda electoral.
+    Incluye el numero de resolucion, fecha de expedicion, sentido de la decision
+    y notificacion al interesado."""@es ;
+    skos:scopeNote """Estados posibles:
+    - Autorizado: Aprobacion total
+    - Autorizado parcial: Aprobacion con restricciones
+    - Negado: Rechazo de la solicitud
+    - En recurso: Pendiente de reposicion
+    Genera obligaciones de cumplimiento para el solicitante"""@es ;
+    skos:example "Resolucion 2026-PE-0567 autorizando 30 de 50 pendones solicitados"@es ;
+    dcterms:source "Codigo de Procedimiento Administrativo - CPACA"@es ;
+    iso11179:objectClass "Resolucion_Propaganda_Electoral" ;
+    :semanticLayer "identifiers" ;
+    :semanticType "documento_oficial" ;
+    :columnaOrigen "resolucion_numero, resolucion_fecha" .
+
+# =============================================================================
+# CLASE 8: Requerimiento
+# =============================================================================
+# Solicitud de subsanacion de documentos
+
+pe:Requerimiento a owl:Class, skos:Concept ;
+    rdfs:label "Requerimiento Documental"@es ;
+    rdfs:label "Document Requirement"@en ;
+    rdfs:subClassOf prov:Activity ;
+    skos:inScheme pe:PropagandaElectoralScheme ;
+    skos:prefLabel "Requerimiento"@es ;
+    skos:altLabel "Solicitud de Subsanacion"@es ;
+    skos:altLabel "Requerimiento de Documentos"@es ;
+    skos:definition """Comunicacion oficial al solicitante requiriendo documentos
+    adicionales o subsanacion de defectos en la solicitud de propaganda electoral.
+    Establece plazos de respuesta y puede suspender el tramite hasta su cumplimiento."""@es ;
+    skos:scopeNote """Flujo del requerimiento:
+    1. Expedicion: Se detecta falta de documentos
+    2. Notificacion: Se comunica al partido
+    3. Respuesta: El partido aporta documentos
+    4. Evaluacion: Se verifica cumplimiento
+    Documentos tipicos: Formulario E6, autorizacion propietario, certificado tradicion"""@es ;
+    skos:example "Requerimiento de certificado de tradicion del predio para instalar valla"@es ;
+    dcterms:source "CPACA - Art. 17 (Documentos exigibles)"@es ;
+    iso11179:objectClass "Requerimiento_Documental" ;
+    :semanticLayer "identifiers" ;
+    :semanticType "comunicacion_oficial" ;
+    :columnaOrigen "requerimiento_id, requerimiento_codigo" .
+
+# =============================================================================
+# CLASE 9: TipoEleccion
+# =============================================================================
+# Clasificacion del proceso electoral
+
+pe:TipoEleccion a owl:Class, skos:Concept ;
+    rdfs:label "Tipo de Eleccion"@es ;
+    rdfs:label "Election Type"@en ;
+    skos:inScheme pe:PropagandaElectoralScheme ;
+    skos:prefLabel "Tipo de Eleccion"@es ;
+    skos:altLabel "Categoria Electoral"@es ;
+    skos:altLabel "Nivel de Eleccion"@es ;
+    skos:definition """Clasificacion del proceso electoral segun el cargo o corporacion
+    a elegir. Determina el ambito territorial, regulaciones especificas y calendario
+    aplicable a la propaganda electoral."""@es ;
+    skos:scopeNote """Tipos principales en Colombia:
+    - Presidencial: Presidente y Vicepresidente
+    - Legislativa: Senado y Camara de Representantes
+    - Territorial: Gobernadores, Alcaldes, Asambleas, Concejos
+    - Consultas: Consultas internas de partidos
+    - Revocatoria: Revocatoria de mandato"""@es ;
+    skos:example "Elecciones Territoriales, Elecciones Legislativas"@es ;
+    dcterms:source "Constitucion Politica de Colombia - Art. 260-264"@es ;
+    iso11179:objectClass "Tipo_Eleccion" ;
+    :semanticLayer "identifiers" ;
+    :semanticType "clasificacion" ;
+    :columnaOrigen "tipo_eleccion" .
+
+# =============================================================================
+# CLASE 10: UbicacionPropaganda
+# =============================================================================
+# Lugar especifico de instalacion de propaganda
+
+pe:UbicacionPropaganda a owl:Class, skos:Concept ;
+    rdfs:label "Ubicacion de Propaganda"@es ;
+    rdfs:label "Propaganda Location"@en ;
+    rdfs:subClassOf core:Lugar ;
+    skos:inScheme pe:PropagandaElectoralScheme ;
+    skos:prefLabel "Ubicacion de Propaganda"@es ;
+    skos:altLabel "Punto de Instalacion"@es ;
+    skos:altLabel "Direccion Autorizada"@es ;
+    skos:altLabel "Sitio de Propaganda"@es ;
+    skos:definition """Lugar fisico especifico donde se instala o solicita instalar
+    un elemento de propaganda electoral. Incluye datos geograficos (ciudad, comuna,
+    barrio, direccion), informacion del predio (titular del inmueble) y estado
+    de autorizacion (solicitado, autorizado, rechazado)."""@es ;
+    skos:scopeNote """Distingue entre:
+    - Ubicacion solicitada: Donde el partido quiere instalar
+    - Ubicacion autorizada: Donde se permite instalar
+    - Ubicacion real: Donde efectivamente se instalo
+    Puede diferir en caso de ajustes tecnicos"""@es ;
+    skos:example "Carrera 70 con Calle 44A, Barrio Laureles, Comuna 11"@es ;
+    dcterms:source "Catastro Municipal"@es ;
+    iso11179:objectClass "Ubicacion_Propaganda_Electoral" ;
+    :semanticLayer "geodata" ;
+    :semanticType "ubicacion" ;
+    :columnaOrigen "direccion_solicitada_id, direccion_autorizada_id" .
+
+# =============================================================================
+# ESQUEMA SKOS PRINCIPAL
+# =============================================================================
+
+pe:PropagandaElectoralScheme a skos:ConceptScheme ;
+    skos:prefLabel "Vocabulario de Propaganda Electoral"@es ;
+    skos:prefLabel "Electoral Propaganda Vocabulary"@en ;
+    dcterms:title "Ontologia de Propaganda Electoral"@es ;
+    dcterms:description "Esquema conceptual para la gestion de propaganda electoral en espacio publico"@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico"@es ;
+    dcterms:created "2026-01-09"^^xsd:date ;
+    dcterms:modified "2026-01-09"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    skos:hasTopConcept pe:PartidoPolitico, pe:Candidato, pe:SolicitudPropaganda,
+        pe:ElementoPublicitario, pe:InfraccionElectoral, pe:PeriodoElectoral,
+        pe:ResolucionAdministrativa, pe:Requerimiento, pe:TipoEleccion, pe:UbicacionPropaganda .
+
+# =============================================================================
+# JERARQUIAS SKOS (broader/narrower)
+# =============================================================================
+
+pe:PartidoPolitico skos:narrower pe:Candidato .
+pe:Candidato skos:broader pe:PartidoPolitico .
+
+pe:SolicitudPropaganda skos:narrower pe:ElementoPublicitario, pe:Requerimiento, pe:ResolucionAdministrativa .
+pe:ElementoPublicitario skos:broader pe:SolicitudPropaganda .
+pe:Requerimiento skos:broader pe:SolicitudPropaganda .
+pe:ResolucionAdministrativa skos:broader pe:SolicitudPropaganda .
+
+pe:ElementoPublicitario skos:narrower pe:UbicacionPropaganda .
+pe:UbicacionPropaganda skos:broader pe:ElementoPublicitario .
+
+pe:PeriodoElectoral skos:narrower pe:TipoEleccion .
+pe:TipoEleccion skos:broader pe:PeriodoElectoral .
+
+pe:InfraccionElectoral skos:related pe:ElementoPublicitario, pe:PartidoPolitico .
+

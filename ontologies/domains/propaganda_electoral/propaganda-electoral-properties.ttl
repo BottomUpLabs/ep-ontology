@@ -1,0 +1,739 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/propaganda-electoral#> .
+@prefix pe: <https://w3id.org/medellin/espacio-publico/propaganda-electoral#> .
+@prefix pep: <https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <http://schema.org/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# PROPIEDADES: Propaganda Electoral
+# =============================================================================
+# Object Properties y Datatype Properties para el dominio de propaganda electoral.
+# Incluye anotaciones semanticas para integracion con semantic layer del DMP.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/propaganda-electoral/properties> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/propaganda-electoral/properties/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Propiedades de Propaganda Electoral"@es ;
+    dcterms:description "Object Properties y Datatype Properties para el dominio de propaganda electoral"@es ;
+    dcterms:created "2026-01-09"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/propaganda-electoral> .
+
+# =============================================================================
+# OBJECT PROPERTIES: Relaciones entre Clases
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Partido Politico -> Candidato
+# -----------------------------------------------------------------------------
+
+pep:tieneCandidato a owl:ObjectProperty ;
+    rdfs:label "tiene candidato"@es ;
+    rdfs:label "has candidate"@en ;
+    rdfs:comment "Relaciona un partido politico con los candidatos que postula"@es ;
+    rdfs:domain pe:PartidoPolitico ;
+    rdfs:range pe:Candidato ;
+    owl:inverseOf pep:esPostuladoPor ;
+    skos:prefLabel "tiene candidato"@es ;
+    skos:definition "Vinculo entre partido y candidatos inscritos para elecciones"@es ;
+    skos:example "<partido/liberal> pep:tieneCandidato <candidato/12345> ."@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" ;
+    pe:columnaOrigen "partido_politico_id -> candidato" ;
+    dcterms:source "DMP trx_propaganda_electoral" .
+
+pep:esPostuladoPor a owl:ObjectProperty ;
+    rdfs:label "es postulado por"@es ;
+    rdfs:comment "Relaciona un candidato con el partido que lo postula"@es ;
+    rdfs:domain pe:Candidato ;
+    rdfs:range pe:PartidoPolitico ;
+    owl:inverseOf pep:tieneCandidato ;
+    a owl:FunctionalProperty ;  # Un candidato solo puede ser postulado por un partido/coalicion
+    skos:prefLabel "es postulado por"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" ;
+    pe:columnaOrigen "partido_politico_id" .
+
+# -----------------------------------------------------------------------------
+# Partido Politico -> Solicitud Propaganda
+# -----------------------------------------------------------------------------
+
+pep:presentaSolicitud a owl:ObjectProperty ;
+    rdfs:label "presenta solicitud"@es ;
+    rdfs:label "submits request"@en ;
+    rdfs:comment "Relaciona un partido politico con las solicitudes de propaganda que presenta"@es ;
+    rdfs:domain pe:PartidoPolitico ;
+    rdfs:range pe:SolicitudPropaganda ;
+    owl:inverseOf pep:esPresentadaPor ;
+    skos:prefLabel "presenta solicitud"@es ;
+    skos:definition "Vinculo entre partido y sus tramites de autorizacion de propaganda"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" ;
+    pe:columnaOrigen "partido_politico_id -> radicado_solicitud" ;
+    dcterms:source "base_propaganda_electoral_radicado_solicitud" .
+
+pep:esPresentadaPor a owl:ObjectProperty ;
+    rdfs:label "es presentada por"@es ;
+    rdfs:comment "Relaciona una solicitud con el partido que la presenta"@es ;
+    rdfs:domain pe:SolicitudPropaganda ;
+    rdfs:range pe:PartidoPolitico ;
+    owl:inverseOf pep:presentaSolicitud ;
+    a owl:FunctionalProperty ;
+    skos:prefLabel "es presentada por"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" ;
+    pe:columnaOrigen "partido_politico_id" .
+
+# -----------------------------------------------------------------------------
+# Solicitud Propaganda -> Elemento Publicitario
+# -----------------------------------------------------------------------------
+
+pep:contieneElemento a owl:ObjectProperty ;
+    rdfs:label "contiene elemento"@es ;
+    rdfs:label "contains element"@en ;
+    rdfs:comment "Relaciona una solicitud con los elementos publicitarios que incluye"@es ;
+    rdfs:domain pe:SolicitudPropaganda ;
+    rdfs:range pe:ElementoPublicitario ;
+    owl:inverseOf pep:perteneceASolicitud ;
+    skos:prefLabel "contiene elemento"@es ;
+    skos:definition "Vinculo entre radicado y elementos de propaganda solicitados"@es ;
+    skos:example "<solicitud/2026-001> pep:contieneElemento <elemento/pendon-001> ."@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" ;
+    pe:columnaOrigen "radicado_solicitud_id -> solicitud_propaganda" ;
+    dcterms:source "base_propaganda_electoral_solicitud_propaganda" .
+
+pep:perteneceASolicitud a owl:ObjectProperty ;
+    rdfs:label "pertenece a solicitud"@es ;
+    rdfs:comment "Relaciona un elemento publicitario con su solicitud padre"@es ;
+    rdfs:domain pe:ElementoPublicitario ;
+    rdfs:range pe:SolicitudPropaganda ;
+    owl:inverseOf pep:contieneElemento ;
+    a owl:FunctionalProperty ;
+    skos:prefLabel "pertenece a solicitud"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" ;
+    pe:columnaOrigen "radicado_solicitud_id" .
+
+# -----------------------------------------------------------------------------
+# Solicitud Propaganda -> Resolucion
+# -----------------------------------------------------------------------------
+
+pep:tieneResolucion a owl:ObjectProperty ;
+    rdfs:label "tiene resolucion"@es ;
+    rdfs:label "has resolution"@en ;
+    rdfs:comment "Relaciona una solicitud con la resolucion que la resuelve"@es ;
+    rdfs:domain pe:SolicitudPropaganda ;
+    rdfs:range pe:ResolucionAdministrativa ;
+    owl:inverseOf pep:resuelveSolicitud ;
+    a owl:FunctionalProperty ;  # Una solicitud tiene una resolucion principal
+    skos:prefLabel "tiene resolucion"@es ;
+    skos:definition "Vinculo entre tramite y acto administrativo de decision"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "documento_oficial" ;
+    pe:columnaOrigen "resolucion_numero" ;
+    dcterms:source "base_propaganda_electoral_radicado_solicitud" .
+
+pep:resuelveSolicitud a owl:ObjectProperty ;
+    rdfs:label "resuelve solicitud"@es ;
+    rdfs:comment "Relaciona una resolucion con la solicitud que resuelve"@es ;
+    rdfs:domain pe:ResolucionAdministrativa ;
+    rdfs:range pe:SolicitudPropaganda ;
+    owl:inverseOf pep:tieneResolucion ;
+    skos:prefLabel "resuelve solicitud"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" .
+
+# -----------------------------------------------------------------------------
+# Solicitud Propaganda -> Requerimiento
+# -----------------------------------------------------------------------------
+
+pep:tieneRequerimiento a owl:ObjectProperty ;
+    rdfs:label "tiene requerimiento"@es ;
+    rdfs:label "has requirement"@en ;
+    rdfs:comment "Relaciona una solicitud con los requerimientos de documentos que genera"@es ;
+    rdfs:domain pe:SolicitudPropaganda ;
+    rdfs:range pe:Requerimiento ;
+    owl:inverseOf pep:derivaDeSolicitud ;
+    skos:prefLabel "tiene requerimiento"@es ;
+    skos:definition "Vinculo entre tramite y solicitudes de subsanacion"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" ;
+    pe:columnaOrigen "radicado_solicitud_id -> requerimiento" ;
+    dcterms:source "base_propaganda_electoral_requerimientos" .
+
+pep:derivaDeSolicitud a owl:ObjectProperty ;
+    rdfs:label "deriva de solicitud"@es ;
+    rdfs:comment "Relaciona un requerimiento con la solicitud que lo origina"@es ;
+    rdfs:domain pe:Requerimiento ;
+    rdfs:range pe:SolicitudPropaganda ;
+    owl:inverseOf pep:tieneRequerimiento ;
+    a owl:FunctionalProperty ;
+    skos:prefLabel "deriva de solicitud"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" ;
+    pe:columnaOrigen "radicado_solicitud_id" .
+
+# -----------------------------------------------------------------------------
+# Elemento Publicitario -> Ubicacion
+# -----------------------------------------------------------------------------
+
+pep:ubicadoEn a owl:ObjectProperty ;
+    rdfs:label "ubicado en"@es ;
+    rdfs:label "located at"@en ;
+    rdfs:comment "Relaciona un elemento publicitario con su ubicacion fisica"@es ;
+    rdfs:domain pe:ElementoPublicitario ;
+    rdfs:range pe:UbicacionPropaganda ;
+    rdfs:subPropertyOf schema:location ;
+    skos:prefLabel "ubicado en"@es ;
+    skos:definition "Vinculo espacial entre elemento y punto de instalacion"@es ;
+    skos:example "<elemento/pendon-001> pep:ubicadoEn <ubicacion/cra70-cll44> ."@es ;
+    pe:semanticLayer "geodata" ;
+    pe:semanticType "ubicacion" ;
+    pe:columnaOrigen "direccion_solicitada_id, direccion_autorizada_id" ;
+    dcterms:source "base_propaganda_electoral_solicitud_propaganda" .
+
+pep:tieneUbicacionSolicitada a owl:ObjectProperty ;
+    rdfs:label "tiene ubicacion solicitada"@es ;
+    rdfs:comment "Ubicacion donde el partido solicita instalar propaganda"@es ;
+    rdfs:domain pe:ElementoPublicitario ;
+    rdfs:range pe:UbicacionPropaganda ;
+    rdfs:subPropertyOf pep:ubicadoEn ;
+    skos:prefLabel "ubicacion solicitada"@es ;
+    pe:semanticLayer "geodata" ;
+    pe:semanticType "ubicacion" ;
+    pe:columnaOrigen "direccion_solicitada_id" .
+
+pep:tieneUbicacionAutorizada a owl:ObjectProperty ;
+    rdfs:label "tiene ubicacion autorizada"@es ;
+    rdfs:comment "Ubicacion donde se autoriza la instalacion de propaganda"@es ;
+    rdfs:domain pe:ElementoPublicitario ;
+    rdfs:range pe:UbicacionPropaganda ;
+    rdfs:subPropertyOf pep:ubicadoEn ;
+    skos:prefLabel "ubicacion autorizada"@es ;
+    pe:semanticLayer "geodata" ;
+    pe:semanticType "ubicacion" ;
+    pe:columnaOrigen "direccion_autorizada_id" .
+
+# -----------------------------------------------------------------------------
+# Infraccion -> Partido, Candidato, Elemento
+# -----------------------------------------------------------------------------
+
+pep:infraccioRegistradaContra a owl:ObjectProperty ;
+    rdfs:label "infraccion registrada contra"@es ;
+    rdfs:label "violation registered against"@en ;
+    rdfs:comment "Relaciona una infraccion con el partido politico responsable"@es ;
+    rdfs:domain pe:InfraccionElectoral ;
+    rdfs:range pe:PartidoPolitico ;
+    skos:prefLabel "registrada contra partido"@es ;
+    skos:definition "Vinculo entre infraccion y partido responsable"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" ;
+    pe:columnaOrigen "partido_politico_id" ;
+    dcterms:source "base_propaganda_electoral_infracciones" .
+
+pep:involucraCandidato a owl:ObjectProperty ;
+    rdfs:label "involucra candidato"@es ;
+    rdfs:comment "Relaciona una infraccion con el candidato cuya propaganda genero la falta"@es ;
+    rdfs:domain pe:InfraccionElectoral ;
+    rdfs:range pe:Candidato ;
+    skos:prefLabel "involucra candidato"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" ;
+    pe:columnaOrigen "candidato_id" ;
+    dcterms:source "base_propaganda_electoral_infracciones" .
+
+pep:afectaElemento a owl:ObjectProperty ;
+    rdfs:label "afecta elemento"@es ;
+    rdfs:comment "Relaciona una infraccion con el elemento publicitario infractor"@es ;
+    rdfs:domain pe:InfraccionElectoral ;
+    rdfs:range pe:ElementoPublicitario ;
+    skos:prefLabel "afecta elemento"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "foreign_key" ;
+    pe:columnaOrigen "elemento_tipo" .
+
+# -----------------------------------------------------------------------------
+# Periodo Electoral -> Tipo Eleccion
+# -----------------------------------------------------------------------------
+
+pep:correspondeTipoEleccion a owl:ObjectProperty ;
+    rdfs:label "corresponde a tipo de eleccion"@es ;
+    rdfs:label "corresponds to election type"@en ;
+    rdfs:comment "Relaciona un periodo electoral con el tipo de eleccion que representa"@es ;
+    rdfs:domain pe:PeriodoElectoral ;
+    rdfs:range pe:TipoEleccion ;
+    a owl:FunctionalProperty ;
+    skos:prefLabel "corresponde a tipo eleccion"@es ;
+    skos:definition "Vinculo entre marco temporal y categoria de eleccion"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "clasificacion" ;
+    pe:columnaOrigen "tipo_eleccion" ;
+    dcterms:source "base_propaganda_electoral_radicado_solicitud" .
+
+pep:enPeriodoElectoral a owl:ObjectProperty ;
+    rdfs:label "en periodo electoral"@es ;
+    rdfs:comment "Relaciona una solicitud o infraccion con el periodo electoral correspondiente"@es ;
+    rdfs:domain [ a owl:Class ; owl:unionOf (pe:SolicitudPropaganda pe:InfraccionElectoral) ] ;
+    rdfs:range pe:PeriodoElectoral ;
+    skos:prefLabel "en periodo electoral"@es ;
+    pe:semanticLayer "temporal" ;
+    pe:semanticType "periodo" ;
+    pe:columnaOrigen "periodo_electoral" .
+
+# =============================================================================
+# DATATYPE PROPERTIES: Atributos de Datos
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Partido Politico
+# -----------------------------------------------------------------------------
+
+pep:partidoNombre a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "nombre del partido"@es ;
+    rdfs:domain pe:PartidoPolitico ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "nombre del partido"@es ;
+    skos:definition "Nombre oficial del partido politico registrado ante el CNE"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "business_id" ;
+    pe:columnaOrigen "partido_nombre" ;
+    dcterms:source "base_propaganda_electoral_partido_politico" .
+
+pep:esCoalicion a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "es coalicion"@es ;
+    rdfs:domain pe:PartidoPolitico ;
+    rdfs:range xsd:boolean ;
+    skos:prefLabel "indicador de coalicion"@es ;
+    skos:definition "Indica si el partido es una coalicion de varios partidos"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "indicator" ;
+    pe:columnaOrigen "es_coalicion" .
+
+pep:coalicionNombre a owl:DatatypeProperty ;
+    rdfs:label "nombre de la coalicion"@es ;
+    rdfs:domain pe:PartidoPolitico ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "nombre coalicion"@es ;
+    skos:definition "Nombre de la coalicion electoral (si aplica)"@es ;
+    pe:columnaOrigen "coalicion_nombre" .
+
+pep:delegacionDepartamental a owl:DatatypeProperty ;
+    rdfs:label "delegacion departamental"@es ;
+    rdfs:domain pe:PartidoPolitico ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "departamento delegacion"@es ;
+    skos:definition "Departamento de la delegacion del partido"@es ;
+    pe:semanticLayer "geodata" ;
+    pe:semanticType "departamento" ;
+    pe:columnaOrigen "partido_delegacion_departamental" .
+
+pep:representanteNombre a owl:DatatypeProperty ;
+    rdfs:label "nombre del representante"@es ;
+    rdfs:domain pe:PartidoPolitico ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "representante legal"@es ;
+    skos:definition "Nombre completo del representante legal del partido"@es ;
+    pe:semanticLayer "personal_data" ;
+    pe:semanticType "nombre_completo" ;
+    pe:piiLevel "medium" ;
+    pe:columnaOrigen "partido_representante_nombre" .
+
+pep:representanteDocumento a owl:DatatypeProperty ;
+    rdfs:label "documento del representante"@es ;
+    rdfs:domain pe:PartidoPolitico ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "documento representante"@es ;
+    skos:definition "Numero de documento de identidad del representante"@es ;
+    pe:semanticLayer "personal_data" ;
+    pe:semanticType "documento_identidad" ;
+    pe:piiLevel "high" ;
+    pe:columnaOrigen "partido_representante_documento" .
+
+# -----------------------------------------------------------------------------
+# Candidato
+# -----------------------------------------------------------------------------
+
+pep:candidatoNombres a owl:DatatypeProperty ;
+    rdfs:label "nombres del candidato"@es ;
+    rdfs:domain pe:Candidato ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "nombres candidato"@es ;
+    skos:definition "Primer y segundo nombre del candidato"@es ;
+    pe:semanticLayer "personal_data" ;
+    pe:semanticType "nombre" ;
+    pe:piiLevel "medium" ;
+    pe:columnaOrigen "candidato_nombres" .
+
+pep:candidatoApellidos a owl:DatatypeProperty ;
+    rdfs:label "apellidos del candidato"@es ;
+    rdfs:domain pe:Candidato ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "apellidos candidato"@es ;
+    skos:definition "Primer y segundo apellido del candidato"@es ;
+    pe:semanticLayer "personal_data" ;
+    pe:semanticType "apellido" ;
+    pe:piiLevel "medium" ;
+    pe:columnaOrigen "candidato_apellidos" .
+
+pep:candidatoDocumento a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "documento del candidato"@es ;
+    rdfs:domain pe:Candidato ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "documento candidato"@es ;
+    skos:definition "Numero de documento de identidad del candidato"@es ;
+    pe:semanticLayer "personal_data" ;
+    pe:semanticType "documento_identidad" ;
+    pe:piiLevel "high" ;
+    pe:columnaOrigen "candidato_documento" .
+
+# -----------------------------------------------------------------------------
+# Solicitud Propaganda (Radicado)
+# -----------------------------------------------------------------------------
+
+pep:radicadoNumero a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "numero de radicado"@es ;
+    rdfs:domain pe:SolicitudPropaganda ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "numero radicado"@es ;
+    skos:definition "Numero unico de radicacion de la solicitud"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "numero_radicado" ;
+    pe:grainLevel "solicitud" ;
+    pe:columnaOrigen "radicado_numero" .
+
+pep:solicitudOrigen a owl:DatatypeProperty ;
+    rdfs:label "origen de la solicitud"@es ;
+    rdfs:domain pe:SolicitudPropaganda ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "origen solicitud"@es ;
+    skos:definition "Canal de ingreso de la solicitud"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "business_id" ;
+    pe:columnaOrigen "solicitud_origen" .
+
+pep:periodoElectoralAnio a owl:DatatypeProperty ;
+    rdfs:label "anio del periodo electoral"@es ;
+    rdfs:domain [ a owl:Class ; owl:unionOf (pe:SolicitudPropaganda pe:InfraccionElectoral pe:PeriodoElectoral) ] ;
+    rdfs:range xsd:gYear ;
+    skos:prefLabel "periodo electoral"@es ;
+    skos:definition "Anio del proceso electoral (2026, 2027, etc.)"@es ;
+    pe:semanticLayer "temporal" ;
+    pe:semanticType "fecha" ;
+    pe:columnaOrigen "periodo_electoral" .
+
+pep:tipoEleccionTexto a owl:DatatypeProperty ;
+    rdfs:label "tipo de eleccion"@es ;
+    rdfs:domain [ a owl:Class ; owl:unionOf (pe:SolicitudPropaganda pe:InfraccionElectoral pe:TipoEleccion) ] ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "tipo eleccion"@es ;
+    skos:definition "Categoria de eleccion (presidencial, legislativa, territorial)"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "business_id" ;
+    pe:columnaOrigen "tipo_eleccion" .
+
+pep:estadoCodigo a owl:DatatypeProperty ;
+    rdfs:label "codigo de estado"@es ;
+    rdfs:domain [ a owl:Class ; owl:unionOf (pe:SolicitudPropaganda pe:InfraccionElectoral pe:Requerimiento) ] ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "estado"@es ;
+    skos:definition "Codigo del estado actual del tramite"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "business_id" ;
+    pe:columnaOrigen "estado_cod" .
+
+pep:descripcion a owl:DatatypeProperty ;
+    rdfs:label "descripcion"@es ;
+    rdfs:domain [ a owl:Class ; owl:unionOf (pe:SolicitudPropaganda pe:InfraccionElectoral) ] ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "descripcion"@es ;
+    skos:definition "Descripcion textual del tramite o evento"@es ;
+    pe:columnaOrigen "descripcion, detalles" .
+
+# -----------------------------------------------------------------------------
+# Elemento Publicitario
+# -----------------------------------------------------------------------------
+
+pep:elementoTipo a owl:DatatypeProperty ;
+    rdfs:label "tipo de elemento"@es ;
+    rdfs:domain pe:ElementoPublicitario ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "tipo elemento"@es ;
+    skos:definition "Clasificacion del elemento (pendon, pasacalle, valla, afiche)"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "business_id" ;
+    pe:columnaOrigen "elemento_tipo" .
+
+pep:alusivaA a owl:DatatypeProperty ;
+    rdfs:label "alusiva a"@es ;
+    rdfs:domain pe:ElementoPublicitario ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "referencia"@es ;
+    skos:definition "Referencia a lo que alude la propaganda (candidato, partido, propuesta)"@es ;
+    pe:columnaOrigen "alusiva_a" .
+
+pep:dimensionAlto a owl:DatatypeProperty ;
+    rdfs:label "dimension alto"@es ;
+    rdfs:domain pe:ElementoPublicitario ;
+    rdfs:range xsd:decimal ;
+    skos:prefLabel "alto"@es ;
+    skos:definition "Altura del elemento publicitario en centimetros"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "medida" ;
+    pe:columnaOrigen "dimension_alto" .
+
+pep:dimensionAncho a owl:DatatypeProperty ;
+    rdfs:label "dimension ancho"@es ;
+    rdfs:domain pe:ElementoPublicitario ;
+    rdfs:range xsd:decimal ;
+    skos:prefLabel "ancho"@es ;
+    skos:definition "Ancho del elemento publicitario en centimetros"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "medida" ;
+    pe:columnaOrigen "dimension_ancho" .
+
+pep:autorizacionEstado a owl:DatatypeProperty ;
+    rdfs:label "estado de autorizacion"@es ;
+    rdfs:domain pe:ElementoPublicitario ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "estado autorizacion"@es ;
+    skos:definition "Estado de la autorizacion del elemento (pendiente, autorizado, rechazado)"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "business_id" ;
+    pe:columnaOrigen "autorizacion_estado" .
+
+pep:incumplimientoTipo a owl:DatatypeProperty ;
+    rdfs:label "tipo de incumplimiento"@es ;
+    rdfs:domain pe:ElementoPublicitario ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "incumplimiento"@es ;
+    skos:definition "Tipo de incumplimiento detectado (si aplica)"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "business_id" ;
+    pe:columnaOrigen "incumplimiento_tipo" .
+
+# -----------------------------------------------------------------------------
+# Resolucion Administrativa
+# -----------------------------------------------------------------------------
+
+pep:resolucionNumero a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "numero de resolucion"@es ;
+    rdfs:domain pe:ResolucionAdministrativa ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "numero resolucion"@es ;
+    skos:definition "Numero unico del acto administrativo"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "numero_resolucion" ;
+    pe:columnaOrigen "resolucion_numero" .
+
+pep:resolucionFecha a owl:DatatypeProperty ;
+    rdfs:label "fecha de resolucion"@es ;
+    rdfs:domain pe:ResolucionAdministrativa ;
+    rdfs:range xsd:date ;
+    skos:prefLabel "fecha resolucion"@es ;
+    skos:definition "Fecha de expedicion de la resolucion"@es ;
+    pe:semanticLayer "temporal" ;
+    pe:semanticType "fecha" ;
+    pe:columnaOrigen "resolucion_fecha" .
+
+pep:notificacionFecha a owl:DatatypeProperty ;
+    rdfs:label "fecha de notificacion"@es ;
+    rdfs:domain pe:ResolucionAdministrativa ;
+    rdfs:range xsd:date ;
+    skos:prefLabel "fecha notificacion"@es ;
+    skos:definition "Fecha de notificacion al interesado"@es ;
+    pe:semanticLayer "temporal" ;
+    pe:semanticType "fecha" ;
+    pe:columnaOrigen "resolucion_notificacion_fecha" .
+
+# -----------------------------------------------------------------------------
+# Requerimiento
+# -----------------------------------------------------------------------------
+
+pep:requerimientoCodigo a owl:DatatypeProperty ;
+    rdfs:label "codigo de requerimiento"@es ;
+    rdfs:domain pe:Requerimiento ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "codigo requerimiento"@es ;
+    skos:definition "Codigo unico del requerimiento documental"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "business_id" ;
+    pe:columnaOrigen "requerimiento_codigo" .
+
+pep:requisitosSolicitados a owl:DatatypeProperty ;
+    rdfs:label "requisitos solicitados"@es ;
+    rdfs:domain pe:Requerimiento ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "requisitos"@es ;
+    skos:definition "Descripcion de los documentos o requisitos solicitados"@es ;
+    pe:columnaOrigen "requisitos_solicitados" .
+
+pep:requerimientoEstado a owl:DatatypeProperty ;
+    rdfs:label "estado del requerimiento"@es ;
+    rdfs:domain pe:Requerimiento ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "estado requerimiento"@es ;
+    skos:definition "Estado actual del requerimiento (pendiente, respondido, vencido)"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "business_id" ;
+    pe:columnaOrigen "estado" .
+
+# -----------------------------------------------------------------------------
+# Infraccion Electoral
+# -----------------------------------------------------------------------------
+
+pep:infraccionCodigo a owl:DatatypeProperty ;
+    rdfs:label "codigo de infraccion"@es ;
+    rdfs:domain pe:InfraccionElectoral ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "codigo infraccion"@es ;
+    skos:definition "Codigo unico de la infraccion registrada"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "business_id" ;
+    pe:columnaOrigen "infraccion_codigo" .
+
+pep:infraccionDetalles a owl:DatatypeProperty ;
+    rdfs:label "detalles de la infraccion"@es ;
+    rdfs:domain pe:InfraccionElectoral ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "detalles"@es ;
+    skos:definition "Descripcion detallada de la infraccion"@es ;
+    pe:columnaOrigen "detalles" .
+
+# -----------------------------------------------------------------------------
+# Ubicacion Propaganda
+# -----------------------------------------------------------------------------
+
+pep:ciudad a owl:DatatypeProperty ;
+    rdfs:label "ciudad"@es ;
+    rdfs:domain pe:UbicacionPropaganda ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf schema:addressLocality ;
+    skos:prefLabel "ciudad"@es ;
+    skos:definition "Municipio o ciudad de la ubicacion"@es ;
+    pe:semanticLayer "geodata" ;
+    pe:semanticType "municipio" ;
+    pe:columnaOrigen "ciudad_solicitada, ciudad" .
+
+pep:comuna a owl:DatatypeProperty ;
+    rdfs:label "comuna"@es ;
+    rdfs:domain pe:UbicacionPropaganda ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "comuna"@es ;
+    skos:definition "Comuna administrativa de la ubicacion"@es ;
+    pe:semanticLayer "geodata" ;
+    pe:semanticType "comuna" ;
+    pe:columnaOrigen "comuna_solicitada" .
+
+pep:barrio a owl:DatatypeProperty ;
+    rdfs:label "barrio"@es ;
+    rdfs:domain pe:UbicacionPropaganda ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "barrio"@es ;
+    skos:definition "Barrio o vereda de la ubicacion"@es ;
+    pe:semanticLayer "geodata" ;
+    pe:semanticType "barrio" ;
+    pe:columnaOrigen "barrio_solicitado" .
+
+pep:direccion a owl:DatatypeProperty ;
+    rdfs:label "direccion"@es ;
+    rdfs:domain pe:UbicacionPropaganda ;
+    rdfs:range xsd:string ;
+    rdfs:subPropertyOf schema:streetAddress ;
+    skos:prefLabel "direccion"@es ;
+    skos:definition "Direccion especifica de la ubicacion"@es ;
+    pe:semanticLayer "geodata" ;
+    pe:semanticType "direccion" ;
+    pe:columnaOrigen "ubicacion_solicitada, direccion" .
+
+pep:titularInmuebleNombre a owl:DatatypeProperty ;
+    rdfs:label "nombre del titular del inmueble"@es ;
+    rdfs:domain pe:UbicacionPropaganda ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "titular inmueble"@es ;
+    skos:definition "Nombre del propietario o poseedor del inmueble"@es ;
+    pe:semanticLayer "personal_data" ;
+    pe:semanticType "nombre_completo" ;
+    pe:piiLevel "medium" ;
+    pe:columnaOrigen "titular_inmueble_nombre" .
+
+# -----------------------------------------------------------------------------
+# Propiedades Temporales Comunes
+# -----------------------------------------------------------------------------
+
+pep:ingresoFechaHora a owl:DatatypeProperty ;
+    rdfs:label "fecha y hora de ingreso"@es ;
+    rdfs:domain [ a owl:Class ; owl:unionOf (pe:SolicitudPropaganda pe:InfraccionElectoral pe:Requerimiento) ] ;
+    rdfs:range xsd:dateTime ;
+    skos:prefLabel "fecha ingreso"@es ;
+    skos:definition "Fecha y hora de registro en el sistema"@es ;
+    pe:semanticLayer "temporal" ;
+    pe:semanticType "timestamp" ;
+    pe:columnaOrigen "ingreso_fechahora" .
+
+pep:metaCreatedAt a owl:DatatypeProperty ;
+    rdfs:label "fecha de creacion"@es ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:dateTime ;
+    skos:prefLabel "creado en"@es ;
+    skos:definition "Marca de tiempo de creacion del registro"@es ;
+    pe:semanticLayer "temporal" ;
+    pe:semanticType "timestamp" ;
+    pe:columnaOrigen "meta_created_at" .
+
+pep:metaUpdatedAt a owl:DatatypeProperty ;
+    rdfs:label "fecha de actualizacion"@es ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:dateTime ;
+    skos:prefLabel "actualizado en"@es ;
+    skos:definition "Marca de tiempo de ultima actualizacion del registro"@es ;
+    pe:semanticLayer "temporal" ;
+    pe:semanticType "timestamp" ;
+    pe:columnaOrigen "meta_updated_at" .
+
+# -----------------------------------------------------------------------------
+# Propiedades de Archivos Adjuntos
+# -----------------------------------------------------------------------------
+
+pep:archivoFormularioE6 a owl:DatatypeProperty ;
+    rdfs:label "archivo formulario E6"@es ;
+    rdfs:domain pe:PartidoPolitico ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "formulario E6"@es ;
+    skos:definition "Ruta al archivo del formulario E6 de inscripcion"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "file_reference" ;
+    pe:columnaOrigen "archivo_formulario_e6" .
+
+pep:ubicacionFoto a owl:DatatypeProperty ;
+    rdfs:label "foto de ubicacion"@es ;
+    rdfs:domain pe:ElementoPublicitario ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "foto ubicacion"@es ;
+    skos:definition "Ruta a la foto de la ubicacion de instalacion"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "file_reference" ;
+    pe:columnaOrigen "ubicacion_instalacion_foto" .
+
+pep:infraccionFoto a owl:DatatypeProperty ;
+    rdfs:label "foto de evidencia"@es ;
+    rdfs:domain pe:InfraccionElectoral ;
+    rdfs:range xsd:string ;
+    skos:prefLabel "foto evidencia"@es ;
+    skos:definition "Ruta a la foto de evidencia de la infraccion"@es ;
+    pe:semanticLayer "identifiers" ;
+    pe:semanticType "file_reference" ;
+    pe:columnaOrigen "foto1, foto2, foto3" .
+

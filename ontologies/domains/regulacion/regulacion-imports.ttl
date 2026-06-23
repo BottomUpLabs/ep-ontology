@@ -1,0 +1,154 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+
+# =============================================================================
+# ONTOLOGIA PRINCIPAL: Dominio Regulacion de Vendedores Informales
+# =============================================================================
+# Fecha creacion: 2026-01-07
+# Version: 3.0 (refactored - extends core ontologies)
+#
+# ARQUITECTURA:
+# Este archivo importa las ontologias CORE (abstractas) y los modulos de DOMINIO
+# especificos para regulacion de vendedores informales.
+#
+# CORE (abstracto, reutilizable) - ../../../core/:
+#   - entidades-primer-orden.ttl: Lugar, Negocio, Familia, Vivienda
+#   - persona-natural.ttl: PersonaNatural, MiembroFamiliar y caracterizacion
+#   - institutional-core-entities.ttl: Tramite, Resolucion, Evento, Programa
+#   - roles-institucionales.ttl: RolInstitucional, RolInferido, patrones
+#
+# DOMINIO (especifico vendedores) - modular/:
+#   - roles-vendedor.ttl: VendedorInformal, Solicitante, Regulado
+#   - tramites-autorizacion.ttl: AutorizacionTemporalEspacioPublico
+#   - permisos-resoluciones.ttl: PermisoOcupacion
+#   - infraestructura.ttl: Modulo, Carnet
+#   - programas-institucionales.ttl: ProgramaReubicacion
+#   - pqrs-novedades.ttl: NovedadFallecimiento, etc.
+#   - dmp-regulacion-properties.ttl: Propiedades DMP regulacion_v1
+#   - concepto-vulnerabilidad.ttl: FO-GGOL-016
+#   - estudio-socioeconomico.ttl: FO-GGOL-044
+#
+# REGLAS DE INFERENCIA - ./:
+#   - inference-rules.ttl: Reglas de inferencia OWL/SWRL
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/regulacion> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/regulacion/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Dominio Regulacion Vendedores Informales"@es ;
+    dcterms:title "Public Space - Informal Vendor Regulation Domain"@en ;
+    dcterms:description """Ontologia de dominio para la gestion de vendedores informales 
+    en el espacio publico de Medellin. EXTIENDE las ontologias CORE abstractas con 
+    especializaciones para el proceso de autorizacion temporal de ocupacion."""@es ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-01-07"^^xsd:date ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    owl:versionInfo "0.1.0" ;
+    vann:preferredNamespacePrefix "reg" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/regulacion#" ;
+    
+    # ==========================================================================
+    # IMPORTAR ONTOLOGIAS CORE (Abstractas, Reutilizables)
+    # ==========================================================================
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/entidades-primer-orden> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/persona-natural> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/institutional-core-entities> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+
+    # ==========================================================================
+    # IMPORTAR MODULOS DE DOMINIO (Especificos Vendedores) - modular/
+    # ==========================================================================
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/roles-vendedor> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/tramites-autorizacion> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/permisos-resoluciones> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/infraestructura> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/programas-institucionales> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/pqrs-novedades> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/dmp-regulacion-properties> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/concepto-vulnerabilidad> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/estudio-socioeconomico> ;
+    
+    # ==========================================================================
+    # METADATOS
+    # ==========================================================================
+    dcterms:source "Acuerdo 076 de 2014 - Politica Publica de Vendedores Informales" ;
+    dcterms:source "Decreto 883 de 2015" ;
+    dcterms:source "SUIT Codigo 26521 - Autorizacion temporal espacio publico" ;
+    
+    rdfs:comment """
+ARQUITECTURA v3.0 (2026-01-07):
+
+SEPARACION CORE/DOMINIO:
+Las ontologias ahora siguen una arquitectura de dos capas:
+
+1. CORE (ontologies/core/):
+   - Clases ABSTRACTAS reutilizables en todos los dominios de Espacio Publico
+   - Tramite, Resolucion, Evento, Programa son genericos
+   - RolInstitucional define patrones de roles con propagacion de ciclo de vida
+   - Provenance es domain-agnostic
+
+2. DOMINIO (ontologies/domains/regulacion/):
+   - Clases ESPECIFICAS para regulacion de vendedores
+   - VendedorInformal es un RolInferido
+   - AutorizacionTemporalEspacioPublico extiende Tramite
+   - PermisoOcupacion extiende Resolucion
+
+CARACTERISTICAS CLAVE:
+- VendedorInformal es INFERIDO cuando Persona radica AutorizacionTemporalEspacioPublico
+- Propagacion de ciclo de vida: Persona:fallecido → todos los roles terminales
+- Estados terminales explicitos con transiciones validas documentadas
+- SHACL shapes validan integridad de ciclos de vida
+
+MODULOS DE DOMINIO (modular/):
+1. roles-vendedor.ttl: VendedorInformal, VendedorInformalSolicitante, VendedorInformalRegulado
+2. tramites-autorizacion.ttl: AutorizacionTemporalEspacioPublico, ConceptoTecnico
+3. permisos-resoluciones.ttl: PermisoOcupacion, PermisoEvento, PermisoTransitorio
+4. infraestructura.ttl: Modulo, Carnet
+5. programas-institucionales.ttl: ProgramaReubicacion, OfertaInstitucional
+6. pqrs-novedades.ttl: NovedadFallecimiento, NovedadTransferencia, etc.
+7. dmp-regulacion-properties.ttl: Propiedades derivadas del DMP regulacion_v1
+   - PuestoVenta, LugarVenta, VisitaAdministrativa (clases)
+   - VisitaDomiciliaria (FO-GGOL-028): visita al domicilio del vendedor
+   - VisitaAdministrativa (FO-GGOL-036): visita al punto de venta
+   - Titular: nombre, documento, proteccion constitucional, SISBEN
+   - Puesto: actividad economica, dimensiones, horario, amoblamiento
+   - Estado: ocupacion, cancelacion, reubicacion, novedades
+   - Modulo: servicios publicos (agua, energia, gas, alcantarillado)
+   NOTA: El historial de resoluciones se modela usando instancias de
+   PermisoOcupacionTemporal con fechas - no requiere clase separada.
+8. concepto-vulnerabilidad.ttl: ConceptoVulnerabilidad y FO-GGOL-016
+   - Mapeo completo del formulario FO-GGOL-016 (Concepto Socioeconómico)
+   - Criterios de inclusión: SISBÉN, víctima, discapacidad, cabeza familia
+   - Valoración económica: puntaje, clasificación, grado vulnerabilidad
+   - SHACL shapes para validación de conceptos y permisos
+   - Flujo: ConceptoVulnerabilidad → EstudioSocioeconomico → PermisoOcupacionTemporal
+9. estudio-socioeconomico.ttl: EstudioSocioeconomicoCompleto (FO-GOOL-044)
+   - Documento completo de caracterización socioeconómica (145 campos)
+   - 9 secciones: datos personales, inclusión, vivienda, seguridad social,
+     economía, poblacional, familiar, APGAR, grupo familiar
+   - Incluye clase MiembroGrupoFamiliar para composición familiar
+   - Insumo principal para ConceptoVulnerabilidad
+   - Requiere VisitaDomiciliaria previa (FO-GGOL-028)
+
+REGLAS DE INFERENCIA (./, mismo directorio):
+- inference-rules.ttl: Reglas OWL/SWRL para inferencias
+
+SHAPES DE VALIDACION:
+- shapes/vendedor-lifecycle-shapes.ttl: Transiciones de estado
+- shapes/event-state-enforcement-shapes.ttl: Eventos y estados
+- shapes/lifecycle-propagation-shapes.ttl: Propagacion de ciclo de vida
+"""@es .

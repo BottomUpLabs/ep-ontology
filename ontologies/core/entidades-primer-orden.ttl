@@ -1,0 +1,182 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <http://schema.org/> .
+@prefix iso11179: <http://purl.org/iso11179/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# ONTOLOGIA: Entidades de Primer Orden - Espacio Publico
+# =============================================================================
+# Entidades con ciclos de vida INDEPENDIENTES de la institucion.
+# Estas entidades existen por si mismas; la institucion las observa pero NO controla
+# su existencia ni transiciones de estado fundamentales.
+#
+# NOTA: esta ontologia es la base compartida. Las entidades se reparten en modulos
+# dedicados que la importan:
+#   - PersonaNatural y MiembroFamiliar -> core/persona-natural.ttl
+#   - Lugar, PuestoVenta, Vivienda y Modulo (entidades espaciales)
+#     -> core/lugar-puestoventa-vivienda.ttl
+# Aqui quedan :Negocio y :Familia, mas las anotaciones de ciclo de vida que
+# reutilizan todos los modulos.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/core/entidades-primer-orden> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/core/entidades-primer-orden/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Entidades de Primer Orden"@es ;
+    dcterms:title "Public Space - First-Order Entities"@en ;
+    dcterms:description """Ontologia base de entidades con ciclos de vida independientes
+    de la institucion. Define las clases :Negocio y :Familia y las anotaciones de ciclo
+    de vida compartidas. Las entidades PersonaNatural (core/persona-natural) y las
+    espaciales Lugar/PuestoVenta/Vivienda/Modulo (core/lugar-puestoventa-vivienda) se
+    definen en modulos dedicados que importan este archivo."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:created "2026-01-06"^^xsd:date ;
+    dcterms:modified "2026-06-03"^^xsd:date ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    owl:versionInfo "0.1.0" .
+
+# =============================================================================
+# PROPIEDADES DE METADATOS PARA CICLOS DE VIDA
+# =============================================================================
+
+:tipoCicloVida a owl:AnnotationProperty ;
+    rdfs:label "tipo de ciclo de vida"@es ;
+    rdfs:comment "Indica si el ciclo de vida es independiente (entidad) o controlado (rol)"@es .
+
+:estadosCicloVida a owl:AnnotationProperty ;
+    rdfs:label "estados del ciclo de vida"@es ;
+    rdfs:comment "Lista de estados posibles en el ciclo de vida de la entidad"@es .
+
+:gestionadoPor a owl:AnnotationProperty ;
+    rdfs:label "gestionado por"@es ;
+    rdfs:comment "Actor o sistema que gestiona las transiciones de ciclo de vida"@es .
+
+# =============================================================================
+# CLASE: Negocio (Entidad de Primer Orden)
+# =============================================================================
+
+:Negocio a owl:Class ;
+    rdfs:label "Unidad Economica"@es ;
+    rdfs:label "Economic Unit"@en ;
+    skos:prefLabel "Unidad Economica"@es ;
+    skos:altLabel "Negocio"@es ;
+    skos:altLabel "Actividad Comercial"@es ;
+    skos:definition """Actividad comercial operada por una persona. Su estado operacional
+    (activo/cerrado/suspendido) NO es controlado por la institucion. El vendedor decide
+    cuando opera y cuando cierra su negocio. La institucion puede AUTORIZAR o RESTRINGIR
+    la operacion en espacio publico, pero no controla la existencia del negocio en si."""@es ;
+    skos:scopeNote """Captura la dimension economica de la actividad:
+    - Tipologia de productos/servicios
+    - Ingresos estimados
+    - Horarios de operacion
+    - Antiguedad en la actividad
+    Diferente del ROL de vendedor (que es la relacion institucional)"""@es ;
+
+    iso11179:objectClass "Unidad_Economica_Informal" ;
+    :tipoCicloVida "ciclo_vida_entidad" ;
+    :estadosCicloVida ("activo" "cerrado" "suspendido_temporalmente") ;
+    :gestionadoPor "Vendedor (independiente de la institucion)" .
+
+# =============================================================================
+# CLASE: Familia (Entidad de Primer Orden)
+# =============================================================================
+
+:Familia a owl:Class ;
+    rdfs:label "Nucleo Familiar"@es ;
+    rdfs:label "Family Unit"@en ;
+    skos:prefLabel "Nucleo Familiar"@es ;
+    skos:altLabel "Familia"@es ;
+    skos:altLabel "Hogar"@es ;
+    skos:definition """Grupo de personas relacionadas por parentesco o convivencia que
+    comparten recursos economicos y/o vivienda. Su conformacion y disolucion NO es
+    controlada por la institucion. Relevante para caracterizacion socioeconomica y
+    evaluacion de vulnerabilidad del vendedor informal."""@es ;
+    skos:scopeNote """Captura:
+    - Composicion familiar (numero de integrantes, edades)
+    - Dependientes economicos
+    - Condiciones de vulnerabilidad familiar
+    - Indicadores de calidad de vida
+    Enlaza con estandar familias_v1 del DMP"""@es ;
+
+    iso11179:objectClass "Nucleo_Familiar" ;
+    :tipoCicloVida "ciclo_vida_entidad" ;
+    :estadosCicloVida ("conformado" "disuelto" "reestructurado") ;
+    :gestionadoPor "Nucleo familiar (independiente de la institucion)" .
+
+# =============================================================================
+# PROPIEDADES DE DATOS - Negocio
+# =============================================================================
+
+:actividadEconomica a owl:DatatypeProperty ;
+    rdfs:label "actividad economica"@es ;
+    rdfs:comment "Clasificacion de la actividad comercial"@es ;
+    rdfs:domain :Negocio ;
+    rdfs:range xsd:string .
+
+:tipologiaVenta a owl:DatatypeProperty ;
+    rdfs:label "tipologia de venta"@es ;
+    rdfs:comment "Tipo de productos o servicios ofrecidos"@es ;
+    rdfs:domain :Negocio ;
+    rdfs:range xsd:string .
+
+:claseVenta a owl:DatatypeProperty ;
+    rdfs:label "clase de venta"@es ;
+    rdfs:comment "Modalidad de venta (Estacionario, Semi-estacionario, Ambulante)"@es ;
+    rdfs:domain :Negocio ;
+    rdfs:range xsd:string .
+
+:antiguedadAnios a owl:DatatypeProperty ;
+    rdfs:label "antiguedad en anios"@es ;
+    rdfs:domain :Negocio ;
+    rdfs:range xsd:integer .
+
+:ingresoMensual a owl:DatatypeProperty ;
+    rdfs:label "ingreso mensual"@es ;
+    rdfs:comment "Rango de ingresos mensuales estimados"@es ;
+    rdfs:domain :Negocio ;
+    rdfs:range xsd:string .
+
+:horaInicio a owl:DatatypeProperty ;
+    rdfs:label "hora de inicio"@es ;
+    rdfs:domain :Negocio ;
+    rdfs:range xsd:time .
+
+:horaCierre a owl:DatatypeProperty ;
+    rdfs:label "hora de cierre"@es ;
+    rdfs:domain :Negocio ;
+    rdfs:range xsd:time .
+
+# =============================================================================
+# PROPIEDADES DE DATOS - Familia
+# =============================================================================
+
+:totalIntegrantes a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "total de integrantes"@es ;
+    rdfs:domain :Familia ;
+    rdfs:range xsd:integer .
+
+:integrantesMenores a owl:DatatypeProperty ;
+    rdfs:label "integrantes menores de edad"@es ;
+    rdfs:domain :Familia ;
+    rdfs:range xsd:integer .
+
+:integrantesAdultosMayores a owl:DatatypeProperty ;
+    rdfs:label "integrantes adultos mayores"@es ;
+    rdfs:domain :Familia ;
+    rdfs:range xsd:integer .
+
+:tipologiaFamiliar a owl:DatatypeProperty ;
+    rdfs:label "tipologia familiar"@es ;
+    rdfs:domain :Familia ;
+    rdfs:range xsd:string ;
+    skos:definition "Estructura o composicion del nucleo familiar (Nuclear, Extensa, Monoparental, Unipersonal, Compuesta)"@es .

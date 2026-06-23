@@ -1,0 +1,241 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix dmp: <https://w3id.org/medellin/espacio-publico/dmp#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# Ontologia Modular: Infraestructura para Venta Informal
+# =============================================================================
+# Fecha creacion: 2026-01-07
+# Descripcion: Define la infraestructura fisica institucional para vendedores
+#              autorizados: modulos de venta regulados y carnets de identificacion.
+
+<https://w3id.org/medellin/espacio-publico/regulacion/infraestructura> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/regulacion/infraestructura/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Infraestructura"@es ;
+    dcterms:description """Ontologia que define modulos de venta regulados y documentos 
+    de identificacion (carnets) para vendedores informales autorizados."""@es ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-01-07"^^xsd:date ;
+    owl:versionInfo "0.1.0" .
+
+# =============================================================================
+# CLASE: Carnet (Documento de Identificacion del Vendedor Autorizado)
+# =============================================================================
+
+:Carnet a owl:Class ;
+    rdfs:label "Carnet de Vendedor Autorizado"@es ;
+    skos:definition """Documento de identificacion plastico con fotografia que acredita 
+    al titular como vendedor informal autorizado por la Subsecretaria de Espacio Publico. 
+    Incluye fotografia, numero de resolucion, ubicacion asignada, actividad autorizada, 
+    vigencia y codigo QR de verificacion. Es de exhibicion obligatoria durante operacion."""@es ;
+    skos:scopeNote """Caracteristicas del carnet:
+    - Material plastico resistente con fotografia
+    - Codigo QR vinculado a SISDEP
+    - Vigencia sincronizada con PermisoOcupacionTemporal
+    - Actualizacion anual (renovacion)
+    - Reposicion por perdida o deterioro
+    Funciona como credencial oficial de vendedor regulado"""@es ;
+    skos:example "Carnet C-2024-001234 de Juan Perez para modulo M-456"@es ;
+    dcterms:source "Proceso PR-GGOL-019 - Autorizacion de ocupacion" ;
+    :estadosCicloVida (
+        "en_elaboracion"
+        "impreso"
+        "entregado"
+        "vigente"
+        "vencido"
+        "extraviado"
+        "reemplazado"
+        "revocado"
+    ) .
+
+# =============================================================================
+# CLASE: Modulo (Infraestructura Publica de Venta Regulada)
+# =============================================================================
+
+:Modulo a owl:Class ;
+    rdfs:label "Modulo de Venta Regulado"@es ;
+    skos:definition """Estructura fisica estandarizada propiedad de la Alcaldia de Medellin, 
+    asignada temporalmente a vendedores autorizados en puntos especificos de Medellin. 
+    Incorpora condiciones de ergonomia, seguridad, servicios publicos integrados 
+    (energia prepago, acometidas de agua), almacenamiento y senaletica institucional."""@es ;
+    skos:scopeNote """Caracteristicas tipicas:
+    - Dimensiones: 2x2 m o 1.8x2.5 m
+    - Estructura metalica/madera con cerramientos
+    - Pintura anticorrosiva, anclajes al suelo
+    - Breakers, medidores, drenajes
+    - Cerraduras certificadas y placas de identificacion oficial
+    Funciona como bien publico entregado temporalmente a vendedores regulados"""@es ;
+    dcterms:source "Inventario de modulos - SISDEP" ;
+    :estadosCicloVida (
+        "disenado"
+        "en_fabricacion"
+        "fabricado"
+        "instalado"
+        "en_inventario"
+        "asignado"
+        "entregado"
+        "en_uso"
+        "en_mantenimiento"
+        "vandalizado"
+        "en_reparacion"
+        "retirado_temporalmente"
+        "recuperado"
+        "desmontado"
+        "reemplazado"
+    ) .
+
+# =============================================================================
+# PROPIEDADES: Carnet → Relaciones
+# =============================================================================
+
+:tieneCarnet a owl:ObjectProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range :Carnet ;
+    rdfs:label "Tiene carnet"@es ;
+    skos:definition "Vincula el vendedor regulado a su carnet de identificacion"@es .
+
+:derivadoDe a owl:ObjectProperty ;
+    rdfs:domain :Carnet ;
+    rdfs:range :PermisoOcupacionTemporal ;
+    rdfs:label "Derivado de"@es ;
+    skos:definition "Vincula el carnet al permiso de ocupacion temporal que lo origina"@es .
+
+# =============================================================================
+# PROPIEDADES: Modulo → Relaciones
+# =============================================================================
+
+:tieneModuloAsignado a owl:ObjectProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range :Modulo ;
+    rdfs:label "Tiene modulo asignado"@es ;
+    skos:definition "Vincula el vendedor al modulo que le fue asignado"@es .
+
+:asignadoA a owl:ObjectProperty ;
+    owl:inverseOf :tieneModuloAsignado ;
+    rdfs:domain :Modulo ;
+    rdfs:range :VendedorInformalRegulado ;
+    rdfs:label "Asignado a"@es ;
+    skos:definition "Inversa - vincula el modulo al vendedor beneficiario"@es .
+
+# =============================================================================
+# DATATYPE PROPERTIES: Carnet
+# =============================================================================
+
+:numeroCarnet a owl:DatatypeProperty ;
+    rdfs:domain :Carnet ;
+    rdfs:range xsd:string ;
+    rdfs:label "Numero de carnet"@es ;
+    skos:definition "Codigo unico del carnet (ej: C-2024-001234)"@es .
+
+:fechaEmisionCarnet a owl:DatatypeProperty ;
+    rdfs:domain :Carnet ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de emision del carnet"@es ;
+    skos:definition "Fecha en que se emitio el carnet"@es ;
+    dmp:ruleName "format_iso_date" .
+
+:vigenciaCarnet a owl:DatatypeProperty ;
+    rdfs:domain :Carnet ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de vencimiento del carnet"@es ;
+    skos:definition "Fecha en que vence la vigencia del carnet"@es ;
+    dmp:ruleName "format_iso_date" .
+
+:codigoQRCarnet a owl:DatatypeProperty ;
+    rdfs:domain :Carnet ;
+    rdfs:range xsd:string ;
+    rdfs:label "Codigo QR del carnet"@es ;
+    skos:definition "Codigo QR para verificacion digital del carnet"@es .
+
+:estadoCarnet a owl:DatatypeProperty ;
+    rdfs:domain :Carnet ;
+    rdfs:range xsd:string ;
+    rdfs:label "Estado del carnet"@es ;
+    skos:definition "Estado actual del carnet segun ciclo de vida"@es .
+
+# =============================================================================
+# DATATYPE PROPERTIES: Modulo
+# =============================================================================
+
+:numeroModulo a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "Numero de modulo"@es ;
+    skos:definition "Codigo unico del modulo (ej: M-456, MOD-CR-001)"@es .
+
+:codigoSisdep a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "Codigo SISDEP"@es ;
+    skos:definition "Codigo del modulo en el Sistema de Informacion SISDEP"@es .
+
+:dimensionesModulo a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "Dimensiones del modulo"@es ;
+    skos:definition "Dimensiones del modulo en metros (ej: 2x2x2.5)"@es .
+
+:materialModulo a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "Material del modulo"@es ;
+    skos:definition "Material de construccion del modulo (metalico, madera, mixto)"@es .
+
+:estadoFisico a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "Estado fisico"@es ;
+    skos:definition "Condicion fisica del modulo (bueno, regular, malo)"@es .
+
+:fechaInstalacion a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de instalacion"@es ;
+    skos:definition "Fecha en que se instalo el modulo en el punto"@es ;
+    dmp:ruleName "format_iso_date" .
+
+:fechaUltimoMantenimiento a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de ultimo mantenimiento"@es ;
+    skos:definition "Fecha del ultimo mantenimiento realizado al modulo"@es ;
+    dmp:ruleName "format_iso_date" .
+
+:estadoModulo a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "Estado del modulo"@es ;
+    skos:definition "Estado actual del modulo segun ciclo de vida"@es .
+
+:tieneElectricidad a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Tiene electricidad"@es ;
+    skos:definition "Indica si el modulo cuenta con conexion electrica"@es ;
+    dmp:ruleName "format_boolean" .
+
+:tieneAguaPotable a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Tiene agua potable"@es ;
+    skos:definition "Indica si el modulo cuenta con acometida de agua potable"@es ;
+    dmp:ruleName "format_boolean" .
+
+:colorModulo a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "Color del modulo"@es ;
+    skos:definition "Color institucional del modulo (ej: verde institucional)"@es .

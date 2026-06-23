@@ -1,0 +1,592 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <https://schema.org/> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+
+# EP Modeling Namespaces
+@prefix ep: <https://w3id.org/medellin/ep/> .
+@prefix epp: <https://w3id.org/medellin/ep/property/> .
+@prefix epd: <https://w3id.org/medellin/ep/domain/> .
+@prefix epd-pp: <https://w3id.org/medellin/ep/domain/politica_publica/> .
+@prefix epd-pp-prop: <https://w3id.org/medellin/ep/domain/politica_publica/property/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# ============================================================================
+# ONTOLOGY METADATA
+# ============================================================================
+
+<https://w3id.org/medellin/ep/domain/politica_publica>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/ep/domain/politica_publica/0.1.0> ;
+    dct:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dct:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    owl:versionInfo "0.1.0" ;
+    dct:title "Política Pública para Vendedores Informales - Ofertas Institucionales"@es ;
+    dct:description "Ontología para el dominio de Política Pública con énfasis en OfertaInstitucional y flujos de formalización para vendedores no regulados"@es ;
+    dct:creator "EP Modeling Team" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    dct:modified "2026-01-11"^^xsd:date ;
+    dct:source "Acuerdo 076 de 2014 - Política de Vendedores Informales; Caracterización_v1.md field vendor_conoce_politica_publica_vendedores" ;
+    dct:license "CC-BY-4.0" ;
+    owl:imports <https://w3id.org/medellin/ep/domain/caracterizacion> ;
+    rdfs:comment "Define clases, propiedades y flujos para gestionar acceso de vendedores a programas estatales, servicios e iniciativas institucionales"@es ;
+    skos:scopeNote "Dominio complementario a caracterizacion_v1: conecta datos de vendedor con su acceso a oferta pública"@es .
+
+# ============================================================================
+# CORE CLASSES: POLITICA PUBLICA DOMAIN
+# ============================================================================
+
+# --- INSTITUTIONAL OFFER (Central concept) ---
+
+epd-pp:OfertaInstitucional
+    a owl:Class, skos:Concept ;
+    rdfs:label "Oferta Institucional"@es ;
+    skos:prefLabel "Oferta Institucional"@es ;
+    skos:altLabel "Programa Estatal"@es, "Servicio Público"@es, "Iniciativa de Apoyo"@es ;
+    skos:definition "Conjunto de servicios, programas, subsidios, créditos o iniciativas de apoyo ofrecidas por entidades públicas o privadas para facilitar la formalización, acceso a derechos y mejora de condiciones de vendedores informales"@es ;
+    skos:scopeNote "Eje central de política pública. Agrupa todos los servicios disponibles para vendedores"@es ;
+    skos:example "Programa de Reubicación, Formalización de Unidades Productivas, Subsidios de Vivienda, Acceso a Crédito, Capacitación, Servicios de Salud"@es ;
+    rdfs:comment "Entidad transversal: diseñada, financiada y ejecutada por entidades públicas o con participación estatal"@es ;
+    dct:source "Acuerdo 076 de 2014; Políticas distritales de formalización" ;
+    
+    owl:disjointWith epd-pp:OfertaPrivada, epd-pp:OfertaComunitaria ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-pp-prop:tieneNombre ;
+        owl:cardinality 1
+    ] ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-pp-prop:gestionadaPor ;
+        owl:minCardinality 1
+    ] .
+
+epd-pp:OfertaPrivada
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-pp:OfertaInstitucional ;
+    skos:prefLabel "Oferta de Entidad Privada"@es ;
+    skos:definition "Servicio o programa ofrecido por entidad privada (empresa, ONG, cooperativa) para vendedores informales"@es ;
+    dcat:keyword "private_sector"@en .
+
+epd-pp:OfertaComunitaria
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-pp:OfertaInstitucional ;
+    skos:prefLabel "Oferta Comunitaria"@es ;
+    skos:definition "Iniciativa de apoyo promovida por organizaciones comunitarias, asociaciones de vendedores o colectivos"@es ;
+    dcat:keyword "community_based"@en .
+
+# --- FORMALIZATION WORKFLOW ---
+
+epd-pp:ProcesoFormalizacion
+    a owl:Class, skos:Concept ;
+    rdfs:label "Proceso de Formalización"@es ;
+    skos:prefLabel "Flujo de Formalización"@es ;
+    skos:definition "Conjunto de pasos, procedimientos administrativos y ofertas institucionales necesarios para que un vendedor informal transite desde situación no regulada a situación regulada/formalizada"@es ;
+    skos:scopeNote "Orquesta múltiples ofertas e instituciones. Vendedor no regulado → Solicitante → Regulado"@es ;
+    skos:example "Vendedor informal se registra → Caracterización → Accede a capacitación → Solicita permiso → Es aprobado → Obtiene PermisoOcupacion"@es ;
+    rdfs:comment "Concepto de orden superior que integra SolicitudPermisoOcupacion, AprobacionPermiso, acceso a programas"@es ;
+    dct:source "Acuerdo 076 de 2014" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-pp-prop:tieneEtapa ;
+        owl:minCardinality 3
+    ] .
+
+epd-pp:EtapaFormalizacion
+    a owl:Class, skos:Concept ;
+    rdfs:label "Etapa de Formalización"@es ;
+    skos:prefLabel "Fase del Proceso"@es ;
+    skos:definition "Fase o hito específico dentro del flujo de formalización"@es ;
+    skos:example "Identificación, Caracterización, Capacitación, Solicitud Permiso, Aprobación, Regulado"@es ;
+    dcat:keyword "process_stage"@en .
+
+# --- PROGRAM CATEGORIES ---
+
+epd-pp:ProgramaReubicacion
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-pp:OfertaInstitucional ;
+    rdfs:label "Programa de Reubicación"@es ;
+    skos:prefLabel "Reubicación a Centro Comercial"@es ;
+    skos:definition "Programa que ofrece espacio en infraestructura pública (módulos, centros comerciales) para vendedores caracterizados"@es ;
+    skos:scopeNote "Solución física: trasladar vendedor de espacio público a módulo formalizado"@es ;
+    dct:source "DMP a2_listas - programa_reubicacion" ;
+    rdfs:comment "Requiere consentimiento del vendedor; generalmente gratuito o con baja tarifa"@es ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-pp-prop:ofreceespacioFisico ;
+        owl:minCardinality 1
+    ] .
+
+epd-pp:ProgramaCapacitacion
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-pp:OfertaInstitucional ;
+    rdfs:label "Programa de Capacitación"@es ;
+    skos:prefLabel "Capacitación para Vendedores"@es ;
+    skos:definition "Programa educativo de fortalecimiento de habilidades, gestión empresarial, higiene, atención al cliente"@es ;
+    skos:scopeNote "Oferta de desarrollo: mejorar capacidades de vendedor"@es ;
+    dcat:keyword "training"@en, "capacitación"@es .
+
+epd-pp:ProgramaSubsidios
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-pp:OfertaInstitucional ;
+    rdfs:label "Programa de Subsidios"@es ;
+    skos:prefLabel "Asistencia Económica Directa"@es ;
+    skos:definition "Programa de transferencias de dinero, subsidios de vivienda, alimentación u otros bienes para vendedores en situación de vulnerabilidad"@es ;
+    skos:scopeNote "Oferta de asistencia social: alivio de necesidades inmediatas"@es ;
+    dcat:keyword "subsidy"@en, "subsidio"@es ;
+    rdfs:comment "Requiere caracterización e identificación de población vulnerable"@es ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-pp-prop:otorgaMonto ;
+        owl:cardinality 1
+    ] .
+
+epd-pp:ProgramaCreditoMicro
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-pp:OfertaInstitucional ;
+    rdfs:label "Programa de Microcrédito"@es ;
+    skos:prefLabel "Crédito para Capital de Trabajo"@es ;
+    skos:definition "Oferta de acceso a crédito de bajo monto para capital de trabajo, adquisición de infraestructura o diversificación"@es ;
+    skos:scopeNote "Oferta económica: acceso a financiamiento"@es ;
+    dcat:keyword "microcredit"@en, "microcrédito"@es ;
+    rdfs:comment "Requiere evaluación de capacidad de pago; generalmente requiere regulación previa"@es .
+
+epd-pp:ProgramaSalud
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-pp:OfertaInstitucional ;
+    rdfs:label "Programa de Salud"@es ;
+    skos:prefLabel "Servicios de Salud"@es ;
+    skos:definition "Oferta de acceso a servicios de salud, afilición a régimen de salud, campañas de vacunación o atención especializada"@es ;
+    skos:scopeNote "Oferta de derechos básicos: acceso a salud"@es ;
+    dcat:keyword "health_services"@en .
+
+epd-pp:ProgramaEducacion
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-pp:OfertaInstitucional ;
+    rdfs:label "Programa de Educación"@es ;
+    skos:prefLabel "Educación para Familia"@es ;
+    skos:definition "Oferta de acceso a educación formal, educación superior, becas o programas de alfabetización para el vendedor o su familia"@es ;
+    skos:scopeNote "Oferta de derechos básicos: acceso a educación"@es ;
+    dcat:keyword "education"@en, "educación"@es .
+
+epd-pp:ProgramaPensionLaboral
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-pp:OfertaInstitucional ;
+    rdfs:label "Programa de Protección Social"@es ;
+    skos:prefLabel "Pensión u Otro Beneficio Social"@es ;
+    skos:definition "Oferta de acceso a pensión, seguro de desempleo, o programa de protección social para trabajadores informales"@es ;
+    skos:scopeNote "Oferta de derechos básicos: protección laboral"@es ;
+    dcat:keyword "social_protection"@en .
+
+# --- DELIVERY MECHANISM ---
+
+epd-pp:CanalEntregaOferta
+    a owl:Class, skos:Concept ;
+    rdfs:label "Canal de Entrega"@es ;
+    skos:prefLabel "Mecanismo de Implementación"@es ;
+    skos:definition "Modalidad o mecanismo mediante el cual se entrega la oferta al vendedor (presencial, virtual, mixta, delegada a terceros)"@es ;
+    skos:example "Centro de Atención, Plataforma Digital, Alianza con Operador, Delegación a Asociación de Vendedores"@es ;
+    dcat:keyword "delivery_channel"@en .
+
+# --- ACCESSIBILITY & EQUITY ---
+
+epd-pp:RequisitosAcceso
+    a owl:Class, skos:Concept ;
+    rdfs:label "Requisitos de Acceso"@es ;
+    skos:prefLabel "Criterios de Elegibilidad"@es ;
+    skos:definition "Conjunto de requisitos, criterios y condiciones que debe cumplir un vendedor para acceder a la oferta institucional"@es ;
+    skos:example "Estar caracterizado, tener x años de antigüedad, ingreso menor a X, pertenecer a población vulnerable"@es ;
+    dcat:keyword "eligibility"@en, "requisitos"@es ;
+    rdfs:comment "Basados en datos de caracterizacion_v1 y otras fuentes administrativas"@es .
+
+epd-pp:BarreraAcceso
+    a owl:Class, skos:Concept ;
+    rdfs:label "Barrera de Acceso"@es ;
+    skos:prefLabel "Obstáculo a Servicio"@es ;
+    skos:definition "Factor económico, administrativo, geográfico, educativo o de otra índole que impide que vendedor acceda a oferta"@es ;
+    skos:example "Desconocimiento de programa, ubicación geográfica lejana, requisitos complicados, incompatibilidad horaria"@es ;
+    dcat:keyword "access_barrier"@en ;
+    rdfs:comment "Información crítica para diseño de política: identificar barreras y diseñar soluciones"@es .
+
+# --- INSTITUTIONAL ACTORS ---
+
+epd-pp:EntidadImplementadora
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf foaf:Organization ;
+    rdfs:label "Entidad Implementadora"@es ;
+    skos:prefLabel "Institución Responsable"@es ;
+    skos:definition "Entidad pública, privada o comunitaria que diseña, financia, administra o ejecuta la oferta institucional"@es ;
+    skos:example "Secretaría de Incluisón Social, AMSCD, DIMAR, Cooperativas de Vendedores, ONG"@es ;
+    dcat:keyword "implementing_agency"@en ;
+    rdfs:comment "Múltiples niveles: distrital, comunal, delegada"@es ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-pp-prop:tieneContacto ;
+        owl:minCardinality 1
+    ] .
+
+epd-pp:AdministradorOferta
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-pp:EntidadImplementadora ;
+    skos:prefLabel "Gestor del Programa"@es ;
+    skos:definition "Entidad que administra día a día la oferta: recibe solicitudes, registra participantes, monitorea"@es ;
+    dcat:keyword "manager"@en .
+
+epd-pp:ProveedorOferta
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-pp:EntidadImplementadora ;
+    skos:prefLabel "Proveedor de Servicio"@es ;
+    skos:definition "Entidad que ejecuta operacionalmente el servicio: capacita, entrega subsidios, etc."@es ;
+    dcat:keyword "service_provider"@en .
+
+# --- VENDOR ENROLLMENT & TRACKING ---
+
+epd-pp:InscripcionOferta
+    a owl:Class, skos:Concept ;
+    rdfs:label "Inscripción a Oferta"@es ;
+    skos:prefLabel "Participación en Programa"@es ;
+    skos:definition "Relación entre vendedor y oferta: registra la inscripción, participación, beneficio recibido y estado"@es ;
+    skos:scopeNote "Vincula caracterizacion_v1 (vendedor) con politica_publica (oferta)"@es ;
+    rdfs:comment "Tabla de transacción: registra qué vendedor accede a qué oferta cuándo"@es ;
+    dct:source "Tabla transaccional: podrá ser trx_inscripcion_ofertas" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-pp-prop:inscritoEn ;
+        owl:cardinality 1
+    ] ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-pp-prop:tieneVendedor ;
+        owl:cardinality 1
+    ] ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-pp-prop:estadoInscripcion ;
+        owl:cardinality 1
+    ] .
+
+epd-pp:EstadoInscripcion
+    a owl:Class, skos:Concept ;
+    rdfs:label "Estado de Inscripción"@es ;
+    skos:prefLabel "Estatus del Participante"@es ;
+    skos:definition "Estado actual de participación del vendedor en oferta: solicitante, aceptado, activo, completado, retirado, etc."@es ;
+    skos:example "Preregistro, Documentación Incompleta, Aceptado, Activo, Completó, Desistió"@es ;
+    dcat:keyword "enrollment_status"@en .
+
+epd-pp:BeneficioRecibido
+    a owl:Class, skos:Concept ;
+    rdfs:label "Beneficio Recibido"@es ;
+    skos:prefLabel "Prestación Entregada"@es ;
+    skos:definition "Bien, dinero, servicio o derecho efectivamente recibido por vendedor tras participar en oferta"@es ;
+    skos:example "Módulo asignado, Subsidio de $500k, Certificado de capacitación, Acceso a crédito $5M"@es ;
+    dcat:keyword "benefit_received"@en ;
+    rdfs:comment "Diferencia entre oferta (lo que se ofrece) y beneficio (lo que se obtiene efectivamente)"@es .
+
+# ============================================================================
+# PROPERTIES (Object & Datatype)
+# ============================================================================
+
+# --- OFFER IDENTIFICATION ---
+
+epd-pp-prop:tieneNombre
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "Nombre de Oferta"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range xsd:string ;
+    skos:definition "Nombre oficial o comercial de la oferta institucional"@es ;
+    skos:example "Programa de Reubicación a Módulos - Administración Municipal" ;
+    dcat:keyword "offer_name"@en .
+
+epd-pp-prop:tieneDescripcion
+    a owl:DatatypeProperty ;
+    rdfs:label "Descripción"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range xsd:string ;
+    skos:definition "Descripción detallada de qué ofrece, a quién, cómo"@es ;
+    dcat:keyword "description"@en, "descripción"@es .
+
+epd-pp-prop:tieneObjetivo
+    a owl:DatatypeProperty ;
+    rdfs:label "Objetivo"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range xsd:string ;
+    skos:definition "Objetivo o propósito de la oferta en el marco de política pública"@es ;
+    dcat:keyword "objective"@en .
+
+# --- GOVERNANCE & ADMINISTRATION ---
+
+epd-pp-prop:gestionadaPor
+    a owl:ObjectProperty ;
+    rdfs:label "Gestionada Por"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range epd-pp:EntidadImplementadora ;
+    skos:definition "Entidad que administra y supervisa la oferta"@es ;
+    dcat:keyword "managed_by"@en ;
+    owl:inverseOf epd-pp-prop:administraOferta .
+
+epd-pp-prop:administraOferta
+    a owl:ObjectProperty ;
+    rdfs:label "Administra Oferta"@es ;
+    rdfs:domain epd-pp:EntidadImplementadora ;
+    rdfs:range epd-pp:OfertaInstitucional ;
+    owl:inverseOf epd-pp-prop:gestionadaPor .
+
+epd-pp-prop:ejecutadaPor
+    a owl:ObjectProperty ;
+    rdfs:label "Ejecutada Por"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range epd-pp:ProveedorOferta ;
+    skos:definition "Entidad que operacionalmente ejecuta y entrega la oferta"@es ;
+    dcat:keyword "executed_by"@en ;
+    owl:inverseOf epd-pp-prop:ejecutaOferta .
+
+epd-pp-prop:ejecutaOferta
+    a owl:ObjectProperty ;
+    rdfs:label "Ejecuta Oferta"@es ;
+    rdfs:domain epd-pp:ProveedorOferta ;
+    rdfs:range epd-pp:OfertaInstitucional ;
+    owl:inverseOf epd-pp-prop:ejecutadaPor .
+
+# --- DELIVERY & ACCESS ---
+
+epd-pp-prop:tieneCanal
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Canal"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range epd-pp:CanalEntregaOferta ;
+    skos:definition "Canal o modalidad mediante el cual se entrega la oferta"@es ;
+    dcat:keyword "delivery_mechanism"@en .
+
+epd-pp-prop:tieneRequisito
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Requisito"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range epd-pp:RequisitosAcceso ;
+    skos:definition "Criterios de elegibilidad para acceder a la oferta"@es ;
+    dcat:keyword "has_requirement"@en .
+
+epd-pp-prop:tieneBarrera
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Barrera"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range epd-pp:BarreraAcceso ;
+    skos:definition "Factores que obstaculizan acceso a la oferta"@es ;
+    dcat:keyword "has_barrier"@en ;
+    rdfs:comment "Información para mejora continua de política pública"@es .
+
+# --- RESOURCE ALLOCATION ---
+
+epd-pp-prop:otorgaMonto
+    a owl:DatatypeProperty ;
+    rdfs:label "Otorga Monto"@es ;
+    rdfs:domain epd-pp:ProgramaSubsidios ;
+    rdfs:range xsd:string ;
+    skos:definition "Monto en pesos colombianos otorgado por beneficiario"@es ;
+    dcat:keyword "amount"@en ;
+    rdfs:comment "Rango o monto específico; unidad: COP"@es .
+
+epd-pp-prop:ofreceespacioFisico
+    a owl:ObjectProperty ;
+    rdfs:label "Ofrece Espacio Físico"@es ;
+    rdfs:domain epd-pp:ProgramaReubicacion ;
+    rdfs:range ep:Lugar ;
+    skos:definition "Ubicación física donde se ofrece el servicio (módulo, centro comercial, espacio)"@es ;
+    dcat:keyword "physical_location"@en .
+
+epd-pp-prop:tieneCapacidad
+    a owl:DatatypeProperty ;
+    rdfs:label "Capacidad"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range xsd:integer ;
+    skos:definition "Número máximo de beneficiarios que puede atender la oferta"@es ;
+    dcat:keyword "capacity"@en ;
+    rdfs:comment "Información crítica: si capacidad < demanda, hay lista de espera"@es .
+
+# --- CONTACT & INFORMATION ---
+
+epd-pp-prop:tieneContacto
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Contacto"@es ;
+    rdfs:domain epd-pp:EntidadImplementadora ;
+    rdfs:range vcard:Contact ;
+    skos:definition "Información de contacto de la entidad: teléfono, correo, ubicación"@es ;
+    dcat:keyword "contact_info"@en .
+
+epd-pp-prop:tieneWebsite
+    a owl:DatatypeProperty ;
+    rdfs:label "Website"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range xsd:anyURI ;
+    skos:definition "URL donde se puede obtener más información sobre la oferta"@es ;
+    dcat:keyword "website"@en .
+
+# --- ENROLLMENT & TRACKING ---
+
+epd-pp-prop:inscritoEn
+    a owl:ObjectProperty ;
+    rdfs:label "Inscrito En"@es ;
+    rdfs:domain epd-pp:InscripcionOferta ;
+    rdfs:range epd-pp:OfertaInstitucional ;
+    skos:definition "Oferta en la que está inscrito el vendedor"@es ;
+    owl:inverseOf epd-pp-prop:tieneInscripcion ;
+    dcat:keyword "enrolled_in"@en .
+
+epd-pp-prop:tieneInscripcion
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Inscripción"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range epd-pp:InscripcionOferta ;
+    owl:inverseOf epd-pp-prop:inscritoEn .
+
+epd-pp-prop:tieneVendedor
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Vendedor"@es ;
+    rdfs:domain epd-pp:InscripcionOferta ;
+    rdfs:range ep:VendedorCaracterizado ;
+    skos:definition "Vendedor que está inscrito"@es ;
+    owl:inverseOf epd-pp-prop:participaEnOferta ;
+    dcat:keyword "enrolled_vendor"@en .
+
+epd-pp-prop:participaEnOferta
+    a owl:ObjectProperty ;
+    rdfs:label "Participa En Oferta"@es ;
+    rdfs:domain ep:VendedorCaracterizado ;
+    rdfs:range epd-pp:OfertaInstitucional ;
+    skos:definition "Oferta en la que participa o ha participado el vendedor"@es ;
+    owl:inverseOf epd-pp-prop:tieneVendedor ;
+    dcat:keyword "participates_in"@en ;
+    rdfs:comment "Vinculación entre caracterizacion_v1 (vendedor) y politica_publica (oferta)"@es .
+
+epd-pp-prop:estadoInscripcion
+    a owl:ObjectProperty ;
+    rdfs:label "Estado de Inscripción"@es ;
+    rdfs:domain epd-pp:InscripcionOferta ;
+    rdfs:range epd-pp:EstadoInscripcion ;
+    skos:definition "Estado actual de participación: aplicante, aceptado, activo, completado, etc."@es ;
+    dcat:keyword "enrollment_status"@es .
+
+epd-pp-prop:fechaInscripcion
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "Fecha de Inscripción"@es ;
+    rdfs:domain epd-pp:InscripcionOferta ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha en que el vendedor se inscribió en la oferta"@es ;
+    dcat:keyword "enrollment_date"@en .
+
+epd-pp-prop:fechaCompletacion
+    a owl:DatatypeProperty ;
+    rdfs:label "Fecha de Completación"@es ;
+    rdfs:domain epd-pp:InscripcionOferta ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha en que el vendedor completó la oferta (si aplica)"@es ;
+    dcat:keyword "completion_date"@en .
+
+epd-pp-prop:recibebeneficio
+    a owl:ObjectProperty ;
+    rdfs:label "Recibe Beneficio"@es ;
+    rdfs:domain epd-pp:InscripcionOferta ;
+    rdfs:range epd-pp:BeneficioRecibido ;
+    skos:definition "Beneficios efectivamente recibidos por el vendedor"@es ;
+    owl:inverseOf epd-pp-prop:esDadoA ;
+    dcat:keyword "receives_benefit"@en .
+
+epd-pp-prop:esDadoA
+    a owl:ObjectProperty ;
+    rdfs:label "Es Dado A"@es ;
+    rdfs:domain epd-pp:BeneficioRecibido ;
+    rdfs:range epd-pp:InscripcionOferta ;
+    owl:inverseOf epd-pp-prop:recibebeneficio .
+
+# --- FORMALIZATION WORKFLOW ---
+
+epd-pp-prop:tieneEtapa
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Etapa"@es ;
+    rdfs:domain epd-pp:ProcesoFormalizacion ;
+    rdfs:range epd-pp:EtapaFormalizacion ;
+    skos:definition "Etapas secuenciales que conforman el flujo de formalización"@es ;
+    owl:inverseOf epd-pp-prop:esEtapaDe ;
+    dcat:keyword "has_stage"@en .
+
+epd-pp-prop:esEtapaDe
+    a owl:ObjectProperty ;
+    rdfs:label "Es Etapa De"@es ;
+    rdfs:domain epd-pp:EtapaFormalizacion ;
+    rdfs:range epd-pp:ProcesoFormalizacion ;
+    owl:inverseOf epd-pp-prop:tieneEtapa .
+
+epd-pp-prop:requiereOferta
+    a owl:ObjectProperty ;
+    rdfs:label "Requiere Oferta"@es ;
+    rdfs:domain epd-pp:EtapaFormalizacion ;
+    rdfs:range epd-pp:OfertaInstitucional ;
+    skos:definition "Oferta necesaria para completar esta etapa"@es ;
+    dcat:keyword "requires_service"@en .
+
+# --- POLICY ALIGNMENT ---
+
+epd-pp-prop:alineadoConPolitica
+    a owl:ObjectProperty ;
+    rdfs:label "Alineado Con Política"@es ;
+    rdfs:domain epd-pp:OfertaInstitucional ;
+    rdfs:range epd-pp:DirectrizPoliticaPublica ;
+    skos:definition "Marco de política pública con el que la oferta se alinea"@es ;
+    dcat:keyword "aligned_with"@en .
+
+epd-pp:DirectrizPoliticaPublica
+    a owl:Class, skos:Concept ;
+    rdfs:label "Directriz de Política Pública"@es ;
+    skos:prefLabel "Principio o Línea Estratégica"@es ;
+    skos:definition "Principio estratégico o línea de política que guía el diseño de ofertas (ej: Acceso a Derechos Básicos, Transición a Formalidad)"@es ;
+    dcat:keyword "policy_directive"@en ;
+    rdfs:comment "Basado en Acuerdo 076 de 2014 y otros marcos estratégicos"@es .
+
+# ============================================================================
+# ANNOTATIONS
+# ============================================================================
+
+epd-pp:OfertaInstitucional
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:politica_publica ;
+    dcat:theme epd:caracterizacion .
+
+epd-pp:ProcesoFormalizacion
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:politica_publica ;
+    dcat:theme epd:regulacion ;
+    skos:scopeNote "Concepto central: transición de vendedor no regulado a regulado mediante sistema de ofertas e instituciones"@es .
+
+epd-pp:ProgramaReubicacion
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:politica_publica ;
+    dcat:theme epd:geospatial ;
+    skos:scopeNote "Programa prioritario: solución espacial a informalidad en espacio público"@es .
+
+epd-pp:InscripcionOferta
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:politica_publica ;
+    dcat:theme epd:caracterizacion ;
+    skos:scopeNote "Tabla de unión: vincula dominio caracterizacion (vendedor) con dominio politica_publica (servicio)"@es ;
+    rdfs:comment "Tabla transaccional crítica para evaluación de cobertura y impacto de política pública"@es .
+
+epd-pp:BarreraAcceso
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:politica_publica ;
+    skos:scopeNote "Concepto habilitador: identificar y resolver barreras es central para mejorar política pública"@es .
+
+epd-pp:SujetoDeEspecialProteccion
+    rdfs:subClassOf ep:SujetoDeEspecialProteccion ;
+    skos:scopeNote "En contexto de politica_publica: ciudadanos con mayores vulnerabilidades tienen acceso prioritario a ofertas"@es .

@@ -1,0 +1,205 @@
+@prefix pdd:     <https://w3id.org/medellin/espacio-publico/plan-desarrollo#> .
+@prefix tst:     <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo:    <http://purl.org/ontology/bibo/> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+
+# #############################################################################
+# PLAN DE DESARROLLO — Programa "Espacio publico para la convivencia ciudadana"
+# #############################################################################
+# Modela un PROGRAMA del Plan de Desarrollo Distrital de Medellin y sus
+# INDICADORES DE PRODUCTO (linea base + meta del cuatrienio). Namespace propio
+# pdd:; se conecta UNICAMENTE al tramite SUIT 26521 (tst:) para unir el indicador
+# de actos administrativos con los actos administrativos que el tramite expide.
+#
+# Fuente: Plan de Desarrollo Distrital de Medellin. Gaceta Oficial No. 5387,
+#         pag. 306 (Programa: Espacio publico para la convivencia ciudadana).
+# #############################################################################
+
+<https://w3id.org/medellin/espacio-publico/plan-desarrollo>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/plan-desarrollo/0.1.0> ;
+    dcterms:title "Plan de Desarrollo - Programa Espacio Publico para la convivencia ciudadana"@es ;
+    dcterms:description """Programa del Plan de Desarrollo Distrital de Medellin orientado a regular,
+    recuperar y hacer sostenible el aprovechamiento del espacio publico, con sus cuatro indicadores
+    de producto (linea base y meta del cuatrienio). El indicador de actos administrativos se conecta
+    con los actos administrativos (tst:ActoAdministrativo) que expide el tramite SUIT 26521."""@es ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    dcterms:created "2026-06-17"^^xsd:date ;
+    dcterms:modified "2026-06-17"^^xsd:date ;
+    dcterms:source "Plan de Desarrollo Distrital de Medellin - Gaceta Oficial No. 5387, pag. 306" ;
+    bibo:status "draft"@en ;
+    owl:versionInfo "0.1.0" ;
+    vann:preferredNamespacePrefix "pdd" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/plan-desarrollo#" ;
+    # Conexion al tramite: para unir el indicador de actos administrativos con tst:ActoAdministrativo.
+    owl:imports <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal> .
+
+# =============================================================================
+# CLASES
+# =============================================================================
+
+pdd:Programa a owl:Class ;
+    rdfs:label "Programa del Plan de Desarrollo"@es ;
+    rdfs:label "Development Plan Programme"@en ;
+    skos:definition """Programa del Plan de Desarrollo Distrital: linea de accion con un objetivo,
+    una entidad responsable (y opcionalmente corresponsables) e indicadores de producto que miden
+    su cumplimiento durante el cuatrienio."""@es ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/plan-desarrollo> .
+
+pdd:IndicadorProducto a owl:Class ;
+    rdfs:label "Indicador de producto"@es ;
+    skos:definition """Indicador con que se mide un producto del programa. Tiene unidad de medida,
+    eventualmente una linea base (anio y valor) y una meta para el cuatrienio, y una entidad/dependencia
+    responsable de su reporte."""@es ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/plan-desarrollo> .
+
+pdd:EntidadResponsable a owl:Class ;
+    rdfs:label "Entidad / dependencia responsable"@es ;
+    skos:definition "Entidad o dependencia responsable de un programa o del reporte de un indicador."@es ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/plan-desarrollo> .
+
+# =============================================================================
+# PROPIEDADES
+# =============================================================================
+
+# --- Programa ---
+pdd:responsable a owl:ObjectProperty ;
+    rdfs:domain pdd:Programa ; rdfs:range pdd:EntidadResponsable ;
+    rdfs:label "responsable"@es ;
+    skos:definition "Entidad responsable del programa."@es .
+pdd:corresponsable a owl:ObjectProperty ;
+    rdfs:domain pdd:Programa ; rdfs:range pdd:EntidadResponsable ;
+    rdfs:label "corresponsable"@es ;
+    skos:definition "Entidad corresponsable del programa (puede no existir: 'sin corresponsable')."@es .
+pdd:objetivo a owl:DatatypeProperty ;
+    rdfs:domain pdd:Programa ; rdfs:range xsd:string ;
+    rdfs:label "objetivo del programa"@es .
+pdd:tieneIndicadorProducto a owl:ObjectProperty ;
+    rdfs:domain pdd:Programa ; rdfs:range pdd:IndicadorProducto ;
+    rdfs:label "tiene indicador de producto"@es .
+
+# --- Indicador de producto ---
+pdd:unidadMedida a owl:ObjectProperty ;
+    rdfs:domain pdd:IndicadorProducto ; rdfs:range skos:Concept ;
+    rdfs:label "unidad de medida"@es ;
+    skos:definition "Unidad en que se expresa el indicador (porcentaje, numero)."@es .
+pdd:lineaBaseAplica a owl:DatatypeProperty ;
+    rdfs:domain pdd:IndicadorProducto ; rdfs:range xsd:boolean ;
+    rdfs:label "la linea base aplica"@es ;
+    skos:definition "Falso cuando el indicador no tiene linea base ('No aplica')."@es .
+pdd:anioLineaBase a owl:DatatypeProperty ;
+    rdfs:domain pdd:IndicadorProducto ; rdfs:range xsd:gYear ;
+    rdfs:label "anio de la linea base"@es .
+pdd:valorLineaBase a owl:DatatypeProperty ;
+    rdfs:domain pdd:IndicadorProducto ; rdfs:range xsd:decimal ;
+    rdfs:label "valor de la linea base"@es .
+pdd:metaCuatrienio a owl:DatatypeProperty ;
+    rdfs:domain pdd:IndicadorProducto ; rdfs:range xsd:decimal ;
+    rdfs:label "meta del cuatrienio"@es .
+pdd:entidadResponsable a owl:ObjectProperty ;
+    rdfs:domain pdd:IndicadorProducto ; rdfs:range pdd:EntidadResponsable ;
+    rdfs:label "entidad responsable del indicador"@es .
+
+# --- CONEXION AL TRAMITE (lo unico que sale de pdd:) ---
+# Une el indicador con el TIPO de acto administrativo que cuenta. El valor es la
+# clase tst:ActoAdministrativo (punning clase-individuo, admitido en OWL 2 DL).
+pdd:contabilizaActos a owl:ObjectProperty ;
+    rdfs:domain pdd:IndicadorProducto ; rdfs:range owl:Class ;
+    rdfs:label "contabiliza actos administrativos"@es ;
+    skos:definition """Relaciona un indicador con el tipo de acto administrativo cuyo conteo mide.
+    Para 'Actos administrativos expedidos para la regulacion del espacio publico' apunta a
+    tst:ActoAdministrativo, los actos que expide el tramite SUIT 26521."""@es .
+
+# =============================================================================
+# UNIDADES DE MEDIDA (SKOS)
+# =============================================================================
+pdd:EsquemaUnidadesMedida a skos:ConceptScheme ;
+    skos:prefLabel "Unidades de medida de indicadores"@es .
+pdd:unidad-porcentaje a skos:Concept ; skos:inScheme pdd:EsquemaUnidadesMedida ;
+    skos:prefLabel "Porcentaje"@es .
+pdd:unidad-numero a skos:Concept ; skos:inScheme pdd:EsquemaUnidadesMedida ;
+    skos:prefLabel "Numero"@es .
+
+# =============================================================================
+# ENTIDAD RESPONSABLE
+# =============================================================================
+pdd:secretaria-seguridad-convivencia a owl:NamedIndividual , pdd:EntidadResponsable ;
+    rdfs:label "Secretaria de Seguridad y Convivencia"@es ;
+    skos:prefLabel "Secretaria de Seguridad y Convivencia"@es .
+
+# =============================================================================
+# PROGRAMA: Espacio publico para la convivencia ciudadana
+# =============================================================================
+pdd:programa-espacio-publico-convivencia a owl:NamedIndividual , pdd:Programa ;
+    rdfs:label "Espacio publico para la convivencia ciudadana"@es ;
+    skos:prefLabel "Espacio publico para la convivencia ciudadana"@es ;
+    pdd:responsable pdd:secretaria-seguridad-convivencia ;
+    skos:scopeNote "Sin corresponsable."@es ;
+    pdd:objetivo """Regular el espacio publico, recuperar el existente y hacer sostenible su
+    aprovechamiento economico y social para el uso, goce y disfrute de la ciudadania."""@es ;
+    dcterms:description """Busca apoyar la regulacion del aprovechamiento economico y social del
+    espacio publico e implementacion de acciones que posibiliten su proteccion, recuperacion y
+    apropiacion mediante estrategias orientadas a fomentar la sana convivencia, el encuentro
+    ciudadano, el sentido de identidad y pertenencia por el territorio y la atencion de
+    problematicas asociadas a la ocupacion indebida de las areas de uso colectivo; buscando con
+    todo lo anterior, una mejora en la calidad de vida de los habitantes del distrito."""@es ;
+    dcterms:source "Plan de Desarrollo Distrital de Medellin - Gaceta Oficial No. 5387, pag. 306" ;
+    pdd:tieneIndicadorProducto
+        pdd:ind-plan-accion-pp-ventero ,
+        pdd:ind-intervenciones-recuperacion-ep ,
+        pdd:ind-actos-administrativos-regulacion-ep ,
+        pdd:ind-campanas-proteccion-ep .
+
+# =============================================================================
+# INDICADORES DE PRODUCTO
+# =============================================================================
+
+# 1. Plan de Accion de la Politica Publica del Ventero Informal y sus Familias
+pdd:ind-plan-accion-pp-ventero a owl:NamedIndividual , pdd:IndicadorProducto ;
+    rdfs:label "Plan de Accion de la Politica Publica del Ventero Informal y sus Familias disenado e implementado"@es ;
+    pdd:unidadMedida pdd:unidad-porcentaje ;
+    pdd:lineaBaseAplica false ;        # Anio LB y LB: "No aplica"
+    pdd:metaCuatrienio "100"^^xsd:decimal ;
+    pdd:entidadResponsable pdd:secretaria-seguridad-convivencia .
+
+# 2. Intervenciones realizadas para la recuperacion del espacio publico
+pdd:ind-intervenciones-recuperacion-ep a owl:NamedIndividual , pdd:IndicadorProducto ;
+    rdfs:label "Intervenciones realizadas para la recuperacion del espacio publico"@es ;
+    pdd:unidadMedida pdd:unidad-numero ;
+    pdd:lineaBaseAplica true ;
+    pdd:anioLineaBase "2023"^^xsd:gYear ;
+    pdd:valorLineaBase "5014"^^xsd:decimal ;
+    pdd:metaCuatrienio "60000"^^xsd:decimal ;
+    pdd:entidadResponsable pdd:secretaria-seguridad-convivencia .
+
+# 3. Actos administrativos expedidos para la regulacion del espacio publico
+#    >>> Unido con los actos administrativos del tramite (tst:ActoAdministrativo).
+pdd:ind-actos-administrativos-regulacion-ep a owl:NamedIndividual , pdd:IndicadorProducto ;
+    rdfs:label "Actos administrativos expedidos para la regulacion del espacio publico"@es ;
+    pdd:unidadMedida pdd:unidad-numero ;
+    pdd:lineaBaseAplica true ;
+    pdd:anioLineaBase "2023"^^xsd:gYear ;
+    pdd:valorLineaBase "2325"^^xsd:decimal ;
+    pdd:metaCuatrienio "8000"^^xsd:decimal ;
+    pdd:entidadResponsable pdd:secretaria-seguridad-convivencia ;
+    pdd:contabilizaActos tst:ActoAdministrativo .
+
+# 4. Campanas realizadas para la proteccion, recuperacion y apropiacion del E.P.
+pdd:ind-campanas-proteccion-ep a owl:NamedIndividual , pdd:IndicadorProducto ;
+    rdfs:label "Campanas realizadas para la proteccion, recuperacion y apropiacion del espacio publico"@es ;
+    pdd:unidadMedida pdd:unidad-numero ;
+    pdd:lineaBaseAplica true ;
+    pdd:anioLineaBase "2023"^^xsd:gYear ;
+    pdd:valorLineaBase "6"^^xsd:decimal ;
+    pdd:metaCuatrienio "24"^^xsd:decimal ;
+    pdd:entidadResponsable pdd:secretaria-seguridad-convivencia .

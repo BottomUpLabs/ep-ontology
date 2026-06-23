@@ -1,0 +1,413 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/propaganda-electoral/vocab#> .
+@prefix pe: <https://w3id.org/medellin/espacio-publico/propaganda-electoral#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+
+# =============================================================================
+# VOCABULARIO CONTROLADO: Tipos de Elemento Publicitario Electoral
+# =============================================================================
+# Clasificacion de los elementos de propaganda electoral permitidos
+# segun normativa municipal y nacional de publicidad politica.
+# =============================================================================
+
+:TipoElementoPublicitarioScheme a skos:ConceptScheme ;
+    owl:versionInfo "0.1.0" ;
+    vann:preferredNamespacePrefix "vocab" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/propaganda-electoral/vocab#" ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    skos:prefLabel "Tipos de Elemento Publicitario Electoral"@es ;
+    skos:prefLabel "Electoral Advertising Element Types"@en ;
+    dcterms:title "Vocabulario de Tipos de Elemento Publicitario"@es ;
+    dcterms:description """Clasificacion de las piezas de propaganda electoral
+    que pueden instalarse en el espacio publico o predios privados durante
+    periodos electorales. Basado en reglamentacion municipal."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico"@es ;
+    dcterms:source "Acuerdo 024 de 2020 - Reglamento de Propaganda Electoral"@es ;
+    dcterms:created "2026-01-09"^^xsd:date ;
+    skos:hasTopConcept :pendon, :pasacalle, :valla, :afiche, :mural, :bandera, :cartel, :otro .
+
+# -----------------------------------------------------------------------------
+# Conceptos de Tipos de Elemento
+# -----------------------------------------------------------------------------
+
+:pendon a skos:Concept ;
+    skos:inScheme :TipoElementoPublicitarioScheme ;
+    skos:prefLabel "Pendon"@es ;
+    skos:prefLabel "Banner"@en ;
+    skos:altLabel "Pendón vertical"@es ;
+    skos:altLabel "Banner colgante"@es ;
+    skos:definition """Elemento publicitario vertical colgante, generalmente de tela
+    o lona, que se instala en postes, fachadas o estructuras de soporte. Tipicamente
+    mide entre 2 y 3 metros de alto por 0.6 a 1 metro de ancho."""@es ;
+    skos:notation "PENDON" ;
+    skos:example "Pendon de 2.5m x 0.8m con imagen del candidato a alcaldia"@es ;
+    skos:scopeNote "Requiere autorizacion del propietario del punto de instalacion"@es .
+
+:pasacalle a skos:Concept ;
+    skos:inScheme :TipoElementoPublicitarioScheme ;
+    skos:prefLabel "Pasacalle"@es ;
+    skos:prefLabel "Street Banner"@en ;
+    skos:altLabel "Atravesado"@es ;
+    skos:altLabel "Banner horizontal"@es ;
+    skos:definition """Elemento publicitario horizontal que atraviesa la via publica,
+    instalado entre dos postes o puntos de amarre. Debe respetar alturas minimas
+    para no obstaculizar el transito vehicular y peatonal."""@es ;
+    skos:notation "PASACALLE" ;
+    skos:example "Pasacalle de 6m x 1m sobre via principal anunciando debate"@es ;
+    skos:scopeNote "Solo permitido en vias autorizadas por la secretaria de movilidad"@es .
+
+:valla a skos:Concept ;
+    skos:inScheme :TipoElementoPublicitarioScheme ;
+    skos:prefLabel "Valla Publicitaria"@es ;
+    skos:prefLabel "Billboard"@en ;
+    skos:altLabel "Valla fija"@es ;
+    skos:altLabel "Estructura publicitaria"@es ;
+    skos:definition """Estructura publicitaria fija de gran formato, instalada en predios
+    privados o espacios autorizados. Requiere certificado de tradicion del inmueble
+    y autorizacion expresa del propietario."""@es ;
+    skos:notation "VALLA" ;
+    skos:example "Valla de 4m x 3m en lote de esquina con propuesta de gobierno"@es ;
+    skos:scopeNote "Sujeta a regulacion de publicidad exterior visual (PEV)"@es .
+
+:afiche a skos:Concept ;
+    skos:inScheme :TipoElementoPublicitarioScheme ;
+    skos:prefLabel "Afiche"@es ;
+    skos:prefLabel "Poster"@en ;
+    skos:altLabel "Cartelera"@es ;
+    skos:altLabel "Poster electoral"@es ;
+    skos:definition """Pieza grafica de papel o material similar, de menor tamaño,
+    que se adhiere a superficies autorizadas. Prohibida su colocacion en bienes
+    de patrimonio, monumentos y mobiliario publico."""@es ;
+    skos:notation "AFICHE" ;
+    skos:example "Afiche A3 pegado en cartelera comunitaria"@es ;
+    skos:scopeNote "Solo en carteleras autorizadas, no en fachadas historicas"@es .
+
+:mural a skos:Concept ;
+    skos:inScheme :TipoElementoPublicitarioScheme ;
+    skos:prefLabel "Mural"@es ;
+    skos:prefLabel "Mural"@en ;
+    skos:altLabel "Pintura mural"@es ;
+    skos:altLabel "Mural electoral"@es ;
+    skos:definition """Pintura realizada directamente sobre muros o paredes con
+    mensajes electorales. Requiere autorizacion del propietario y compromiso
+    de restauracion posterior al periodo electoral."""@es ;
+    skos:notation "MURAL" ;
+    skos:example "Mural de 5m x 3m en pared lateral de edificio comercial"@es ;
+    skos:scopeNote "Debe restaurarse la superficie original despues de elecciones"@es .
+
+:bandera a skos:Concept ;
+    skos:inScheme :TipoElementoPublicitarioScheme ;
+    skos:prefLabel "Bandera"@es ;
+    skos:prefLabel "Flag"@en ;
+    skos:altLabel "Banderola"@es ;
+    skos:altLabel "Gallardete"@es ;
+    skos:definition """Elemento de tela con colores o simbolos del partido o campana,
+    instalado en astas, vehiculos o puntos de concentracion. Comun en eventos
+    de campana y caravanas."""@es ;
+    skos:notation "BANDERA" ;
+    skos:example "Bandera del partido en vehiculo de campana"@es .
+
+:cartel a skos:Concept ;
+    skos:inScheme :TipoElementoPublicitarioScheme ;
+    skos:prefLabel "Cartel"@es ;
+    skos:prefLabel "Sign"@en ;
+    skos:altLabel "Letrero"@es ;
+    skos:altLabel "Señal publicitaria"@es ;
+    skos:definition """Elemento rigido de menor formato que la valla, tipicamente
+    de carton, plastico o madera, instalado en puntos de visibilidad temporal
+    como eventos de campana."""@es ;
+    skos:notation "CARTEL" ;
+    skos:example "Cartel de 1m x 0.5m en tarima de evento"@es .
+
+:otro a skos:Concept ;
+    skos:inScheme :TipoElementoPublicitarioScheme ;
+    skos:prefLabel "Otro Elemento"@es ;
+    skos:prefLabel "Other Element"@en ;
+    skos:altLabel "Elemento no clasificado"@es ;
+    skos:definition """Cualquier otro elemento publicitario que no corresponda
+    a las categorias anteriores. Requiere evaluacion especifica por parte
+    de la autoridad competente."""@es ;
+    skos:notation "OTRO" ;
+    skos:scopeNote "Sujeto a evaluacion caso por caso"@es .
+
+# =============================================================================
+# VOCABULARIO CONTROLADO: Estados de Solicitud
+# =============================================================================
+
+:EstadoSolicitudScheme a skos:ConceptScheme ;
+    skos:prefLabel "Estados de Solicitud de Propaganda"@es ;
+    dcterms:title "Vocabulario de Estados de Tramite"@es ;
+    dcterms:description "Estados posibles del tramite de autorizacion de propaganda electoral"@es ;
+    dcterms:created "2026-01-09"^^xsd:date ;
+    skos:hasTopConcept :radicado, :en_evaluacion, :requerimiento, :autorizado, 
+        :autorizado_parcial, :negado, :desistido, :archivado .
+
+:radicado a skos:Concept ;
+    skos:inScheme :EstadoSolicitudScheme ;
+    skos:prefLabel "Radicado"@es ;
+    skos:definition "Solicitud ingresada al sistema, pendiente de asignacion"@es ;
+    skos:notation "RADICADO" ;
+    skos:topConceptOf :EstadoSolicitudScheme .
+
+:en_evaluacion a skos:Concept ;
+    skos:inScheme :EstadoSolicitudScheme ;
+    skos:prefLabel "En Evaluacion"@es ;
+    skos:definition "Solicitud asignada a evaluador tecnico para revision"@es ;
+    skos:notation "EN_EVALUACION" ;
+    skos:broader :radicado .
+
+:requerimiento a skos:Concept ;
+    skos:inScheme :EstadoSolicitudScheme ;
+    skos:prefLabel "En Requerimiento"@es ;
+    skos:altLabel "Pendiente subsanacion"@es ;
+    skos:definition "Solicitud suspendida por falta de documentos o informacion"@es ;
+    skos:notation "REQUERIMIENTO" ;
+    skos:broader :en_evaluacion .
+
+:autorizado a skos:Concept ;
+    skos:inScheme :EstadoSolicitudScheme ;
+    skos:prefLabel "Autorizado"@es ;
+    skos:altLabel "Aprobado"@es ;
+    skos:definition "Solicitud aprobada en su totalidad mediante resolucion"@es ;
+    skos:notation "AUTORIZADO" ;
+    skos:broader :en_evaluacion .
+
+:autorizado_parcial a skos:Concept ;
+    skos:inScheme :EstadoSolicitudScheme ;
+    skos:prefLabel "Autorizado Parcial"@es ;
+    skos:altLabel "Aprobado con restricciones"@es ;
+    skos:definition "Solicitud aprobada parcialmente, algunos elementos negados"@es ;
+    skos:notation "AUTORIZADO_PARCIAL" ;
+    skos:broader :en_evaluacion .
+
+:negado a skos:Concept ;
+    skos:inScheme :EstadoSolicitudScheme ;
+    skos:prefLabel "Negado"@es ;
+    skos:altLabel "Rechazado"@es ;
+    skos:definition "Solicitud rechazada en su totalidad mediante resolucion"@es ;
+    skos:notation "NEGADO" ;
+    skos:broader :en_evaluacion .
+
+:desistido a skos:Concept ;
+    skos:inScheme :EstadoSolicitudScheme ;
+    skos:prefLabel "Desistido"@es ;
+    skos:definition "Solicitud abandonada por el partido sin respuesta a requerimiento"@es ;
+    skos:notation "DESISTIDO" ;
+    skos:broader :requerimiento .
+
+:archivado a skos:Concept ;
+    skos:inScheme :EstadoSolicitudScheme ;
+    skos:prefLabel "Archivado"@es ;
+    skos:definition "Tramite finalizado y cerrado"@es ;
+    skos:notation "ARCHIVADO" .
+
+# =============================================================================
+# VOCABULARIO CONTROLADO: Tipos de Eleccion
+# =============================================================================
+
+:TipoEleccionScheme a skos:ConceptScheme ;
+    skos:prefLabel "Tipos de Eleccion en Colombia"@es ;
+    dcterms:title "Vocabulario de Tipos de Eleccion"@es ;
+    dcterms:description "Clasificacion de procesos electorales segun cargo o corporacion"@es ;
+    dcterms:source "Constitucion Politica de Colombia - Art. 260-264"@es ;
+    dcterms:created "2026-01-09"^^xsd:date ;
+    skos:hasTopConcept :presidencial, :legislativa, :territorial, :consulta, :revocatoria .
+
+:presidencial a skos:Concept ;
+    skos:inScheme :TipoEleccionScheme ;
+    skos:prefLabel "Elecciones Presidenciales"@es ;
+    skos:altLabel "Presidencia"@es ;
+    skos:definition "Eleccion de Presidente y Vicepresidente de la Republica"@es ;
+    skos:notation "PRESIDENCIAL" ;
+    skos:scopeNote "Se realizan cada 4 años, circunscripcion nacional"@es .
+
+:legislativa a skos:Concept ;
+    skos:inScheme :TipoEleccionScheme ;
+    skos:prefLabel "Elecciones Legislativas"@es ;
+    skos:altLabel "Congreso"@es ;
+    skos:definition "Eleccion de Senado y Camara de Representantes"@es ;
+    skos:notation "LEGISLATIVA" ;
+    skos:scopeNote "Se realizan cada 4 años, circunscripcion nacional y departamental"@es .
+
+:territorial a skos:Concept ;
+    skos:inScheme :TipoEleccionScheme ;
+    skos:prefLabel "Elecciones Territoriales"@es ;
+    skos:altLabel "Regionales"@es ;
+    skos:altLabel "Locales"@es ;
+    skos:definition "Eleccion de Gobernadores, Alcaldes, Asambleas, Concejos y JAL"@es ;
+    skos:notation "TERRITORIAL" ;
+    skos:narrower :alcaldia, :gobernacion, :concejo, :asamblea, :jal ;
+    skos:scopeNote "Se realizan cada 4 años, circunscripcion departamental y municipal"@es .
+
+:alcaldia a skos:Concept ;
+    skos:inScheme :TipoEleccionScheme ;
+    skos:prefLabel "Eleccion de Alcalde"@es ;
+    skos:broader :territorial ;
+    skos:notation "ALCALDIA" .
+
+:gobernacion a skos:Concept ;
+    skos:inScheme :TipoEleccionScheme ;
+    skos:prefLabel "Eleccion de Gobernador"@es ;
+    skos:broader :territorial ;
+    skos:notation "GOBERNACION" .
+
+:concejo a skos:Concept ;
+    skos:inScheme :TipoEleccionScheme ;
+    skos:prefLabel "Eleccion de Concejo Municipal"@es ;
+    skos:broader :territorial ;
+    skos:notation "CONCEJO" .
+
+:asamblea a skos:Concept ;
+    skos:inScheme :TipoEleccionScheme ;
+    skos:prefLabel "Eleccion de Asamblea Departamental"@es ;
+    skos:broader :territorial ;
+    skos:notation "ASAMBLEA" .
+
+:jal a skos:Concept ;
+    skos:inScheme :TipoEleccionScheme ;
+    skos:prefLabel "Eleccion de Juntas Administradoras Locales"@es ;
+    skos:altLabel "JAL"@es ;
+    skos:broader :territorial ;
+    skos:notation "JAL" .
+
+:consulta a skos:Concept ;
+    skos:inScheme :TipoEleccionScheme ;
+    skos:prefLabel "Consulta Interna o Popular"@es ;
+    skos:altLabel "Consulta de partido"@es ;
+    skos:definition "Consulta interna de partidos o consulta popular ciudadana"@es ;
+    skos:notation "CONSULTA" .
+
+:revocatoria a skos:Concept ;
+    skos:inScheme :TipoEleccionScheme ;
+    skos:prefLabel "Revocatoria de Mandato"@es ;
+    skos:definition "Proceso para revocar el mandato de un alcalde o gobernador"@es ;
+    skos:notation "REVOCATORIA" .
+
+# =============================================================================
+# VOCABULARIO CONTROLADO: Tipos de Infraccion Electoral
+# =============================================================================
+
+:TipoInfraccionScheme a skos:ConceptScheme ;
+    skos:prefLabel "Tipos de Infraccion Electoral"@es ;
+    dcterms:title "Vocabulario de Infracciones de Propaganda"@es ;
+    dcterms:description "Clasificacion de violaciones a la normativa de propaganda electoral"@es ;
+    dcterms:source "Codigo Nacional de Policia - Ley 1801 de 2016"@es ;
+    dcterms:created "2026-01-09"^^xsd:date ;
+    skos:hasTopConcept :sin_autorizacion, :fuera_zona, :exceso_dimensiones, 
+        :fuera_periodo, :deterioro_espacio, :obstruccion_via, :patrimonio .
+
+:sin_autorizacion a skos:Concept ;
+    skos:inScheme :TipoInfraccionScheme ;
+    skos:prefLabel "Sin Autorizacion"@es ;
+    skos:altLabel "Propaganda ilegal"@es ;
+    skos:altLabel "No radicada"@es ;
+    skos:definition "Instalacion de propaganda sin haber obtenido autorizacion previa"@es ;
+    skos:notation "SIN_AUTORIZACION" ;
+    skos:scopeNote "Sancion principal: retiro inmediato y multa"@es .
+
+:fuera_zona a skos:Concept ;
+    skos:inScheme :TipoInfraccionScheme ;
+    skos:prefLabel "Fuera de Zona Autorizada"@es ;
+    skos:altLabel "Ubicacion no permitida"@es ;
+    skos:definition "Instalacion en ubicacion diferente a la autorizada"@es ;
+    skos:notation "FUERA_ZONA" .
+
+:exceso_dimensiones a skos:Concept ;
+    skos:inScheme :TipoInfraccionScheme ;
+    skos:prefLabel "Exceso de Dimensiones"@es ;
+    skos:altLabel "Tamaño no autorizado"@es ;
+    skos:definition "Elemento con dimensiones mayores a las autorizadas"@es ;
+    skos:notation "EXCESO_DIMENSIONES" .
+
+:fuera_periodo a skos:Concept ;
+    skos:inScheme :TipoInfraccionScheme ;
+    skos:prefLabel "Fuera de Periodo Electoral"@es ;
+    skos:altLabel "Propaganda anticipada"@es ;
+    skos:altLabel "Propaganda extemporanea"@es ;
+    skos:definition "Instalacion antes o despues del periodo electoral permitido"@es ;
+    skos:notation "FUERA_PERIODO" .
+
+:deterioro_espacio a skos:Concept ;
+    skos:inScheme :TipoInfraccionScheme ;
+    skos:prefLabel "Deterioro del Espacio Publico"@es ;
+    skos:altLabel "Afectacion bienes publicos"@es ;
+    skos:definition "Dano a infraestructura publica por instalacion de propaganda"@es ;
+    skos:notation "DETERIORO_ESPACIO" .
+
+:obstruccion_via a skos:Concept ;
+    skos:inScheme :TipoInfraccionScheme ;
+    skos:prefLabel "Obstruccion de Via"@es ;
+    skos:altLabel "Bloqueo de transito"@es ;
+    skos:definition "Propaganda que obstaculiza transito vehicular o peatonal"@es ;
+    skos:notation "OBSTRUCCION_VIA" .
+
+:patrimonio a skos:Concept ;
+    skos:inScheme :TipoInfraccionScheme ;
+    skos:prefLabel "Afectacion a Patrimonio"@es ;
+    skos:altLabel "Bien patrimonial"@es ;
+    skos:definition "Instalacion en bienes de interes cultural o patrimonial"@es ;
+    skos:notation "PATRIMONIO" ;
+    skos:scopeNote "Incluye monumentos, fachadas historicas, espacios protegidos"@es .
+
+# =============================================================================
+# VOCABULARIO CONTROLADO: Estados de Autorizacion de Elemento
+# =============================================================================
+
+:EstadoAutorizacionScheme a skos:ConceptScheme ;
+    skos:prefLabel "Estados de Autorizacion de Elemento"@es ;
+    dcterms:title "Vocabulario de Estados de Elemento Publicitario"@es ;
+    dcterms:description "Estados posibles para cada elemento publicitario solicitado"@es ;
+    dcterms:created "2026-01-09"^^xsd:date ;
+    skos:hasTopConcept :pendiente_eval, :aprobado, :rechazado, :instalado, :retirado, :incumplimiento .
+
+:pendiente_eval a skos:Concept ;
+    skos:inScheme :EstadoAutorizacionScheme ;
+    skos:prefLabel "Pendiente Evaluacion"@es ;
+    skos:definition "Elemento en proceso de evaluacion tecnica"@es ;
+    skos:notation "PENDIENTE" .
+
+:aprobado a skos:Concept ;
+    skos:inScheme :EstadoAutorizacionScheme ;
+    skos:prefLabel "Aprobado"@es ;
+    skos:altLabel "Autorizado"@es ;
+    skos:definition "Elemento autorizado para instalacion"@es ;
+    skos:notation "APROBADO" ;
+    skos:broader :pendiente_eval .
+
+:rechazado a skos:Concept ;
+    skos:inScheme :EstadoAutorizacionScheme ;
+    skos:prefLabel "Rechazado"@es ;
+    skos:altLabel "No autorizado"@es ;
+    skos:definition "Elemento no autorizado para instalacion"@es ;
+    skos:notation "RECHAZADO" ;
+    skos:broader :pendiente_eval .
+
+:instalado a skos:Concept ;
+    skos:inScheme :EstadoAutorizacionScheme ;
+    skos:prefLabel "Instalado"@es ;
+    skos:definition "Elemento fisicamente instalado en la ubicacion autorizada"@es ;
+    skos:notation "INSTALADO" ;
+    skos:broader :aprobado .
+
+:retirado a skos:Concept ;
+    skos:inScheme :EstadoAutorizacionScheme ;
+    skos:prefLabel "Retirado"@es ;
+    skos:definition "Elemento removido despues del periodo electoral"@es ;
+    skos:notation "RETIRADO" ;
+    skos:broader :instalado .
+
+:incumplimiento a skos:Concept ;
+    skos:inScheme :EstadoAutorizacionScheme ;
+    skos:prefLabel "En Incumplimiento"@es ;
+    skos:altLabel "Incumplido"@es ;
+    skos:definition "Elemento con incumplimiento de condiciones de autorizacion"@es ;
+    skos:notation "INCUMPLIMIENTO" ;
+    skos:broader :instalado .
+

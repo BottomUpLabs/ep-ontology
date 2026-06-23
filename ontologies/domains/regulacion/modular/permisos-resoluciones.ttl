@@ -1,0 +1,184 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix dmp: <https://w3id.org/medellin/espacio-publico/dmp#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# Ontologia Modular: Permisos y Resoluciones Administrativas
+# =============================================================================
+# Fecha creacion: 2026-01-07
+# Descripcion: Define actos administrativos (resoluciones) que autorizan o niegan
+#              la ocupacion temporal del espacio publico, incluyendo permisos
+#              permanentes, eventos temporales, y autorizaciones transitorias.
+
+<https://w3id.org/medellin/espacio-publico/regulacion/permisos-resoluciones> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/regulacion/permisos-resoluciones/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/institutional-core-entities> ;
+    dcterms:title "Espacio Publico - Permisos y Resoluciones"@es ;
+    dcterms:description """Ontologia que define resoluciones administrativas y permisos 
+    para la ocupacion temporal del espacio publico por vendedores informales.
+    Extiende la ontologia core usando core:Resolucion como clase base."""@es ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-01-07"^^xsd:date ;
+    owl:versionInfo "0.1.0" .
+
+# =============================================================================
+# CLASE: PermisoOcupacionTemporal (Autorizacion Permanente)
+# =============================================================================
+
+:PermisoOcupacionTemporal a owl:Class ;
+    rdfs:subClassOf core:Resolucion ;
+    rdfs:label "Permiso de Ocupacion Temporal"@es ;
+    rdfs:label "Temporary Occupation Permit"@en ;
+    skos:prefLabel "Permiso de Ocupacion Temporal"@es ;
+    skos:altLabel "PermisoOcupacion"@es ;
+    skos:altLabel "POT"@es ;
+    skos:definition """Resolucion administrativa especifica para VendedorInformalRegulado 
+    que permite ocupar un punto delimitado del espacio publico con modulo o estructura 
+    definida. Establece ubicacion autorizada, area permitida, horarios de operacion y 
+    obligaciones del titular. Resultado exitoso de un proceso SolicitudAutorizacionTemporal.
+    
+    Al ser emitido un PermisoOcupacionTemporal:
+    1. Se crea automaticamente un Carnet para el beneficiario
+    2. El beneficiario transiciona a VendedorInformalRegulado
+    3. Se activan las obligaciones de operacion"""@es ;
+    skos:scopeNote """Ciclo de vida PermisoOcupacionTemporal:
+    1. proyectado: Borrador de resolucion en elaboracion
+    2. en_revision_juridica: Revision de legalidad
+    3. firmado: Resolucion firmada por autoridad competente
+    4. notificado: Titular notificado oficialmente
+    5. activo: Vigente y en uso (estado normal de operacion)
+    6. suspendido: Suspension temporal por incumplimiento
+    7. vencido: Plazo de vigencia expirado
+    8. revocado: Cancelacion definitiva
+    9. archivado: Cerrado administrativamente
+    
+    Transiciones clave:
+    - SolicitudAutorizacionTemporal APROBADA → crea PermisoOcupacionTemporal (estado: proyectado)
+    - Al crear PermisoOcupacionTemporal → se genera Carnet para el beneficiario
+    - Notificacion exitosa → activo (se activa rol VendedorInformalRegulado)
+    - Incumplimiento → suspendido
+    - Causa grave → revocado
+    
+    Modalidades:
+    - Asignacion de modulo regulado permanente
+    - Autorizacion de punto fijo sin modulo
+    - Renovacion de permiso existente
+    Excluye eventos temporales (ver PermisoEvento)"""@es ;
+    skos:example "Resolucion R-2024-001234 autoriza a Juan Perez (VendedorInformalRegulado) operar modulo M-456 con Carnet CAR-001234"@es ;
+    dcterms:source "Proceso PR-GGOL-019 - Autorizacion de ocupacion" ;
+    :estadosCicloVida (
+        "proyectado"
+        "en_revision_juridica"
+        "firmado"
+        "notificado"
+        "activo"
+        "suspendido"
+        "vencido"
+        "revocado"
+        "archivado"
+    ) .
+
+# =============================================================================
+# OBJECT PROPERTIES: Asociaciones Entidad-Entidad
+# =============================================================================
+# Propiedades unidireccionales desde entidades administrativas hacia Persona.
+# NO existen propiedades inversas desde Persona (navegacion unidireccional).
+# =============================================================================
+
+
+# --- PermisoOcupacionTemporal → PersonaNatural ---
+:titular a owl:ObjectProperty ;
+    rdfs:domain :PermisoOcupacionTemporal ;
+    rdfs:range core:PersonaNatural ;
+    rdfs:label "Titular del permiso"@es ;
+    rdfs:label "Permit holder"@en ;
+    skos:definition """Persona a quien se otorgo el permiso de ocupacion.
+    NO tiene inversa - la navegacion es desde Permiso hacia Persona.
+    
+    PROPIEDAD CLAVE para inferencia de VendedorInformalRegulado:
+      ?permiso :titular ?persona .
+      ?permiso :estadoPermiso 'activo' .
+      → ?persona a :VendedorInformalRegulado
+    
+    Para consultar permisos de una persona, usar SPARQL:
+      SELECT ?permiso WHERE { ?permiso :titular ?persona }"""@es .
+
+# --- PermisoOcupacionTemporal → SolicitudAutorizacionTemporal ---
+:derivaDeSolicitud a owl:ObjectProperty ;
+    rdfs:domain :PermisoOcupacionTemporal ;
+    rdfs:range :SolicitudAutorizacionTemporal ;
+    rdfs:label "Deriva de solicitud"@es ;
+    skos:definition """Vincula el permiso con la solicitud que lo origino.
+    Permite trazabilidad desde permiso hasta su tramite inicial."""@es .
+
+# =============================================================================
+# PROPIEDADES: Resolucion → Relaciones
+# =============================================================================
+
+
+:resultadoDeTramite a owl:ObjectProperty ;
+    rdfs:domain :PermisoOcupacionTemporal ;
+    rdfs:range :SolicitudAutorizacionTemporal ;
+    rdfs:label "Resultado de tramite"@es ;
+    skos:definition "Vincula el PermisoOcupacionTemporal al tramite que lo genero (trazabilidad)"@es .
+
+
+# =============================================================================
+# DATATYPE PROPERTIES: Resolucion
+# =============================================================================
+
+
+:numeroRadicadoOrigen a owl:DatatypeProperty ;
+    rdfs:domain :PermisoOcupacionTemporal ;
+    rdfs:range xsd:string ;
+    rdfs:label "Numero de radicado origen"@es ;
+    skos:definition "Radicado del tramite que genero este permiso (trazabilidad)"@es .
+
+# =============================================================================
+# DATATYPE PROPERTIES: PermisoOcupacionTemporal
+# =============================================================================
+
+:vigenciaInicio a owl:DatatypeProperty ;
+    rdfs:domain :PermisoOcupacionTemporal ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de inicio de vigencia"@es ;
+    skos:definition "Fecha en que inicia la vigencia del permiso"@es ;
+    dmp:ruleName "format_iso_date" .
+
+:vigenciaFin a owl:DatatypeProperty ;
+    rdfs:domain :PermisoOcupacionTemporal ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de fin de vigencia"@es ;
+    skos:definition "Fecha en que vence el permiso (si aplica)"@es ;
+    dmp:ruleName "format_iso_date" .
+
+:areaAutorizada a owl:DatatypeProperty ;
+    rdfs:domain :PermisoOcupacionTemporal ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "Area autorizada (m²)"@es ;
+    skos:definition "Area en metros cuadrados autorizada para ocupar"@es .
+
+:horariosOperacion a owl:DatatypeProperty ;
+    rdfs:domain :PermisoOcupacionTemporal ;
+    rdfs:range xsd:string ;
+    rdfs:label "Horarios de operacion"@es ;
+    skos:definition "Horarios autorizados para operar (ej: 8:00-18:00)"@es .
+
+:actividadAutorizada a owl:DatatypeProperty ;
+    rdfs:domain :PermisoOcupacionTemporal ;
+    rdfs:range xsd:string ;
+    rdfs:label "Actividad autorizada"@es ;
+    skos:definition "Actividad economica especifica autorizada (ej: venta de frutas)"@es .

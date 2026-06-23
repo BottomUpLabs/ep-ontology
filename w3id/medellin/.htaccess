@@ -1,0 +1,64 @@
+# =============================================================================
+# w3id.org redirect + content negotiation for the Medellin Public Space Ontology
+# -----------------------------------------------------------------------------
+# Submit this file as  medellin/.htaccess  to https://github.com/perma-id/w3id.org
+# It governs every IRI under:
+#     https://w3id.org/medellin/espacio-publico...   (main ontology + modules + vocab + shapes)
+#     https://w3id.org/medellin/ep...                (complementary epmodeling vocabulary)
+#
+# Hosting target (GitHub Pages): adjust HOST below if you publish elsewhere.
+# =============================================================================
+
+Options -MultiViews
+AddType text/turtle .ttl
+AddType application/rdf+xml .rdf
+AddType application/ld+json .jsonld
+AddType application/n-triples .nt
+
+RewriteEngine On
+
+# Convenience: HOST is hard-coded because .htaccess does not support variables.
+# HOST = https://medellin-datos.github.io/ep-ontology
+
+# -----------------------------------------------------------------------------
+# Direct downloads of release artifacts (no negotiation)
+# -----------------------------------------------------------------------------
+RewriteRule ^espacio-publico/dist/(.*)$ https://medellin-datos.github.io/ep-ontology/dist/$1 [R=302,L]
+
+# -----------------------------------------------------------------------------
+# Main ontology IRI: https://w3id.org/medellin/espacio-publico
+# Content negotiation by Accept header (303 See Other, per W3C best practice).
+# -----------------------------------------------------------------------------
+RewriteCond %{HTTP_ACCEPT} text/turtle [NC]
+RewriteRule ^espacio-publico/?$ https://medellin-datos.github.io/ep-ontology/dist/espacio-publico-0.1.0.ttl [R=303,L]
+
+RewriteCond %{HTTP_ACCEPT} application/rdf\+xml [NC]
+RewriteRule ^espacio-publico/?$ https://medellin-datos.github.io/ep-ontology/dist/espacio-publico-0.1.0.rdf [R=303,L]
+
+RewriteCond %{HTTP_ACCEPT} application/ld\+json [NC]
+RewriteRule ^espacio-publico/?$ https://medellin-datos.github.io/ep-ontology/dist/espacio-publico-0.1.0.jsonld [R=303,L]
+
+RewriteCond %{HTTP_ACCEPT} application/n-triples [NC]
+RewriteRule ^espacio-publico/?$ https://medellin-datos.github.io/ep-ontology/dist/espacio-publico-0.1.0.nt [R=303,L]
+
+# Default (browsers / text/html): human-readable documentation
+RewriteRule ^espacio-publico/?$ https://medellin-datos.github.io/ep-ontology/docs/index.html [R=303,L]
+
+# Explicit version IRI
+RewriteRule ^espacio-publico/0\.1\.0/?$ https://medellin-datos.github.io/ep-ontology/dist/espacio-publico-0.1.0.ttl [R=303,L]
+
+# -----------------------------------------------------------------------------
+# Sub-resources (core/, regulacion/, propaganda-electoral/, control/, shapes/,
+# vocab/ and individual modules + terms): RDF clients get the merged ontology,
+# browsers get the documentation.
+# -----------------------------------------------------------------------------
+RewriteCond %{HTTP_ACCEPT} (text/turtle|application/rdf\+xml|application/ld\+json|application/n-triples) [NC]
+RewriteRule ^espacio-publico/(.+)$ https://medellin-datos.github.io/ep-ontology/dist/espacio-publico-0.1.0.ttl [R=303,L]
+RewriteRule ^espacio-publico/(.+)$ https://medellin-datos.github.io/ep-ontology/docs/index.html [R=303,L]
+
+# -----------------------------------------------------------------------------
+# Complementary epmodeling vocabulary: https://w3id.org/medellin/ep...
+# -----------------------------------------------------------------------------
+RewriteCond %{HTTP_ACCEPT} (text/turtle|application/rdf\+xml|application/ld\+json|application/n-triples) [NC]
+RewriteRule ^ep(/.*)?$ https://medellin-datos.github.io/ep-ontology/dist/espacio-publico-0.1.0.ttl [R=303,L]
+RewriteRule ^ep(/.*)?$ https://medellin-datos.github.io/ep-ontology/docs/index.html [R=303,L]

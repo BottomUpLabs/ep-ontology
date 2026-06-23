@@ -1,0 +1,100 @@
+// Pasos del tramite de solicitud temporal de aprovechamiento economico del E.P.
+// (SUIT 26521) — arbol horizontal por ETAPAS (rankdir=LR). Version estatica/imprimible.
+// La version interactiva (etapas colapsables) esta en tramite-pasos-tree.html.
+// Fuentes: TramiteSolicitudTemporalAEEP.ttl (estadosCicloVida, entregables)
+//          categoria-venta-informal.ttl (FLUJO + formularios + entregables)
+// Render:  dot -Tsvg tramite-pasos-tree.dot -o tramite-pasos-tree.svg
+//
+// Formas: caja redonda = accion/paso · nota (papel) = documento · carpeta = entregable.
+digraph pasos {
+  rankdir=LR;
+  bgcolor="#0f1419";
+  splines=ortho;
+  nodesep=0.30;
+  ranksep=0.85;
+  fontname="Helvetica";
+  node  [shape=box style="rounded,filled" fontname="Helvetica" fontcolor="#ffffff"
+         fontsize=11 penwidth=0 margin="0.16,0.09"];
+  edge  [color="#5b6672" arrowsize=0.7 penwidth=1.1];
+
+  // ---- raiz ----
+  root [label="Tramite SUIT 26521\nSolicitud temporal AEEP\n(categoria: venta informal)"
+        fillcolor="#6a1b9a" fontsize=13 width=2.4];
+
+  // ---- ETAPAS (espina del proceso) ----
+  node [fillcolor="#37424d" fontsize=12 style="rounded,filled,dashed" penwidth=1.2 color="#7e8a96"];
+  f1 [label="1 · Radicacion\n[radicado]"];
+  f2 [label="2 · Revision de requisitos\n[doc. incompleta / subsanado]"];
+  f3 [label="3 · Evaluacion\n[en_evaluacion]"];
+  f4 [label="4 · Concepto emitido\n[concepto_emitido]"];
+  f5 [label="5 · Decision\n[resuelto_aprobado / negado / desistido]"];
+  f6 [label="6 · Notificacion\n[acto: notificado]"];
+
+  root -> f1 -> f2 -> f3 -> f4 -> f5 -> f6 [color="#9aa7b2" penwidth=2.0 arrowsize=0.9];
+
+  // ---- contenido de cada etapa ----
+  node [style="rounded,filled" penwidth=0 color="#0f1419"];
+
+  // 1 — Radicacion:  solicitante -> documento -> modalidades
+  p_solic [label="Solicitante (Persona)\nradica FO-GGOL-026" fillcolor="#e53935"];
+  docs    [label="Documento soporte:\nidentidad · SISBEN · cuenta de\nservicios · plano · fotos\n· sanitario (si aplica)"
+           fillcolor="#78909c" shape=note penwidth=0.8 color="#9aa7b2"];
+  m_amb   [label="Modalidad:\nvendedor semiestacionario\n/ ambulante" fillcolor="#fb8c00"];
+  m_mod   [label="Modalidad:\nvendedor en modulo\n(+ asignacion de modulo)" fillcolor="#fb8c00"];
+  f1 -> p_solic -> docs;
+  docs -> m_amb;
+  docs -> m_mod;
+
+  // 2 — Revision de requisitos
+  r_verif  [label="Verificacion documental\n(PR-GGOL-016)" fillcolor="#43a047"];
+  r_subsan [label="Requerimiento de subsanacion\n(si incompleta)" fillcolor="#43a047"];
+  f2 -> r_verif;
+  f2 -> r_subsan;
+
+  // 3 — Evaluacion
+  e_visdom  [label="Visita domiciliaria\nFO-GGOL-028  -> Vivienda" fillcolor="#00acc1"];
+  e_estudio [label="Estudio socioeconomico\nFO-GOOL-044" fillcolor="#6d4c41"];
+  c_cruce   [label="Cruce interinstitucional\nFO-GGOL-022" fillcolor="#6d4c41"];
+  e_visadm  [label="Visita administrativa\nFO-GGOL-036  -> PuestoVenta" fillcolor="#00acc1"];
+  f3 -> e_visdom;
+  f3 -> e_estudio;
+  f3 -> c_cruce;
+  f3 -> e_visadm;
+
+  // 4 — Concepto emitido:  conceptos tecnicos
+  e_conc [label="Conceptos tecnicos" fillcolor="#8e24aa" fontsize=12];
+  f4 -> e_conc;
+  node [fillcolor="#8e24aa" fontsize=10];
+  c_vuln  [label="Concepto Socioeconomico\nFO-GGOL-016"];
+  c_otros [label="Legalidad · Urbano\nSeguridad · Sanitario"];
+  c_app   [label="Viabilidad APP\n(retribucion economica)"];
+  e_conc -> c_vuln;
+  e_conc -> c_otros;
+  e_conc -> c_app;
+  // Estudio socioeconomico y Cruce interinstitucional alimentan el Concepto Socioeconomico
+  e_estudio -> c_vuln [constraint=false style=dashed color="#6d4c41"];
+  c_cruce   -> c_vuln [constraint=false style=dashed color="#6d4c41"];
+
+  // 5 — Decision:  Acto administrativo (entregable, la respuesta) -> desenlaces
+  node [fontsize=11];
+  acto [label="Acto administrativo\n(entregable · la respuesta)" fillcolor="#d81b60" shape=folder penwidth=0.8 color="#f48fb1"];
+  f5 -> acto;
+  a_aprob  [label="Aprobacion de Permiso\n(accion · favorable)" fillcolor="#2e7d32"];
+  a_neg    [label="Negacion de Permiso\n(accion · desfavorable, PR-GGOL-012)" fillcolor="#c62828"];
+  a_des    [label="Desistido" fillcolor="#546e7a"];
+  acto -> a_aprob;
+  acto -> a_neg;
+  acto -> a_des;
+  a_carnet  [label="Carnet del vendedor\n(credencial)" fillcolor="#ad1457" shape=note penwidth=0.8 color="#f48fb1"];
+  a_aprob -> a_carnet;
+  a_recurso [label="Recurso de Apelacion" fillcolor="#43a047"];
+  a_reeval  [label="Reevaluacion y respuesta" fillcolor="#43a047"];
+  a_neg -> a_recurso;
+  a_neg -> a_reeval;
+
+  // 6 — Notificacion
+  n_notif [label="Notificacion del acto\n(personal / por aviso)" fillcolor="#43a047"];
+  n_firme [label="Firmeza / recursos de ley" fillcolor="#43a047"];
+  f6 -> n_notif;
+  n_notif -> n_firme;
+}

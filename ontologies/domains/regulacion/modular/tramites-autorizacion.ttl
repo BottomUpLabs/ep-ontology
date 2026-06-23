@@ -1,0 +1,458 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix dmp: <https://w3id.org/medellin/espacio-publico/dmp#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+
+# =============================================================================
+# Ontologia Modular: Tramites y Autorizaciones
+# =============================================================================
+# Fecha creacion: 2026-01-07
+# Descripcion: Define tramites administrativos, conceptos tecnicos, y eventos
+#              de decision (aprobacion/negacion) relacionados con autorizaciones
+#              temporales para ocupar espacio publico.
+
+<https://w3id.org/medellin/espacio-publico/regulacion/tramites-autorizacion> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/regulacion/tramites-autorizacion/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Tramites y Autorizaciones"@es ;
+    dcterms:description """Ontologia que define el procedimiento administrativo para solicitar 
+    autorizaciones temporales, incluyendo conceptos tecnicos y eventos de decision."""@es ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-01-07"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    vann:preferredNamespacePrefix "reg" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/regulacion#" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/institutional-core-entities> .
+
+# =============================================================================
+# NOTA: Las clases abstractas Tramite, ConceptoTecnico, Evento estan definidas
+# en core:institutional-core-entities.ttl. Este archivo define las especializaciones
+# para el dominio de regulacion de vendedores informales.
+# =============================================================================
+
+# =============================================================================
+# CLASE: SolicitudAutorizacionTemporal (antes SolicitudAutorizacionTemporal)
+# =============================================================================
+# Formulario de captura: FO-GGOL-026 v12 "Solicitud Autorización para la 
+# Ocupación del Espacio Público con una Venta Informal"
+# =============================================================================
+
+:SolicitudAutorizacionTemporal a owl:Class ;
+    rdfs:subClassOf core:Tramite ;
+    rdfs:label "Solicitud de Autorización Temporal"@es ;
+    rdfs:label "Temporary Authorization Request"@en ;
+    skos:prefLabel "Solicitud de Autorización Temporal"@es ;
+    skos:altLabel "Solicitud de Permiso"@es ;
+    skos:altLabel "Trámite de Autorización"@es ;
+    skos:definition """Trámite administrativo mediante el cual una persona solicita autorización temporal 
+    para ejercer actividades económicas informales en el espacio público. Se captura mediante el 
+    formulario FO-GGOL-026. Requiere evaluación técnica (ConceptoTecnico) y puede resultar en 
+    AprobacionPermiso o NegacionPermiso."""@es ;
+    skos:example "Trámite radicado 2024-001 para ocupación en Centro Histórico"@es ;
+    skos:scopeNote """Documentos obligatorios según FO-GGOL-026:
+    - Fotocopia de documento de identidad del vendedor
+    - Fotocopia de documentos de identidad de personas con quien vive
+    - Puntaje del SISBEN actualizado
+    - Fotocopia de la última cuenta de servicios del lugar de residencia
+    - Documento que acredite especial protección constitucional (si aplica)
+    - Fotocopia del curso de manipulación de alimentos vigente (si aplica)"""@es ;
+    dcterms:source "FO-GGOL-026 v12" ;
+    :formularioCaptura "FO-GGOL-026" ;
+    :estadosCicloVida (
+        "radicado"                       # Solicitud presentada formalmente
+        "documentacion_incompleta"       # Falta documentación requerida
+        "subsanado"                      # Documentación completada
+        "en_evaluacion"                  # En proceso de evaluación técnica
+        "concepto_emitido"               # ConceptoTecnico(s) emitido(s)
+        "resuelto_aprobado"              # AprobacionPermiso emitida
+        "resuelto_negado"                # NegacionPermiso emitida
+        "desistido"                      # Solicitante desiste voluntariamente
+    ) .
+
+
+# =============================================================================
+# CLASES: Tipos de Concepto Tecnico (6 especializaciones de core:ConceptoTecnico)
+# =============================================================================
+# NOTA: La clase abstracta core:ConceptoTecnico esta definida en 
+# institutional-core-entities.ttl. Aqui se definen las especializaciones
+# para el dominio de regulacion de vendedores informales.
+# =============================================================================
+
+:ConceptoVulnerabilidad a owl:Class ;
+    rdfs:subClassOf core:ConceptoTecnico ;
+    rdfs:label "Concepto de Vulnerabilidad"@es ;
+    skos:prefLabel "Concepto de Vulnerabilidad"@es ;
+    skos:altLabel "Concepto Socioeconómico"@es ;
+    skos:altLabel "Estudio Socioeconómico"@es ;
+    skos:definition """Concepto técnico que evalúa condiciones de vulnerabilidad del solicitante mediante 
+    un estudio socioeconómico integral. El instrumento formal de captura es el formulario FO-GGOL-016 
+    (Concepto Socioeconómico). Evalúa: condiciones de vulnerabilidad (desplazamiento, discapacidad, 
+    conflicto armado), situación económica (SISBEN, línea de pobreza), criterios de inclusión 
+    (protección constitucional, grupos étnicos, cabeza de familia). Evaluado por equipo social 
+    (Trabajador(a) Social)."""@es ;
+    skos:example "ConceptoVulnerabilidad favorable que acredita clasificación SISBEN A1 y condición de cabeza de familia"@es ;
+    skos:scopeNote """El resultado de este concepto técnico se documenta en el formulario FO-GGOL-016.
+    Un concepto favorable con grado de vulnerabilidad ≥3 recomienda exención de retribución económica.
+    Fundamenta la decisión de AprobacionPermiso junto con otros conceptos técnicos."""@es ;
+    dcterms:source "FO-GGOL-016 v8" ;
+    :formularioAsociado "FO-GGOL-016" ;
+    :metodologiaReferencia "DE-GGOL-007" .
+
+# =============================================================================
+# CLASE: ConceptoCruceInterinstitucional (FO-GGOL-022)
+# =============================================================================
+
+:ConceptoCruceInterinstitucional a owl:Class ;
+    rdfs:subClassOf core:ConceptoTecnico ;
+    rdfs:label "Concepto de Cruce Interinstitucional"@es ;
+    rdfs:label "Interinstitutional Cross-check Concept"@en ;
+    skos:prefLabel "Concepto de Cruce Interinstitucional"@es ;
+    skos:altLabel "Cruce Interinstitucional"@es ;
+    skos:altLabel "Verificación Interinstitucional"@es ;
+    skos:definition """Concepto técnico que verifica la información del solicitante mediante cruce 
+    con bases de datos interinstitucionales para determinar vulnerabilidad y elegibilidad. 
+    Se captura mediante el formulario FO-GGOL-022 (Concepto Cruce Interinstitucional).
+    
+    Bases de datos consultadas:
+    - SISBEN (puntaje versión III, clasificación versión IV)
+    - Catastro Municipal/Departamental
+    - RUNT (Tránsito Municipal/Departamental)
+    - RUES (Cámara de Comercio)
+    - SISPRO-RUAF (Afiliación EPS y Pensiones)
+    - SISPRO-Pagos Compensados
+    - ARL (Administradora de Riesgos Laborales)
+    - AFP (Administradora de Fondo de Pensiones)
+    - Registro Único de Víctimas
+    - Base de Datos Revalidación
+    - SISDEP"""@es ;
+    skos:example "Cruce interinstitucional que verifica SISBEN A1 y registro en RUV"@es ;
+    skos:scopeNote """El cruce interinstitucional complementa el estudio socioeconómico (FO-GOOL-044)
+    y el concepto de vulnerabilidad (FO-GGOL-016). Ambos conceptos (vulnerabilidad y cruce 
+    interinstitucional) son requeridos para fundamentar el PermisoOcupacionTemporal."""@es ;
+    dcterms:source "FO-GGOL-022 v4" ;
+    :formularioAsociado "FO-GGOL-022" .
+
+:ConceptoLegalidad a owl:Class ;
+    rdfs:subClassOf core:ConceptoTecnico ;
+    rdfs:label "Concepto de Legalidad"@es ;
+    skos:definition """Verificacion juridica del cumplimiento de requisitos legales y documentacion del tramite. 
+    Incluye revision de identificacion, certificados, antecedentes, capacidad juridica. Evaluado por equipo juridico."""@es ;
+    skos:example "ConceptoLegalidad que verifica cumplimiento de requisitos del Decreto 552"@es .
+
+:ConceptoUrbano a owl:Class ;
+    rdfs:subClassOf core:ConceptoTecnico ;
+    rdfs:label "Concepto Urbano"@es ;
+    skos:definition """Evaluacion tecnica de viabilidad urbanistica de la ocupacion solicitada. Incluye: 
+    compatibilidad con POT (Plan de Ordenamiento Territorial), disponibilidad espacial, afectacion de 
+    movilidad, impacto en infraestructura urbana. Evaluado por equipo urbanistico."""@es ;
+    skos:example "ConceptoUrbano que determina disponibilidad espacial en zona Centro Historico"@es .
+
+:ConceptoSocieconomico owl:equivalentClass :ConceptoVulnerabilidad ;
+    owl:deprecated "true"^^xsd:boolean ;
+    rdfs:label "Concepto Socioeconomico"@es ;
+    skos:definition """DEPRECATED: Usar ConceptoVulnerabilidad directamente. 
+    El concepto socioeconómico es parte integral del ConceptoVulnerabilidad y se captura 
+    mediante el formulario FO-GGOL-016. Esta clase se mantiene por compatibilidad con datos existentes."""@es ;
+    skos:changeNote "2026-01: Fusionado con ConceptoVulnerabilidad - FO-GGOL-016 es el instrumento único."@es ;
+    skos:example "ConceptoSocieconomico que acredita condicion de cabeza de familia con 3 dependientes"@es .
+
+:ConceptoSeguridad a owl:Class ;
+    rdfs:subClassOf core:ConceptoTecnico ;
+    rdfs:label "Concepto de Seguridad"@es ;
+    skos:definition """Revision de aspectos de seguridad y orden publico relacionados con la ocupacion solicitada. 
+    Incluye: revision de antecedentes, comportamiento previo en espacio publico, conflictos de convivencia, 
+    afectacion a seguridad ciudadana. Evaluado por equipo de seguridad."""@es ;
+    skos:example "ConceptoSeguridad que verifica ausencia de antecedentes penales y sanciones administrativas"@es .
+
+:ConceptoSanitario a owl:Class ;
+    rdfs:subClassOf core:ConceptoTecnico ;
+    rdfs:label "Concepto Sanitario"@es ;
+    skos:definition """Evaluacion de condiciones sanitarias para vendedores de alimentos preparados. Incluye: 
+    cumplimiento de normas de manipulacion de alimentos, carnet de salud, condiciones del modulo (agua potable, 
+    residuos, higiene). Evaluado por equipo de salud publica. OBLIGATORIO para actividad 'alimentos preparados'."""@es ;
+    skos:example "ConceptoSanitario favorable para venta de arepas con carnet de manipulacion vigente"@es .
+
+
+
+# =============================================================================
+# PROPIEDADES: Tramite → Rol
+# =============================================================================
+
+# --- SolicitudAutorizacion → Persona ---
+:solicitante a owl:ObjectProperty ;
+    rdfs:domain :SolicitudAutorizacionTemporal ;
+    rdfs:range core:PersonaNatural ;
+    rdfs:label "Solicitante"@es ;
+    rdfs:label "Applicant"@en ;
+    skos:definition """Persona que presento la solicitud de autorizacion.
+    NO tiene inversa - la navegacion es desde Solicitud hacia Persona.
+    
+    Para consultar solicitudes de una persona, usar SPARQL:
+      SELECT ?solicitud WHERE { ?solicitud :solicitante ?persona }"""@es .
+
+
+# =============================================================================
+# DATATYPE PROPERTIES: Tramite
+# =============================================================================
+
+:numeroRadicado a owl:DatatypeProperty ;
+    rdfs:domain :SolicitudAutorizacionTemporal ;
+    rdfs:range xsd:string ;
+    rdfs:label "Numero de radicado"@es ;
+    skos:definition "Codigo unico del tramite (ej: 2024-001)"@es ;
+    dmp:ruleName "format_consecutivo_mercurio" .
+
+:fechaRadicacion a owl:DatatypeProperty ;
+    rdfs:domain :SolicitudAutorizacionTemporal ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de radicacion"@es ;
+    skos:definition "Fecha en que se radico la solicitud"@es ;
+    dmp:ruleName "format_iso_date" .
+
+:estadoTramite a owl:DatatypeProperty ;
+    rdfs:domain :SolicitudAutorizacionTemporal ;
+    rdfs:range xsd:string ;
+    rdfs:label "Estado del tramite"@es ;
+    skos:definition "Estado actual del tramite segun ciclo de vida"@es .
+
+:actividadEconomicaSolicitada a owl:DatatypeProperty ;
+    rdfs:domain :SolicitudAutorizacionTemporal ;
+    rdfs:range xsd:string ;
+    rdfs:label "Actividad economica solicitada"@es ;
+    skos:definition "Actividad economica que el solicitante desea ejercer (ej: venta de frutas, alimentos preparados)"@es .
+
+:zonaOcupacionSolicitada a owl:DatatypeProperty ;
+    rdfs:domain :SolicitudAutorizacionTemporal ;
+    rdfs:range xsd:string ;
+    rdfs:label "Zona de ocupacion solicitada"@es ;
+    skos:definition "Zona geografica donde se solicita ocupar espacio publico"@es .
+
+
+# =============================================================================
+# PROPIEDADES: ConceptoVulnerabilidad → EstudioSocioeconomico (FO-GGOL-016)
+# =============================================================================
+# Estas propiedades corresponden al formulario FO-GGOL-016 v8 "Concepto Socioeconómico"
+# y se utilizan para documentar el resultado de la evaluación de vulnerabilidad.
+
+:generaEstudio a owl:ObjectProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range :EstudioSocioeconomico ;
+    rdfs:label "Genera estudio"@es ;
+    skos:definition """Vincula el ConceptoVulnerabilidad al EstudioSocioeconomico que documenta 
+    formalmente el resultado de la evaluación. El estudio se captura mediante FO-GGOL-016."""@es .
+
+# -----------------------------------------------------------------------------
+# Sección: Criterios de Inclusión (FO-GGOL-016 §3)
+# -----------------------------------------------------------------------------
+
+:tieneSisben a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Tiene SISBÉN"@es ;
+    skos:definition "Indica si el solicitante está registrado en SISBÉN"@es ;
+    dcterms:source "FO-GGOL-016 - Criterios de Inclusión" .
+
+:sujetoProteccionConstitucional a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Sujeto de especial protección constitucional"@es ;
+    skos:definition "Indica si el solicitante es sujeto de especial protección constitucional"@es ;
+    dcterms:source "FO-GGOL-016 - Criterios de Inclusión" .
+
+:victimaConflictoArmado a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Víctima del conflicto armado"@es ;
+    skos:definition "Indica si el solicitante es víctima del conflicto armado (RUV)"@es ;
+    skos:scopeNote "Se verifica mediante consulta al Registro Único de Víctimas"@es ;
+    dcterms:source "FO-GGOL-016 - Criterios de Inclusión" .
+
+:condicionDiscapacidad a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Persona en condición de discapacidad"@es ;
+    skos:definition "Indica si el solicitante tiene condición de discapacidad"@es ;
+    dcterms:source "FO-GGOL-016 - Criterios de Inclusión" .
+
+:perteneceGrupoEtnico a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Pertenece a un grupo étnico"@es ;
+    skos:definition "Indica si el solicitante pertenece a un grupo étnico reconocido"@es ;
+    dcterms:source "FO-GGOL-016 - Criterios de Inclusión" .
+
+:cabezaFamilia a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Hombre/mujer cabeza de familia"@es ;
+    skos:definition "Indica si el solicitante es cabeza de familia (hombre o mujer)"@es ;
+    dcterms:source "FO-GGOL-016 - Criterios de Inclusión" .
+
+:poblacionLGBTI a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Población LGBTI"@es ;
+    skos:definition "Indica si el solicitante pertenece a población LGBTI"@es ;
+    dcterms:source "FO-GGOL-016 - Criterios de Inclusión" .
+
+:adultoMayor a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Adulto mayor"@es ;
+    skos:definition "Indica si el solicitante es adulto mayor (60+ años)"@es ;
+    dcterms:source "FO-GGOL-016 - Criterios de Inclusión" .
+
+# -----------------------------------------------------------------------------
+# Sección: Valoración Económica (FO-GGOL-016 §4)
+# -----------------------------------------------------------------------------
+
+:sisbenPuntaje a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "Puntaje SISBÉN (Versión III)"@es ;
+    skos:definition "Puntaje SISBÉN del solicitante según metodología versión III"@es ;
+    dcterms:source "FO-GGOL-016 - Valoración Económica" .
+
+:sisbenClasificacion a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:string ;
+    rdfs:label "Clasificación SISBÉN (Versión IV)"@es ;
+    skos:definition "Clasificación SISBÉN del solicitante según metodología versión IV (A1-D21)"@es ;
+    skos:example "A1, A2, B1, B2, C1, etc."@es ;
+    dcterms:source "FO-GGOL-016 - Valoración Económica" .
+
+:gradoVulnerabilidad a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:integer ;
+    rdfs:label "Grado de vulnerabilidad"@es ;
+    skos:definition "Grado de vulnerabilidad asignado (1-5). Grado ≥3 recomienda exención de retribución"@es ;
+    skos:scopeNote "1=Muy baja, 2=Baja, 3=Media, 4=Alta, 5=Muy alta"@es ;
+    dcterms:source "FO-GGOL-016 - Valoración Económica" .
+
+:exentoRetribucionEconomica a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Exento de retribución económica"@es ;
+    skos:definition "Indica si el solicitante cumple criterios para exención de retribución económica"@es ;
+    dcterms:source "FO-GGOL-016 - Valoración Económica" .
+
+:tipoVendedor a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:string ;
+    rdfs:label "Tipo de vendedor evaluado"@es ;
+    skos:definition "Tipo de vendedor: 'ambulante' o 'estacionario/semiestacionario'"@es ;
+    dcterms:source "FO-GGOL-016 - Valoración Económica" .
+
+:lineaPobreza a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Línea de pobreza"@es ;
+    skos:definition "Indica si el solicitante se encuentra por debajo de la línea de pobreza"@es ;
+    dcterms:source "FO-GGOL-016 - Valoración Económica" .
+
+:lineaPobrezaExtrema a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Línea de pobreza extrema"@es ;
+    skos:definition "Indica si el solicitante se encuentra por debajo de la línea de pobreza extrema"@es ;
+    dcterms:source "FO-GGOL-016 - Valoración Económica" .
+
+# -----------------------------------------------------------------------------
+# Sección: Evaluación Profesional (FO-GGOL-016 §5)
+# -----------------------------------------------------------------------------
+
+:profesionalEvaluador a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:string ;
+    rdfs:label "Nombre del profesional social que evaluó"@es ;
+    skos:definition "Nombre completo del profesional social responsable de la evaluación"@es ;
+    dcterms:source "FO-GGOL-016 - Evaluación Profesional" .
+
+:cargoEvaluador a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:string ;
+    rdfs:label "Cargo del evaluador"@es ;
+    skos:definition "Cargo del profesional que realizó la evaluación (ej: Trabajadora Social)"@es ;
+    dcterms:source "FO-GGOL-016 - Evaluación Profesional" .
+
+:correoEvaluador a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:string ;
+    rdfs:label "Correo electrónico del evaluador"@es ;
+    skos:definition "Correo electrónico institucional del profesional evaluador"@es ;
+    dcterms:source "FO-GGOL-016 - Evaluación Profesional" .
+
+:fechaConceptoVulnerabilidad a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha del concepto"@es ;
+    skos:definition "Fecha en que se emitió el concepto de vulnerabilidad"@es ;    dmp:ruleName "format_iso_date" ;    dcterms:source "FO-GGOL-016 - Evaluación Profesional" .
+
+# =============================================================================
+# CLASE: OfertaInstitucional (Programas para vendedores no regulados)
+# =============================================================================
+# NOTA: Clase principal definida en programas-institucionales.ttl
+# Aquí solo se referencia para usar en propiedades de este módulo.
+# =============================================================================
+
+# :OfertaInstitucional ya definida en programas-institucionales.ttl
+
+:ProgramaFormalizacion a owl:Class ;
+    rdfs:subClassOf :OfertaInstitucional ;
+    rdfs:label "Programa de Formalización"@es ;
+    skos:definition """Programa específico para acompañar a vendedores informales hacia la 
+    formalización comercial (registro mercantil, bancarización, etc.)"""@es .
+
+# =============================================================================
+# PROPIEDADES: Negación → Oferta Institucional
+# =============================================================================
+# NOTA: Las propiedades remiteAOferta, requierePrograma, participaEn están
+# definidas en programas-institucionales.ttl
+
+:remiteAOferta a owl:ObjectProperty ;
+    rdfs:domain :NegacionPermiso ;
+    rdfs:range :OfertaInstitucional ;
+    rdfs:label "Remite a oferta"@es ;
+    skos:definition """Vincula la negación del permiso a la oferta institucional sugerida.
+    Cuando no hay convocatorias abiertas, se orienta al solicitante hacia programas 
+    alternativos de apoyo o formalización."""@es ;
+    dcterms:source "PR-GGOL-012" .
+
+# requierePrograma y participaEn ya definidas en programas-institucionales.ttl
+
+# =============================================================================
+# DATATYPE PROPERTIES: OfertaInstitucional
+# =============================================================================
+# NOTA: Estas propiedades ya están definidas en programas-institucionales.ttl
+# Aquí solo se documentan para referencia
+# =============================================================================
+
+# =============================================================================
+# FLUJO: Solicitud de Vendedor No Regulado (PR-GGOL-012)
+# =============================================================================
+# Cuando un vendedor no regulado solicita autorización temporal:
+# 1. Se verifica en bases SISDEP, Revalidación, TETHA
+# 2. Si no hay convocatoria abierta → NegacionPermiso
+# 3. Se remite a OfertaInstitucional
+#
+# Ejemplo de instanciación:
+# <vendedor/V-789> :estadoActual vocab:caracterizado-socialmente .
+# <cambio/20250106-003> a :CambioEstado ;
+#     :vendedorAfectado <vendedor/V-789> ;
+#     :estadoOrigen vocab:caracterizado-socialmente ;
+#     :estadoDestino vocab:negado ;
+#     :motivoCambio "No se otorgan nuevos permisos por fuera de convocatorias" .
+# <vendedor/V-789> :requierePrograma <programa/PROG-OFER-2025> .
+# =============================================================================

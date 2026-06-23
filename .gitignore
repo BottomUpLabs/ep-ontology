@@ -1,0 +1,23 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Backups
+_backup/
+
+# OS
+.DS_Store
+.env
+# Editor / tooling
+.idea/
+.vscode/
+.claude/
+dist/
+
+# Excluido de la publicacion publica (capa de datos / tuberia de origen)
+mappings/
+tools/
+context/
+
+# Nota: docs/ SI se publica (visualizaciones). dist/ se genera con tools/.

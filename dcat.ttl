@@ -1,0 +1,90 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+
+# =============================================================================
+# DESCRIPCION DCAT + VoID del conjunto de datos (release 0.1.0)
+# =============================================================================
+# Describe la Ontologia de Espacio Publico de Medellin como un dataset DCAT con
+# sus distribuciones (TTL, RDF/XML, JSON-LD, N-Triples) y un resumen VoID.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/catalog> a dcat:Catalog ;
+    dcterms:title "Catalogo de la Ontologia de Espacio Publico de Medellin"@es ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    foaf:homepage <https://w3id.org/medellin/espacio-publico> ;
+    dcat:dataset <https://w3id.org/medellin/espacio-publico/dataset> .
+
+<https://w3id.org/medellin/espacio-publico/dataset> a dcat:Dataset , void:Dataset ;
+    dcterms:title "Ontologia de Espacio Publico de Medellin"@es ;
+    dcterms:title "Public Space Ontology of Medellin"@en ;
+    dcterms:description """Ontologia OWL modular y vocabularios SKOS para la gestion del
+    espacio publico de Medellin (vendedores informales, propaganda electoral, control y
+    aprovechamiento). Publicada como datos abiertos enlazados."""@es ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:creator <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    dcterms:modified "2026-05-31"^^xsd:date ;
+    dcterms:spatial <https://sws.geonames.org/3674962/> ;
+    dcterms:accrualPeriodicity <http://purl.org/cld/freq/irregular> ;
+    owl:versionInfo "0.1.0" ;
+    adms:status <http://purl.org/adms/status/UnderDevelopment> ;
+    dcat:landingPage <https://w3id.org/medellin/espacio-publico> ;
+    dcat:keyword "espacio publico" , "vendedores informales" , "propaganda electoral" ,
+        "datos abiertos" , "Medellin" , "ontologia" , "SKOS" , "OWL" ;
+    dcat:theme <http://publications.europa.eu/resource/authority/data-theme/GOVE> ;
+    void:vocabulary <http://www.w3.org/2002/07/owl#> , <http://www.w3.org/2004/02/skos/core#> ,
+        <http://purl.org/dc/terms/> , <http://xmlns.com/foaf/0.1/> , <https://schema.org/> ;
+    void:triples 10060 ;
+    void:classes 132 ;
+    void:properties 504 ;
+    dcat:distribution
+        <https://w3id.org/medellin/espacio-publico/dist/ttl> ,
+        <https://w3id.org/medellin/espacio-publico/dist/rdfxml> ,
+        <https://w3id.org/medellin/espacio-publico/dist/jsonld> ,
+        <https://w3id.org/medellin/espacio-publico/dist/nt> ,
+        <https://w3id.org/medellin/espacio-publico/dist/shapes> .
+
+<https://w3id.org/medellin/espacio-publico/dist/ttl> a dcat:Distribution ;
+    dcterms:title "Ontologia integrada (Turtle)"@es ;
+    dcat:mediaType "text/turtle" ;
+    dcterms:format "TTL" ;
+    dcat:downloadURL <https://w3id.org/medellin/espacio-publico/dist/espacio-publico-0.1.0.ttl> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> .
+
+<https://w3id.org/medellin/espacio-publico/dist/rdfxml> a dcat:Distribution ;
+    dcterms:title "Ontologia integrada (RDF/XML)"@es ;
+    dcat:mediaType "application/rdf+xml" ;
+    dcterms:format "RDF/XML" ;
+    dcat:downloadURL <https://w3id.org/medellin/espacio-publico/dist/espacio-publico-0.1.0.rdf> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> .
+
+<https://w3id.org/medellin/espacio-publico/dist/jsonld> a dcat:Distribution ;
+    dcterms:title "Ontologia integrada (JSON-LD)"@es ;
+    dcat:mediaType "application/ld+json" ;
+    dcterms:format "JSON-LD" ;
+    dcat:downloadURL <https://w3id.org/medellin/espacio-publico/dist/espacio-publico-0.1.0.jsonld> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> .
+
+<https://w3id.org/medellin/espacio-publico/dist/nt> a dcat:Distribution ;
+    dcterms:title "Ontologia integrada (N-Triples)"@es ;
+    dcat:mediaType "application/n-triples" ;
+    dcterms:format "N-Triples" ;
+    dcat:downloadURL <https://w3id.org/medellin/espacio-publico/dist/espacio-publico-0.1.0.nt> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> .
+
+<https://w3id.org/medellin/espacio-publico/dist/shapes> a dcat:Distribution ;
+    dcterms:title "SHACL Shapes (Turtle)"@es ;
+    dcat:mediaType "text/turtle" ;
+    dcterms:format "TTL" ;
+    dcat:downloadURL <https://w3id.org/medellin/espacio-publico/dist/espacio-publico-shapes-0.1.0.ttl> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> .

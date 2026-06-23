@@ -1,0 +1,266 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vocab: <https://w3id.org/medellin/espacio-publico/vocab/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# =============================================================================
+# VOCABULARIO CONTROLADO: Tipos de Programa Institucional
+# =============================================================================
+# Define los tipos de programas y servicios que ofrece la Subsecretaria de
+# Espacio Publico para vendedores informales. Complementa las clases OWL en
+# institutional-core-entities.ttl con vocabulario controlado para categorizacion.
+# =============================================================================
+
+vocab:tipo-programa-institucional a skos:ConceptScheme ;
+    owl:versionInfo "0.1.0" ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Tipos de Programa Institucional"@es ;
+    dcterms:title "Institutional Program Types"@en ;
+    dcterms:description """Vocabulario controlado para clasificar los programas y
+    servicios institucionales dirigidos a vendedores informales en Medellin. Incluye
+    programas de reubicacion, formalizacion, capacitacion y apoyo social. Utilizado
+    para etiquetar y categorizar iniciativas en el sistema de gestion."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:created "2026-01-06"^^xsd:date ;
+    dcterms:modified "2026-01-06"^^xsd:date ;
+    dcterms:source "concepts/informal/solicitud_permiso_no_regulado.md" ;
+    dcterms:source "concepts/regulated/novedades_regulados.md" ;
+    dcterms:source "concepts/regulated/reubicacion_definitiva_amenaza.md" ;
+    prov:wasDerivedFrom <duckdb:///docs_sys/10_semantics/ontologies/core/institutional-core-entities.ttl#Programa> ;
+    skos:hasTopConcept
+        vocab:prog-reubicacion ,
+        vocab:prog-formalizacion ,
+        vocab:prog-capacitacion ,
+        vocab:prog-apoyo-social ,
+        vocab:prog-sensibilizacion .
+
+# =============================================================================
+# CONCEPTO: Programa de Reubicacion
+# =============================================================================
+
+vocab:prog-reubicacion a skos:Concept ;
+    skos:inScheme vocab:tipo-programa-institucional ;
+    skos:prefLabel "Programa de Reubicacion"@es ;
+    skos:prefLabel "Relocation Program"@en ;
+    skos:altLabel "Traslado de vendedores"@es ;
+    skos:altLabel "Reubicacion definitiva"@es ;
+    skos:altLabel "Programa de traslado"@es ;
+    skos:notation "prog_reubicacion" ;
+    skos:definition """Programa que gestiona el traslado definitivo o transitorio de
+    vendedores regulados por amenazas documentadas, obras publicas, intervenciones
+    estrategicas o recuperacion del espacio publico. Provee cupos en zonas seguras,
+    coordina logistica, actualiza autorizaciones y realiza seguimiento posttraslado."""@es ;
+    skos:scopeNote """Causales de reubicacion:
+    - Amenazas a la vida o integridad personal (requiere denuncia Fiscalia)
+    - Obras publicas que afectan punto autorizado (Metro, Metroplús, vias)
+    - Intervenciones de recuperacion del espacio publico
+    - Traslados voluntarios por problemas de convivencia (evaluados caso a caso)
+    Coordina con: Fiscalia, Personeria, Facturacion, Gestion de Modulos"""@es ;
+    skos:historyNote "Consolidado en PR-GGOL-012 (2023) a partir de procedimientos previos"@es ;
+    skos:example "Programa de traslado por obras Metro Linea P - Comuna 10"@es ;
+    skos:example "Reubicacion por amenaza con coordinacion de la Fiscalia"@es ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "reubicacion"@es ;
+    skos:hiddenLabel "traslado"@es ;
+    skos:hiddenLabel "programa traslado"@es ;
+    skos:hiddenLabel "reubicacion por obra"@es ;
+    skos:hiddenLabel "reubicacion por amenaza"@es ;
+    skos:hiddenLabel "REUBICACION"@es .
+
+# =============================================================================
+# CONCEPTO: Programa de Formalizacion
+# =============================================================================
+
+vocab:prog-formalizacion a skos:Concept ;
+    skos:inScheme vocab:tipo-programa-institucional ;
+    skos:prefLabel "Programa de Formalizacion"@es ;
+    skos:prefLabel "Formalization Program"@en ;
+    skos:altLabel "Ruta de formalizacion"@es ;
+    skos:altLabel "Formalizacion comercial"@es ;
+    skos:altLabel "Transicion a la formalidad"@es ;
+    skos:notation "prog_formalizacion" ;
+    skos:definition """Programa que acompana vendedores informales en la transicion hacia
+    actividades economicas formales: registro mercantil, obtencion de permisos sanitarios,
+    vinculacion a plazas de mercado, locales comerciales o emprendimientos registrados.
+    Incluye orientacion juridica, financiera y empresarial."""@es ;
+    skos:scopeNote """Servicios provistos:
+    - Asesoria para registro en Camara de Comercio
+    - Tramites de permisos sanitarios (INVIMA, secretarias de salud)
+    - Vinculacion a plazas de mercado municipales
+    - Acceso a credito y capital semilla
+    - Formacion en constitucion empresarial (SAS, unipersonal)
+    Coordina con: Secretaria Desarrollo Economico, Camara de Comercio, SENA"""@es ;
+    skos:example "Programa Formaliza tu Negocio 2025"@es ;
+    skos:example "Ruta de formalizacion para vendedores de alimentos"@es ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "formalizacion"@es ;
+    skos:hiddenLabel "ruta formalizacion"@es ;
+    skos:hiddenLabel "programa formalizacion"@es ;
+    skos:hiddenLabel "formalizacion comercial"@es ;
+    skos:hiddenLabel "FORMALIZACION"@es .
+
+# =============================================================================
+# CONCEPTO: Programa de Capacitacion
+# =============================================================================
+
+vocab:prog-capacitacion a skos:Concept ;
+    skos:inScheme vocab:tipo-programa-institucional ;
+    skos:prefLabel "Programa de Capacitacion"@es ;
+    skos:prefLabel "Training Program"@en ;
+    skos:altLabel "Formacion empresarial"@es ;
+    skos:altLabel "Capacitacion tecnica"@es ;
+    skos:altLabel "Desarrollo de competencias"@es ;
+    skos:notation "prog_capacitacion" ;
+    skos:definition """Programa que ofrece formacion tecnica y empresarial a vendedores
+    informales para mejorar sus competencias: manipulacion de alimentos, gestion
+    empresarial, atencion al cliente, marketing digital, manejo financiero. Busca
+    fortalecer la sostenibilidad economica de la actividad."""@es ;
+    skos:scopeNote """Lineas de formacion:
+    - Manipulacion higienica de alimentos (BPM)
+    - Gestion empresarial y contabilidad basica
+    - Atencion al cliente y mercadeo
+    - Uso de TIC y comercio electronico
+    - Gestion ambiental y sostenibilidad
+    Coordina con: SENA, Comfenalco, universidades, gremios"""@es ;
+    skos:example "Curso BPM para vendedores de alimentos preparados"@es ;
+    skos:example "Capacitacion en marketing digital para venteros regulados"@es ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "capacitacion"@es ;
+    skos:hiddenLabel "formacion"@es ;
+    skos:hiddenLabel "capacitacion tecnica"@es ;
+    skos:hiddenLabel "programa capacitacion"@es ;
+    skos:hiddenLabel "cursos"@es ;
+    skos:hiddenLabel "CAPACITACION"@es .
+
+# =============================================================================
+# CONCEPTO: Programa de Apoyo Social
+# =============================================================================
+
+vocab:prog-apoyo-social a skos:Concept ;
+    skos:inScheme vocab:tipo-programa-institucional ;
+    skos:prefLabel "Programa de Apoyo Social"@es ;
+    skos:prefLabel "Social Support Program"@en ;
+    skos:altLabel "Atencion psicosocial"@es ;
+    skos:altLabel "Acompanamiento social"@es ;
+    skos:altLabel "Intervencion social"@es ;
+    skos:notation "prog_apoyo_social" ;
+    skos:definition """Programa que atiende condiciones de vulnerabilidad de vendedores
+    y sus familias: vivienda, salud, educacion, proteccion de menores, atencion a
+    victimas, acceso a subsidios. Articula con otras secretarias y entidades del
+    Sistema Distrital de Bienestar Social."""@es ;
+    skos:scopeNote """Componentes de intervencion:
+    - Visitas domiciliarias para caracterizacion familiar
+    - Remision a programas de vivienda (mejoramiento, arriendo social)
+    - Vinculacion a servicios de salud (EPS, regimen subsidiado)
+    - Acceso a programas de educacion (adultos, ninos)
+    - Proteccion de victimas de violencia, desplazamiento
+    - Atencion a poblacion vulnerable (adultos mayores, discapacidad)
+    Coordina con: Secretaria Social, Salud, Personeria, ICBF"""@es ;
+    skos:example "Remision a programa de mejoramiento de vivienda"@es ;
+    skos:example "Atencion psicosocial a vendedora victima de violencia"@es ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "apoyo social"@es ;
+    skos:hiddenLabel "atencion social"@es ;
+    skos:hiddenLabel "programa social"@es ;
+    skos:hiddenLabel "intervencion social"@es ;
+    skos:hiddenLabel "acompanamiento social"@es ;
+    skos:hiddenLabel "APOYO SOCIAL"@es .
+
+# =============================================================================
+# CONCEPTO: Programa de Sensibilizacion
+# =============================================================================
+
+vocab:prog-sensibilizacion a skos:Concept ;
+    skos:inScheme vocab:tipo-programa-institucional ;
+    skos:prefLabel "Programa de Sensibilizacion"@es ;
+    skos:prefLabel "Awareness Program"@en ;
+    skos:altLabel "Pedagogia ciudadana"@es ;
+    skos:altLabel "Cultura ciudadana"@es ;
+    skos:altLabel "Campanas de sensibilizacion"@es ;
+    skos:notation "prog_sensibilizacion" ;
+    skos:definition """Programa de pedagogia y comunicacion dirigido a vendedores informales,
+    comunidad y ciudadania para promover convivencia, cumplimiento normativo, derechos
+    y deberes en el espacio publico. Incluye campanas, talleres, material educativo."""@es ;
+    skos:scopeNote """Tematicas de sensibilizacion:
+    - Politica Publica de Vendedores Informales (Acuerdo 076/2014)
+    - Derechos y deberes en el espacio publico
+    - Importancia de la regulacion y autorizacion
+    - Convivencia entre vendedores, comerciantes, ciudadania
+    - Cuidado del espacio publico y medio ambiente
+    - Prevencion de ocupacion irregular
+    Coordina con: Comunicaciones, Cultura Ciudadana, Policia"""@es ;
+    skos:example "Campana Territorios Publicos - Ocupacion responsable"@es ;
+    skos:example "Taller de convivencia para vendedores y comerciantes"@es ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "sensibilizacion"@es ;
+    skos:hiddenLabel "pedagogia"@es ;
+    skos:hiddenLabel "programa sensibilizacion"@es ;
+    skos:hiddenLabel "campana"@es ;
+    skos:hiddenLabel "cultura ciudadana"@es ;
+    skos:hiddenLabel "SENSIBILIZACION"@es .
+
+# =============================================================================
+# CONCEPTO: Oferta Integral (Meta-concepto)
+# =============================================================================
+
+vocab:oferta-integral a skos:Concept ;
+    skos:inScheme vocab:tipo-programa-institucional ;
+    skos:prefLabel "Oferta Integral"@es ;
+    skos:prefLabel "Comprehensive Services Offer"@en ;
+    skos:altLabel "Oferta institucional"@es ;
+    skos:altLabel "Servicios articulados"@es ;
+    skos:notation "oferta_integral" ;
+    skos:definition """Conjunto articulado de todos los programas institucionales disponibles
+    para vendedores informales. Representa la capacidad institucional integral de la
+    Subsecretaria y entidades aliadas para ofrecer alternativas economicas, acompanamiento
+    social y rutas de formalizacion."""@es ;
+    skos:scopeNote """La Oferta Integral NO es un programa unico, sino la sumatoria coordinada
+    de: reubicacion + formalizacion + capacitacion + apoyo social + sensibilizacion.
+    Usado en contextos de remision: 'se orienta a la oferta institucional' significa
+    que se deriva a uno o mas programas segun necesidades del caso."""@es ;
+    skos:narrower
+        vocab:prog-reubicacion ,
+        vocab:prog-formalizacion ,
+        vocab:prog-capacitacion ,
+        vocab:prog-apoyo-social ,
+        vocab:prog-sensibilizacion ;
+    skos:example "Vendedor negado es remitido a la oferta institucional (formalizacion + apoyo social)"@es ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "oferta institucional"@es ;
+    skos:hiddenLabel "oferta programatica"@es ;
+    skos:hiddenLabel "servicios institucionales"@es ;
+    skos:hiddenLabel "programas disponibles"@es ;
+    skos:hiddenLabel "OFERTA INSTITUCIONAL"@es .
+
+# =============================================================================
+# CONCEPTO: Programa de Empleabilidad (Relacionado)
+# =============================================================================
+
+vocab:prog-empleabilidad a skos:Concept ;
+    skos:inScheme vocab:tipo-programa-institucional ;
+    skos:prefLabel "Programa de Empleabilidad"@es ;
+    skos:prefLabel "Employability Program"@en ;
+    skos:altLabel "Vinculacion laboral"@es ;
+    skos:altLabel "Intermediacion laboral"@es ;
+    skos:notation "prog_empleabilidad" ;
+    skos:definition """Programa que conecta vendedores informales con oportunidades de
+    empleo formal a traves de intermediacion laboral, ferias de empleo, formacion
+    para el trabajo. Alternativa para quienes desean salir de la informalidad mediante
+    vinculacion laboral dependiente."""@es ;
+    skos:scopeNote """NO gestionado directamente por Subsecretaria de Espacio Publico,
+    pero articula remisiones a Secretaria de Desarrollo Economico, SENA, Agencia
+    Publica de Empleo (APE). Incluido por relevancia en rutas de salida."""@es ;
+    skos:related vocab:prog-formalizacion ;
+    skos:example "Remision a APE para busqueda de empleo formal"@es ;
+    # Sinonimos para limpieza de datos
+    skos:hiddenLabel "empleabilidad"@es ;
+    skos:hiddenLabel "vinculacion laboral"@es ;
+    skos:hiddenLabel "intermediacion laboral"@es ;
+    skos:hiddenLabel "empleo formal"@es ;
+    skos:hiddenLabel "EMPLEABILIDAD"@es .

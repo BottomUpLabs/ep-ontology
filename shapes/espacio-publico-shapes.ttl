@@ -1,0 +1,116 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix : <https://w3id.org/medellin/espacio-publico/shapes/espacio-publico#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix reg: <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+
+# =============================================================================
+# SHACL SHAPES: Espacio Publico - Archivo Unico de Importacion
+# =============================================================================
+# Importar SOLO este archivo para cargar todas las SHACL shapes de validacion.
+#
+# USO:
+#   En pySHACL: shapes_graph.parse("espacio-publico-shapes.ttl")
+#   En TopBraid: Import shapes
+#
+# NOTA: Las shapes requieren que la ontologia este cargada previamente.
+#       Cargar primero: ontologies/espacio-publico.ttl
+# =============================================================================
+
+: a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/shapes/espacio-publico/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - SHACL Shapes Integradas"@es ;
+    dcterms:description """Archivo unico de importacion para todas las SHACL shapes 
+    de validacion del sistema de Espacio Publico."""@es ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-01-07"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    vann:preferredNamespacePrefix "espacio_publico" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/shapes/espacio-publico#" ;
+    
+    # ==========================================================================
+    # CORE SHAPES (Abstract, Reusable)
+    # ==========================================================================
+    # NOTA: lifecycle-propagation-shapes.ttl contiene algunas shapes que 
+    # referencian clases del dominio regulacion (reg:VendedorInformalRegulado).
+    # Esto es una deuda tecnica - idealmente deberian estar en domains/regulacion/
+    # Ver: REFACTORING_TODO al final de este archivo.
+    
+    owl:imports <https://w3id.org/medellin/espacio-publico/shapes/lifecycle-propagation> ;  # Propagacion de ciclo de vida
+
+    # ==========================================================================
+    # DOMAIN SHAPES: REGULACION VENDEDORES
+    # ==========================================================================
+
+    owl:imports <https://w3id.org/medellin/espacio-publico/shapes/vendedor-lifecycle> ;      # Transiciones de estado
+    owl:imports <https://w3id.org/medellin/espacio-publico/shapes/event-state-enforcement> ; # Eventos y sincronizacion
+    owl:imports <https://w3id.org/medellin/espacio-publico/shapes/vendedor> ;                # Validacion basica
+    owl:imports <https://w3id.org/medellin/espacio-publico/shapes/programa-institucional> ;  # Validacion programas
+    
+    rdfs:comment """
+================================================================================
+SHAPES INCLUIDAS
+================================================================================
+
+CORE (shapes/core/):
+------------------
+1. lifecycle-propagation-shapes.ttl
+   - PersonaFallecidaPropagacionShape: Persona fallecida → roles cerrados
+   - SolicitanteFallecidoShape: Solicitante → desistido_por_fallecimiento
+   - ReguladoFallecidoShape: Regulado → cerrado_por_fallecimiento
+   - TransferenciaRequiereSucesorShape: Transferencia requiere nuevo titular
+   - PermisoInactivoCuandoRolTerminalShape: Permiso inactivo si rol terminal
+   - CadenasPropagacionCompletasShape: CambioPropagado completo
+
+DOMAIN: REGULACION (shapes/domains/regulacion/):
+----------------------------------------------
+2. vendedor-lifecycle-shapes.ttl
+   - EstadoVendedorTransitionShape: Transiciones de estado validas
+   - EstadoRequiereResolucionShape: Regulado debe tener resolucion
+   - EstadoRequiereCarneShape: Regulado debe tener carne
+   - TemporalConstraintsShape: Tiempo maximo en estados transitorios
+   - CaracterizacionRequiredShape: Solicitante debe estar caracterizado
+   - EstadosTerminalesShape: Estados terminales son permanentes
+
+3. event-state-enforcement-shapes.ttl
+   - ReposicionTransicionShape: Validacion proceso de reposicion
+   - NovedadTransicionShape: Validacion eventos de novedad
+   - VigenciaTransicionShape: Validacion renovacion de permisos
+   - ConceptoFundamentaDecisionShape: Concepto tecnico fundamenta decision
+   - PermisoEstadoSincronizadoShape: Sincronizacion Permiso ↔ Rol
+
+4. vendedor-shapes.ttl
+   - Validaciones basicas de VendedorInformal
+
+5. programa-shapes.ttl
+   - Validaciones de ProgramaInstitucional
+
+================================================================================
+REFACTORING TODO (Deuda Tecnica)
+================================================================================
+
+Las siguientes shapes en core/lifecycle-propagation-shapes.ttl referencian 
+clases del dominio regulacion y deberian moverse a domains/regulacion/:
+
+- ReguladoFallecidoShape (sh:targetClass reg:VendedorInformalRegulado)
+- TransferenciaRequiereSucesorShape (sh:targetClass reg:VendedorInformalRegulado)
+- PermisoInactivoCuandoRolTerminalShape (sh:targetClass reg:VendedorInformalRegulado)
+- SolicitanteFallecidoShape (sh:targetClass reg:VendedorInformalSolicitante)
+
+Para refactorizar:
+1. Crear shapes/domains/regulacion/vendedor-propagation-shapes.ttl
+2. Mover las shapes domain-specific a ese archivo
+3. Dejar en core/ solo PersonaFallecidaPropagacionShape (patron generico)
+4. Actualizar imports en este archivo
+
+================================================================================
+"""@es .

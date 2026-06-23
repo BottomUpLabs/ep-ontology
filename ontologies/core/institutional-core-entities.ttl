@@ -1,0 +1,662 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix iso11179: <http://purl.org/iso11179/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+
+# =============================================================================
+# ONTOLOGIA: Entidades Institucionales Core - Espacio Publico
+# =============================================================================
+# Clases ABSTRACTAS y REUTILIZABLES para todos los dominios de Espacio Publico.
+# Estas clases NO son especificas de vendedores informales; aplican a:
+# - Regulacion de vendedores informales
+# - Publicidad exterior visual
+# - Eventos en espacio publico
+# - Ocupacion temporal por obras
+# - Mobiliario urbano
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/core/institutional-core-entities> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/core/institutional-core-entities/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Entidades Institucionales Core"@es ;
+    dcterms:title "Public Space - Institutional Core Entities"@en ;
+    dcterms:description """Ontologia de clases abstractas institucionales reutilizables 
+    en todos los dominios de Espacio Publico. Define patrones para Tramite, Resolucion, 
+    Evento, Programa, ConceptoTecnico. Estas clases son EXTENDIDAS por ontologias de 
+    dominio especificas (regulacion, publicidad, eventos, etc.)."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-01-07"^^xsd:date ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    owl:versionInfo "0.1.0" ;
+    vann:preferredNamespacePrefix "core" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/core#" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/entidades-primer-orden> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/persona-natural> ;
+    rdfs:comment """CAMBIOS v2.0.0 (2026-01-07):
+    - Separado de entidades-segundo-orden.ttl (que era especifico de vendedores)
+    - Clases ahora son ABSTRACTAS y aplican a todo Espacio Publico
+    - Agregado soporte para propagacion de ciclos de vida"""@es .
+
+# =============================================================================
+# PROPIEDADES DE METADATOS PARA CICLOS DE VIDA
+# =============================================================================
+
+:tipoCicloVida a owl:AnnotationProperty ;
+    rdfs:label "tipo de ciclo de vida"@es ;
+    skos:definition """Clasifica el tipo de gestion del ciclo de vida:
+    - ciclo_vida_entidad: Independiente de la institucion (Persona, Lugar)
+    - ciclo_vida_rol: Controlado por asignacion institucional
+    - ciclo_vida_tramite: Controlado por procedimiento administrativo
+    - ciclo_vida_resolucion: Controlado por vigencia del acto administrativo
+    - ciclo_vida_programa: Controlado por gestion institucional"""@es .
+
+:estadosCicloVida a owl:AnnotationProperty ;
+    rdfs:label "estados del ciclo de vida"@es ;
+    skos:definition "Lista ordenada de estados validos para la clase"@es .
+
+:gestionadoPor a owl:AnnotationProperty ;
+    rdfs:label "gestionado por"@es ;
+    skos:definition "Entidad responsable de gestionar las transiciones de estado"@es .
+
+:tipoSCD a owl:AnnotationProperty ;
+    rdfs:label "tipo SCD"@es ;
+    skos:definition "Slowly Changing Dimension type para modelado dimensional (1, 2, o 3)"@es .
+
+:heredaEstadoDe a owl:AnnotationProperty ;
+    rdfs:label "hereda estado de"@es ;
+    skos:definition """Indica que estados terminales de la entidad referenciada 
+    deben propagarse a esta clase. Por ejemplo, si Persona → fallecido, 
+    todos los roles de esa persona deben transitar a estado terminal."""@es .
+
+:propagaEstadoA a owl:AnnotationProperty ;
+    rdfs:label "propaga estado a"@es ;
+    skos:definition """Inversa de heredaEstadoDe. Lista de clases que deben 
+    actualizarse cuando esta entidad cambia a estado terminal."""@es .
+
+:estadosTerminales a owl:AnnotationProperty ;
+    rdfs:label "estados terminales"@es ;
+    skos:definition "Lista de estados que representan el fin del ciclo de vida"@es .
+
+# =============================================================================
+# CLASE: Tramite (Abstract)
+# =============================================================================
+
+:Tramite a owl:Class ;
+    rdfs:label "Tramite Administrativo"@es ;
+    rdfs:label "Administrative Procedure"@en ;
+    skos:prefLabel "Tramite Administrativo"@es ;
+    skos:altLabel "Procedimiento administrativo"@es ;
+    skos:altLabel "Gestion administrativa"@es ;
+    skos:definition """ABSTRACTA: Conjunto de pasos o acciones reguladas por el Estado 
+    que un ciudadano o empresa debe seguir para obtener un derecho, cumplir una 
+    obligacion, ejercer una actividad o gestionar algo ante una entidad publica.
+    
+    Esta clase es ABSTRACTA y debe ser especializada para cada dominio:
+    - Regulacion vendedores: AutorizacionTemporalEspacioPublico
+    - Publicidad: SolicitudAnuncioPublicitario
+    - Eventos: SolicitudEventoTemporalEspacioPublico
+    - Obras: SolicitudOcupacionTemporalObra"""@es ;
+    skos:scopeNote """Caracteristicas de un Tramite:
+    - Tiene pasos o etapas definidas por normatividad
+    - Genera radicado unico de seguimiento
+    - Requiere documentos soporte especificos
+    - Puede aprobarse, negarse o desistirse
+    - Tiene plazos de respuesta legales (15, 30, 60 dias)
+    - Deja trazabilidad de decisiones administrativas"""@es ;
+    dcterms:source "Ley 1437 de 2011 - Codigo de Procedimiento Administrativo" ;
+    dcterms:source "Decreto 1081 de 2015 - Sector Administrativo" ;
+    iso11179:objectClass "Tramite_Administrativo" ;
+    :tipoCicloVida "ciclo_vida_tramite" ;
+    :estadosCicloVida (
+        "radicado"                  # Solicitud presentada formalmente
+        "en_evaluacion"             # En proceso de revision
+        "documentacion_incompleta"  # Requiere subsanacion
+        "subsanado"                 # Documentacion completada
+        "concepto_emitido"          # Evaluacion tecnica finalizada
+        "resuelto_favorable"        # Aprobado
+        "resuelto_desfavorable"     # Negado
+        "desistido"                 # Ciudadano retira solicitud
+        "archivado"                 # Cerrado administrativamente
+    ) ;
+    :gestionadoPor "Subsecretaria de Espacio Publico" .
+
+# =============================================================================
+# CLASE: Resolucion (Abstract)
+# =============================================================================
+
+:Resolucion a owl:Class ;
+    rdfs:label "Resolucion Administrativa"@es ;
+    rdfs:label "Administrative Resolution"@en ;
+    skos:prefLabel "Resolucion Administrativa"@es ;
+    skos:altLabel "Acto administrativo"@es ;
+    skos:altLabel "Decision administrativa"@es ;
+    skos:definition """ABSTRACTA: Acto administrativo formal emitido por autoridad 
+    competente que resuelve un tramite o modifica el estado de una autorizacion.
+    
+    Aplica a TODOS los dominios de Espacio Publico:
+    - Regulacion vendedores: Resolucion de autorizacion/negacion de ocupacion
+    - Publicidad: Resolucion de licencia de publicidad exterior
+    - Eventos: Resolucion de permiso de evento temporal
+    - Obras: Resolucion de ocupacion por obra
+    
+    Subclases especializan el tipo de resolucion para cada dominio."""@es ;
+    skos:scopeNote """Tipos genericos de resoluciones:
+    - Autorizacion: Otorga derecho temporal
+    - Negacion: Rechaza solicitud
+    - Suspension: Suspende temporalmente autorizacion
+    - Revocatoria: Cancela definitivamente autorizacion
+    - Modificacion: Altera condiciones de autorizacion vigente
+    - Renovacion: Extiende vigencia de autorizacion"""@es ;
+    dcterms:source "Ley 1437 de 2011 - CPACA" ;
+    iso11179:objectClass "Resolucion_Administrativa" ;
+    :tipoCicloVida "ciclo_vida_resolucion" ;
+    :estadosCicloVida (
+        "proyectada"             # Borrador en elaboracion
+        "en_revision_juridica"   # Revision de legalidad
+        "firmada"                # Firmada por autoridad competente
+        "notificada"             # Notificada al interesado
+        "vigente"                # En vigor
+        "suspendida"             # Temporalmente sin efecto
+        "vencida"                # Vigencia expirada
+        "revocada"               # Cancelada definitivamente
+        "archivada"              # Cerrada administrativamente
+    ) ;
+    :gestionadoPor "Subsecretaria de Espacio Publico" ;
+    :tipoSCD "2" .
+
+:numeroResolucion a owl:DatatypeProperty ;
+    rdfs:domain :Resolucion ;
+    rdfs:range xsd:string ;
+    rdfs:label "Numero de resolucion"@es ;
+    skos:definition "Codigo unico de la resolucion (ej: R-2024-001234)"@es .
+
+:fechaExpedicion a owl:DatatypeProperty ;
+    rdfs:domain :Resolucion ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de expedicion"@es ;
+    skos:definition "Fecha en que se expidio la resolucion"@es .
+
+:estadoResolucion a owl:DatatypeProperty ;
+    rdfs:domain :Resolucion ;
+    rdfs:range xsd:string ;
+    rdfs:label "Estado de la resolucion"@es ;
+    skos:definition "Estado actual de la resolucion segun ciclo de vida"@es .
+
+:fechaNotificacion a owl:DatatypeProperty ;
+    rdfs:domain :Resolucion ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de notificacion"@es ;
+    skos:definition "Fecha en que se notifico la resolucion al beneficiario"@es .
+
+# =============================================================================
+# CLASE: ConceptoTecnico (Abstract)
+# =============================================================================
+
+:ConceptoTecnico a owl:Class ;
+    rdfs:label "Concepto Tecnico"@es ;
+    rdfs:label "Technical Assessment"@en ;
+    skos:prefLabel "Concepto Tecnico"@es ;
+    skos:altLabel "Dictamen tecnico"@es ;
+    skos:altLabel "Evaluacion tecnica"@es ;
+    skos:definition """ABSTRACTA: Documento tecnico o juridico emitido por equipo 
+    especializado que evalua aspectos especificos de un tramite administrativo 
+    para soportar la decision de aprobacion o negacion.
+    
+    Tipos genericos de concepto:
+    - ConceptoJuridico: Evaluacion de legalidad
+    - ConceptoTecnicoUrbano: Viabilidad urbanistica
+    - ConceptoTecnicoAmbiental: Impacto ambiental
+    - ConceptoSocioeconomico: Condiciones sociales
+    - ConceptoSeguridad: Condiciones de seguridad
+    
+    Cada dominio puede definir tipos especificos."""@es ;
+    skos:scopeNote """Resultados posibles:
+    - FAVORABLE: Recomienda aprobar
+    - DESFAVORABLE: Recomienda negar
+    - CONDICIONADO: Aprueba con restricciones"""@es ;
+    dcterms:source "Proceso PR-GGOL-019" ;
+    iso11179:objectClass "Concepto_Tecnico" ;
+    :tipoCicloVida "ciclo_vida_tramite" ;
+    :estadosCicloVida (
+        "en_elaboracion"
+        "en_revision"
+        "emitido"
+        "rechazado"
+        "archivado"
+    ) ;
+    :gestionadoPor "Subsecretaria de Espacio Publico" .
+
+# =============================================================================
+# DATATYPE PROPERTIES: ConceptoTecnico
+# =============================================================================
+
+:codigoConcepto a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoTecnico ;
+    rdfs:range xsd:string ;
+    rdfs:label "Codigo del concepto"@es ;
+    skos:definition "Identificador unico del concepto tecnico (ej: CV-001, CL-002)"@es .
+
+:estadoConcepto a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoTecnico ;
+    rdfs:range xsd:string ;
+    rdfs:label "Estado del concepto"@es ;
+    skos:definition "Estado del concepto segun ciclo de vida (en_elaboracion, emitido, etc.)"@es .
+
+:conceptoResultado a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoTecnico ;
+    rdfs:range xsd:string ;
+    rdfs:label "Resultado del concepto"@es ;
+    skos:definition "Resultado tecnico: 'favorable' (recomienda aprobar), 'desfavorable' (recomienda negar), 'condicionado' (requiere ajustes)"@es .
+
+:conceptoJustificacion a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoTecnico ;
+    rdfs:range xsd:string ;
+    rdfs:label "Justificacion del concepto"@es ;
+    skos:definition "Argumentacion tecnica o juridica que fundamenta el resultado del concepto"@es .
+
+:conceptoFechaEmision a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoTecnico ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de emision del concepto"@es ;
+    skos:definition "Fecha en que el concepto fue emitido formalmente"@es .
+
+:conceptoResponsable a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoTecnico ;
+    rdfs:range xsd:string ;
+    rdfs:label "Responsable del concepto"@es ;
+    skos:definition "Profesional o equipo tecnico responsable de emitir el concepto"@es .
+
+:conceptoVinculante a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoTecnico ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "Concepto vinculante"@es ;
+    skos:definition "Indica si el concepto es vinculante (decision obligatoria) o consultivo (informativo)"@es .
+
+# =============================================================================
+# PROPIEDADES: Tramite → ConceptoTecnico
+# =============================================================================
+
+:conceptoParaTramite a owl:ObjectProperty ;
+    rdfs:domain :ConceptoTecnico ;
+    rdfs:range :Tramite ;
+    rdfs:label "Concepto para tramite"@es ;
+    skos:definition "Vincula el ConceptoTecnico al tramite que evalua"@es .
+
+:tieneConcepto a owl:ObjectProperty ;
+    owl:inverseOf :conceptoParaTramite ;
+    rdfs:domain :Tramite ;
+    rdfs:range :ConceptoTecnico ;
+    rdfs:label "Tiene concepto"@es ;
+    skos:definition "Inversa de conceptoParaTramite - tramite tiene conceptos tecnicos emitidos"@es .
+
+# =============================================================================
+# PROPIEDADES: Formulario y Metodología
+# =============================================================================
+
+:formularioAsociado a owl:AnnotationProperty ;
+    rdfs:label "Formulario asociado"@es ;
+    skos:definition "Código del formulario oficial que captura los datos del concepto técnico"@es ;
+    skos:example "FO-GGOL-016"@es .
+
+:metodologiaReferencia a owl:AnnotationProperty ;
+    rdfs:label "Metodología de referencia"@es ;
+    skos:definition "Código del documento metodológico que guía la evaluación"@es ;
+    skos:example "DE-GGOL-007"@es .
+
+# =============================================================================
+# CLASE: ProgramaInstitucional (Abstract)
+# =============================================================================
+
+:ProgramaInstitucional a owl:Class ;
+    rdfs:label "Programa Institucional"@es ;
+    rdfs:label "Institutional Program"@en ;
+    skos:prefLabel "Programa Institucional"@es ;
+    skos:altLabel "Oferta programatica"@es ;
+    skos:definition """ABSTRACTA: Iniciativa estructurada de la Subsecretaria de 
+    Espacio Publico que ofrece servicios, acompanamiento o alternativas a ciudadanos.
+    
+    Aplica a todos los dominios:
+    - Regulacion: Programas de reubicacion, formalizacion
+    - Publicidad: Programas de regularizacion publicitaria
+    - Convivencia: Programas de apropiacion del espacio publico
+    
+    Cada dominio especializa los tipos de programas."""@es ;
+    skos:scopeNote """Caracteristicas de un Programa:
+    - Tiene objetivos, metas y poblacion beneficiaria definida
+    - Requiere presupuesto y equipo tecnico
+    - Genera reportes de seguimiento y evaluacion
+    - Se articula con otras secretarias"""@es ;
+    iso11179:objectClass "Programa_Institucional" ;
+    :tipoCicloVida "ciclo_vida_programa" ;
+    :estadosCicloVida (
+        "en_diseno"
+        "aprobado"
+        "en_ejecucion"
+        "suspendido"
+        "cerrado"
+        "evaluado"
+    ) ;
+    :gestionadoPor "Subsecretaria de Espacio Publico" .
+
+# =============================================================================
+# CLASE: Novedad (Abstract - Lifecycle Change Event)
+# =============================================================================
+
+:Novedad a owl:Class ;
+    rdfs:label "Novedad"@es ;
+    rdfs:label "Lifecycle Event"@en ;
+    skos:prefLabel "Novedad"@es ;
+    skos:altLabel "Evento de ciclo de vida"@es ;
+    skos:definition """ABSTRACTA: Tipo especial de Evento que causa cambios 
+    significativos en el ciclo de vida de una o mas entidades.
+    
+    Las novedades son PUNTOS DE DECISION en diagramas de flujo:
+    - NovedadFallecimiento: Persona fallece → cierra todos los roles
+    - NovedadCambioTitular: Transferencia de autorizacion
+    - NovedadCancelacion: Renuncia voluntaria
+    - NovedadSuspension: Suspension por incumplimiento
+    - NovedadRevocatoria: Revocacion definitiva
+    
+    Las novedades PROPAGAN cambios de estado a entidades relacionadas."""@es ;
+    skos:scopeNote """Patron de propagacion:
+    NovedadFallecimiento → 
+        Persona.estadoVida = 'fallecido'
+        TODOS los roles de Persona → estado terminal
+        TODAS las solicitudes pendientes → 'desistido_por_fallecimiento'
+        TODAS las autorizaciones → 'vencida' o 'transferida'"""@es ;
+    iso11179:objectClass "Novedad" .
+
+# =============================================================================
+# CLASE: Recurso (Subclass of Novedad)
+# =============================================================================
+
+:Recurso a owl:Class ;
+    rdfs:subClassOf :Novedad ;
+    rdfs:label "Recurso Administrativo"@es ;
+    rdfs:label "Administrative Appeal"@en ;
+    skos:prefLabel "Recurso Administrativo"@es ;
+    skos:altLabel "Recurso de reposicion"@es ;
+    skos:altLabel "Recurso de apelacion"@es ;
+    skos:definition """Mecanismo juridico mediante el cual un ciudadano impugna 
+    una decision administrativa (resolucion) ante la misma entidad o superior.
+    
+    Tipos de recursos administrativos:
+    - Recurso de reposicion: Ante la misma autoridad que emitio la decision
+    - Recurso de apelacion: Ante el superior jerarquico
+    - Recurso de queja: Ante superior cuando se niega apelacion
+    
+    El recurso es una NOVEDAD porque puede modificar el estado de una 
+    autorizacion (confirmar, revocar, modificar la resolucion impugnada)."""@es ;
+    skos:scopeNote """Ciclo del recurso:
+    1. Ciudadano radica recurso dentro de plazos legales
+    2. Evaluacion de admisibilidad
+    3. Estudio de fondo del recurso
+    4. Emision de resolucion que resuelve el recurso
+    5. Notificacion de decision
+    
+    Plazos legales (Ley 1437):
+    - Interposicion: 10 dias habiles desde notificacion
+    - Respuesta: 2 meses para resolver"""@es ;
+    dcterms:source "Ley 1437 de 2011 - CPACA, Articulos 74-82" ;
+    iso11179:objectClass "Recurso_Administrativo" ;
+    :tipoCicloVida "ciclo_vida_tramite" ;
+    :estadosCicloVida (
+        "radicado"              # Recurso presentado formalmente
+        "admitido"              # Aceptado para estudio
+        "inadmitido"            # Rechazado por extemporaneo o requisitos
+        "en_estudio"            # En analisis juridico
+        "resuelto_favorable"    # Recurso aceptado, modifica resolucion
+        "resuelto_desfavorable" # Recurso negado, confirma resolucion
+        "desistido"             # Ciudadano retira recurso
+        "archivado"             # Cerrado administrativamente
+    ) ;
+    :gestionadoPor "Subsecretaria de Espacio Publico" .
+
+# =============================================================================
+# CLASE: SolicitudPQRS (Abstract)
+# =============================================================================
+
+:SolicitudPQRS a owl:Class ;
+    rdfs:label "Solicitud PQRS"@es ;
+    rdfs:label "PQRS Request"@en ;
+    skos:prefLabel "Solicitud de Peticion, Queja, Reclamo o Sugerencia"@es ;
+    skos:altLabel "PQRS"@es ;
+    skos:altLabel "Peticion ciudadana"@es ;
+    skos:altLabel "Derecho de peticion"@es ;
+    skos:definition """ABSTRACTA: Tramite administrativo mediante el cual un ciudadano
+    presenta una peticion, queja, reclamo o sugerencia ante la entidad publica.
+    
+    Aplica a TODOS los dominios de Espacio Publico:
+    - Regulacion vendedores: Novedades de autorizacion (fallecimiento, cesion)
+    - Publicidad: Solicitudes de retiro/modificacion de anuncios
+    - Convivencia: Denuncias de invasion de espacio publico
+    - General: Solicitudes de informacion, quejas de servicio
+    
+    Cada dominio especializa los tipos de PQRS para su contexto."""@es ;
+    skos:scopeNote """Tipos de PQRS segun Ley 1755 de 2015:
+    - Peticion: Solicitud de informacion o servicio
+    - Queja: Manifestacion de insatisfaccion con servicio
+    - Reclamo: Exigencia de cumplimiento de derecho
+    - Sugerencia: Propuesta de mejora
+    - Denuncia: Comunicacion de irregularidad
+    
+    Plazos de respuesta:
+    - Peticion general: 15 dias habiles
+    - Consulta: 30 dias habiles
+    - Peticion documentos: 10 dias habiles"""@es ;
+    dcterms:source "Ley 1755 de 2015 - Derecho de Peticion" ;
+    dcterms:source "Ley 1437 de 2011 - CPACA" ;
+    iso11179:objectClass "Solicitud_PQRS" ;
+    :tipoCicloVida "ciclo_vida_tramite" ;
+    :estadosCicloVida (
+        "radicada"              # Solicitud presentada
+        "en_gestion"            # Asignada a funcionario
+        "requerimiento_enviado" # Solicitando documentos adicionales
+        "en_respuesta"          # Elaborando respuesta
+        "respondida"            # Respuesta emitida
+        "cerrada"               # Cerrada satisfactoriamente
+        "archivada"             # Archivada por desistimiento o silencio
+    ) ;
+    :gestionadoPor "Subsecretaria de Espacio Publico" .
+
+# =============================================================================
+# CLASE: VendedorInformal (Rol Inferido)
+# =============================================================================
+# PATRON: VendedorInformal ES INFERIDO cuando una Persona radica tramite de
+# SolicitudAutorizacionTemporal. NO se asigna manualmente.
+#
+# REGLA DE INFERENCIA (OWL):
+#   ?persona core:radicaTramite ?tramite .
+#   ?tramite a core:SolicitudAutorizacionTemporal .
+#   → ?persona a :VendedorInformal .
+# =============================================================================
+
+:VendedorInformal a owl:Class ;
+    rdfs:label "Vendedor Informal"@es ;
+    rdfs:label "Informal Vendor"@en ;
+    skos:prefLabel "Vendedor Informal"@es ;
+    skos:altLabel "Vendedor ambulante"@es ;
+    skos:altLabel "Comerciante popular"@es ;
+    skos:altLabel "Trabajador autonomo de calle"@es ;
+    skos:altLabel "Ventero informal"@es ;
+    skos:hiddenLabel "caracterizado"@es ;
+    rdfs:seeAlso <https://w3id.org/medellin/espacio-publico/vocab/clase-venta> ;
+    skos:editorialNote "El termino 'informal' es institucional y puede percibirse como estigmatizante; la modalidad de ocupacion se clasifica con el vocabulario clase-venta."@es ;
+    skos:definition """Rol INFERIDO que representa a una persona que ejerce o aspira ejercer
+    actividades economicas informales en el espacio publico. 
+    
+    INFERENCIA: Una persona SE CONVIERTE en VendedorInformal cuando radica una solicitud 
+    de SolicitudAutorizacionTemporal. Esta clasificacion NO depende de la aprobacion 
+    del tramite - el acto de solicitar ya clasifica a la persona.
+    
+    Se especializa en dos roles asumidos:
+    - VendedorInformalSolicitante (en tramite de autorizacion)
+    - VendedorInformalRegulado (con permiso activo)
+    
+    El rol VendedorInformal PERMANECE incluso si el tramite es negado, ya que la persona
+    sigue siendo vendedor informal (aunque sin autorizacion)."""@es ;
+    skos:scopeNote """IMPORTANTE: VendedorInformal es un ROL INFERIDO, no asumido.
+    - No tiene estados propios (usa estados de subclases)
+    - Hereda estados terminales de Persona (si Persona fallece, rol se cierra)
+    - Coexiste con roles asumidos (Solicitante, Regulado)"""@es ;
+    :estadosTerminales ("fallecido") ;
+    :tipoSCD "2" ;
+    owl:equivalentClass [
+        a owl:Restriction ;
+        owl:onProperty :radicaTramite ;
+        owl:someValuesFrom :SolicitudAutorizacionTemporal
+    ] .
+
+:tienePuestoVenta a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain :VendedorInformal ;
+    rdfs:range :PuestoVenta ;
+    rdfs:label "tiene puesto de venta"@es ;
+    skos:definition "Vincula el vendedor informal al puesto donde opera"@es ;
+    dcterms:source "DMP regulacion_v1 - Seccion Puesto" .
+
+
+# =============================================================================
+# PROPIEDADES DE OBJETO: Relaciones entre clases core
+# =============================================================================
+
+:resuelve a owl:ObjectProperty ;
+    rdfs:label "resuelve"@es ;
+    rdfs:domain :Resolucion ;
+    rdfs:range :Tramite ;
+    owl:inverseOf :resueltoPor ;
+    skos:definition "La Resolucion resuelve (aprueba/niega) un Tramite"@es .
+
+:resueltoPor a owl:ObjectProperty ;
+    rdfs:label "resuelto por"@es ;
+    rdfs:domain :Tramite ;
+    rdfs:range :Resolucion ;
+    skos:definition "El Tramite es resuelto por una Resolucion"@es .
+
+:conceptoParaTramite a owl:ObjectProperty ;
+    rdfs:label "concepto para tramite"@es ;
+    rdfs:domain :ConceptoTecnico ;
+    rdfs:range :Tramite ;
+    skos:definition "El ConceptoTecnico evalua un Tramite especifico"@es .
+
+:tieneConcepto a owl:ObjectProperty ;
+    rdfs:label "tiene concepto"@es ;
+    rdfs:domain :Tramite ;
+    rdfs:range :ConceptoTecnico ;
+    owl:inverseOf :conceptoParaTramite ;
+    skos:definition "El Tramite tiene ConceptoTecnico asociado"@es .
+
+:participaEnPrograma a owl:ObjectProperty ;
+    rdfs:label "participa en programa"@es ;
+    rdfs:range :ProgramaInstitucional ;
+    skos:definition "La entidad participa en un ProgramaInstitucional"@es .
+
+:radicaTramite a owl:ObjectProperty ;
+    rdfs:label "radica tramite"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range :Tramite ;
+    skos:definition "Vincula a una persona con el tramite que radico"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Comunes a todas las clases
+# =============================================================================
+# NOTA: numeroResolucion, fechaExpedicion, estadoResolucion ya definidas arriba
+
+:numeroRadicado a owl:DatatypeProperty ;
+    rdfs:label "numero de radicado"@es ;
+    rdfs:domain :Tramite ;
+    rdfs:range xsd:string ;
+    skos:definition "Identificador unico del tramite (ej: RAD-2024-001234)"@es .
+
+:fechaRadicacion a owl:DatatypeProperty ;
+    rdfs:label "fecha de radicacion"@es ;
+    rdfs:domain :Tramite ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha en que se radico el tramite"@es .
+
+:estadoTramite a owl:DatatypeProperty ;
+    rdfs:label "estado del tramite"@es ;
+    rdfs:domain :Tramite ;
+    rdfs:range xsd:string ;
+    skos:definition "Estado actual del tramite segun ciclo de vida"@es .
+
+# numeroResolucion, fechaExpedicion, estadoResolucion - ya definidas en seccion Resolucion
+
+
+:conceptoResultado a owl:DatatypeProperty ;
+    rdfs:label "resultado del concepto"@es ;
+    rdfs:domain :ConceptoTecnico ;
+    rdfs:range xsd:string ;
+    skos:definition "Resultado del concepto: favorable, desfavorable, condicionado"@es .
+
+:conceptoFechaEmision a owl:DatatypeProperty ;
+    rdfs:label "fecha de emision del concepto"@es ;
+    rdfs:domain :ConceptoTecnico ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha en que se emitio el concepto"@es .
+
+
+
+# =============================================================================
+# PROPIEDADES DE DATOS: SolicitudPQRS
+# =============================================================================
+
+:numeroRadicadoPQRS a owl:DatatypeProperty ;
+    rdfs:subPropertyOf :numeroRadicado ;
+    rdfs:label "numero de radicado PQRS"@es ;
+    rdfs:comment "Numero unico de radicacion de la solicitud PQRS"@es ;
+    rdfs:domain :SolicitudPQRS ;
+    rdfs:range xsd:string ;
+    skos:definition "Identificador unico del tramite PQRS (ej: RAD-2025-00456)"@es .
+
+:fechaRadicacionPQRS a owl:DatatypeProperty ;
+    rdfs:subPropertyOf :fechaRadicacion ;
+    rdfs:label "fecha de radicacion PQRS"@es ;
+    rdfs:domain :SolicitudPQRS ;
+    rdfs:range xsd:dateTime ;
+    skos:definition "Fecha y hora de radicacion de la solicitud PQRS"@es .
+
+:estadoPQRS a owl:DatatypeProperty ;
+    rdfs:label "estado PQRS"@es ;
+    rdfs:domain :SolicitudPQRS ;
+    rdfs:range xsd:string ;
+    skos:definition "Estado actual de la solicitud PQRS en su ciclo de vida"@es .
+
+:tipoNovedad a owl:DatatypeProperty ;
+    rdfs:label "tipo de novedad"@es ;
+    rdfs:comment "Clasificacion de la novedad: fallecimiento, cambio_titular, suspension, etc."@es ;
+    rdfs:domain :SolicitudPQRS ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo especifico de novedad administrativa"@es .
+
+:causalNovedad a owl:DatatypeProperty ;
+    rdfs:label "causal de novedad"@es ;
+    rdfs:comment "Motivo especifico que origina la novedad"@es ;
+    rdfs:domain :SolicitudPQRS ;
+    rdfs:range xsd:string ;
+    skos:definition "Descripcion de la causa que motiva la solicitud PQRS"@es ;
+    skos:example "Enfermedad grave diagnosticada, Amenaza documentada Fiscalia, Deceso titular"@es .
+
+:solicitanteNovedad a owl:DatatypeProperty ;
+    rdfs:label "solicitante de novedad"@es ;
+    rdfs:comment "Persona que radica la solicitud PQRS (puede ser titular, familiar, tercero)"@es ;
+    rdfs:domain :SolicitudPQRS ;
+    rdfs:range xsd:string ;
+    skos:definition "Nombre e identificacion del solicitante"@es .
+
+:relacionSolicitante a owl:DatatypeProperty ;
+    rdfs:label "relacion del solicitante"@es ;
+    rdfs:comment "Relacion del solicitante con el titular (titular, conyugue, hijo, tercero, etc.)"@es ;
+    rdfs:domain :SolicitudPQRS ;
+    rdfs:range xsd:string ;
+    skos:scopeNote "Valores: titular, conyugue, hijo, padre, hermano, conviviente, tercero, entidad"@es .

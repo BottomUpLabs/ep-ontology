@@ -1,0 +1,311 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix : <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix vocab: <https://w3id.org/medellin/espacio-publico/vocab/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# Shared SPARQL prefix declarations for sh:sparql constraints in this file.
+<https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> a sh:Declarable ;
+    sh:declare [ sh:prefix "core" ; sh:namespace "https://w3id.org/medellin/espacio-publico/core#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "role" ; sh:namespace "https://w3id.org/medellin/espacio-publico/roles#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "reg" ; sh:namespace "https://w3id.org/medellin/espacio-publico/regulacion#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "ctrl" ; sh:namespace "https://w3id.org/medellin/espacio-publico/control#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "vocab" ; sh:namespace "https://w3id.org/medellin/espacio-publico/vocab/"^^xsd:anyURI ] .
+
+
+# =============================================================================
+# SHACL SHAPES: Vendedor Lifecycle State Transitions
+# =============================================================================
+# Valida transiciones validas en el ciclo de vida institucional del vendedor
+# informal. Previene transiciones invalidas (ej: identificado → regulado sin
+# caracterizacion). Basado en vocabulario estado-vendedor.ttl.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/shapes/vendedor-lifecycle>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/shapes/vendedor-lifecycle/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "SHACL Shapes - Vendedor Lifecycle Validation"@es ;
+    dcterms:description """Constraints para validar transiciones de estado en el
+    ciclo de vida institucional del vendedor informal. Asegura que las transiciones
+    respeten el flujo definido en la politica publica."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico" ;
+    dcterms:created "2026-01-06"^^xsd:date ;
+    owl:versionInfo "0.1.0" .
+
+# =============================================================================
+# SHAPE: EstadoVendedorTransitionShape
+# =============================================================================
+
+:EstadoVendedorTransitionShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformal ;
+    sh:name "Vendedor Estado Transition Validation"@es ;
+    sh:description "Valida que las transiciones de estado sean validas"@es ;
+    
+    # Propiedad estadoActual debe existir
+    sh:property [
+        sh:path :estadoActual ;
+        sh:name "Estado actual"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class skos:Concept ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Todo vendedor debe tener exactamente un estado actual"@es
+    ] ;
+    
+    # Validar transicion valida usando SPARQL
+    sh:sparql [
+        sh:message "Transicion de estado invalida: no se puede pasar de {$estadoAnterior} a {$estadoActual} sin cumplir requisitos previos"@es ;
+        sh:prefixes [
+            sh:declare [
+                sh:prefix "vocab" ;
+                sh:namespace "https://w3id.org/medellin/espacio-publico/vocab/"^^xsd:anyURI
+            ]
+        ] ;
+        sh:select """
+            SELECT $this ?estadoAnterior ?estadoActual
+            WHERE {
+                $this :estadoAnterior ?estadoAnterior ;
+                      :estadoActual ?estadoActual .
+                
+                # Definir transiciones VALIDAS permitidas
+                FILTER NOT EXISTS {
+                    {
+                        # Desde identificado_territorio solo puede ir a caracterizado
+                        BIND(vocab:identificado-territorio AS ?from)
+                        BIND(vocab:caracterizado-socialmente AS ?to)
+                        FILTER(?estadoAnterior = ?from && ?estadoActual = ?to)
+                    } UNION {
+                        # Desde caracterizado puede ir a solicitante
+                        BIND(vocab:caracterizado-socialmente AS ?from)
+                        BIND(vocab:solicitante-regulacion AS ?to)
+                        FILTER(?estadoAnterior = ?from && ?estadoActual = ?to)
+                    } UNION {
+                        # Desde solicitante puede ir a regulado_activo, negado o desistido
+                        BIND(vocab:solicitante-regulacion AS ?from)
+                        FILTER(?estadoAnterior = ?from && ?estadoActual IN (
+                            vocab:regulado-activo,
+                            vocab:negado,
+                            vocab:desistido
+                        ))
+                    } UNION {
+                        # Desde regulado_activo puede ir a suspendido, revocado, reubicado o vencido
+                        BIND(vocab:regulado-activo AS ?from)
+                        FILTER(?estadoAnterior = ?from && ?estadoActual IN (
+                            vocab:regulado-suspendido,
+                            vocab:revocado,
+                            vocab:reubicado,
+                            vocab:fallecido
+                        ))
+                    } UNION {
+                        # Desde regulado_suspendido puede reactivarse o ser revocado
+                        BIND(vocab:regulado-suspendido AS ?from)
+                        FILTER(?estadoAnterior = ?from && ?estadoActual IN (
+                            vocab:regulado-activo,
+                            vocab:revocado
+                        ))
+                    } UNION {
+                        # Desde negado puede volver a solicitante (nueva solicitud)
+                        BIND(vocab:negado AS ?from)
+                        BIND(vocab:solicitante-regulacion AS ?to)
+                        FILTER(?estadoAnterior = ?from && ?estadoActual = ?to)
+                    } UNION {
+                        # Desde desistido puede volver a solicitante
+                        BIND(vocab:desistido AS ?from)
+                        BIND(vocab:solicitante-regulacion AS ?to)
+                        FILTER(?estadoAnterior = ?from && ?estadoActual = ?to)
+                    }
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: EstadoRequiereResolucion
+# =============================================================================
+
+:EstadoRequiereResolucionShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformal ;
+    sh:name "Regulado debe tener resolucion"@es ;
+    sh:description "Vendedores en estado regulado_activo deben tener resolucion vigente"@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Vendedor en estado 'regulado-activo' debe tener resolucion vigente asociada"@es ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this :estadoActual vocab:regulado-activo .
+                
+                # Debe tener al menos una resolucion
+                FILTER NOT EXISTS {
+                    $this :tieneResolucion ?resolucion .
+                    ?resolucion a :PermisoOcupacionTemporal ;
+                                :estadoResolucion "vigente" .
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: EstadoRequiereCarnet
+# =============================================================================
+
+:EstadoRequiereCarnetShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformal ;
+    sh:name "Regulado debe tener carnet vigente"@es ;
+    sh:description "Vendedores regulados activos deben portar carnet vigente"@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Vendedor en estado 'regulado-activo' debe tener carnet vigente"@es ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this :estadoActual vocab:regulado-activo .
+                
+                # Debe tener carnet vigente
+                FILTER NOT EXISTS {
+                    $this :tieneCarnet ?carnet .
+                    ?carnet :estadoCarnet "vigente" .
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: TemporalConstraints - Tiempo maximo en cada estado
+# =============================================================================
+
+:TemporalConstraintsShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformal ;
+    sh:name "Tiempo maximo en estado"@es ;
+    sh:description "Valida que vendedores no permanezcan indefinidamente en estados transitorios"@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Vendedor lleva mas de 180 dias en estado 'solicitante-regulacion' sin resolucion. Requiere seguimiento."@es ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this :estadoActual vocab:solicitante-regulacion ;
+                      :fechaCambioEstado ?fechaCambio .
+                
+                # Calcular dias transcurridos
+                BIND(NOW() AS ?hoy)
+                BIND((?hoy - ?fechaCambio) / 86400 AS ?diasTranscurridos)
+                
+                # Advertencia si supera 180 dias (6 meses)
+                FILTER(?diasTranscurridos > 180)
+            }
+        """
+    ] ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Permiso transitorio vencido. Vendedor debe ser reubicado definitivamente o permiso revocado."@es ;
+        sh:severity sh:Violation ;
+        sh:select """
+            SELECT $this ?permiso
+            WHERE {
+                $this :tieneResolucion ?permiso .
+                ?permiso a :PermisoTransitorio ;
+                         :vigenciaFin ?fechaFin .
+                
+                # Verificar si ya vencio
+                FILTER(?fechaFin < NOW())
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Caracterizacion Required for Solicitante
+# =============================================================================
+
+:CaracterizacionRequiredShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformal ;
+    sh:name "Solicitante debe estar caracterizado"@es ;
+    sh:description "No se puede solicitar regulacion sin caracterizacion previa (FO-GGOL-048)"@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Vendedor en estado 'solicitante-regulacion' debe tener caracterizacion completa (FO-GGOL-048)"@es ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this :estadoActual vocab:solicitante-regulacion .
+                
+                # Debe tener referencia a caracterizacion
+                FILTER NOT EXISTS {
+                    $this :tieneCaracterizacion ?caract .
+                    ?caract :formulario "FO-GGOL-048" ;
+                            :estadoFormulario "completo" .
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Reubicacion Requires Programa
+# =============================================================================
+
+:ReubicacionRequiresProgramaShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformal ;
+    sh:name "Reubicado debe participar en programa"@es ;
+    sh:description "Vendedores reubicados deben estar vinculados a ProgramaReubicacion"@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Vendedor en estado 'reubicado' debe participar en ProgramaReubicacion"@es ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this :estadoActual vocab:reubicado .
+                
+                # Debe participar en programa de reubicacion
+                FILTER NOT EXISTS {
+                    $this :participaEn ?programa .
+                    ?programa a :ProgramaReubicacion .
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Estados Terminales No Cambian
+# =============================================================================
+
+:EstadosTerminalesShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformal ;
+    sh:name "Estados terminales son permanentes"@es ;
+    sh:description "Estados fallecido, revocado son terminales (no hay transicion salida)"@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Estado terminal ({$estadoAnterior}) no puede cambiar a otro estado"@es ;
+        sh:select """
+            SELECT $this ?estadoAnterior ?estadoActual
+            WHERE {
+                $this :estadoAnterior ?estadoAnterior ;
+                      :estadoActual ?estadoActual .
+                
+                # Estados terminales
+                FILTER(?estadoAnterior IN (
+                    vocab:fallecido,
+                    vocab:revocado
+                ))
+                
+                # No puede cambiar de estado
+                FILTER(?estadoAnterior != ?estadoActual)
+            }
+        """
+    ] .

@@ -1,0 +1,437 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+# EP Modeling Namespaces
+@prefix epd-pp-vocab: <https://w3id.org/medellin/ep/domain/politica_publica/vocabulary/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# ============================================================================
+# CONTROLLED VOCABULARIES FOR POLÍTICA PÚBLICA DOMAIN
+# ============================================================================
+
+# --- ESTADO DE INSCRIPCION (Enrollment Status) ---
+
+epd-pp-vocab:EstadoInscripcionScheme
+    a skos:ConceptScheme ;
+    dct:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dct:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dct:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    skos:prefLabel "Estado de Inscripción"@es ;
+    dct:title "Estados del Ciclo de Vida de Inscripción"@es ;
+    dct:description "Clasificación de estados durante el proceso de inscripción en oferta institucional"@es ;
+    dct:source "DMP politica_publica - estado_inscripcion" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Estados que transita una inscripción desde preinscripción hasta conclusión"@es .
+
+epd-pp-vocab:preregistro
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:EstadoInscripcionScheme ;
+    skos:prefLabel "Preregistro"@es ;
+    skos:notation "PRE" ;
+    skos:definition "Vendedor ha manifestado interés en la oferta pero documentación incompleta"@es ;
+    skos:example "Contacto inicial, promesa de participación"@es ;
+    skos:topConceptOf epd-pp-vocab:EstadoInscripcionScheme ;
+    dct:source "Etapa inicial de proceso" .
+
+epd-pp-vocab:documentacionIncompleta
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:EstadoInscripcionScheme ;
+    skos:prefLabel "Documentación Incompleta"@es ;
+    skos:notation "DOC" ;
+    skos:hiddenLabel "falta documentos"@es ;
+    skos:definition "Vendedor está esperando entregar documentos faltantes"@es ;
+    skos:example "Cédula, caracterización, comprobante de dirección"@es ;
+    skos:topConceptOf epd-pp-vocab:EstadoInscripcionScheme ;
+    dct:source "Espera por documentación" .
+
+epd-pp-vocab:aceptado
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:EstadoInscripcionScheme ;
+    skos:prefLabel "Aceptado"@es ;
+    skos:notation "ACE" ;
+    skos:hiddenLabel "aprobado"@es ;
+    skos:definition "Inscripción ha sido revisada y aprobada, vendedor cumple requisitos"@es ;
+    skos:topConceptOf epd-pp-vocab:EstadoInscripcionScheme ;
+    dct:source "Aprobación del proceso" .
+
+epd-pp-vocab:activo
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:EstadoInscripcionScheme ;
+    skos:prefLabel "Activo"@es ;
+    skos:notation "ACT" ;
+    skos:hiddenLabel "participando"@es ;
+    skos:hiddenLabel "vigente"@es ;
+    skos:definition "Vendedor está participando activamente en la oferta"@es ;
+    skos:example "Asistiendo a capacitaciones, recibiendo subsidio, usando crédito"@es ;
+    skos:topConceptOf epd-pp-vocab:EstadoInscripcionScheme ;
+    dct:source "Fase de ejecución" .
+
+epd-pp-vocab:completado
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:EstadoInscripcionScheme ;
+    skos:prefLabel "Completado"@es ;
+    skos:notation "COM" ;
+    skos:hiddenLabel "terminado"@es ;
+    skos:hiddenLabel "finalizado"@es ;
+    skos:definition "Vendedor ha completado el programa o beneficio"@es ;
+    skos:example "Terminó capacitación, crédito pagado, período de subsidio vencido"@es ;
+    skos:topConceptOf epd-pp-vocab:EstadoInscripcionScheme ;
+    dct:source "Conclusión exitosa" .
+
+epd-pp-vocab:retirado
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:EstadoInscripcionScheme ;
+    skos:prefLabel "Retirado"@es ;
+    skos:notation "RET" ;
+    skos:hiddenLabel "abandonado"@es ;
+    skos:hiddenLabel "desertó"@es ;
+    skos:definition "Vendedor se ha retirado del programa o beneficio"@es ;
+    skos:example "Solicitud de exclusión, no continuó asistiendo, renuncia"@es ;
+    skos:topConceptOf epd-pp-vocab:EstadoInscripcionScheme ;
+    dct:source "Conclusión sin éxito" .
+
+epd-pp-vocab:rechazado
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:EstadoInscripcionScheme ;
+    skos:prefLabel "Rechazado"@es ;
+    skos:notation "REC" ;
+    skos:hiddenLabel "denegado"@es ;
+    skos:definition "Inscripción ha sido rechazada (no cumple requisitos o capacidad agotada)"@es ;
+    skos:topConceptOf epd-pp-vocab:EstadoInscripcionScheme ;
+    dct:source "Conclusión negativa" .
+
+# --- TIPO DE PROGRAMA ---
+
+epd-pp-vocab:TipoProgramaScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Tipo de Programa"@es ;
+    dct:title "Categorización de Programas de Formalización"@es ;
+    dct:description "Tipos de ofertas institucionales disponibles para vendedores informales"@es ;
+    dct:source "DMP politica_publica - tipo_programa" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Categorización según objetivo de formalización del Acuerdo 076"@es .
+
+epd-pp-vocab:reubicacion
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoProgramaScheme ;
+    skos:prefLabel "Reubicación"@es ;
+    skos:notation "REU" ;
+    skos:hiddenLabel "módulos"@es ;
+    skos:hiddenLabel "centro comercial"@es ;
+    skos:definition "Acceso a espacios físicos formalizados (módulos, centros comerciales)"@es ;
+    skos:example "Centro Comercial Junín, Módulos ECI, Galerías formales"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoProgramaScheme ;
+    dct:source "Eje de formalización espacial" .
+
+epd-pp-vocab:capacitacion
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoProgramaScheme ;
+    skos:prefLabel "Capacitación"@es ;
+    skos:notation "CAP" ;
+    skos:hiddenLabel "formación"@es ;
+    skos:hiddenLabel "formación empresarial"@es ;
+    skos:definition "Programas de formación técnica y empresarial para mejorar competencias"@es ;
+    skos:example "Formación en gestión empresarial, habilidades blandas, digitalización"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoProgramaScheme ;
+    dct:source "Eje de capacitación" .
+
+epd-pp-vocab:subsidios
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoProgramaScheme ;
+    skos:prefLabel "Subsidios"@es ;
+    skos:notation "SUB" ;
+    skos:hiddenLabel "ayuda económica"@es ;
+    skos:hiddenLabel "auxilio"@es ;
+    skos:definition "Asistencia económica directa para cubrir necesidades básicas o costos de formalización"@es ;
+    skos:example "Subsidio de vivienda, alimentos, licencia, permisos"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoProgramaScheme ;
+    dct:source "Eje de protección social" .
+
+epd-pp-vocab:creditoMicro
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoProgramaScheme ;
+    skos:prefLabel "Crédito Micro"@es ;
+    skos:notation "CRE" ;
+    skos:hiddenLabel "microcrédito"@es ;
+    skos:hiddenLabel "financiamiento"@es ;
+    skos:definition "Acceso a crédito accesible para capital de trabajo o inversión en negocio"@es ;
+    skos:example "Crédito para inventario, equipamiento, mejora de punto de venta"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoProgramaScheme ;
+    dct:source "Eje de acceso a crédito" .
+
+epd-pp-vocab:salud
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoProgramaScheme ;
+    skos:prefLabel "Salud"@es ;
+    skos:notation "SAL" ;
+    skos:hiddenLabel "afiliación salud"@es ;
+    skos:hiddenLabel "aseguramiento"@es ;
+    skos:definition "Acceso a servicios de salud y aseguramiento médico"@es ;
+    skos:example "Afiliación a EPS, régimen subsidiado, atención preventiva"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoProgramaScheme ;
+    dct:source "Eje de protección social" .
+
+epd-pp-vocab:educacion
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoProgramaScheme ;
+    skos:prefLabel "Educación"@es ;
+    skos:notation "EDU" ;
+    skos:hiddenLabel "becas"@es ;
+    skos:hiddenLabel "escolaridad"@es ;
+    skos:definition "Acceso a educación formal y becas para miembros de familia"@es ;
+    skos:example "Beca escolar, educación técnica, programa de adultos"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoProgramaScheme ;
+    dct:source "Eje de protección social" .
+
+epd-pp-vocab:pension
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoProgramaScheme ;
+    skos:prefLabel "Pensión/Protección Laboral"@es ;
+    skos:notation "PEN" ;
+    skos:hiddenLabel "aporte"@es ;
+    skos:hiddenLabel "seguro social"@es ;
+    skos:definition "Acceso a pensión, seguros y protección laboral (riesgos profesionales)"@es ;
+    skos:example "Afiliación a AFP, SENA, seguro de accidentes"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoProgramaScheme ;
+    dct:source "Eje de protección laboral" .
+
+# --- BARRERA DE ACCESO ---
+
+epd-pp-vocab:TipoBarreraScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Tipo de Barrera de Acceso"@es ;
+    dct:title "Obstáculos Identificados para Acceso a Ofertas"@es ;
+    dct:description "Categorización de barreras que impiden que vendedores accedan a programas"@es ;
+    dct:source "DMP politica_publica - barrera_acceso" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Clasificación de obstáculos por tipo (geográfica, administrativa, etc.)"@es .
+
+epd-pp-vocab:geografica
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoBarreraScheme ;
+    skos:prefLabel "Geográfica"@es ;
+    skos:notation "GEO" ;
+    skos:hiddenLabel "distancia"@es ;
+    skos:hiddenLabel "ubicación"@es ;
+    skos:definition "Distancia, transporte o ubicación dificultan acceso al punto de atención"@es ;
+    skos:example "Centro está lejos, costo de transporte alto, zona insegura"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoBarreraScheme ;
+    dct:source "Factores de ubicación" .
+
+epd-pp-vocab:administrativa
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoBarreraScheme ;
+    skos:prefLabel "Administrativa"@es ;
+    skos:notation "ADM" ;
+    skos:hiddenLabel "trámite"@es ;
+    skos:hiddenLabel "requisito"@es ;
+    skos:definition "Requisitos, documentos o trámites son complejos o inalcanzables"@es ;
+    skos:example "Falta cédula, documentos adicionales, cédula en otro municipio"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoBarreraScheme ;
+    dct:source "Factores de gestión" .
+
+epd-pp-vocab:informacion
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoBarreraScheme ;
+    skos:prefLabel "Información/Conocimiento"@es ;
+    skos:notation "INF" ;
+    skos:hiddenLabel "desconocimiento"@es ;
+    skos:hiddenLabel "falta de información"@es ;
+    skos:definition "Vendedor no sabe de la existencia del programa o cómo acceder"@es ;
+    skos:example "No conoce el programa, no sabe cómo inscribirse, desconfianza"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoBarreraScheme ;
+    dct:source "Factores de comunicación" .
+
+epd-pp-vocab:temporal
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoBarreraScheme ;
+    skos:prefLabel "Temporal"@es ;
+    skos:notation "TEM" ;
+    skos:hiddenLabel "horario"@es ;
+    skos:hiddenLabel "tiempo"@es ;
+    skos:definition "Horarios de atención no coinciden con disponibilidad del vendedor"@es ;
+    skos:example "Centro abierto solo días hábiles, vendedor trabaja esos días"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoBarreraScheme ;
+    dct:source "Factores de compatibilidad" .
+
+epd-pp-vocab:economica
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoBarreraScheme ;
+    skos:prefLabel "Económica"@es ;
+    skos:notation "ECO" ;
+    skos:hiddenLabel "costo"@es ;
+    skos:hiddenLabel "cuota"@es ;
+    skos:definition "Costo de acceso o cuota es prohibitivo para el vendedor"@es ;
+    skos:example "Cuota de inscripción, costo de curso, aporte inicial"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoBarreraScheme ;
+    dct:source "Factores económicos" .
+
+epd-pp-vocab:institucional
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoBarreraScheme ;
+    skos:prefLabel "Institucional"@es ;
+    skos:notation "INS" ;
+    skos:hiddenLabel "capacidad"@es ;
+    skos:hiddenLabel "cupo lleno"@es ;
+    skos:definition "Institución no tiene capacidad (cupos agotados) o discrimina aplicante"@es ;
+    skos:example "Programa lleno, no acepta más vendedores, rechazo sin justificación"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoBarreraScheme ;
+    dct:source "Factores institucionales" .
+
+# --- CANAL DE ENTREGA ---
+
+epd-pp-vocab:CanalEntregaScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Canal de Entrega"@es ;
+    dct:title "Modalidades de Entrega de Programa"@es ;
+    dct:description "Forma en que se entrega o comunica el programa al beneficiario"@es ;
+    dct:source "DMP politica_publica - canal_entrega" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Modalidades de acceso y entrega adaptadas para la formalización"@es .
+
+epd-pp-vocab:centroPrevencional
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:CanalEntregaScheme ;
+    skos:prefLabel "Centro Presencial"@es ;
+    skos:notation "CPR" ;
+    skos:hiddenLabel "presencial"@es ;
+    skos:hiddenLabel "atención directa"@es ;
+    skos:definition "Vendedor acude a oficina o centro de atención física"@es ;
+    skos:example "Oficina Junín, AMSCD, módulos de atención"@es ;
+    skos:topConceptOf epd-pp-vocab:CanalEntregaScheme ;
+    dct:source "Modalidad tradicional" .
+
+epd-pp-vocab:plataformaDigital
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:CanalEntregaScheme ;
+    skos:prefLabel "Plataforma Digital"@es ;
+    skos:notation "DIG" ;
+    skos:hiddenLabel "online"@es ;
+    skos:hiddenLabel "virtual"@es ;
+    skos:definition "Acceso a través de plataforma digital o aplicación móvil"@es ;
+    skos:example "Portal web, app móvil, tramitador en línea"@es ;
+    skos:topConceptOf epd-pp-vocab:CanalEntregaScheme ;
+    dct:source "Modalidad moderna" .
+
+epd-pp-vocab:terceroDelegado
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:CanalEntregaScheme ;
+    skos:prefLabel "Tercero Delegado"@es ;
+    skos:notation "TER" ;
+    skos:hiddenLabel "intermediario"@es ;
+    skos:hiddenLabel "gestor"@es ;
+    skos:definition "Vendedor tramita a través de gestor, cooperativa o intermediario"@es ;
+    skos:example "Cooperativa de vendedores, ONG, líder de sector"@es ;
+    skos:topConceptOf epd-pp-vocab:CanalEntregaScheme ;
+    dct:source "Modalidad comunitaria" .
+
+epd-pp-vocab:baseComunitaria
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:CanalEntregaScheme ;
+    skos:prefLabel "Base Comunitaria"@es ;
+    skos:notation "COM" ;
+    skos:hiddenLabel "junta acción comunal"@es ;
+    skos:hiddenLabel "vecino"@es ;
+    skos:definition "Organización o líder comunitario oferta/facilita el acceso"@es ;
+    skos:example "Junta de Acción Comunal, Espacios Públicos, líder barrial"@es ;
+    skos:topConceptOf epd-pp-vocab:CanalEntregaScheme ;
+    dct:source "Modalidad territorial" .
+
+epd-pp-vocab:movil
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:CanalEntregaScheme ;
+    skos:prefLabel "Móvil"@es ;
+    skos:notation "MOV" ;
+    skos:hiddenLabel "brigada"@es ;
+    skos:hiddenLabel "itinerante"@es ;
+    skos:definition "Equipo móvil acude al sector/barrio del vendedor"@es ;
+    skos:example "Brigadas de registro, equipos itinerantes de capacitación"@es ;
+    skos:topConceptOf epd-pp-vocab:CanalEntregaScheme ;
+    dct:source "Modalidad de extensión" .
+
+# --- REQUISITO ACCESO ---
+
+epd-pp-vocab:TipoRequisitoAccessoScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Tipo de Requisito de Acceso"@es ;
+    dct:title "Categorías de Requisitos para Elegibilidad"@es ;
+    dct:description "Tipos de requisitos que debe cumplir vendedor para acceder al programa"@es ;
+    dct:source "DMP politica_publica - tipo_requisito" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Requisitos pueden variar según el programa específico"@es .
+
+epd-pp-vocab:documentacion
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    skos:prefLabel "Documentación"@es ;
+    skos:notation "DOC" ;
+    skos:hiddenLabel "cédula"@es ;
+    skos:hiddenLabel "documento"@es ;
+    skos:definition "Requisitos de documentación formal (identidad, certificados)"@es ;
+    skos:example "Cédula ciudadanía, CDA, caracterización, empadronamiento"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    dct:source "Requisito administrativo" .
+
+epd-pp-vocab:caracterizacion_req
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    skos:prefLabel "Caracterización Previa"@es ;
+    skos:notation "CAR" ;
+    skos:hiddenLabel "estar caracterizado"@es ;
+    skos:definition "Vendedor debe estar previamente registrado en caracterización"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    dct:source "Requisito de información" .
+
+epd-pp-vocab:antiguedad
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    skos:prefLabel "Antigüedad Mínima"@es ;
+    skos:notation "ANT" ;
+    skos:hiddenLabel "tiempo en venta"@es ;
+    skos:definition "Vendedor debe tener mínimo de años ejerciendo en venta informal"@es ;
+    skos:example "Mínimo 1, 2 o 3 años de antigüedad"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    dct:source "Requisito temporal" .
+
+epd-pp-vocab:nivelIngreso
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    skos:prefLabel "Nivel de Ingreso"@es ;
+    skos:notation "ING" ;
+    skos:hiddenLabel "ingresos"@es ;
+    skos:hiddenLabel "smlmv"@es ;
+    skos:definition "Vendedor debe tener ingresos dentro de rango establecido"@es ;
+    skos:example "Máximo 2 SMLMV, mínimo 0.5 SMLMV"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    dct:source "Requisito económico" .
+
+epd-pp-vocab:poblacionVulnerable
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    skos:prefLabel "Pertenencia a Población Vulnerable"@es ;
+    skos:notation "VUL" ;
+    skos:hiddenLabel "sujeto especial protección"@es ;
+    skos:definition "Programa destinado a población en situación de vulnerabilidad"@es ;
+    skos:example "Mujeres, víctimas conflicto, migrantes, discapacitados"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    dct:source "Requisito de equidad" .
+
+epd-pp-vocab:capacitacionPrevia
+    a skos:Concept ;
+    skos:inScheme epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    skos:prefLabel "Capacitación Previa"@es ;
+    skos:notation "CAP" ;
+    skos:hiddenLabel "formación anterior"@es ;
+    skos:definition "Vendedor debe acreditar capacitación o competencias previas"@es ;
+    skos:example "Curso de emprendimiento, formación técnica"@es ;
+    skos:topConceptOf epd-pp-vocab:TipoRequisitoAccessoScheme ;
+    dct:source "Requisito de competencia" .

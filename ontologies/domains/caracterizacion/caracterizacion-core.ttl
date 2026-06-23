@@ -1,0 +1,739 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <https://schema.org/> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+
+# EP Modeling Namespaces
+@prefix ep: <https://w3id.org/medellin/ep/> .
+@prefix epp: <https://w3id.org/medellin/ep/property/> .
+@prefix epd: <https://w3id.org/medellin/ep/domain/> .
+@prefix epd-car: <https://w3id.org/medellin/ep/domain/caracterizacion/> .
+@prefix epd-car-prop: <https://w3id.org/medellin/ep/domain/caracterizacion/property/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# ============================================================================
+# ONTOLOGY METADATA
+# ============================================================================
+
+<https://w3id.org/medellin/ep/domain/caracterizacion>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/ep/domain/caracterizacion/0.1.0> ;
+    dct:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dct:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    owl:versionInfo "0.1.0" ;
+    dct:title "Caracterización de Vendedores Informales"@es ;
+    dct:description "Ontología para el dominio de Caracterización Socioeconómica de Vendedores Informales en Espacio Público"@es ;
+    dct:creator "EP Modeling Team" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    dct:modified "2026-01-11"^^xsd:date ;
+    dct:source "DMP caracterizacion_v1 (a1_diccionario, a2_listas, a3_formatos)" ;
+    dct:license "CC-BY-4.0" ;
+    rdfs:comment "Ontología OWL + SKOS para la caracterización integral de vendedores informales, incluyendo datos demográficos, económicos, sociales y espaciales"@es .
+
+# ============================================================================
+# CORE CLASSES: CARACTERIZACION DOMAIN
+# ============================================================================
+
+# --- SURVEY/CHARACTERIZATION EVENT ---
+
+epd-car:CaracterizacionSocieconomica
+    a owl:Class, skos:Concept ;
+    rdfs:label "Caracterización Socioeconómica"@es ;
+    skos:prefLabel "Caracterización Socioeconómica"@es ;
+    skos:definition "Proceso de recolección sistemática de información sobre la situación demográfica, económica, social y espacial de un vendedor informal mediante formulario FO-GGOL-048"@es ;
+    skos:scopeNote "Evento principal del dominio caracterizacion_v1. Registra el estado del vendedor en un momento específico"@es ;
+    skos:example "Encuesta completada a Vendedor Juan Pérez el 2025-11-15 en Barrio Manila"@es ;
+    rdfs:comment "Equivalente a un registro (fila) en la tabla staging stg_caracterizacion_v1"@es ;
+    dct:source "FO-GGOL-048 - Formulario de Caracterización" ;
+    owl:disjointWith epd-car:VendedorCaracterizado, epd-car:PuestoVentaCaracterizado .
+
+# --- PRIMARY SUBJECT: VENDOR ---
+
+epd-car:VendedorCaracterizado
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf foaf:Person ;
+    rdfs:label "Vendedor Caracterizado"@es ;
+    skos:prefLabel "Vendedor Caracterizado"@es ;
+    skos:altLabel "Vendedor Informal Encuestado"@es ;
+    skos:definition "Persona natural identificada y encuestada mediante formulario FO-GGOL-048 que realiza actividades de venta informal en espacio público"@es ;
+    skos:scopeNote "Subtipo de VendedorInformal que ha sido sujeto de caracterización. Agrupa información demográfica y socioeconómica"@es ;
+    skos:example "Juan Pérez García, documento 1001234567, vendedor de arepas en Barrio Manila"@es ;
+    rdfs:comment "Relacionado con caracterizacion mediante participaEnCaracterizacion; es el actor principal del dominio"@es ;
+    dct:source "DMP a1_diccionario - campos vendor_*" ;
+    
+    # OWL Restrictions
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-car-prop:documentoIdentidad ;
+        owl:cardinality 1
+    ] ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-car-prop:nombreCompleto ;
+        owl:cardinality 1
+    ] ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-car-prop:tipoDocumento ;
+        owl:cardinality 1
+    ] .
+
+# --- PRIMARY SUBJECT: SALES POINT (LUGAR DE VENTA) ---
+
+epd-car:PuestoVentaCaracterizado
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf ep:Lugar ;
+    rdfs:label "Punto de Venta Caracterizado"@es ;
+    skos:prefLabel "Punto de Venta Caracterizado"@es ;
+    skos:altLabel "Puesto de Venta Registrado"@es ;
+    skos:definition "Ubicación geográfica específica donde un vendedor informal realiza actividades de comercio registradas mediante caracterización"@es ;
+    skos:scopeNote "Dimensión espacial DÓNDE. Agrupa información geográfica y características físicas del punto de venta"@es ;
+    skos:example "Punto de venta en intersección Cra 44 con Cll 50, Barrio Manrique, Comuna 3"@es ;
+    rdfs:comment "Vinculado a VendedorCaracterizado mediante ubicaVentaEn; contiene información de infraestructura y servicios"@es ;
+    dct:source "DMP a1_diccionario - campos lugar_venta_* y vendor_venta_*" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-car-prop:ubicacionGeografica ;
+        owl:minCardinality 1
+    ] .
+
+# --- ECONOMIC ACTIVITY ---
+
+epd-car:ActividadEconomicaVendedor
+    a owl:Class, skos:Concept ;
+    rdfs:label "Actividad Económica del Vendedor"@es ;
+    skos:prefLabel "Actividad Económica"@es ;
+    skos:altLabel "Tipología de Venta"@es ;
+    skos:definition "Clasificación de la actividad comercial principal que realiza el vendedor informal (ej: Venta de alimentos, Comercialización de bienes)"@es ;
+    skos:scopeNote "Dimensión QUÉ. Especifica el tipo de comercio que realiza el vendedor"@es ;
+    skos:example "Venta de alimentos preparados (arepas, jugos), Comercio de accesorios y ropa usada"@es ;
+    rdfs:comment "Vinculada a VendedorCaracterizado mediante realizaActividadEconomica; valores controlados en a2_listas.actividad_economica_tipologica"@es ;
+    dct:source "DMP a2_listas - actividad_economica_tipologica" .
+
+# --- FAMILY UNIT ---
+
+epd-car:UnidadFamiliar
+    a owl:Class, skos:Concept ;
+    rdfs:label "Unidad Familiar"@es ;
+    skos:prefLabel "Unidad Familiar"@es ;
+    skos:altLabel "Composición Familiar"@es ;
+    skos:definition "Grupo de personas vinculadas por parentesco o matrimonio que cohabitan con el vendedor caracterizado"@es ;
+    skos:scopeNote "Agrupa información sobre la familia del vendedor: cantidad de miembros, tipología, composición"@es ;
+    skos:example "Familia nuclear: vendedor (cabeza de hogar), cónyuge e hijos menores de edad"@es ;
+    rdfs:comment "Vinculada a VendedorCaracterizado mediante tieneFamilia; contiene información de dependientes y estructura familiar"@es ;
+    dct:source "DMP caracterizacion_v1 - familia dataset" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-car-prop:tipologiaFamiliar ;
+        owl:cardinality 1
+    ] .
+
+# --- SURVEY METADATA ---
+
+epd-car:ProcesoEncuesta
+    a owl:Class, skos:Concept ;
+    rdfs:label "Proceso de Encuesta"@es ;
+    skos:prefLabel "Proceso de Encuesta"@es ;
+    skos:definition "Registro de los datos de procedimiento y auditoría de la encuesta de caracterización"@es ;
+    skos:scopeNote "Metadatos del survey. Quién, cuándo y cómo se recolectó la información"@es ;
+    rdfs:comment "Propiedades: encuestador, hora inicio/fin, consentimiento, autorización de datos"@es ;
+    dct:source "DMP a1_diccionario - campos survey_*" .
+
+# --- EQUITY/VULNERABLE POPULATIONS ---
+
+epd-car:SujetoDeEspecialProteccion
+    a owl:Class, skos:Concept ;
+    rdfs:label "Sujeto de Especial Protección"@es ;
+    skos:prefLabel "Población Vulnerable"@es ;
+    skos:definition "Vendedor que pertenece a un grupo poblacional o tiene una condición que requiere enfoque diferencial según norma constitucional"@es ;
+    skos:scopeNote "Dimensión EQUITY. Identifica poblaciones con protección constitucional especial"@es ;
+    skos:example "Mujeres gestantes, personas desmovilizadas, víctimas del conflicto, personas LGBTIQ+"@es ;
+    rdfs:comment "Vinculada a VendedorCaracterizado; contiene información sensible con protección de privacidad"@es ;
+    dct:source "DMP a1_diccionario - campos de ENFOQUE DIFERENCIAL" ;
+    
+    # Subclasses for specific populations
+    owl:disjointUnionOf (
+        epd-car:MujerEnSituacionEspecial
+        epd-car:PersonaConDiscapacidad
+        epd-car:VictimDelConflicto
+        epd-car:PersonaDesmovilizada
+        epd-car:PersonaMigrante
+        epd-car:PersonaLGBTIQ
+    ) .
+
+epd-car:MujerEnSituacionEspecial
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-car:SujetoDeEspecialProteccion ;
+    skos:prefLabel "Mujer en Situación Especial"@es ;
+    skos:definition "Mujer vendedora con condición de especial protección (gestante, lactante)"@es .
+
+epd-car:PersonaConDiscapacidad
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-car:SujetoDeEspecialProteccion ;
+    skos:prefLabel "Persona con Discapacidad"@es ;
+    skos:definition "Vendedor que reporta tener capacidad diferencial (auditiva, visual, motriz, cognitiva)"@es .
+
+epd-car:VictimDelConflicto
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-car:SujetoDeEspecialProteccion ;
+    skos:prefLabel "Víctima del Conflicto Armado"@es ;
+    skos:definition "Vendedor registrado en el Registro Único de Víctimas (RUV)"@es .
+
+epd-car:PersonaDesmovilizada
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-car:SujetoDeEspecialProteccion ;
+    skos:prefLabel "Persona Desmovilizada"@es ;
+    skos:definition "Vendedor que forma parte de programa de desmovilización o reintegración"@es .
+
+epd-car:PersonaMigrante
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-car:SujetoDeEspecialProteccion ;
+    skos:prefLabel "Persona Migrante"@es ;
+    skos:definition "Vendedor con condición migratoria (inmigrante en Colombia)"@es .
+
+epd-car:PersonaLGBTIQ
+    a owl:Class, skos:Concept ;
+    rdfs:subClassOf epd-car:SujetoDeEspecialProteccion ;
+    skos:prefLabel "Persona LGBTIQ+"@es ;
+    skos:definition "Vendedor que se identifica con el colectivo LGBTIQ+"@es .
+
+# --- HOUSING CONDITION ---
+
+epd-car:ViviendaVendedor
+    a owl:Class, skos:Concept ;
+    rdfs:label "Vivienda del Vendedor"@es ;
+    skos:prefLabel "Vivienda"@es ;
+    skos:definition "Caracterización de las condiciones de habitabilidad y acceso a servicios básicos de la residencia del vendedor"@es ;
+    skos:scopeNote "Dimensión VIVIENDA. Agrupa datos sobre tipo de construcción, materiales, servicios públicos"@es ;
+    rdfs:comment "Vinculada a VendedorCaracterizado; información de calidad de vida y condiciones socioeconómicas"@es ;
+    dct:source "DMP a1_diccionario - campos vendor_vivienda_* y lugar_residencia_*" .
+
+# --- SOCIAL PARTICIPATION ---
+
+epd-car:ParticipacionSocial
+    a owl:Class, skos:Concept ;
+    rdfs:label "Participación Social"@es ;
+    skos:prefLabel "Participación en Organizaciones"@es ;
+    skos:definition "Información sobre la participación del vendedor en asociaciones, gremios, organizaciones comunitarias o actividades cívicas"@es ;
+    skos:scopeNote "Dimensión ORGANIZACIÓN. Capta el capital social y redes del vendedor"@es ;
+    rdfs:comment "Vinculada a VendedorCaracterizado; incluye asociaciones de vendedores, organizaciones comunitarias, actividades cívicas"@es ;
+    dct:source "DMP a1_diccionario - campos de INFORMACIÓN COMPLEMENTARIA" .
+
+# --- VENDOR'S WORK SCHEDULE ---
+
+epd-car:JornadaLaboralVendedor
+    a owl:Class, skos:Concept ;
+    rdfs:label "Jornada Laboral"@es ;
+    skos:prefLabel "Horario y Jornada Laboral"@es ;
+    skos:definition "Registro de los días y horas que el vendedor dedica a la actividad comercial"@es ;
+    skos:scopeNote "Dimensión TIEMPO. Captura intensidad laboral y disponibilidad temporal"@es ;
+    rdfs:comment "Vinculada a PuestoVentaCaracterizado; información de horas/días laborados por semana"@es ;
+    dct:source "DMP a1_diccionario - campos vendor_venta_informal_*" ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-car-prop:diasLaborados ;
+        owl:minCardinality 1
+    ] .
+
+# --- HEALTH & SUBSTANCE USE ---
+
+epd-car:CondicionDeSalud
+    a owl:Class, skos:Concept ;
+    rdfs:label "Condición de Salud"@es ;
+    skos:prefLabel "Condición de Salud"@es ;
+    skos:definition "Información sobre enfermedades crónicas, consumo de sustancias y afiliación al sistema de salud"@es ;
+    skos:scopeNote "Dimensión SALUD. Información sensible sobre condiciones de salud y bienestar"@es ;
+    rdfs:comment "Vinculada a VendedorCaracterizado; contiene información sensible con protección PII"@es ;
+    dct:source "DMP a1_diccionario - campos de SITUACIÓN DEL VENDEDOR" .
+
+# --- SALES POINT INFRASTRUCTURE ---
+
+epd-car:InfraestructuraVenta
+    a owl:Class, skos:Concept ;
+    rdfs:label "Infraestructura de Venta"@es ;
+    skos:prefLabel "Infraestructura del Punto de Venta"@es ;
+    skos:definition "Caracterización física de las instalaciones, amoblamiento, servicios y condiciones del punto de venta"@es ;
+    skos:scopeNote "Dimensión INFRAESTRUCTURA. Agrupa datos sobre tipología, amoblamiento, servicios públicos disponibles"@es ;
+    rdfs:comment "Vinculada a PuestoVentaCaracterizado; información de calidad y formalización del espacio"@es ;
+    dct:source "DMP a1_diccionario - campos vendor_venta_informal_* (amoblamiento, servicios, etc.)" .
+
+# --- ACCESS TO PUBLIC PROGRAMS/SERVICES ---
+
+epd-car:AccesoOfertaInstitucional
+    a owl:Class, skos:Concept ;
+    rdfs:label "Acceso a Oferta Institucional"@es ;
+    skos:prefLabel "Acceso a Programas y Servicios"@es ;
+    skos:definition "Información sobre acceso actual o potencial a programas estatales, subsidios, servicios públicos y ofertas de otras entidades"@es ;
+    skos:scopeNote "Conexión con politica_publica domain. Registra qué servicios ha accedido el vendedor"@es ;
+    rdfs:comment "Vinculada a VendedorCaracterizado y potencialmente a OfertaInstitucional; información de cobertura programática"@es ;
+    dct:source "DMP a1_diccionario - campos de INFORMACIÓN COMPLEMENTARIA" ;
+    dct:isPartOf epd:politica_publica .
+
+# ============================================================================
+# DATA TRANSACTION TABLES (Transactional Records)
+# ============================================================================
+
+epd-car:RegistroCaracterizacion
+    a owl:Class, skos:Concept ;
+    rdfs:label "Registro de Caracterización"@es ;
+    skos:prefLabel "Fila de Caracterización"@es ;
+    skos:definition "Registro individual (fila) en la tabla de caracterización que representa una encuesta completada"@es ;
+    skos:scopeNote "Equivalente a fila en trx_caracterizacion table. Contiene todos los campos del DMP a1_diccionario"@es ;
+    rdfs:comment "Grano: Un registro por vendedor por encuesta. Muchos registros pueden referir al mismo vendedor en diferentes momentos"@es ;
+    dct:source "Tabla transaccional: trx_caracterizacion" ;
+    
+    # Key properties for record identification
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-car-prop:recordId ;
+        owl:cardinality 1
+    ] ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-car-prop:horaInicio ;
+        owl:cardinality 1
+    ] .
+
+# ============================================================================
+# STAGING LAYER ENTITY
+# ============================================================================
+
+epd-car:CaracterizacionEstandarizada
+    a owl:Class, skos:Concept ;
+    rdfs:label "Caracterización Estandarizada"@es ;
+    skos:prefLabel "Caracterización en Estándar DMP"@es ;
+    skos:definition "Registro de caracterización que ha sido limpiado, validado y estandarizado conforme a a1_diccionario, a2_listas y a3_formatos"@es ;
+    skos:scopeNote "Equivalente a fila en stg_caracterizacion_v1 staging table. Datos listos para análisis"@es ;
+    rdfs:comment "Resultado de pipeline de limpieza: raw → bronze → silver → gold. Contiene datos de calidad validada"@es ;
+    dct:source "Tabla staging: stg_caracterizacion_v1" ;
+    rdfs:subClassOf epd-car:RegistroCaracterizacion .
+
+# ============================================================================
+# PROPERTIES (Object & Datatype)
+# ============================================================================
+
+# --- VENDOR IDENTIFICATION PROPERTIES ---
+
+epd-car-prop:documentoIdentidad
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "Documento de Identidad"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range xsd:string ;
+    skos:definition "Número de identificación única del vendedor según su tipo de documento"@es ;
+    skos:example "1001234567" ;
+    dct:source "DMP a1_diccionario - vendor_documento_numero" ;
+    dcat:keyword "identification"@en, "documento"@es .
+
+epd-car-prop:tipoDocumento
+    a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "Tipo de Documento"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range skos:Concept ;
+    skos:definition "Tipo de documento de identidad (Cédula de Ciudadanía, Cédula de Extranjería, etc.)"@es ;
+    dct:source "DMP a2_listas - tipo_documento" ;
+    dcat:keyword "document_type"@en .
+
+epd-car-prop:nombreCompleto
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "Nombre Completo"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range xsd:string ;
+    skos:definition "Nombre completo del vendedor informal encuestado"@es ;
+    skos:example "Juan Pérez García" ;
+    dct:source "DMP a1_diccionario - vendor_nombre_completo" ;
+    dcat:keyword "name"@en, "nombre"@es ;
+    rdfs:comment "PII: Información sensible que requiere consentimiento"@es .
+
+epd-car-prop:fechaNacimiento
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "Fecha de Nacimiento"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha de nacimiento del vendedor"@es ;
+    dct:source "DMP a1_diccionario - vendor_fecha_nacimiento" ;
+    dcat:keyword "birthdate"@en .
+
+# --- VENDOR CONTACT PROPERTIES ---
+
+epd-car-prop:celular
+    a owl:DatatypeProperty ;
+    rdfs:label "Número Celular"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range xsd:string ;
+    skos:definition "Número de teléfono celular de contacto"@es ;
+    dct:source "DMP a1_diccionario - vendor_celular" ;
+    dcat:keyword "phone"@en, "celular"@es ;
+    rdfs:comment "Canal de notificación preferido; país código +57 Colombia"@es .
+
+epd-car-prop:correoElectronico
+    a owl:DatatypeProperty ;
+    rdfs:label "Correo Electrónico"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range xsd:string ;
+    skos:definition "Correo electrónico personal del vendedor"@es ;
+    dct:source "DMP a1_diccionario - vendor_correo_electronico" ;
+    dcat:keyword "email"@en, "correo"@es .
+
+# --- VENDOR DEMOGRAPHIC PROPERTIES ---
+
+epd-car-prop:sexo
+    a owl:ObjectProperty ;
+    rdfs:label "Sexo"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range skos:Concept ;
+    skos:definition "Sexo con el que se identifica el vendedor"@es ;
+    dct:source "DMP a2_listas - sexo" ;
+    dcat:keyword "gender"@en, "sexo"@es ;
+    rdfs:comment "Información sensible; clasificación DANE"@es .
+
+epd-car-prop:estadoCivil
+    a owl:ObjectProperty ;
+    rdfs:label "Estado Civil"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range skos:Concept ;
+    skos:definition "Estado civil actual del vendedor"@es ;
+    dct:source "DMP a2_listas - estado_civil" ;
+    dcat:keyword "marital_status"@en .
+
+epd-car-prop:grupoEtnico
+    a owl:ObjectProperty ;
+    rdfs:label "Grupo Étnico"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range skos:Concept ;
+    skos:definition "Grupo étnico al que pertenece el vendedor"@es ;
+    dct:source "DMP a2_listas - etnia" ;
+    dcat:keyword "ethnicity"@en, "etnia"@es ;
+    rdfs:comment "Información sensible; clasificación DANE"@es .
+
+epd-car-prop:nivelEducacion
+    a owl:ObjectProperty ;
+    rdfs:label "Nivel de Educación"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range skos:Concept ;
+    skos:definition "Último nivel de escolaridad alcanzado"@es ;
+    dct:source "DMP a2_listas - escolaridad" ;
+    dcat:keyword "education_level"@en ;
+    rdfs:comment "Escala DANE"@es .
+
+# --- ECONOMIC ACTIVITY PROPERTIES ---
+
+epd-car-prop:realizaActividadEconomica
+    a owl:ObjectProperty ;
+    rdfs:label "Realiza Actividad Económica"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range epd-car:ActividadEconomicaVendedor ;
+    skos:definition "Clasificación de la actividad económica principal"@es ;
+    dct:source "DMP a2_listas - actividad_economica_tipologica" ;
+    dcat:keyword "economic_activity"@en ;
+    owl:inverseOf epd-car-prop:esRealizadaPor ;
+    
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty epd-car-prop:realizaActividadEconomica ;
+        owl:minCardinality 1
+    ] .
+
+epd-car-prop:esRealizadaPor
+    a owl:ObjectProperty ;
+    rdfs:label "Es Realizada Por"@es ;
+    rdfs:domain epd-car:ActividadEconomicaVendedor ;
+    rdfs:range epd-car:VendedorCaracterizado ;
+    owl:inverseOf epd-car-prop:realizaActividadEconomica .
+
+epd-car-prop:antiguedadAnios
+    a owl:DatatypeProperty ;
+    rdfs:label "Antigüedad en Años"@es ;
+    rdfs:domain epd-car:ActividadEconomicaVendedor ;
+    rdfs:range xsd:integer ;
+    skos:definition "Antigüedad en años que el vendedor lleva ejerciendo la venta informal en general"@es ;
+    dct:source "DMP a1_diccionario - vendor_venta_informal_antiguedad_anios" ;
+    dcat:keyword "seniority"@en ;
+    rdfs:comment "Duración en años; rango típico 0-50"@es .
+
+epd-car-prop:antiguedadEnPuntoAnios
+    a owl:DatatypeProperty ;
+    rdfs:label "Antigüedad en Punto (años)"@es ;
+    rdfs:domain epd-car:PuestoVentaCaracterizado ;
+    rdfs:range xsd:integer ;
+    skos:definition "Años específicos ejerciendo en el punto de venta actual"@es ;
+    dct:source "DMP a1_diccionario - vendor_venta_informal_anos_ejercicio" ;
+    dcat:keyword "seniority_location"@en .
+
+epd-car-prop:ingresoMensual
+    a owl:ObjectProperty ;
+    rdfs:label "Ingreso Mensual"@es ;
+    rdfs:domain epd-car:ActividadEconomicaVendedor ;
+    rdfs:range skos:Concept ;
+    skos:definition "Rango de ingreso mensual estimado en pesos colombianos"@es ;
+    dct:source "DMP a2_listas - rango_ingreso_mensual" ;
+    dcat:keyword "monthly_income"@en ;
+    rdfs:comment "Valores en rango: < 100k, 100k-200k, 200k-400k, etc."@es .
+
+# --- SALES POINT LOCATION PROPERTIES ---
+
+epd-car-prop:ubicacionGeografica
+    a owl:ObjectProperty ;
+    rdfs:label "Ubicación Geográfica"@es ;
+    rdfs:domain epd-car:PuestoVentaCaracterizado ;
+    rdfs:range epd:Lugar ;
+    skos:definition "Ubicación espacial del punto de venta"@es ;
+    dcat:keyword "location"@en, "ubicación"@es .
+
+epd-car-prop:comunaVenta
+    a owl:ObjectProperty ;
+    rdfs:label "Comuna de Venta"@es ;
+    rdfs:domain epd-car:PuestoVentaCaracterizado ;
+    rdfs:range skos:Concept ;
+    skos:definition "Comuna de Medellín donde está ubicado el punto de venta"@es ;
+    dct:source "DMP a2_listas - comuna" ;
+    dcat:keyword "administrative_division"@en ;
+    rdfs:comment "Vocabulario de 16 comunas de Medellín"@es .
+
+epd-car-prop:barrioVenta
+    a owl:DatatypeProperty ;
+    rdfs:label "Barrio de Venta"@es ;
+    rdfs:domain epd-car:PuestoVentaCaracterizado ;
+    rdfs:range xsd:string ;
+    skos:definition "Nombre del barrio donde está ubicado el punto de venta"@es ;
+    dct:source "DMP a1_diccionario - lugar_venta_barrio_nombre" ;
+    dcat:keyword "neighborhood"@en ;
+    rdfs:comment "Campo de texto libre; susceptible a variaciones ortográficas"@es .
+
+epd-car-prop:direccionVenta
+    a owl:DatatypeProperty ;
+    rdfs:label "Dirección de Venta"@es ;
+    rdfs:domain epd-car:PuestoVentaCaracterizado ;
+    rdfs:range xsd:string ;
+    skos:definition "Dirección o punto de referencia específico del puesto de venta"@es ;
+    dct:source "DMP a1_diccionario - lugar_venta_direccion_texto" ;
+    dcat:keyword "address"@en, "dirección"@es ;
+    rdfs:comment "PII: Información de ubicación exacta; requiere protección de privacidad"@es .
+
+epd-car-prop:coordenadas
+    a owl:ObjectProperty ;
+    rdfs:label "Coordenadas Geográficas"@es ;
+    rdfs:domain epd-car:PuestoVentaCaracterizado ;
+    rdfs:range epd:PuntoGeografico ;
+    skos:definition "Coordenadas en WGS84 (latitud, longitud) del punto de venta"@es ;
+    dct:source "DMP a1_diccionario - lugar_venta_latitud_decimal, lugar_venta_longitud_decimal" ;
+    dcat:keyword "coordinates"@en, "georeferenciación"@es ;
+    rdfs:comment "EPSG:4326; unidad: grados decimales"@es .
+
+# --- FAMILY PROPERTIES ---
+
+epd-car-prop:tieneFamilia
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Familia"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range epd-car:UnidadFamiliar ;
+    skos:definition "Relación con la unidad familiar del vendedor"@es ;
+    dct:source "DMP a1_diccionario - vendor_tiene_familiar" ;
+    dcat:keyword "family"@en, "familia"@es ;
+    owl:inverseOf epd-car-prop:perteneceFamiliaA .
+
+epd-car-prop:perteneceFamiliaA
+    a owl:ObjectProperty ;
+    rdfs:label "Pertenece Familia A"@es ;
+    rdfs:domain epd-car:UnidadFamiliar ;
+    rdfs:range epd-car:VendedorCaracterizado ;
+    owl:inverseOf epd-car-prop:tieneFamilia .
+
+epd-car-prop:tipologiaFamiliar
+    a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "Tipología Familiar"@es ;
+    rdfs:domain epd-car:UnidadFamiliar ;
+    rdfs:range skos:Concept ;
+    skos:definition "Estructura o composición de la familia (Nuclear, Extensa, Monoparental, etc.)"@es ;
+    dct:source "DMP a2_listas - tipologia_familiar" ;
+    dcat:keyword "family_type"@en ;
+    rdfs:comment "Clasificación DANE"@es .
+
+epd-car-prop:esCabezaDeHogar
+    a owl:DatatypeProperty ;
+    rdfs:label "Es Cabeza de Hogar"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si el vendedor es el principal responsable económico del hogar"@es ;
+    dct:source "DMP a1_diccionario - vendor_es_cabeza_hogar" ;
+    dcat:keyword "household_head"@en .
+
+# --- SCHEDULE PROPERTIES ---
+
+epd-car-prop:diasLaborados
+    a owl:ObjectProperty ;
+    rdfs:label "Días Laborados"@es ;
+    rdfs:domain epd-car:JornadaLaboralVendedor ;
+    rdfs:range rdfs:Resource ;
+    skos:definition "Días de la semana en que el vendedor trabaja (multiselección)"@es ;
+    dct:source "DMP a1_diccionario - vendor_venta_informal_dias_labora" ;
+    dcat:keyword "work_days"@en ;
+    rdfs:comment "Array de valores: lunes, martes, miércoles, jueves, viernes, sábado, domingo"@es .
+
+epd-car-prop:horaInicio
+    a owl:DatatypeProperty ;
+    rdfs:label "Hora de Inicio"@es ;
+    rdfs:domain epd-car:JornadaLaboralVendedor ;
+    rdfs:range xsd:time ;
+    skos:definition "Hora del día en que el vendedor habitualmente comienza su jornada"@es ;
+    dct:source "DMP a1_diccionario - vendor_venta_informal_hora_inicio" ;
+    dcat:keyword "start_time"@en ;
+    rdfs:comment "Zona horaria: America/Bogota"@es .
+
+epd-car-prop:horaCierre
+    a owl:DatatypeProperty ;
+    rdfs:label "Hora de Cierre"@es ;
+    rdfs:domain epd-car:JornadaLaboralVendedor ;
+    rdfs:range xsd:time ;
+    skos:definition "Hora del día en que el vendedor habitualmente finaliza su jornada"@es ;
+    dct:source "DMP a1_diccionario - vendor_venta_informal_hora_cierre" ;
+    dcat:keyword "end_time"@en .
+
+epd-car-prop:totalHorasDia
+    a owl:DatatypeProperty ;
+    rdfs:label "Total Horas/Día"@es ;
+    rdfs:domain epd-car:JornadaLaboralVendedor ;
+    rdfs:range xsd:integer ;
+    skos:definition "Número de horas que el vendedor trabaja en un día promedio"@es ;
+    dct:source "DMP a1_diccionario - vendor_venta_informal_total_horas_dia" ;
+    dcat:keyword "daily_hours"@en ;
+    rdfs:comment "Unidad: horas; rango típico 4-12"@es ;
+    prov:wasDerivedFrom epd-car-prop:horaInicio, epd-car-prop:horaCierre .
+
+# --- HEALTH & CONDITION PROPERTIES ---
+
+epd-car-prop:tieneDiscapacidad
+    a owl:ObjectProperty ;
+    rdfs:label "Tiene Discapacidad"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range skos:Concept ;
+    skos:definition "Tipo de discapacidad o capacidad diferencial del vendedor"@es ;
+    dct:source "DMP a2_listas - capacidad_diferencial" ;
+    dcat:keyword "disability"@en, "discapacidad"@es ;
+    rdfs:comment "Información sensible; clasificación: Auditiva, Visual, Motriz, Cognitiva"@es .
+
+epd-car-prop:tieneEnfermedadCronica
+    a owl:DatatypeProperty ;
+    rdfs:label "Tiene Enfermedad Crónica"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si el vendedor padece enfermedad crónica o larga duración"@es ;
+    dct:source "DMP a1_diccionario - vendor_enfermedad_cronica" ;
+    dcat:keyword "chronic_disease"@en ;
+    rdfs:comment "Información sensible; PII level: high"@es .
+
+epd-car-prop:regimensalud
+    a owl:ObjectProperty ;
+    rdfs:label "Régimen de Salud"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range skos:Concept ;
+    skos:definition "Tipo de afiliación al sistema de salud colombiano"@es ;
+    dct:source "DMP a2_listas - tipo_afiliacion" ;
+    dcat:keyword "health_system"@en ;
+    rdfs:comment "Valores: Contributivo, Subsidiado, Régimen Especial"@es .
+
+# --- SURVEY PROCESS PROPERTIES ---
+
+epd-car-prop:recordId
+    a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "ID de Registro"@es ;
+    rdfs:domain epd-car:RegistroCaracterizacion ;
+    rdfs:range xsd:string ;
+    skos:definition "Identificador único del registro (primary key generada automáticamente)"@es ;
+    dct:source "DMP a1_diccionario - record_id" ;
+    dcat:keyword "primary_key"@en ;
+    rdfs:comment "Sistema generado; único y no nulo"@es .
+
+epd-car-prop:encuestador
+    a owl:DatatypeProperty ;
+    rdfs:label "Encuestador"@es ;
+    rdfs:domain epd-car:ProcesoEncuesta ;
+    rdfs:range xsd:string ;
+    skos:definition "Nombre completo de la persona que realizó la encuesta"@es ;
+    dct:source "DMP a1_diccionario - survey_encuestador_nombre" ;
+    dcat:keyword "surveyor"@en ;
+    rdfs:comment "PII: Información sensible"@es .
+
+epd-car-prop:autorizaTratamientoDatos
+    a owl:DatatypeProperty ;
+    rdfs:label "Autoriza Tratamiento de Datos"@es ;
+    rdfs:domain epd-car:ProcesoEncuesta ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Consentimiento informado para tratamiento de datos personales"@es ;
+    dct:source "DMP a1_diccionario - survey_autorizacion_tratamiento_datos" ;
+    dcat:keyword "consent"@en, "consentimiento"@es ;
+    rdfs:comment "Requerido legalmente; asociado a RGPD, leyes de protección de datos"@es .
+
+# ============================================================================
+# RELATIONSHIPS & INVERSES
+# ============================================================================
+
+epd-car-prop:ubicaVentaEn
+    a owl:ObjectProperty ;
+    rdfs:label "Ubica Venta En"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range epd-car:PuestoVentaCaracterizado ;
+    skos:definition "Ubica punto de venta donde realiza actividad el vendedor"@es ;
+    owl:inverseOf epd-car-prop:esUbicacionDe ;
+    dcat:keyword "sales_point"@en .
+
+epd-car-prop:esUbicacionDe
+    a owl:ObjectProperty ;
+    rdfs:label "Es Ubicación De"@es ;
+    rdfs:domain epd-car:PuestoVentaCaracterizado ;
+    rdfs:range epd-car:VendedorCaracterizado ;
+    owl:inverseOf epd-car-prop:ubicaVentaEn .
+
+epd-car-prop:participaEnCaracterizacion
+    a owl:ObjectProperty ;
+    rdfs:label "Participa en Caracterización"@es ;
+    rdfs:domain epd-car:VendedorCaracterizado ;
+    rdfs:range epd-car:CaracterizacionSocieconomica ;
+    skos:definition "Participante (sujeto) de una encuesta de caracterización"@es ;
+    owl:inverseOf epd-car-prop:registraVendedor ;
+    dcat:keyword "survey_subject"@en .
+
+epd-car-prop:registraVendedor
+    a owl:ObjectProperty ;
+    rdfs:label "Registra Vendedor"@es ;
+    rdfs:domain epd-car:CaracterizacionSocieconomica ;
+    rdfs:range epd-car:VendedorCaracterizado ;
+    owl:inverseOf epd-car-prop:participaEnCaracterizacion .
+
+# ============================================================================
+# ANNOTATIONS & METADATA
+# ============================================================================
+
+epd-car:CaracterizacionSocieconomica
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:caracterizacion .
+
+epd-car:VendedorCaracterizado
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:caracterizacion .
+
+epd-car:PuestoVentaCaracterizado
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:caracterizacion ;
+    dcat:theme epd:geospatial .
+
+epd-car:ActividadEconomicaVendedor
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:caracterizacion ;
+    dcat:theme epd:economia .
+
+epd-car:SujetoDeEspecialProteccion
+    skos:inScheme ep:VendedorInformalScheme ;
+    dcat:theme epd:caracterizacion ;
+    dcat:theme epd:derechos_humanos ;
+    skos:scopeNote "Protección constitucional especial conforme a Acuerdo 076 de 2014"@es .

@@ -1,0 +1,881 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix : <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix vocab: <https://w3id.org/medellin/espacio-publico/vocab/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# Shared SPARQL prefix declarations for sh:sparql constraints in this file.
+<https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> a sh:Declarable ;
+    sh:declare [ sh:prefix "core" ; sh:namespace "https://w3id.org/medellin/espacio-publico/core#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "role" ; sh:namespace "https://w3id.org/medellin/espacio-publico/roles#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "reg" ; sh:namespace "https://w3id.org/medellin/espacio-publico/regulacion#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "ctrl" ; sh:namespace "https://w3id.org/medellin/espacio-publico/control#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "vocab" ; sh:namespace "https://w3id.org/medellin/espacio-publico/vocab/"^^xsd:anyURI ] .
+
+
+# =============================================================================
+# SHACL SHAPES: Event-Driven State Enforcement
+# =============================================================================
+# Valida que los EVENTOS administrativos (AprobacionPermiso, NegacionPermiso,
+# SolicitudPermisoOcupacion) causen las actualizaciones de estado CORRECTAS en
+# las entidades relacionadas (VendedorInformalSolicitante, VendedorInformalRegulado,
+# PermisoOcupacion, Tramite).
+#
+# Principio: Un evento NO puede existir sin actualizar el estado de las entidades
+# afectadas. Esta es la capa de CONSISTENCIA REFERENCIAL entre eventos y estados.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/shapes/event-state-enforcement>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/shapes/event-state-enforcement/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "SHACL Shapes - Event-Driven State Enforcement"@es ;
+    dcterms:description """Constraints para garantizar que los eventos administrativos
+    (AprobacionPermiso, NegacionPermiso, SolicitudPermisoOcupacion) actualicen
+    correctamente el estado de las entidades relacionadas. Implementa validacion
+    de consistencia referencial entre eventos y ciclos de vida."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico" ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    owl:versionInfo "0.1.0" .
+
+# =============================================================================
+# SHAPE: AutorizacionTemporalEspacioPublico → Debe crear VendedorInformalSolicitante
+# =============================================================================
+
+:TramiteAutorizacionCreaRolSolicitanteShape a sh:NodeShape ;
+    sh:targetClass :AutorizacionTemporalEspacioPublico ;
+    sh:name "Tramite autorizacion debe crear rol Solicitante"@es ;
+    sh:description "Todo tramite AutorizacionTemporalEspacioPublico debe crear exactamente un VendedorInformalSolicitante en estado 'radicado'"@es ;
+    sh:severity sh:Violation ;
+    
+    # Debe tener numeroRadicado (ticket del tramite)
+    sh:property [
+        sh:path :numeroRadicado ;
+        sh:name "Numero de radicado"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^RAD-[0-9]{4}-[0-9]{6}$" ;
+        sh:message "Tramite debe tener numeroRadicado con patron RAD-YYYY-NNNNNN"@es
+    ] ;
+    
+    # Debe tener propiedad :creaRol apuntando a VendedorInformalSolicitante
+    sh:property [
+        sh:path :creaRol ;
+        sh:name "Crea rol solicitante"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class :VendedorInformalSolicitante ;
+        sh:message "Tramite debe crear exactamente un VendedorInformalSolicitante"@es
+    ] ;
+    
+    # Validar que el rol creado tenga estado correcto
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "El VendedorInformalSolicitante creado debe tener estadoSolicitud = 'solicita_autorizacion' o 'espera_respuesta' al momento de creacion"@es ;
+        sh:select """
+            SELECT $this ?rolCreado ?estado
+            WHERE {
+                $this :creaRol ?rolCreado .
+                ?rolCreado :estadoSolicitud ?estado .
+                
+                # El estado inicial debe ser 'solicita_autorizacion' o 'espera_respuesta'
+                FILTER(?estado NOT IN ("solicita_autorizacion", "espera_respuesta"))
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: AprobacionPermiso → Debe actualizar 3 estados
+# =============================================================================
+# SHAPE: AprobacionPermiso → Debe actualizar 3 estados
+# =============================================================================
+
+:AprobacionActualizaEstadosShape a sh:NodeShape ;
+    sh:targetClass :AprobacionPermiso ;
+    sh:name "Aprobacion actualiza 3 estados"@es ;
+    sh:description "AprobacionPermiso debe: (1) cambiar VendedorInformalSolicitante a 'aprobado', (2) crear PermisoOcupacion 'proyectado', (3) crear VendedorInformalRegulado 'activo'"@es ;
+    sh:severity sh:Violation ;
+    
+    # 1. Debe referenciar tramite relacionado
+    sh:property [
+        sh:path :tramiteRelacionado ;
+        sh:name "Tramite relacionado"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class :AutorizacionTemporalEspacioPublico ;
+        sh:message "AprobacionPermiso debe tener exactamente un tramiteRelacionado"@es
+    ] ;
+    
+    # 2. Debe generar PermisoOcupacionTemporal
+    sh:property [
+        sh:path :aprobacionGenera ;
+        sh:name "Genera permiso"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class :PermisoOcupacionTemporal ;
+        sh:message "AprobacionPermiso debe generar exactamente un PermisoOcupacionTemporal"@es
+    ] ;
+    
+    # 3. Debe crear rol Regulado
+    sh:property [
+        sh:path :creaRol ;
+        sh:name "Crea rol regulado"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class :VendedorInformalRegulado ;
+        sh:message "AprobacionPermiso debe crear exactamente un VendedorInformalRegulado"@es
+    ] ;
+    
+    # Validar que VendedorInformalSolicitante cambio a 'autorizado'
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "El VendedorInformalSolicitante relacionado debe cambiar a estado 'autorizado' tras AprobacionPermiso"@es ;
+        sh:select """
+            SELECT $this ?tramite ?rolSolicitante ?estado
+            WHERE {
+                $this :tramiteRelacionado ?tramite .
+                ?tramite :creaRol ?rolSolicitante .
+                ?rolSolicitante :estadoSolicitud ?estado .
+                
+                # Estado debe ser 'autorizado' despues de la aprobacion
+                FILTER(?estado != "autorizado")
+            }
+        """
+    ] ;
+    
+    # Validar que PermisoOcupacionTemporal creado tenga estado 'proyectado' inicialmente
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "El PermisoOcupacionTemporal generado debe tener estadoResolucion = 'proyectado' inicialmente"@es ;
+        sh:select """
+            SELECT $this ?permiso ?estado
+            WHERE {
+                $this :aprobacionGenera ?permiso .
+                ?permiso :estadoResolucion ?estado .
+                
+                # Estado inicial debe ser 'proyectado'
+                FILTER(?estado != "proyectado")
+            }
+        """
+    ] ;
+    
+    # Validar que VendedorInformalRegulado creado tenga estado correcto
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "El VendedorInformalRegulado creado debe tener estadoRolRegulado = 'activo' tras notificacion del permiso"@es ;
+        sh:select """
+            SELECT $this ?rolRegulado ?estado ?permiso ?estadoPermiso
+            WHERE {
+                $this :creaRol ?rolRegulado ;
+                      :aprobacionGenera ?permiso .
+                ?rolRegulado :estadoRolRegulado ?estado .
+                ?permiso :estadoResolucion ?estadoPermiso .
+                
+                # Si permiso esta 'notificado' o 'activo', rol debe estar 'activo'
+                FILTER(?estadoPermiso IN ("notificado", "activo") && ?estado != "activo")
+            }
+        """
+    ] .
+
+# Validar que PermisoOcupacionTemporal tiene trazabilidad al tramite
+:PermisoTrazabilidadTramiteShape a sh:NodeShape ;
+    sh:targetClass :PermisoOcupacionTemporal ;
+    sh:name "Permiso con trazabilidad a tramite"@es ;
+    sh:description "PermisoOcupacionTemporal debe tener :resultadoDeTramite apuntando al AutorizacionTemporalEspacioPublico que lo origino"@es ;
+    sh:severity sh:Warning ;
+    
+    sh:property [
+        sh:path :resultadoDeTramite ;
+        sh:name "Resultado de tramite"@es ;
+        sh:maxCount 1 ;
+        sh:class :AutorizacionTemporalEspacioPublico ;
+        sh:message "PermisoOcupacionTemporal deberia tener :resultadoDeTramite para trazabilidad"@es
+    ] ;
+    
+    # Validar que numeroRadicadoOrigen coincide con numeroRadicado del tramite
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "PermisoOcupacionTemporal.numeroRadicadoOrigen debe coincidir con AutorizacionTemporalEspacioPublico.numeroRadicado"@es ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this ?radicadoPermiso ?tramite ?radicadoTramite
+            WHERE {
+                $this :numeroRadicadoOrigen ?radicadoPermiso ;
+                      :resultadoDeTramite ?tramite .
+                ?tramite :numeroRadicado ?radicadoTramite .
+                
+                # Radicados deben coincidir
+                FILTER(?radicadoPermiso != ?radicadoTramite)
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: NegacionPermiso → Debe actualizar estado Solicitante
+# =============================================================================
+
+:NegacionActualizaEstadoShape a sh:NodeShape ;
+    sh:targetClass :NegacionPermiso ;
+    sh:name "Negacion actualiza estado solicitante"@es ;
+    sh:description "NegacionPermiso debe cambiar VendedorInformalSolicitante a estado 'negado'"@es ;
+    sh:severity sh:Violation ;
+    
+    # Debe referenciar tramite
+    sh:property [
+        sh:path :tramiteRelacionado ;
+        sh:name "Tramite relacionado"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class :AutorizacionTemporalEspacioPublico ;
+        sh:message "NegacionPermiso debe tener exactamente un tramiteRelacionado"@es
+    ] ;
+    
+    # Validar que rol solicitante cambio a 'no_autorizado'
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "El VendedorInformalSolicitante relacionado debe cambiar a estado 'no_autorizado' tras NegacionPermiso"@es ;
+        sh:select """
+            SELECT $this ?tramite ?rolSolicitante ?estado
+            WHERE {
+                $this :tramiteRelacionado ?tramite .
+                ?tramite :creaRol ?rolSolicitante .
+                ?rolSolicitante :estadoSolicitud ?estado .
+                
+                # Estado debe ser 'no_autorizado' despues de la negacion
+                FILTER(?estado != "no_autorizado")
+            }
+        """
+    ] ;
+    
+    # No debe crear PermisoOcupacion
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "NegacionPermiso NO debe generar PermisoOcupacion (solicitud fue negada)"@es ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this :aprobacionGenera ?permiso .
+            }
+        """
+    ] ;
+    
+    # No debe crear VendedorInformalRegulado
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "NegacionPermiso NO debe crear VendedorInformalRegulado (solicitud fue negada)"@es ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this :creaRol ?rol .
+                ?rol a :VendedorInformalRegulado .
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: PermisoOcupacionTemporal → Estado sincronizado con VendedorInformalRegulado
+# =============================================================================
+
+:PermisoEstadoSincronizadoShape a sh:NodeShape ;
+    sh:targetClass :PermisoOcupacionTemporal ;
+    sh:name "Permiso y rol regulado sincronizados"@es ;
+    sh:description "El estado del PermisoOcupacionTemporal debe estar sincronizado con el estado del VendedorInformalRegulado"@es ;
+    sh:severity sh:Violation ;
+    
+    # Debe tener beneficiario
+    sh:property [
+        sh:path :beneficiario ;
+        sh:name "Beneficiario del permiso"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "PermisoOcupacionTemporal debe tener exactamente un beneficiario"@es
+    ] ;
+    
+    # Validar sincronizacion: activo ↔ activo
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Si PermisoOcupacionTemporal esta 'activo', el VendedorInformalRegulado debe estar 'activo'"@es ;
+        sh:select """
+            SELECT $this ?beneficiario ?estadoPermiso ?estadoRol
+            WHERE {
+                $this :estadoResolucion ?estadoPermiso ;
+                      :beneficiario ?persona .
+                ?persona :asumeRol ?beneficiario .
+                ?beneficiario a :VendedorInformalRegulado ;
+                              :estadoRolRegulado ?estadoRol .
+                
+                # Si permiso activo, rol debe estar activo
+                FILTER(?estadoPermiso = "activo" && ?estadoRol != "activo")
+            }
+        """
+    ] ;
+    
+    # Validar sincronizacion: suspendido ↔ suspendido
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Si PermisoOcupacion esta 'suspendido', el VendedorInformalRegulado debe estar 'suspendido'"@es ;
+        sh:select """
+            SELECT $this ?beneficiario ?estadoPermiso ?estadoRol
+            WHERE {
+                $this :estadoResolucion ?estadoPermiso ;
+                      :beneficiario ?persona .
+                ?persona :asumeRol ?beneficiario .
+                ?beneficiario a :VendedorInformalRegulado ;
+                              :estadoRolRegulado ?estadoRol .
+                
+                # Si permiso suspendido, rol debe estar suspendido
+                FILTER(?estadoPermiso = "suspendido" && ?estadoRol != "suspendido")
+            }
+        """
+    ] ;
+    
+    # Validar sincronizacion: revocado → revocado (terminal)
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Si PermisoOcupacion esta 'revocado', el VendedorInformalRegulado debe estar 'revocado' (estado terminal)"@es ;
+        sh:select """
+            SELECT $this ?beneficiario ?estadoPermiso ?estadoRol
+            WHERE {
+                $this :estadoResolucion ?estadoPermiso ;
+                      :beneficiario ?persona .
+                ?persona :asumeRol ?beneficiario .
+                ?beneficiario a :VendedorInformalRegulado ;
+                              :estadoRolRegulado ?estadoRol .
+                
+                # Si permiso revocado, rol debe estar revocado
+                FILTER(?estadoPermiso = "revocado" && ?estadoRol != "revocado")
+            }
+        """
+    ] ;
+    
+    # NUEVO 2026-01-07: Validar novedad cambia_titular actualiza beneficiario
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Si VendedorInformalRegulado ejecuta novedad 'cambia_titular', PermisoOcupacion debe actualizar beneficiario al titularSucesor"@es ;
+        sh:select """
+            SELECT $this ?personaActual ?rolAnterior ?nuevoTitular
+            WHERE {
+                $this :beneficiario ?personaActual .
+                
+                # Buscar rol anterior que cambio de titular
+                ?personaActual :asumeRol ?rolAnterior .
+                ?rolAnterior :tipoNovedad \"cambia_titular\" ;
+                             :estadoRolRegulado \"cancelado\" ;
+                             :titularSucesor ?nuevoTitular .
+                
+                # El permiso aun apunta a la persona anterior (deberia apuntar al sucesor)
+                FILTER NOT EXISTS {
+                    $this :beneficiario ?nuevoTitular .
+                }
+            }
+        """
+    ] ;
+    
+    # NUEVO 2026-01-07: Validar novedad cancela_autorizacion cancela permiso
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Si VendedorInformalRegulado ejecuta novedad 'cancela_autorizacion', PermisoOcupacion debe transitar a estado 'cancelado'"@es ;
+        sh:select """
+            SELECT $this ?estadoPermiso ?personaBeneficiaria ?rolRegulado
+            WHERE {
+                $this :estadoResolucion ?estadoPermiso ;
+                      :beneficiario ?personaBeneficiaria .
+                ?personaBeneficiaria :asumeRol ?rolRegulado .
+                ?rolRegulado :tipoNovedad \"cancela_autorizacion\" ;
+                             :estadoRolRegulado \"cancelado\" .
+                
+                # Si rol fue cancelado, permiso debe estar cancelado
+                FILTER(?estadoPermiso != \"cancelado\")
+            }
+        """
+    ] ;
+    
+    # NUEVO 2026-01-07: Validar novedad fallece transita a vencido
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Si VendedorInformalRegulado ejecuta novedad 'fallece', PermisoOcupacion debe transitar a estado 'vencido' o 'cancelado'"@es ;
+        sh:select """
+            SELECT $this ?estadoPermiso ?personaBeneficiaria ?rolRegulado
+            WHERE {
+                $this :estadoResolucion ?estadoPermiso ;
+                      :beneficiario ?personaBeneficiaria .
+                ?personaBeneficiaria :asumeRol ?rolRegulado .
+                ?rolRegulado :tipoNovedad \"fallece\" ;
+                             :estadoRolRegulado \"fallecido\" .
+                
+                # Si titular fallecio, permiso debe estar vencido o cancelado
+                FILTER(?estadoPermiso NOT IN (\"vencido\", \"cancelado\"))
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: VendedorInformalRegulado → Debe tener PermisoOcupacion activo
+# =============================================================================
+
+:RolReguladoRequierePermisoShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformalRegulado ;
+    sh:name "Rol regulado requiere permiso vigente"@es ;
+    sh:description "Todo VendedorInformalRegulado en estado 'activo' DEBE tener un PermisoOcupacion activo"@es ;
+    sh:severity sh:Violation ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalRegulado en estado 'activo' debe tener PermisoOcupacion activo"@es ;
+        sh:select """
+            SELECT $this ?estado
+            WHERE {
+                $this :estadoRolRegulado ?estado .
+                
+                # Si rol esta activo...
+                FILTER(?estado = "activo")
+                
+                # Debe tener permiso activo
+                FILTER NOT EXISTS {
+                    $this :permisoVigente ?permiso .
+                    ?permiso :estadoResolucion "activo" .
+                }
+            }
+        """
+    ] ;
+    
+    # Validar que rol inactivo NO tenga permiso activo
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalRegulado en estado '{?estado}' (inactivo) NO debe tener PermisoOcupacion activo"@es ;
+        sh:select """
+            SELECT $this ?estado ?permiso
+            WHERE {
+                $this :estadoRolRegulado ?estado ;
+                      :permisoVigente ?permiso .
+                ?permiso :estadoResolucion "activo" .
+                
+                # Si rol NO esta activo, no debe tener permiso activo
+                FILTER(?estado != "activo")
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: VendedorInformalSolicitante → Duracion maxima 180 dias
+# =============================================================================
+
+:SolicitanteDuracionMaximaShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformalSolicitante ;
+    sh:name "Solicitante duracion maxima"@es ;
+    sh:description "VendedorInformalSolicitante debe resolverse (aprobado/negado/desistido) en maximo 180 dias"@es ;
+    sh:severity sh:Warning ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalSolicitante lleva mas de 180 dias sin resolucion. Requiere seguimiento urgente."@es ;
+        sh:select """
+            SELECT $this ?fechaInicio ?diasTranscurridos
+            WHERE {
+                $this :fechaRadicacionSolicitud ?fechaInicio ;
+                      :estadoSolicitud ?estado .
+                
+                # Solo evaluar roles NO terminados (segun nuevo diagrama)
+                FILTER(?estado NOT IN ("autorizado", "no_autorizado", "desistido", "reposicion_negada"))
+                
+                # Calcular dias transcurridos
+                BIND((NOW() - ?fechaInicio) / 86400 AS ?diasTranscurridos)
+                
+                # Advertencia si supera 180 dias
+                FILTER(?diasTranscurridos > 180)
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Tramite → Estado debe progresar secuencialmente
+# =============================================================================
+# SHAPE: Tramite → Estado debe progresar secuencialmente
+# =============================================================================
+
+:TramiteEstadoSecuencialShape a sh:NodeShape ;
+    sh:targetClass :Tramite ;
+    sh:name "Tramite estado secuencial"@es ;
+    sh:description "Estados del Tramite deben seguir secuencia logica: radicado → en_evaluacion → concepto_emitido → aprobado/negado"@es ;
+    sh:severity sh:Warning ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Tramite en estado '{?estadoActual}' sin pasar por estado previo '{?estadoRequerido}'"@es ;
+        sh:select """
+            SELECT $this ?estadoActual ?estadoRequerido
+            WHERE {
+                $this :estadoTramite ?estadoActual .
+                
+                # Si esta en 'concepto_emitido', debe haber estado en 'en_evaluacion'
+                {
+                    FILTER(?estadoActual = "concepto_emitido")
+                    BIND("en_evaluacion" AS ?estadoRequerido)
+                    FILTER NOT EXISTS {
+                        $this :historialEstados/rdf:rest*/rdf:first ?estadoRequerido .
+                    }
+                } UNION {
+                    # Si esta en 'aprobado' o 'negado', debe haber pasado por 'concepto_emitido'
+                    FILTER(?estadoActual IN ("aprobado", "negado"))
+                    BIND("concepto_emitido" AS ?estadoRequerido)
+                    FILTER NOT EXISTS {
+                        $this :historialEstados/rdf:rest*/rdf:first ?estadoRequerido .
+                    }
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Evento debe tener fecha posterior a entidades relacionadas
+# =============================================================================
+
+:EventoTemporalConsistenciaShape a sh:NodeShape ;
+    sh:targetClass :AprobacionPermiso ;
+    sh:name "Evento temporal consistencia"@es ;
+    sh:description "AprobacionPermiso debe tener fechaDecision posterior a fechaRadicacion del tramite"@es ;
+    sh:severity sh:Violation ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "AprobacionPermiso tiene fechaDecision anterior a fechaRadicacion del tramite (inconsistencia temporal)"@es ;
+        sh:select """
+            SELECT $this ?fechaAprobacion ?fechaRadicacion
+            WHERE {
+                $this :fechaDecisionAprobacion ?fechaAprobacion ;
+                      :tramiteRelacionado ?tramite .
+                ?tramite :fechaRadicacion ?fechaRadicacion .
+                
+                # Fecha de aprobacion debe ser posterior a radicacion
+                FILTER(?fechaAprobacion < ?fechaRadicacion)
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Reposicion → Validar transiciones del recurso de apelacion
+# =============================================================================
+# NUEVO 2026-01-07: Basado en diagrama "Candidato Presenta Reposición"
+
+:ReposicionTransicionShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformalSolicitante ;
+    sh:name "Reposicion transicion valida"@es ;
+    sh:description "Solo candidatos en estado 'no_autorizado' pueden presentar reposicion. Reposicion aceptada retorna a evaluacion."@es ;
+    sh:severity sh:Violation ;
+    
+    # Validar que presenta_reposicion solo viene de no_autorizado
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Solo VendedorInformalSolicitante en estado 'no_autorizado' puede transitar a 'presenta_reposicion'"@es ;
+        sh:select """
+            SELECT $this ?estado
+            WHERE {
+                $this :estadoSolicitud ?estado .
+                
+                # Si esta presentando reposicion...
+                FILTER(?estado = "presenta_reposicion")
+                
+                # Debe haber estado previamente en 'no_autorizado'
+                FILTER NOT EXISTS {
+                    $this :historialEstados/rdf:rest*/rdf:first "no_autorizado" .
+                }
+            }
+        """
+    ] ;
+    
+    # Validar que reposicion tiene fecha y motivo
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalSolicitante en estado 'presenta_reposicion' o posterior debe tener fechaReposicion y motivoReposicion"@es ;
+        sh:select """
+            SELECT $this ?estado
+            WHERE {
+                $this :estadoSolicitud ?estado .
+                
+                # Si esta en proceso de reposicion...
+                FILTER(?estado IN ("presenta_reposicion", "reposicion_en_estudio", "reposicion_aceptada", "reposicion_negada"))
+                
+                # Debe tener fecha y motivo
+                FILTER NOT EXISTS {
+                    $this :fechaReposicion ?fecha ;
+                          :motivoReposicion ?motivo .
+                }
+            }
+        """
+    ] ;
+    
+    # Validar que reposicion_aceptada retorna a evaluacion
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalSolicitante con reposicion_aceptada debe retornar a estado de evaluacion (espera_respuesta o en_evaluacion_tecnica)"@es ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this ?estado ?fechaDecision
+            WHERE {
+                $this :estadoSolicitud ?estado ;
+                      :fechaDecisionReposicion ?fechaDecision ;
+                      :resultadoReposicion "reposicion_aceptada" .
+                
+                # Si reposicion fue aceptada hace mas de 30 dias y NO ha retornado a evaluacion
+                BIND((NOW() - ?fechaDecision) / 86400 AS ?diasDesdeAceptacion)
+                FILTER(?diasDesdeAceptacion > 30)
+                FILTER(?estado NOT IN ("espera_respuesta", "en_evaluacion_tecnica", "concepto_emitido", "autorizado"))
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Novedad → Validar eventos especiales desde decision point del diagrama
+# =============================================================================
+# NUEVO 2026-01-07: Basado en decision point "Novedad" del diagrama
+
+:NovedadTransicionShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformalRegulado ;
+    sh:name "Novedad transicion valida"@es ;
+    sh:description "Eventos de novedad (cambia_titular, cancela_autorizacion, fallece) solo pueden ocurrir desde estado 'activo' o 'ninguna_novedad'"@es ;
+    sh:severity sh:Violation ;
+    
+    # Validar que novedad requiere documentacion
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalRegulado con novedad debe tener tipoNovedad, fechaNovedad y motivoNovedad registrados"@es ;
+        sh:select """
+            SELECT $this ?estado
+            WHERE {
+                $this :estadoRolRegulado ?estado .
+                
+                # Si esta en estado de novedad...
+                FILTER(?estado IN ("cambia_titular", "cancela_autorizacion", "fallece", "suspendido", "revocado", "reubicado"))
+                
+                # Debe tener tipo, fecha y motivo de novedad
+                FILTER NOT EXISTS {
+                    $this :tipoNovedad ?tipo ;
+                          :fechaNovedad ?fecha ;
+                          :motivoNovedad ?motivo .
+                }
+            }
+        """
+    ] ;
+    
+    # Validar que cambia_titular tiene nuevo titular
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalRegulado con novedad 'cambia_titular' debe tener titularSucesor especificado"@es ;
+        sh:select """
+            SELECT $this ?estado
+            WHERE {
+                $this :estadoRolRegulado ?estado ;
+                      :tipoNovedad \"cambia_titular\" .
+                
+                # Debe tener titular sucesor
+                FILTER NOT EXISTS {
+                    $this :titularSucesor ?sucesor .
+                }
+            }
+        """
+    ] ;
+    
+    # Validar que fallece es estado terminal
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalRegulado con estado 'fallecido' es terminal - no debe tener transiciones posteriores"@es ;
+        sh:select """
+            SELECT $this ?estado ?fechaFin
+            WHERE {
+                $this :estadoRolRegulado ?estado ;
+                      :tipoNovedad \"fallece\" .
+                
+                FILTER(?estado = \"fallecido\")
+                
+                # Debe tener fecha fin del rol
+                FILTER NOT EXISTS {
+                    $this :fechaFinRolRegulado ?fechaFin .
+                }
+            }
+        """
+    ] ;
+    
+    # Validar decision point: solo desde activo pueden ocurrir novedades
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Eventos de novedad solo pueden ocurrir desde estado 'activo' o 'ninguna_novedad' (decision point del diagrama)"@es ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this ?estadoActual ?tipoNovedad ?fechaNovedad
+            WHERE {
+                $this :estadoRolRegulado ?estadoActual ;
+                      :tipoNovedad ?tipoNovedad ;
+                      :fechaNovedad ?fechaNovedad .
+                
+                # Si hay novedad registrada...
+                FILTER(?tipoNovedad IN (\"cambia_titular\", \"cancela_autorizacion\", \"fallece\", \"suspendido\", \"revocado\", \"reubicado\"))
+                
+                # Verificar que vino de estado activo
+                FILTER NOT EXISTS {
+                    $this :historialEstados/rdf:rest*/rdf:first ?estadoPrevio .
+                    FILTER(?estadoPrevio IN (\"activo\", \"ninguna_novedad\"))
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Vigencia → Validar expiracion y renovacion del permiso
+# =============================================================================
+# NUEVO 2026-01-07: Basado en evento "Termina Vigencia" del diagrama
+
+:VigenciaTransicionShape a sh:NodeShape ;
+    sh:targetClass :VendedorInformalRegulado ;
+    sh:name "Vigencia transicion valida"@es ;
+    sh:description "Validar flujo de vencimiento y renovacion del permiso: termina_vigencia → en_renovacion → renovado → activo"@es ;
+    sh:severity sh:Violation ;
+    
+    # Validar que termina_vigencia tiene fecha de vencimiento
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalRegulado en estado 'termina_vigencia' debe tener fechaVencimientoPermiso registrada"@es ;
+        sh:select """
+            SELECT $this ?estado
+            WHERE {
+                $this :estadoRolRegulado ?estado .
+                
+                FILTER(?estado = \"termina_vigencia\")
+                
+                # Debe tener fecha de vencimiento
+                FILTER NOT EXISTS {
+                    $this :fechaVencimientoPermiso ?fechaVencimiento .
+                }
+            }
+        """
+    ] ;
+    
+    # Validar que renovado tiene fecha de renovacion
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalRegulado con estado 'renovado' debe tener fechaRenovacion registrada"@es ;
+        sh:select """
+            SELECT $this ?estado
+            WHERE {
+                $this :estadoRolRegulado ?estado .
+                
+                FILTER(?estado = \"renovado\")
+                
+                # Debe tener fecha de renovacion
+                FILTER NOT EXISTS {
+                    $this :fechaRenovacion ?fechaRenovacion .
+                }
+            }
+        """
+    ] ;
+    
+    # Alertar sobre permisos proximos a vencer
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalRegulado tiene permiso que vence en menos de 30 dias - requiere gestion de renovacion"@es ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this ?estado ?fechaVencimiento ?diasRestantes
+            WHERE {
+                $this :estadoRolRegulado ?estado ;
+                      :fechaVencimientoPermiso ?fechaVencimiento .
+                
+                # Solo evaluar roles activos
+                FILTER(?estado IN (\"activo\", \"ninguna_novedad\"))
+                
+                # Calcular dias restantes
+                BIND((?fechaVencimiento - NOW()) / 86400 AS ?diasRestantes)
+                
+                # Alerta si faltan menos de 30 dias
+                FILTER(?diasRestantes < 30 && ?diasRestantes > 0)
+            }
+        """
+    ] ;
+    
+    # Validar que vencido es resultado de no renovar
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "VendedorInformalRegulado en estado 'vencido' debe haber pasado previamente por 'termina_vigencia'"@es ;
+        sh:select """
+            SELECT $this ?estado
+            WHERE {
+                $this :estadoRolRegulado ?estado .
+                
+                FILTER(?estado = \"vencido\")
+                
+                # Debe tener historial de termina_vigencia
+                FILTER NOT EXISTS {
+                    $this :historialEstados/rdf:rest*/rdf:first \"termina_vigencia\" .
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: ConceptoTecnico → Debe fundamentar decision del tramite
+# =============================================================================
+# NUEVO 2026-01-07: Validar que conceptos tecnicos soportan decisiones
+
+:ConceptoFundamentaDecisionShape a sh:NodeShape ;
+    sh:targetClass :ConceptoTecnico ;
+    sh:name "Concepto fundamenta decision"@es ;
+    sh:description "ConceptoTecnico emitido debe estar vinculado al tramite que evalua y debe fundamentar la decision final"@es ;
+    sh:severity sh:Violation ;
+    
+    # Debe estar vinculado a tramite
+    sh:property [
+        sh:path :conceptoParaTramite ;
+        sh:name "Concepto para tramite"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class :Tramite ;
+        sh:message "ConceptoTecnico debe estar vinculado a exactamente un Tramite"@es
+    ] ;
+    
+    # Concepto emitido debe tener resultado y justificacion
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "ConceptoTecnico en estado 'emitido' debe tener conceptoResultado y conceptoJustificacion"@es ;
+        sh:select """
+            SELECT $this ?estado
+            WHERE {
+                $this :estadoConcepto ?estado .
+                
+                FILTER(?estado = \"emitido\")
+                
+                # Debe tener resultado y justificacion
+                FILTER NOT EXISTS {
+                    $this :conceptoResultado ?resultado ;
+                          :conceptoJustificacion ?justificacion .
+                }
+            }
+        """
+    ] ;
+    
+    # Validar que tramite con concepto_emitido tiene al menos un concepto tecnico emitido
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Tramite en estado 'concepto_emitido' debe tener al menos un ConceptoTecnico en estado 'emitido'"@es ;
+        sh:select """
+            SELECT ?tramite ?estadoTramite
+            WHERE {
+                ?tramite :estadoTramite ?estadoTramite .
+                
+                FILTER(?estadoTramite = \"concepto_emitido\")
+                
+                # Debe tener al menos un concepto emitido
+                FILTER NOT EXISTS {
+                    ?concepto :conceptoParaTramite ?tramite ;
+                              :estadoConcepto \"emitido\" .
+                }
+            }
+        """
+    ] .

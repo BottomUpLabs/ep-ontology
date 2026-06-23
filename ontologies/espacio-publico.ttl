@@ -1,0 +1,185 @@
+@prefix : <https://w3id.org/medellin/espacio-publico#> .
+@prefix ep: <https://w3id.org/medellin/espacio-publico#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix reg: <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <https://schema.org/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+# =============================================================================
+# ONTOLOGIA PRINCIPAL: Espacio Publico - Medellin
+# =============================================================================
+# Archivo unico de importacion para todas las ontologias del sistema.
+# Importar SOLO este archivo para cargar toda la base de conocimiento.
+#
+# USO:
+#   En Protege: File > Open > espacio-publico.ttl
+#   En Python (rdflib): g.parse("espacio-publico.ttl")
+#   En SPARQL: FROM <espacio-publico.ttl>
+#
+# ESTRUCTURA:
+#   ontologies/
+#   ├── espacio-publico.ttl               ← ESTE ARCHIVO (importar solo este)
+#   ├── core/                              ← Ontologias abstractas reutilizables
+#   ├── domains/regulacion/                ← Dominio vendedores informales
+#   ├── domains/propaganda_electoral/      ← Dominio propaganda electoral
+#   └── shapes/                            ← SHACL validation (importar separado)
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico> a owl:Ontology ;
+    dcterms:title "Espacio Publico - Ontologia Integrada"@es ;
+    dcterms:title "Public Space - Integrated Ontology"@en ;
+    rdfs:label "Ontologia de Espacio Publico de Medellin"@es ;
+    dcterms:description """Ontologia integrada para la gestion del espacio publico
+    en Medellin. Incluye entidades base (Persona, Lugar, Negocio, Familia), entidades
+    institucionales (Tramite, Resolucion, ConceptoTecnico, Programa), el patron de rol
+    (RolInstitucional, RolInferido, VendedorInformal) y los dominios de regulacion de
+    vendedores informales y propaganda electoral.
+
+    Importar ESTE archivo carga automaticamente, via owl:imports:
+    - Core: clases abstractas reutilizables (entidades de primer orden, entidades
+      institucionales, patron de rol).
+    - Regulacion: dominio de vendedores informales.
+    - Propaganda Electoral: dominio de publicidad politica en periodos electorales."""@es ;
+    dcterms:abstract "Ontologia OWL modular y vocabularios SKOS para representar la gestion del espacio publico de Medellin: actores, tramites, resoluciones, roles, ciclos de vida y dominios de regulacion de vendedores informales y propaganda electoral."@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:rightsHolder <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:contributor "Equipo de Modelado de Datos - Espacio Publico Medellin" ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    dcterms:modified "2026-05-31"^^xsd:date ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:rights "Copyright 2026 Alcaldia de Medellin. Distribuido bajo licencia Creative Commons Attribution 4.0 International (CC BY 4.0)."@es ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    dcterms:spatial <https://sws.geonames.org/3674962/> ;
+    dcterms:language "es" , "en" ;
+    dcterms:bibliographicCitation "Subsecretaria de Espacio Publico de Medellin (2026). Ontologia de Espacio Publico de Medellin, version 0.1.0. https://w3id.org/medellin/espacio-publico"@es ;
+    schema:citation "Subsecretaria de Espacio Publico de Medellin (2026). Ontologia de Espacio Publico de Medellin, v0.1.0. https://w3id.org/medellin/espacio-publico" ;
+    dcat:keyword "espacio publico"@es , "vendedores informales"@es , "propaganda electoral"@es , "gobierno abierto"@es , "datos abiertos"@es , "Medellin"@es , "public space"@en , "street vendors"@en , "open government data"@en ;
+    schema:keywords "espacio publico, vendedores informales, propaganda electoral, datos abiertos, Medellin, gobierno abierto, OWL, SKOS" ;
+    foaf:homepage <https://w3id.org/medellin/espacio-publico> ;
+    schema:codeRepository <https://github.com/medellin-datos/ep-ontology> ;
+    bibo:status "published"@en ;
+    vann:preferredNamespacePrefix "ep" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico#" ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/0.1.0> ;
+    owl:versionInfo "0.1.0" ;
+
+    # ==========================================================================
+    # CORE ONTOLOGIES (Abstract, Reusable)
+    # ==========================================================================
+    # Clases base que aplican a TODOS los dominios de Espacio Publico
+    
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/entidades-primer-orden> ;      # Negocio, Familia, ciclos de vida
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda> ;  # Lugar, PuestoVenta, Vivienda, Modulo
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/persona-natural> ;             # PersonaNatural, MiembroFamiliar y caracterizacion
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/institutional-core-entities> ; # Tramite, Resolucion, Evento, Programa
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;       # Patron de rol: RolInstitucional, RolInferido
+    
+    # ==========================================================================
+    # DOMAIN: REGULACION VENDEDORES INFORMALES
+    # ==========================================================================
+    # Especializaciones para el proceso de autorizacion de vendedores
+    
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/roles-vendedor> ;          # VendedorInformal, Solicitante, Regulado
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/tramites-autorizacion> ;   # AutorizacionTemporalEspacioPublico
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/permisos-resoluciones> ;   # PermisoOcupacion
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/infraestructura> ;         # Modulo, Carne
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/programas-institucionales> ; # ProgramaReubicacion
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/pqrs-novedades> ;          # NovedadFallecimiento
+    
+    # ==========================================================================
+    # DOMAIN: PROPAGANDA ELECTORAL
+    # ==========================================================================
+    # Gestion de publicidad politica en periodos electorales
+    
+    owl:imports <https://w3id.org/medellin/espacio-publico/propaganda-electoral> ;                                # Clases core propaganda electoral
+    owl:imports <https://w3id.org/medellin/espacio-publico/propaganda-electoral/properties> ;                     # Propiedades propaganda electoral
+
+    # ==========================================================================
+    # DOMAIN: CONTROL Y APROVECHAMIENTO DEL ESPACIO PUBLICO
+    # ==========================================================================
+    # Intervencion, aprovechamiento economico, oferta institucional, puntos criticos
+    # y vocabularios de causales, conceptos tecnicos, actividades y zonas restringidas
+
+    owl:imports <https://w3id.org/medellin/espacio-publico/control> ;                                             # Intervencion, AprovechamientoEconomico, PuntoCritico
+
+    # ==========================================================================
+    # DOMAIN: GESTIONES Y EVIDENCIAS
+    # ==========================================================================
+    # Gestiones operativas de los equipos (app Gestiones) y sus evidencias:
+    # una clase por equipo y una clase por tipo de gestion, con conexiones
+    # explicitas a PersonaNatural, PuestoVenta, Vivienda, Negocio y Lugar
+
+    owl:imports <https://w3id.org/medellin/espacio-publico/gestiones> ;                                           # Gestion, Equipo, Evidencia, Gestor, LugarActividad
+
+    # ==========================================================================
+    # VOCABULARIOS CONTROLADOS SKOS (referencia; se cargan por separado)
+    # ==========================================================================
+    rdfs:seeAlso <https://w3id.org/medellin/espacio-publico/vocab/tipologia-venta> ;
+    rdfs:seeAlso <https://w3id.org/medellin/espacio-publico/vocab/clase-venta> ;
+    rdfs:seeAlso <https://w3id.org/medellin/espacio-publico/vocab/normograma> ;
+
+    # ==========================================================================
+    # METADATOS
+    # ==========================================================================
+    dcterms:source "Acuerdo 076 de 2014 - Politica Publica de Vendedores Informales" ;
+    dcterms:source "Decreto 883 de 2015" ;
+    dcterms:source "SUIT Codigo 26521 - Autorizacion temporal espacio publico" ;
+    
+    rdfs:seeAlso <../shapes/espacio-publico-shapes.ttl> ;  # SHACL shapes (importar separado)
+    
+    rdfs:comment """
+================================================================================
+GUIA DE USO
+================================================================================
+
+1. CARGAR ONTOLOGIA COMPLETA:
+   - Importar solo este archivo (espacio-publico.ttl)
+   - Todas las dependencias se cargan automaticamente via owl:imports
+
+2. CARGAR SHACL SHAPES (opcional, para validacion):
+   - shapes/vendedor-lifecycle-shapes.ttl
+   - shapes/event-state-enforcement-shapes.ttl
+   - shapes/lifecycle-propagation-shapes.ttl
+
+3. NAMESPACES DISPONIBLES:
+   - core:  https://w3id.org/medellin/espacio-publico/core#
+   - reg:   https://w3id.org/medellin/espacio-publico/regulacion#
+
+4. CLASES PRINCIPALES:
+   - core:Persona, core:Lugar, core:Negocio, core:Familia
+   - core:Tramite, core:Resolucion, core:Evento, core:Programa
+   - role:RolInstitucional, role:RolInferido
+   - reg:VendedorInformal, reg:VendedorInformalSolicitante, reg:VendedorInformalRegulado
+   - reg:AutorizacionTemporalEspacioPublico, reg:PermisoOcupacion
+
+5. INFERENCIAS AUTOMATICAS:
+   - Persona que radica AutorizacionTemporalEspacioPublico → VendedorInformal (inferido)
+   - Persona:fallecido → todos sus roles → estado terminal
+
+================================================================================
+"""@es .
+
+# =============================================================================
+# AGENTE: Publicador / Titular de derechos
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico>
+    a foaf:Organization , org:Organization , prov:Organization ;
+    foaf:name "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia, Alcaldia de Medellin"@es ;
+    skos:prefLabel "Subsecretaria de Espacio Publico de Medellin"@es ;
+    org:subOrganizationOf <https://www.medellin.gov.co/> ;
+    foaf:homepage <https://www.medellin.gov.co/> ;
+    dcterms:spatial <https://sws.geonames.org/3674962/> .

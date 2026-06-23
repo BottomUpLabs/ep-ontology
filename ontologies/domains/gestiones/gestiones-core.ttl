@@ -1,0 +1,1089 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/gestiones#> .
+@prefix gestion: <https://w3id.org/medellin/espacio-publico/gestiones#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix role: <https://w3id.org/medellin/espacio-publico/roles#> .
+@prefix regulacion: <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix ctrl: <https://w3id.org/medellin/espacio-publico/control#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix iso11179: <http://purl.org/iso11179/> .
+
+# =============================================================================
+# ONTOLOGIA: Gestiones y Evidencias - Espacio Publico
+# =============================================================================
+# Modela las GESTIONES operativas registradas por los equipos de la
+# Subsecretaria de Espacio Publico (fuente: trx_gestiones.xlsx, app Gestiones)
+# y las EVIDENCIAS documentales que las soportan.
+#
+# Estructura de la fuente:
+#   - equipos:                  los 5 equipos operativos (una clase por equipo)
+#   - actividades:              los 23 tipos de gestion (una clase por gestion),
+#                               cada uno adscrito a un equipo
+#   - columnas_relacionamiento: por tipo de gestion, las columnas de la tabla
+#                               gestiones que aplican. De ahi salen las
+#                               CONEXIONES EXPLICITAS de este modulo:
+#       vendedor_* / persona_*      -> core:PersonaNatural (:atiendeVendedor,
+#                                      :tieneSolicitante)
+#       venta_lugar_*               -> core:PuestoVenta    (:enPuestoVenta)
+#       residencia_lugar_*          -> core:Vivienda       (:enLugarResidencia)
+#       actividad_lugar_*/ubicacion_* -> :LugarActividad   (:enLugarActividad)
+#       establecimiento_*           -> core:Negocio        (:involucraEstablecimiento)
+#       actividad_evidencia_*       -> :Evidencia          (:tieneEvidencia)
+#       gestor_id                   -> :Gestor             (:realizadaPorGestor)
+#       (clase de gestion)          -> :Equipo             (:realizadaPorEquipo)
+#
+# Cada clase hoja declara con owl:Restriction (someValuesFrom / hasValue) las
+# conexiones que su tabla de relacionamiento captura. El crosswalk columna
+# fuente -> termino ontologico vive en
+# mappings/gestiones_columnas-fuente_ontologia.csv.
+#
+# Las gestiones son prov:Activity y las evidencias prov:Entity
+# (prov:wasGeneratedBy), igual que en los dominios control y propaganda.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/gestiones> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/gestiones/0.1.0> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/persona-natural> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/institutional-core-entities> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:issued "2026-06-12"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Gestiones y Evidencias"@es ;
+    dcterms:title "Public Space - Operations Log and Evidence"@en ;
+    dcterms:description """Ontologia de las gestiones operativas de los equipos de
+    la Subsecretaria de Espacio Publico y de sus evidencias documentales. Define
+    la clase abstracta Gestion (prov:Activity), una clase por equipo operativo
+    (Social, Regulaciones, AEEP, Territorio, PEV), una clase por tipo de gestion
+    (23 actividades de la app Gestiones) y la jerarquia de Evidencia
+    (prov:Entity). Hace explicitas las conexiones de cada tipo de gestion con
+    core:PersonaNatural (vendedor atendido, solicitante/remitente),
+    core:PuestoVenta (lugar de venta), core:Vivienda (lugar de residencia),
+    core:Negocio (establecimiento) y el lugar de la actividad, segun la tabla
+    columnas_relacionamiento de la fuente."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:created "2026-06-12"^^xsd:date ;
+    dcterms:modified "2026-06-12"^^xsd:date ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    dcterms:source "trx_gestiones.xlsx - app Gestiones (hojas: equipos, actividades, columnas_relacionamiento, gestiones, solicitudes)" ;
+    vann:preferredNamespacePrefix "gestion" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/gestiones#" ;
+    owl:versionInfo "0.1.0" .
+
+# =============================================================================
+# PROPIEDADES DE ANOTACION
+# =============================================================================
+
+:abreviacion a owl:AnnotationProperty ;
+    rdfs:label "abreviacion"@es ;
+    rdfs:comment """Abreviacion institucional del tipo de gestion usada para
+    nombrar archivos de evidencia (columna nombramiento_abreviacion de la hoja
+    actividades; ej. VAD, ESC, CSE)."""@es .
+
+:formatoAsociado a owl:AnnotationProperty ;
+    rdfs:label "formato asociado"@es ;
+    rdfs:seeAlso regulacion:formularioAsociado ;
+    rdfs:comment """Codigo del formato institucional de calidad con que se
+    documenta la gestion (ej. FO-GGOL-036). Mismo sentido que
+    regulacion:formularioAsociado."""@es .
+
+:variableNombramiento a owl:AnnotationProperty ;
+    rdfs:label "variable de nombramiento"@es ;
+    rdfs:comment """Columna de la fuente cuyo valor identifica la gestion al
+    nombrar los archivos de evidencia (columna nombramiento_variable1 de la hoja
+    actividades; ej. vendedor_documento_numero, codigo, gestion_nombre_corto)."""@es .
+
+# =============================================================================
+# CLASE: Equipo (equipo operativo de la Subsecretaria)
+# =============================================================================
+
+:Equipo a owl:Class ;
+    rdfs:subClassOf foaf:Group, prov:Agent ;
+    rdfs:label "Equipo"@es ;
+    rdfs:label "Team"@en ;
+    skos:prefLabel "Equipo Operativo"@es ;
+    skos:altLabel "Componente"@es ;
+    skos:definition """Equipo operativo de la Subsecretaria de Espacio Publico
+    responsable de un conjunto de tipos de gestion. Cada gestion registrada
+    pertenece a exactamente un equipo a traves de su tipo de actividad
+    (hoja equipos de la fuente)."""@es ;
+    iso11179:objectClass "Equipo" .
+
+# --- Individuos: los 5 equipos de la fuente (hoja equipos) ---
+
+:EquipoSocial a owl:NamedIndividual, :Equipo ;
+    rdfs:label "Equipo Social"@es ;
+    dcterms:identifier "D04EDA4C-8E53-4C0F-8E78-0674690412A8" ;
+    skos:definition "Equipo Social: acompanamiento socioeconomico a vendedores informales (visitas, estudios, conceptos, ofertas institucionales, actas)."@es .
+
+:EquipoRegulaciones a owl:NamedIndividual, :Equipo ;
+    rdfs:label "Equipo Regulaciones"@es ;
+    dcterms:identifier "B148B749-E8B0-4017-82F6-72D5A33F6A38" ;
+    skos:definition "Equipo Regulaciones: tramite de solicitudes de ingreso, novedades, resoluciones y PQRSDF del proceso de regulacion de vendedores."@es .
+
+:EquipoAEEP a owl:NamedIndividual, :Equipo ;
+    rdfs:label "Equipo Aprovechamiento Economico del Espacio Publico (AEEP)"@es ;
+    dcterms:identifier "40EBA143-01BB-46D0-9F20-BA5E1E12CA08" ;
+    skos:altLabel "AEEP"@es ;
+    skos:definition "Equipo AEEP: resoluciones y PQRSD del aprovechamiento economico del espacio publico y actividades en territorio."@es .
+
+:EquipoTerritorio a owl:NamedIndividual, :Equipo ;
+    rdfs:label "Equipo Territorio"@es ;
+    dcterms:identifier "C8B11128-F1DC-471E-BA74-9156C186768B" ;
+    skos:definition "Equipo Territorio: atencion de PQRS con visita a territorio."@es .
+
+:EquipoPEV a owl:NamedIndividual, :Equipo ;
+    rdfs:label "Equipo PEV"@es ;
+    dcterms:identifier "060EBD26-4FCC-488A-969B-25969F546127" ;
+    skos:definition "Equipo PEV (propaganda electoral visual)."@es ;
+    skos:editorialNote "Sin tipos de gestion registrados en la hoja actividades a 2026-06-12."@es .
+
+# =============================================================================
+# CLASE: Gestor (rol institucional de quien realiza la gestion)
+# =============================================================================
+
+:Gestor a owl:Class ;
+    rdfs:subClassOf role:RolInstitucional ;
+    rdfs:subClassOf [ a owl:Restriction ;
+        owl:onProperty role:basadoEn ;
+        owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:label "Gestor"@es ;
+    rdfs:label "Case Officer"@en ;
+    skos:prefLabel "Gestor"@es ;
+    skos:altLabel "Profesional asignado"@es ;
+    skos:definition """Rol institucional de la persona (funcionario o contratista,
+    hoja usuarios de la fuente) que realiza o tiene asignada una gestion. En la
+    fuente se identifica por correo electronico (gestor_id, usuario_id). El rol
+    se basa en una core:PersonaNatural y pertenece a un :Equipo."""@es ;
+    iso11179:objectClass "Gestor" .
+
+:miembroDeEquipo a owl:ObjectProperty ;
+    rdfs:label "miembro de equipo"@es ;
+    rdfs:domain :Gestor ;
+    rdfs:range :Equipo ;
+    skos:definition "Adscribe el gestor a su equipo operativo (columna equipo_id de la hoja usuarios)."@es .
+
+# =============================================================================
+# CLASE: Gestion (ABSTRACTA - prov:Activity)
+# =============================================================================
+
+:Gestion a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Gestion"@es ;
+    rdfs:label "Operation"@en ;
+    skos:prefLabel "Gestion"@es ;
+    skos:altLabel "Actividad operativa"@es ;
+    skos:definition """ABSTRACTA: Actuacion operativa registrada por un equipo de
+    la Subsecretaria de Espacio Publico en la app Gestiones (una fila de las
+    tablas gestiones / solicitudes de la fuente). Toda gestion es de exactamente
+    un tipo (una subclase hoja), es realizada por un equipo y por un gestor, y
+    se soporta en evidencias documentales. Segun su tabla de relacionamiento,
+    la gestion se conecta ademas con la persona natural atendida o solicitante,
+    el puesto de venta, el lugar de residencia, el establecimiento y/o el lugar
+    donde ocurrio la actividad."""@es ;
+    skos:scopeNote """No instanciar directamente: usar la subclase del tipo de
+    gestion correspondiente (una clase por actividad de la fuente)."""@es ;
+    iso11179:objectClass "Gestion" .
+
+# --- Clases por equipo: agrupan los tipos de gestion de cada equipo ---
+
+:GestionSocial a owl:Class ;
+    rdfs:subClassOf :Gestion ;
+    rdfs:subClassOf [ a owl:Restriction ;
+        owl:onProperty :realizadaPorEquipo ;
+        owl:hasValue :EquipoSocial ] ;
+    rdfs:label "Gestion del Equipo Social"@es ;
+    skos:definition "Gestion realizada por el Equipo Social."@es .
+
+:GestionRegulaciones a owl:Class ;
+    rdfs:subClassOf :Gestion ;
+    rdfs:subClassOf [ a owl:Restriction ;
+        owl:onProperty :realizadaPorEquipo ;
+        owl:hasValue :EquipoRegulaciones ] ;
+    rdfs:label "Gestion del Equipo Regulaciones"@es ;
+    skos:definition "Gestion realizada por el Equipo Regulaciones."@es .
+
+:GestionAEEP a owl:Class ;
+    rdfs:subClassOf :Gestion ;
+    rdfs:subClassOf [ a owl:Restriction ;
+        owl:onProperty :realizadaPorEquipo ;
+        owl:hasValue :EquipoAEEP ] ;
+    rdfs:label "Gestion del Equipo AEEP"@es ;
+    skos:definition "Gestion realizada por el equipo de Aprovechamiento Economico del Espacio Publico."@es .
+
+:GestionTerritorio a owl:Class ;
+    rdfs:subClassOf :Gestion ;
+    rdfs:subClassOf [ a owl:Restriction ;
+        owl:onProperty :realizadaPorEquipo ;
+        owl:hasValue :EquipoTerritorio ] ;
+    rdfs:label "Gestion del Equipo Territorio"@es ;
+    skos:definition "Gestion realizada por el Equipo Territorio."@es .
+
+:GestionPEV a owl:Class ;
+    rdfs:subClassOf :Gestion ;
+    rdfs:subClassOf [ a owl:Restriction ;
+        owl:onProperty :realizadaPorEquipo ;
+        owl:hasValue :EquipoPEV ] ;
+    rdfs:label "Gestion del Equipo PEV"@es ;
+    skos:definition "Gestion realizada por el Equipo PEV."@es ;
+    skos:editorialNote "Sin subclases: el equipo PEV no tiene tipos de gestion registrados en la fuente a 2026-06-12."@es .
+
+# =============================================================================
+# CLASE: LugarActividad (lugar donde ocurre la gestion) - subClassOf core:Lugar
+# =============================================================================
+# core:Lugar es abstracta y sus unicas concretas eran core:PuestoVenta y
+# core:Vivienda. Las reuniones, ofertas y visitas de territorio ocurren en
+# lugares que no son ni puesto ni vivienda (sedes institucionales, puentes,
+# parques): se agrega esta tercera especializacion concreta.
+
+:LugarActividad a owl:Class ;
+    rdfs:subClassOf core:Lugar ;
+    rdfs:label "Lugar de Actividad"@es ;
+    rdfs:label "Activity Venue"@en ;
+    skos:prefLabel "Lugar de Actividad"@es ;
+    skos:altLabel "Lugar de reunion"@es ;
+    skos:definition """Lugar donde se desarrolla una gestion cuando no corresponde
+    a un puesto de venta ni a una vivienda: sedes institucionales, espacios
+    publicos de reunion, sectores visitados (columnas actividad_lugar_* y
+    ubicacion_* de la fuente). Hereda de core:Lugar la direccion, el barrio,
+    la comuna, la referencia y las coordenadas."""@es ;
+    iso11179:objectClass "Lugar_Actividad" .
+
+# =============================================================================
+# CLASE: Evidencia y subclases (prov:Entity)
+# =============================================================================
+
+:Evidencia a owl:Class ;
+    rdfs:subClassOf prov:Entity, foaf:Document ;
+    rdfs:label "Evidencia"@es ;
+    rdfs:label "Evidence"@en ;
+    skos:prefLabel "Evidencia"@es ;
+    skos:altLabel "Soporte documental"@es ;
+    skos:definition """Documento o registro que soporta la realizacion de una
+    gestion: el archivo del formato institucional diligenciado, fotografias o el
+    listado de asistencia. Es generada por la gestion (prov:wasGeneratedBy via
+    :evidenciaDe) y se almacena como archivo (ruta o URL en :rutaArchivo)."""@es ;
+    iso11179:objectClass "Evidencia" .
+
+:EvidenciaArchivo a owl:Class ;
+    rdfs:subClassOf :Evidencia ;
+    rdfs:label "Evidencia de Archivo"@es ;
+    rdfs:label "File Evidence"@en ;
+    skos:prefLabel "Evidencia de Archivo"@es ;
+    skos:definition """Archivo documental (tipicamente PDF) que registra la gestion:
+    formato institucional diligenciado, oficio, acta o acto administrativo
+    (columnas actividad_evidencia_archivo, evidencia_archivo, archivo1, archivo2).
+    El formato exigido por cada tipo de gestion se anota en la clase con
+    :formatoAsociado."""@es .
+
+:EvidenciaFotografica a owl:Class ;
+    rdfs:subClassOf :Evidencia ;
+    rdfs:label "Evidencia Fotografica"@es ;
+    rdfs:label "Photographic Evidence"@en ;
+    skos:prefLabel "Evidencia Fotografica"@es ;
+    skos:definition """Fotografia que registra la realizacion de la gestion
+    (columnas actividad_evidencia_foto1/2, foto1, foto2). En las actas de
+    reunion sustituye al archivo del acta cuando este no existe."""@es .
+
+:ListadoAsistencia a owl:Class ;
+    rdfs:subClassOf :Evidencia ;
+    rdfs:label "Listado de Asistencia"@es ;
+    rdfs:label "Attendance List"@en ;
+    skos:prefLabel "Listado de Asistencia"@es ;
+    skos:definition """Listado de asistentes que acompana las actas de reunion.
+    Su presencia se registra en la fuente como indicador
+    (evidencia_listado_asistencia_es -> :incluyeListadoAsistencia)."""@es .
+
+# =============================================================================
+# PROPIEDADES DE OBJETO: conexiones explicitas de la gestion
+# =============================================================================
+
+# --- Gestion -> Equipo / Gestor ---
+
+:realizadaPorEquipo a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:subPropertyOf prov:wasAssociatedWith ;
+    rdfs:label "realizada por equipo"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range :Equipo ;
+    skos:definition "Equipo operativo responsable de la gestion (via equipo_id de la hoja actividades)."@es .
+
+:realizadaPorGestor a owl:ObjectProperty ;
+    rdfs:subPropertyOf prov:wasAssociatedWith ;
+    rdfs:label "realizada por gestor"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range :Gestor ;
+    skos:definition "Gestor que realiza o tiene asignada la gestion (columna gestor_id)."@es .
+
+# --- Gestion -> PersonaNatural ---
+
+:involucraPersona a owl:ObjectProperty ;
+    rdfs:label "involucra persona"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range core:PersonaNatural ;
+    skos:definition """Superpropiedad de las conexiones de la gestion con una
+    persona natural distinta del gestor. Especializada en :atiendeVendedor y
+    :tieneSolicitante."""@es .
+
+:atiendeVendedor a owl:ObjectProperty ;
+    rdfs:subPropertyOf :involucraPersona ;
+    rdfs:label "atiende vendedor"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range core:PersonaNatural ;
+    skos:definition """Persona natural atendida por la gestion en su condicion de
+    vendedor informal (columnas vendedor_documento_tipo, vendedor_documento_numero,
+    vendedor_nombre -> core:documentoTipo, core:documentoNumero,
+    core:nombreCompleto de la persona). La condicion de vendedor es un rol
+    (role:VendedorInformal) basado en la misma persona."""@es .
+
+:tieneSolicitante a owl:ObjectProperty ;
+    rdfs:subPropertyOf :involucraPersona ;
+    rdfs:label "tiene solicitante"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range core:PersonaNatural ;
+    skos:altLabel "remitente"@es ;
+    skos:altLabel "interesado"@es ;
+    skos:definition """Persona natural que solicita, remite o es destinataria del
+    documento gestionado: remitente de PQRSD, solicitante de ingreso o de
+    resolucion, interesado de la compra (columnas persona_documento_tipo,
+    persona_documento_numero, persona_nombre y persona_*1/2 de solicitudes)."""@es .
+
+# --- Gestion -> Lugar ---
+
+:tieneLugar a owl:ObjectProperty ;
+    rdfs:subPropertyOf prov:atLocation ;
+    rdfs:label "tiene lugar"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range core:Lugar ;
+    skos:definition """Superpropiedad de las conexiones de la gestion con un lugar.
+    Especializada segun el tipo de lugar capturado en la tabla de relacionamiento:
+    :enPuestoVenta, :enLugarResidencia, :enLugarActividad, :puestoVentaAnterior."""@es .
+
+:enPuestoVenta a owl:ObjectProperty ;
+    rdfs:subPropertyOf :tieneLugar ;
+    rdfs:label "en puesto de venta"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range core:PuestoVenta ;
+    skos:definition """Puesto de venta sobre el que versa la gestion (columnas
+    venta_lugar_barrio, venta_lugar_direccion, venta_lugar_territorio,
+    venta_lugar_comuna -> core:barrioNombre, core:direccionTexto,
+    core:territorioCod, core:comunaNombre del puesto)."""@es .
+
+:puestoVentaAnterior a owl:ObjectProperty ;
+    rdfs:subPropertyOf :tieneLugar ;
+    rdfs:label "puesto de venta anterior"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range core:PuestoVenta ;
+    skos:definition """Puesto de venta previo al traslado, en las actas de traslado
+    transitorio (columna venta_lugar_antigua_direccion)."""@es .
+
+:enLugarResidencia a owl:ObjectProperty ;
+    rdfs:subPropertyOf :tieneLugar ;
+    rdfs:label "en lugar de residencia"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range core:Vivienda ;
+    skos:definition """Vivienda del vendedor visitada o caracterizada por la gestion
+    (columnas residencia_lugar_barrio, residencia_lugar_direccion,
+    residencia_lugar_territorio, residencia_lugar_comuna -> core:barrioNombre,
+    core:direccionTexto, core:territorioCod, core:comunaNombre de la vivienda).
+    La vivienda se conecta con la persona mediante core:resideEn."""@es .
+
+:enLugarActividad a owl:ObjectProperty ;
+    rdfs:subPropertyOf :tieneLugar ;
+    rdfs:label "en lugar de actividad"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range :LugarActividad ;
+    skos:definition """Lugar donde se desarrollo la gestion cuando no es un puesto
+    de venta ni una vivienda: lugar de la reunion, sector visitado, ubicacion de
+    la solicitud (columnas actividad_lugar_referencia, actividad_lugar_direccion,
+    actividad_lugar_comuna, actividad_lugar_barrio, ubicacion_*1/2)."""@es .
+
+# --- Gestion -> Negocio ---
+
+:involucraEstablecimiento a owl:ObjectProperty ;
+    rdfs:label "involucra establecimiento"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range core:Negocio ;
+    skos:definition """Establecimiento o razon social sobre el que versa la gestion
+    (columnas establecimiento_nombre, establecimiento_documento_numero)."""@es .
+
+# --- Gestion <-> Evidencia ---
+
+:tieneEvidencia a owl:ObjectProperty ;
+    rdfs:label "tiene evidencia"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range :Evidencia ;
+    owl:inverseOf :evidenciaDe ;
+    skos:definition "Evidencia documental que soporta la gestion."@es .
+
+:evidenciaDe a owl:ObjectProperty ;
+    rdfs:subPropertyOf prov:wasGeneratedBy ;
+    rdfs:label "evidencia de"@es ;
+    rdfs:domain :Evidencia ;
+    rdfs:range :Gestion ;
+    skos:definition "Gestion que genero esta evidencia (inversa de :tieneEvidencia)."@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Gestion
+# =============================================================================
+
+:fechaGestion a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "fecha de la gestion"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha en que se realiza la gestion (columnas actividad_fecha, fecha1, gestion_fecha)."@es .
+
+:fechaRadicacion a owl:DatatypeProperty ;
+    rdfs:label "fecha de radicacion"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha en que se radica la solicitud que origina la gestion (columna fecha2 en Resoluciones AEEP)."@es .
+
+:fechaFirma a owl:DatatypeProperty ;
+    rdfs:label "fecha de firma"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha de firma del documento de salida (columna fecha2 en PQRSD AEEP)."@es .
+
+:fechaNotificacion a owl:DatatypeProperty ;
+    rdfs:label "fecha de notificacion"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha de notificacion al interesado (columna fecha3)."@es .
+
+:fechaFinalizacion a owl:DatatypeProperty ;
+    rdfs:label "fecha de finalizacion"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha de finalizacion de la gestion (columna fecha2 en Solicitud de Compra)."@es .
+
+:fechaAutorizacionTexto a owl:DatatypeProperty ;
+    rdfs:label "fecha de autorizacion (texto)"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Fecha o rango de fechas autorizadas, en texto libre (columna fecha_texto en Resoluciones AEEP)."@es .
+
+:horaInicio a owl:DatatypeProperty ;
+    rdfs:label "hora de inicio"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:time ;
+    skos:definition "Hora de inicio de la reunion o actividad (columnas inicio_hora, inicio_hora1)."@es .
+
+:horaFin a owl:DatatypeProperty ;
+    rdfs:label "hora de fin"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:time ;
+    skos:definition "Hora de finalizacion de la reunion o actividad (columnas fin_hora, fin_hora1)."@es .
+
+:codigo a owl:DatatypeProperty ;
+    rdfs:label "codigo"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:related core:numeroRadicado ;
+    skos:definition """Codigo principal de la gestion: numero de radicado, numero
+    de resolucion o codigo del tramite segun el tipo de gestion (columnas codigo,
+    codigo1). Sin comas, puntos, espacios ni guiones."""@es .
+
+:codigoSecundario a owl:DatatypeProperty ;
+    rdfs:label "codigo secundario"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition """Codigo complementario de la gestion: radicado de entrada
+    cuando :codigo es el de salida (Resoluciones, PQRSDF), radicado de la
+    solicitud (Resoluciones AEEP), radicado de salida (PQRSD AEEP) o codigo de
+    identificacion (Solicitud de Compra) (columna codigo2)."""@es .
+
+:asunto a owl:DatatypeProperty ;
+    rdfs:label "asunto"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Asunto del documento gestionado (columna documento_asunto)."@es .
+
+:tema a owl:DatatypeProperty ;
+    rdfs:label "tema"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Actividad o tema de la reunion o del documento (columnas acta_tema, documento_tema)."@es .
+
+:objetivo a owl:DatatypeProperty ;
+    rdfs:label "objetivo"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Objetivo de la reunion o resultado esperado del documento (columnas acta_objetivo, documento_objetivo)."@es .
+
+:nombreCorto a owl:DatatypeProperty ;
+    rdfs:label "nombre corto"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition """Nombre corto que identifica la gestion en los archivos de
+    evidencia (columna gestion_nombre_corto; ej. AsambleaAsociadosUgti,
+    MesaCorresponsabilidad)."""@es .
+
+:cantidadParticipantes a owl:DatatypeProperty ;
+    rdfs:label "cantidad de participantes"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:integer ;
+    skos:definition "Cantidad de asistentes o unidades reportadas en la actividad (columna actividad_cantidad)."@es .
+
+:incluyeListadoAsistencia a owl:DatatypeProperty ;
+    rdfs:label "incluye listado de asistencia"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:boolean ;
+    skos:definition """Indica si el acta incluye listado de asistencia (columna
+    evidencia_listado_asistencia_es; la fuente trae SI/NO en variantes de
+    mayusculas y tildes). Cuando es verdadero, la gestion tiene una evidencia
+    :ListadoAsistencia."""@es .
+
+:conVisita a owl:DatatypeProperty ;
+    rdfs:label "con visita"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si el estudio socioeconomico se realizo con visita domiciliaria (columna visita_es)."@es .
+
+:titularGrupoFamiliar a owl:DatatypeProperty ;
+    rdfs:label "titular o grupo familiar"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition """Alcance del cruce interinstitucional: titular (T) o grupo
+    familiar (GF) (columna titular_grupo_familiar)."""@es .
+
+:conceptoResultado a owl:DatatypeProperty ;
+    rdfs:label "concepto resultado"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition """Concepto o sentido del resultado de la gestion: POSITIVO,
+    NEGATIVO o DESISTIMIENTO en conceptos socioeconomicos; concepto del acto
+    administrativo en resoluciones (columna concepto_socioeconomico)."""@es .
+
+:tipoSolicitud a owl:DatatypeProperty ;
+    rdfs:label "tipo de solicitud"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition """Tipo de la solicitud de ingreso (columna solicitud_tipo;
+    ej. NUEVA SOLICITUD DE AUTORIZACION, HA CONTADO CON AUTORIZACION, AUSENCIA,
+    OPOSICION, CAMBIO DE TITULAR)."""@es .
+
+:tipoPQRSD a owl:DatatypeProperty ;
+    rdfs:label "tipo de PQRSD"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo de la PQRSD: peticion, queja, reclamo, sugerencia o denuncia (columna pqrsd_tipo)."@es .
+
+:eventoNombre a owl:DatatypeProperty ;
+    rdfs:label "nombre del evento"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Nombre del evento autorizado o negado en la resolucion AEEP (columna evento_nombre)."@es .
+
+:actividadEconomica a owl:DatatypeProperty ;
+    rdfs:label "actividad economica"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:related core:actividadEconomica ;
+    skos:definition """Actividad economica objeto del aprovechamiento autorizado
+    (columna actividad_economica). Distinta de core:actividadEconomica, que es
+    atributo del core:Negocio; aqui es atributo de la autorizacion."""@es .
+
+:categoriaAEEP a owl:DatatypeProperty ;
+    rdfs:label "categoria AEEP"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Categoria del aprovechamiento economico del espacio publico (columna categoria)."@es .
+
+:subcategoriaAEEP a owl:DatatypeProperty ;
+    rdfs:label "subcategoria AEEP"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Subcategoria del aprovechamiento economico del espacio publico (columna subcategoria)."@es .
+
+:modalidad a owl:DatatypeProperty ;
+    rdfs:label "modalidad"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Modalidad del aprovechamiento o de la compra (columna modalidad)."@es .
+
+:conRetribucion a owl:DatatypeProperty ;
+    rdfs:label "con retribucion"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si el aprovechamiento autorizado genera retribucion economica (columna retribucion_es)."@es .
+
+:valor a owl:DatatypeProperty ;
+    rdfs:label "valor"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:decimal ;
+    skos:definition "Valor en pesos colombianos: retribucion de la resolucion AEEP o valor total de la compra (columna valor)."@es .
+
+:conceptoGasto a owl:DatatypeProperty ;
+    rdfs:label "concepto de gasto"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Concepto de gasto de la solicitud de compra (columna concepto)."@es .
+
+:tipoGasto a owl:DatatypeProperty ;
+    rdfs:label "tipo de gasto"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo de gasto de la solicitud de compra (columna tipo)."@es .
+
+:categoriaElemento a owl:DatatypeProperty ;
+    rdfs:label "categoria del elemento"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Categoria del elemento comprado (columnas categoria y subcategoria en Solicitud de Compra)."@es .
+
+:observaciones a owl:DatatypeProperty ;
+    rdfs:label "observaciones"@es ;
+    rdfs:domain :Gestion ;
+    rdfs:range xsd:string ;
+    skos:definition "Notas y comentarios sobre la gestion (columnas actividad_observaciones, observaciones)."@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Evidencia y LugarActividad
+# =============================================================================
+
+:rutaArchivo a owl:DatatypeProperty ;
+    rdfs:label "ruta de archivo"@es ;
+    rdfs:domain :Evidencia ;
+    rdfs:range xsd:string ;
+    skos:definition """Ruta relativa o URL del archivo de la evidencia (columnas
+    actividad_evidencia_archivo, actividad_evidencia_foto1/2, evidencia_archivo,
+    archivo1/2, foto1/2)."""@es .
+
+:entregadaA a owl:DatatypeProperty ;
+    rdfs:label "entregada a"@es ;
+    rdfs:domain :Evidencia ;
+    rdfs:range xsd:string ;
+    skos:definition "Correo del usuario al que se entrego la evidencia (columna evidencia_entregada_a de gestiones_2, tabla historica)."@es .
+
+:coordenadasTexto a owl:DatatypeProperty ;
+    rdfs:label "coordenadas (texto)"@es ;
+    rdfs:domain core:Lugar ;
+    rdfs:range xsd:string ;
+    core:derivadaDe core:latitud, core:longitud ;
+    skos:definition """Georeferenciacion en texto crudo tal como la captura la
+    fuente (columnas coordenada1, coordenada2, ubicacion_coordenadas1/2). El dato
+    estructurado objetivo son core:latitud y core:longitud del lugar."""@es .
+
+# =============================================================================
+# =============================================================================
+# CLASES POR TIPO DE GESTION (una clase por actividad de la fuente)
+# =============================================================================
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# EQUIPO SOCIAL
+# -----------------------------------------------------------------------------
+
+:VisitaAdministrativa a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :atiendeVendedor ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enPuestoVenta ; owl:someValuesFrom core:PuestoVenta ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Visita Administrativa"@es ;
+    rdfs:label "Administrative Visit"@en ;
+    skos:prefLabel "Visita Administrativa"@es ;
+    dcterms:identifier "2AB97BE7-B5F7-458C-A924-A1E63920EA59" ;
+    :abreviacion "VAD" ;
+    :formatoAsociado "FO-GGOL-036" ;
+    :variableNombramiento "vendedor_documento_numero" ;
+    skos:closeMatch regulacion:VisitaAdministrativa ;
+    skos:definition """Visita realizada al puesto de venta del vendedor informal
+    para verificar el cumplimiento de las condiciones autorizadas. Conecta con la
+    persona atendida (:atiendeVendedor) y con su puesto de venta (:enPuestoVenta:
+    barrio, direccion, territorio y comuna de la venta). Evidencia: formato
+    FO-GGOL-036 en PDF."""@es .
+
+:PQRSDSocial a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneSolicitante ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "PQRSD (Social)"@es ;
+    skos:prefLabel "PQRSD del Equipo Social"@es ;
+    dcterms:identifier "F16AEE71-FD23-4619-B094-B8294D885EA6" ;
+    :abreviacion "PQRSD" ;
+    :variableNombramiento "codigo" ;
+    rdfs:seeAlso core:SolicitudPQRS ;
+    skos:definition """Atencion de una peticion, queja, reclamo, sugerencia o
+    denuncia recibida por el Equipo Social. Conecta con el remitente
+    (:tieneSolicitante) e identifica el documento por numero de radicado
+    (:codigo) y asunto (:asunto). Evidencia: documento radicado en PDF."""@es .
+
+:EstudioSocioeconomico a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :atiendeVendedor ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enLugarResidencia ; owl:someValuesFrom core:Vivienda ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Estudio Socioeconomico (Visita Domiciliaria)"@es ;
+    rdfs:label "Socioeconomic Study (Home Visit)"@en ;
+    skos:prefLabel "Estudio Socioeconomico"@es ;
+    dcterms:identifier "8FD253EE-2EAA-4549-9383-8C810CF348F2" ;
+    :abreviacion "ESC" ;
+    :formatoAsociado "FO-GGOL-044" ;
+    :variableNombramiento "vendedor_documento_numero" ;
+    skos:closeMatch regulacion:EstudioSocioeconomicoCompleto, regulacion:VisitaDomiciliaria ;
+    skos:definition """Estudio socioeconomico del vendedor realizado mediante
+    visita domiciliaria. Conecta con la persona atendida (:atiendeVendedor) y con
+    su vivienda (:enLugarResidencia: barrio, direccion, territorio y comuna de la
+    residencia); :conVisita registra si hubo visita efectiva. Evidencia: formato
+    FO-GGOL-044 en PDF."""@es .
+
+:ConceptoSocioeconomico a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :atiendeVendedor ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enLugarResidencia ; owl:someValuesFrom core:Vivienda ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enPuestoVenta ; owl:someValuesFrom core:PuestoVenta ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Concepto Socioeconomico"@es ;
+    rdfs:label "Socioeconomic Assessment"@en ;
+    skos:prefLabel "Concepto Socioeconomico"@es ;
+    dcterms:identifier "BE566623-714F-4F64-B12B-F88EE2EC3BB3" ;
+    :abreviacion "CSE" ;
+    :formatoAsociado "FO-GGOL-016" ;
+    :variableNombramiento "vendedor_documento_numero" ;
+    rdfs:seeAlso core:ConceptoTecnico ;
+    skos:definition """Emision del concepto socioeconomico del vendedor
+    (:conceptoResultado: POSITIVO, NEGATIVO, DESISTIMIENTO). Conecta con la
+    persona atendida (:atiendeVendedor), su residencia (:enLugarResidencia:
+    barrio, direccion y comuna) y el territorio de su puesto de venta
+    (:enPuestoVenta). Evidencia: formato FO-GGOL-016 en PDF."""@es .
+
+:RegistroVendedores a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :atiendeVendedor ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enPuestoVenta ; owl:someValuesFrom core:PuestoVenta ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Registro de Vendedores"@es ;
+    rdfs:label "Vendor Registration"@en ;
+    skos:prefLabel "Registro de Vendedores Regulados y No Regulados"@es ;
+    dcterms:identifier "03BF41E8-B20B-4760-A6F6-AD27E9A3CD68" ;
+    :abreviacion "REG" ;
+    :formatoAsociado "FO-GGOL-014" ;
+    :variableNombramiento "vendedor_documento_numero" ;
+    skos:definition """Registro de un vendedor informal, regulado o no regulado.
+    Conecta con la persona registrada (:atiendeVendedor) y su puesto de venta
+    (:enPuestoVenta: direccion, territorio y comuna). Evidencia: formato
+    FO-GGOL-014 en PDF."""@es .
+
+:OfertaInstitucionalVendedor a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :atiendeVendedor ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enLugarResidencia ; owl:someValuesFrom core:Vivienda ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Oferta Institucional a Vendedor"@es ;
+    rdfs:label "Institutional Offer to Vendor"@en ;
+    skos:prefLabel "Vendedor Informado sobre la Oferta Institucional"@es ;
+    dcterms:identifier "47441462-10B1-4F0A-BCED-A914927D882D" ;
+    :abreviacion "OFI" ;
+    :formatoAsociado "FO-GGOL-015" ;
+    :variableNombramiento "vendedor_documento_numero" ;
+    skos:closeMatch ctrl:OfertaInstitucional ;
+    skos:definition """Informacion y remision del vendedor a la oferta
+    institucional. Conecta con la persona informada (:atiendeVendedor) y con su
+    comuna de residencia (:enLugarResidencia; la fuente la captura en la columna
+    actividad_lugar_comuna pero la describe como comuna de residencia).
+    Evidencia: formato FO-GGOL-015 en PDF."""@es .
+
+:VisitaSeguimiento a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :atiendeVendedor ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enPuestoVenta ; owl:someValuesFrom core:PuestoVenta ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Visita de Seguimiento"@es ;
+    rdfs:label "Follow-up Visit"@en ;
+    skos:prefLabel "Visita de Seguimiento"@es ;
+    dcterms:identifier "ADBBE67B-F66F-472D-8C90-43D503E751EB" ;
+    :abreviacion "VSO" ;
+    :formatoAsociado "FO-GGOL-027" ;
+    :variableNombramiento "vendedor_documento_numero" ;
+    skos:definition """Visita de seguimiento al proceso de reubicacion del
+    vendedor. Conecta con la persona atendida (:atiendeVendedor) y su puesto de
+    venta (:enPuestoVenta: direccion, territorio y comuna). Evidencia: formato
+    FO-GGOL-027 en PDF."""@es .
+
+:ActaTrasladoTransitorio a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :atiendeVendedor ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enPuestoVenta ; owl:someValuesFrom core:PuestoVenta ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :puestoVentaAnterior ; owl:someValuesFrom core:PuestoVenta ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Acta de Traslado Transitorio"@es ;
+    rdfs:label "Temporary Relocation Act"@en ;
+    skos:prefLabel "Acta de Traslado Transitorio"@es ;
+    dcterms:identifier "B3D5BD27-5B1E-40D6-887E-82A9A232BEFB" ;
+    :abreviacion "ATT" ;
+    :formatoAsociado "FO-GGOL-020" ;
+    :variableNombramiento "vendedor_documento_numero" ;
+    skos:definition """Traslado transitorio del puesto de venta de un vendedor.
+    Conecta con la persona trasladada (:atiendeVendedor), el puesto transitorio
+    (:enPuestoVenta: direccion, barrio y comuna) y el puesto anterior
+    (:puestoVentaAnterior). Evidencia: formato FO-GGOL-020 en PDF."""@es .
+
+:ActaReunionParticipacionInstitucional a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enLugarActividad ; owl:someValuesFrom :LugarActividad ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :Evidencia ] ;
+    rdfs:label "Acta de Reunion - Participacion Institucional"@es ;
+    rdfs:label "Meeting Minutes - Institutional Participation"@en ;
+    skos:prefLabel "Acta de Reunion de Participacion Institucional"@es ;
+    dcterms:identifier "CCBE6C05-786B-470B-BE0A-A06C1F7D7A3F" ;
+    :abreviacion "ACT" ;
+    :formatoAsociado "FO-GINF-055" ;
+    :variableNombramiento "gestion_nombre_corto" ;
+    skos:definition """Reunion de participacion institucional del Equipo Social
+    (:tema, :objetivo, :horaInicio, :cantidadParticipantes). Conecta con el lugar
+    de la reunion (:enLugarActividad: referencia, direccion y comuna). Evidencia:
+    acta FO-GINF-055 en PDF o, en su defecto, fotografias
+    (:EvidenciaFotografica); :incluyeListadoAsistencia indica si hay
+    :ListadoAsistencia."""@es .
+
+:CruceInterinstitucional a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :atiendeVendedor ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Cruce Interinstitucional"@es ;
+    rdfs:label "Inter-institutional Data Cross-check"@en ;
+    skos:prefLabel "Cruce Interinstitucional"@es ;
+    dcterms:identifier "3E296424-2C1F-4F30-98FB-AA8EDDC6943F" ;
+    :abreviacion "CCI" ;
+    :formatoAsociado "FO-GGOL-022" ;
+    :variableNombramiento "vendedor_documento_numero" ;
+    skos:definition """Cruce de informacion interinstitucional sobre el vendedor o
+    su grupo familiar (:titularGrupoFamiliar: T/GF). Conecta con la persona
+    cruzada (:atiendeVendedor). Evidencia: formato FO-GGOL-022 en PDF."""@es .
+
+:CartaAsignacion a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :atiendeVendedor ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enPuestoVenta ; owl:someValuesFrom core:PuestoVenta ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Carta de Asignacion"@es ;
+    rdfs:label "Assignment Letter"@en ;
+    skos:prefLabel "Carta de Asignacion de Direccion Definitiva"@es ;
+    dcterms:identifier "27757D34-3AEC-47E3-AB67-AC6C31725D59" ;
+    :abreviacion "CAS" ;
+    :formatoAsociado "FO-GGOL-021" ;
+    :variableNombramiento "vendedor_documento_numero" ;
+    skos:definition """Asignacion de la direccion definitiva del puesto de venta
+    del vendedor. Conecta con la persona beneficiaria (:atiendeVendedor) y el
+    puesto asignado (:enPuestoVenta: barrio, direccion y comuna). Evidencia:
+    formato FO-GGOL-021 v3 en PDF."""@es .
+
+:ActaReunionPoliticaPublica a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enLugarActividad ; owl:someValuesFrom :LugarActividad ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Acta de Reunion - Politica Publica"@es ;
+    rdfs:label "Meeting Minutes - Public Policy"@en ;
+    skos:prefLabel "Acta de Reunion de Politica Publica"@es ;
+    dcterms:identifier "C31AC16A-3F43-4B38-BFA4-433F94C19D54" ;
+    :abreviacion "PPACT" ;
+    :formatoAsociado "FO-GINF-055" ;
+    :variableNombramiento "gestion_nombre_corto" ;
+    skos:definition """Reunion del proceso de politica publica de vendedores
+    informales (:tema, :objetivo). Conecta con el lugar de la reunion
+    (:enLugarActividad: referencia, direccion y comuna). Evidencia: acta
+    FO-GINF-055 en PDF; :incluyeListadoAsistencia indica si hay
+    :ListadoAsistencia."""@es .
+
+:RegistroEvidenciaPoliticaPublica a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaFotografica ] ;
+    rdfs:label "Registro de Evidencia - Politica Publica"@es ;
+    rdfs:label "Evidence Record - Public Policy"@en ;
+    skos:prefLabel "Registro de Evidencia de Politica Publica"@es ;
+    dcterms:identifier "BD9F9F70-5278-4477-B621-17849A2E1835" ;
+    skos:definition """Registro fotografico de una actividad del proceso de
+    politica publica (:tema, :objetivo). Evidencia: fotografia
+    (:EvidenciaFotografica)."""@es .
+
+:SolicitudCompra a owl:Class ;
+    rdfs:subClassOf :GestionSocial ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneSolicitante ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :involucraEstablecimiento ; owl:someValuesFrom core:Negocio ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enLugarActividad ; owl:someValuesFrom :LugarActividad ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :Evidencia ] ;
+    rdfs:label "Solicitud de Compra"@es ;
+    rdfs:label "Purchase Request"@en ;
+    skos:prefLabel "Solicitud de Compra"@es ;
+    dcterms:identifier "1D23B5C7-1849-4CB9-BD17-6AED9BA58762" ;
+    skos:definition """Solicitud y gestion de una compra del Equipo Social (tabla
+    solicitudes de la fuente): valor, concepto y tipo de gasto, modalidad y
+    categoria del elemento. Conecta con hasta dos interesados
+    (:tieneSolicitante), el establecimiento proveedor
+    (:involucraEstablecimiento: razon social y NIT) y hasta dos ubicaciones
+    (:enLugarActividad: direccion, barrio, comuna, referencia y coordenadas).
+    Evidencias: archivos y fotografias."""@es .
+
+# -----------------------------------------------------------------------------
+# EQUIPO REGULACIONES
+# -----------------------------------------------------------------------------
+
+:SolicitudIngreso a owl:Class ;
+    rdfs:subClassOf :GestionRegulaciones ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneSolicitante ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Solicitud de Ingreso"@es ;
+    rdfs:label "Entry Request"@en ;
+    skos:prefLabel "Solicitud de Ingreso"@es ;
+    dcterms:identifier "33993D57-9FF8-457D-9FDD-FC0CFB79907A" ;
+    :abreviacion "SDI" ;
+    :variableNombramiento "codigo" ;
+    rdfs:seeAlso regulacion:SolicitudPQRSVendedor ;
+    skos:definition """Radicacion de una solicitud de ingreso al proceso de
+    regulacion (:tipoSolicitud: nueva solicitud de autorizacion, ha contado con
+    autorizacion, ausencia, oposicion, cambios). Conecta con el solicitante
+    (:tieneSolicitante) e identifica el radicado de ingreso (:codigo).
+    Evidencia: documento en PDF."""@es .
+
+:NovedadRegulaciones a owl:Class ;
+    rdfs:subClassOf :GestionRegulaciones ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneSolicitante ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Novedad (Regulaciones)"@es ;
+    rdfs:label "Administrative Update (Regulations)"@en ;
+    skos:prefLabel "Novedad del Equipo Regulaciones"@es ;
+    dcterms:identifier "22B834C2-A81A-4E07-99BC-EA650A3AE55D" ;
+    :abreviacion "NOV" ;
+    :variableNombramiento "codigo" ;
+    skos:closeMatch core:Novedad ;
+    skos:definition """Respuesta a una novedad administrativa del proceso de
+    regulacion. Conecta con el solicitante (:tieneSolicitante) e identifica el
+    radicado de respuesta (:codigo). Evidencia: documento en PDF."""@es .
+
+:ResolucionRegulaciones a owl:Class ;
+    rdfs:subClassOf :GestionRegulaciones ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneSolicitante ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Resolucion (Regulaciones)"@es ;
+    rdfs:label "Resolution (Regulations)"@en ;
+    skos:prefLabel "Resolucion del Equipo Regulaciones"@es ;
+    dcterms:identifier "E90B2C77-7C4F-436D-BE8A-5F60942042EC" ;
+    :abreviacion "RES" ;
+    :variableNombramiento "codigo" ;
+    skos:closeMatch core:Resolucion ;
+    skos:definition """Expedicion de un acto administrativo del proceso de
+    regulacion (:conceptoResultado: concepto del acto). Conecta con la persona
+    destinataria (:tieneSolicitante) e identifica el radicado de entrada
+    (:codigoSecundario) y el de salida (:codigo). Evidencia: acto administrativo
+    en PDF."""@es .
+
+:PQRSDFRegulaciones a owl:Class ;
+    rdfs:subClassOf :GestionRegulaciones ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneSolicitante ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "PQRSDF (Regulaciones)"@es ;
+    skos:prefLabel "PQRSDF del Equipo Regulaciones"@es ;
+    dcterms:identifier "2ADE33A0-957F-4D8E-A6C1-B471ADCDBEBF" ;
+    :abreviacion "PQRSDF" ;
+    :variableNombramiento "codigo" ;
+    rdfs:seeAlso core:SolicitudPQRS ;
+    skos:definition """Respuesta a una peticion, queja, reclamo, sugerencia,
+    denuncia o felicitacion del proceso de regulacion. Conecta con el remitente
+    (:tieneSolicitante) e identifica el radicado de entrada (:codigoSecundario)
+    y el de respuesta (:codigo), con su asunto (:asunto). Evidencia: oficio de
+    respuesta en PDF."""@es .
+
+:ActaReunionRegulaciones a owl:Class ;
+    rdfs:subClassOf :GestionRegulaciones ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enLugarActividad ; owl:someValuesFrom :LugarActividad ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :Evidencia ] ;
+    rdfs:label "Acta de Reunion (Regulaciones)"@es ;
+    rdfs:label "Meeting Minutes (Regulations)"@en ;
+    skos:prefLabel "Acta de Reunion del Equipo Regulaciones"@es ;
+    dcterms:identifier "B7806039-B308-4087-AA23-83753E056013" ;
+    :abreviacion "ACT" ;
+    :formatoAsociado "FO-GINF-055" ;
+    :variableNombramiento "gestion_nombre_corto" ;
+    skos:definition """Reunion del Equipo Regulaciones (:tema, :objetivo,
+    :cantidadParticipantes). Conecta con el lugar de la reunion
+    (:enLugarActividad: referencia, direccion y comuna). Evidencia: acta
+    FO-GINF-055 en PDF o, en su defecto, fotografias; :incluyeListadoAsistencia
+    indica si hay :ListadoAsistencia."""@es .
+
+# -----------------------------------------------------------------------------
+# EQUIPO AEEP (Aprovechamiento Economico del Espacio Publico)
+# -----------------------------------------------------------------------------
+
+:ResolucionAEEP a owl:Class ;
+    rdfs:subClassOf :GestionAEEP ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneSolicitante ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :involucraEstablecimiento ; owl:someValuesFrom core:Negocio ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enPuestoVenta ; owl:someValuesFrom core:PuestoVenta ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "Resolucion AEEP"@es ;
+    rdfs:label "AEEP Resolution"@en ;
+    skos:prefLabel "Resolucion de Aprovechamiento Economico"@es ;
+    dcterms:identifier "9334997B-7433-487F-862D-32C13A99EB91" ;
+    skos:closeMatch core:Resolucion ;
+    rdfs:seeAlso ctrl:AprovechamientoEconomico ;
+    skos:definition """Expedicion de la resolucion que autoriza o niega un
+    aprovechamiento economico del espacio publico (:categoriaAEEP,
+    :subcategoriaAEEP, :actividadEconomica, :modalidad, :eventoNombre,
+    :conRetribucion, :valor, :conceptoResultado). Conecta con el solicitante
+    (:tieneSolicitante), su razon social (:involucraEstablecimiento) y el lugar
+    autorizado o negado (:enPuestoVenta: direccion, barrio y comuna). Identifica
+    el radicado de la solicitud (:codigoSecundario, :fechaRadicacion) y el numero
+    de resolucion (:codigo). Evidencia: resolucion Mercurio en PDF."""@es .
+
+:PQRSDAEEP a owl:Class ;
+    rdfs:subClassOf :GestionAEEP ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneSolicitante ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enLugarActividad ; owl:someValuesFrom :LugarActividad ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "PQRSD (AEEP)"@es ;
+    skos:prefLabel "PQRSD del Equipo AEEP"@es ;
+    dcterms:identifier "6DA55E8C-ABB6-4558-B05A-E3C9CD0CD185" ;
+    rdfs:seeAlso core:SolicitudPQRS ;
+    skos:definition """Atencion de una PQRSD del aprovechamiento economico
+    (:tipoPQRSD). Conecta con el solicitante (:tieneSolicitante) y el lugar
+    referido (:enLugarActividad: direccion, comuna, barrio y sector). Identifica
+    el radicado de entrada (:codigo) y el de salida (:codigoSecundario), con
+    :fechaFirma y :fechaNotificacion. Evidencia: oficio en PDF."""@es .
+
+:ActividadTerritorioAEEP a owl:Class ;
+    rdfs:subClassOf :GestionAEEP ;
+    rdfs:label "Actividad en Territorio (AEEP)"@es ;
+    rdfs:label "Territory Activity (AEEP)"@en ;
+    skos:prefLabel "Actividad en Territorio del Equipo AEEP"@es ;
+    dcterms:identifier "356AFA57-E511-46AF-B11A-08AB6878956E" ;
+    skos:definition "Actividad del equipo AEEP desarrollada en territorio."@es ;
+    skos:editorialNote """Sin columnas en la tabla de relacionamiento de la fuente
+    a 2026-06-12: la clase queda declarada sin conexiones explicitas hasta que la
+    actividad defina sus columnas."""@es .
+
+# -----------------------------------------------------------------------------
+# EQUIPO TERRITORIO
+# -----------------------------------------------------------------------------
+
+:PQRSVisitaTerritorio a owl:Class ;
+    rdfs:subClassOf :GestionTerritorio ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneSolicitante ; owl:someValuesFrom core:PersonaNatural ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :enLugarActividad ; owl:someValuesFrom :LugarActividad ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty :tieneEvidencia ; owl:someValuesFrom :EvidenciaArchivo ] ;
+    rdfs:label "PQRS con Visita a Territorio"@es ;
+    rdfs:label "PQRS with Territory Visit"@en ;
+    skos:prefLabel "PQRS con Visita a Territorio"@es ;
+    dcterms:identifier "BDEAA734-F3E9-40CB-8388-5769E2504601" ;
+    rdfs:seeAlso core:SolicitudPQRS ;
+    skos:definition """Atencion de una PQRS que requiere visita a territorio.
+    Conecta con el remitente (:tieneSolicitante) y el lugar visitado
+    (:enLugarActividad: barrio, comuna, direccion y georeferenciacion).
+    Identifica el radicado (:codigo) y el asunto (:asunto). Evidencias:
+    documento radicado en PDF y fotografia."""@es .
+
+# =============================================================================
+# DISJUNTIVIDAD ENTRE RAMAS PRINCIPALES
+# =============================================================================
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( :Gestion :Evidencia :Equipo ) .

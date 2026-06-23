@@ -1,0 +1,339 @@
+@prefix tst:   <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal#> .
+@prefix core:    <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo:    <http://purl.org/ontology/bibo/> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+
+# #############################################################################
+# CATEGORIA DESARROLLADA: Venta informal  (namespace tst:, AUTOCONTENIDO)
+# #############################################################################
+# Desarrolla tst:AutorizacionVentaInformal. TODAS las clases se generan en
+# tst:; NO se reusa regulacion# ni el core institucional. Unica dependencia:
+# el nucleo tst: (que a su vez solo importa los pilares PersonaNatural y
+# Lugar/PuestoVenta/Vivienda). Se conecta a las PLACES via los puestos y viviendas.
+#
+# Fuentes: SUIT 26521; FO-GGOL-026 v12; PR-GGOL-016 v10; FO-GGOL-016 v8;
+# FO-GGOL-022 v4; FO-GOOL-044 v9; FO-GGOL-028; FO-GGOL-036;
+# concepts/informal/solicitud_permiso_no_regulado.md; concepts/formal_commerce/autorizacion_ep.md.
+# #############################################################################
+
+<https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal/categoria-venta-informal>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal/categoria-venta-informal/0.2.0> ;
+    dcterms:title "Aprovechamiento - Categoria Venta Informal (aislada)"@es ;
+    dcterms:description """Categoria de venta informal del tramite de aprovechamiento economico
+    (SUIT 26521), generada de forma autocontenida en namespace tst: y conectada solo a los
+    pilares PersonaNatural y Lugar/PuestoVenta/Vivienda."""@es ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:created "2026-06-17"^^xsd:date ;
+    dcterms:modified "2026-06-17"^^xsd:date ;
+    bibo:status "draft"@en ;
+    owl:versionInfo "0.2.0" ;
+    vann:preferredNamespacePrefix "tst" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal#" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal> .
+
+# =============================================================================
+# [CATEGORIA] Venta informal
+# =============================================================================
+
+tst:AutorizacionVentaInformal a owl:Class ;
+    rdfs:subClassOf tst:TramiteSolicitudTemporalAEEP ;
+    rdfs:label "Autorizacion - Venta informal"@es ;
+    skos:definition "Categoria de venta informal del tramite SUIT 26521 (vendedores informales con una venta)."@es ;
+    tst:categoria tst:cat-venta-informal ; tst:tipoArtefacto "categoria" .
+
+tst:SolicitudVentaInformal a owl:Class ;
+    # Hereda de la raiz comun de solicitudes (tst:SolicitudTramite) y de su categoria.
+    rdfs:subClassOf tst:SolicitudTramite ;
+    rdfs:subClassOf tst:AutorizacionVentaInformal ;
+    # CLASE DEFINIDA: una solicitud "se vuelve" de venta informal exactamente cuando su
+    # tipoTramite vale tst:cat-venta-informal.
+    owl:equivalentClass [
+        a owl:Class ;
+        owl:intersectionOf (
+            tst:SolicitudTramite
+            [ a owl:Restriction ; owl:onProperty tst:tipoTramite ; owl:hasValue tst:cat-venta-informal ]
+        )
+    ] ;
+    # Proceso COMUN a las dos modalidades de vendedor (semiestacionario/ambulante y modulo).
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty tst:reguladoPor ; owl:someValuesFrom tst:ProcesoVentaInformal ] ;
+    rdfs:label "Solicitud de Autorizacion - Venta informal"@es ;
+    skos:prefLabel "Solicitud de venta informal"@es ;
+    skos:altLabel "Solicitud de Autorizacion Temporal"@es ;
+    skos:definition """Solicitud del vendedor informal para ejercer una venta en el espacio
+    publico (categoria 'venta informal' del tramite SUIT 26521). Se captura con FO-GGOL-026 y
+    se tramita segun PR-GGOL-016. Requiere conceptos tecnicos sustentados en el estudio
+    socioeconomico y produce un acto administrativo (aprobacion o negacion); la aprobacion
+    es la respuesta del tramite y genera el carnet."""@es ;
+    skos:scopeNote """Rutas (misma categoria, distinto desenlace):
+    A. Vendedor regulable: radica -> estudio/conceptos -> aprobacion (acto administrativo) -> carnet.
+    B. No regulado fuera de convocatoria (PR-GGOL-012): negacion + remision a oferta.
+    Modalidades (mismo proceso comun; el de modulo anade un proceso adicional):
+    SolicitudVendedorSemiestacionarioAmbulante y SolicitudVendedorModulo.
+    Documentos soporte (FO-GGOL-026): identidad, SISBEN, ultima cuenta de servicios,
+    plano del area, fotografias, proteccion constitucional / manipulacion de alimentos
+    (si aplican)."""@es ;
+    dcterms:source "FO-GGOL-026 v12" ;
+    tst:tipoArtefacto "solicitud" .
+
+# =============================================================================
+# MODALIDADES DE LA SOLICITUD DE VENTA INFORMAL  ·  proceso comun + adicional
+# =============================================================================
+# Las dos modalidades comparten el ProcesoVentaInformal (heredado de la clase
+# padre). La de MODULO requiere ADEMAS un ProcesoAdicionalModulo (asignacion del
+# modulo); por eso lleva una restriccion reguladoPor extra.
+
+tst:ProcesoVentaInformal a owl:Class ; rdfs:subClassOf tst:Procedimiento ;
+    rdfs:label "Proceso de autorizacion de venta informal"@es ;
+    skos:definition """Proceso comun a las dos modalidades de vendedor informal: radicacion
+    (FO-GGOL-026), estudio socioeconomico, conceptos tecnicos y decision (PR-GGOL-016)."""@es ;
+    dcterms:source "PR-GGOL-016 v10" ; tst:tipoArtefacto "procedimiento" .
+
+tst:ProcesoAdicionalModulo a owl:Class ; rdfs:subClassOf tst:Procedimiento ;
+    rdfs:label "Proceso adicional de asignacion de modulo"@es ;
+    skos:definition """Etapa ADICIONAL que solo aplica a la solicitud de Vendedor en Modulo:
+    asignacion/adjudicacion del modulo de venta dentro del E.P. (sobre el proceso comun)."""@es ;
+    tst:tipoArtefacto "procedimiento" .
+
+tst:SolicitudVendedorSemiestacionarioAmbulante a owl:Class ;
+    rdfs:subClassOf tst:SolicitudVentaInformal ;
+    rdfs:label "Solicitud - Vendedor semiestacionario/ambulante"@es ;
+    skos:prefLabel "Solicitud de vendedor semiestacionario o ambulante"@es ;
+    skos:altLabel "Vendedor semiestacionario"@es ; skos:altLabel "Vendedor ambulante"@es ;
+    skos:definition """Modalidad de venta informal del vendedor semiestacionario o ambulante.
+    Sigue UNICAMENTE el proceso comun de venta informal (ProcesoVentaInformal), sin etapa
+    adicional."""@es ;
+    tst:tipoArtefacto "solicitud" .
+
+tst:SolicitudVendedorModulo a owl:Class ;
+    rdfs:subClassOf tst:SolicitudVentaInformal ;
+    # ADEMAS del proceso comun (heredado), requiere el proceso adicional de modulo.
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty tst:reguladoPor ; owl:someValuesFrom tst:ProcesoAdicionalModulo ] ;
+    rdfs:label "Solicitud - Vendedor en modulo"@es ;
+    skos:prefLabel "Solicitud de vendedor en modulo (modulos)"@es ;
+    skos:altLabel "Vendedor de modulo"@es ;
+    skos:definition """Modalidad de venta informal del vendedor ubicado en un modulo de venta.
+    Sigue el MISMO proceso comun de venta informal y, ADEMAS, un proceso adicional de asignacion
+    del modulo (ProcesoAdicionalModulo)."""@es ;
+    tst:tipoArtefacto "solicitud" .
+
+# Las dos modalidades son excluyentes.
+[] a owl:AllDisjointClasses ;
+   owl:members ( tst:SolicitudVendedorSemiestacionarioAmbulante tst:SolicitudVendedorModulo ) .
+
+# Conexion a PLACES: que puesto de venta se solicita ocupar
+tst:solicitaPuesto a owl:ObjectProperty ;
+    rdfs:subPropertyOf tst:ocupacionSolicitada ;
+    rdfs:domain tst:SolicitudVentaInformal ; rdfs:range core:PuestoVenta ;
+    rdfs:label "solicita puesto"@es ;
+    skos:definition "Puesto de venta del espacio publico que el vendedor pide ocupar."@es .
+
+tst:actividadEconomicaSolicitada a owl:DatatypeProperty ; rdfs:domain tst:SolicitudVentaInformal ; rdfs:range xsd:string ;
+    rdfs:label "actividad economica solicitada"@es .
+tst:zonaOcupacionSolicitada a owl:DatatypeProperty ; rdfs:domain tst:SolicitudVentaInformal ; rdfs:range xsd:string ;
+    rdfs:label "zona de ocupacion solicitada"@es .
+
+# Documentos soporte de la categoria
+tst:DocIdentidad a owl:Class ; rdfs:subClassOf tst:DocumentoSoporte ; rdfs:label "Documento de identidad"@es .
+tst:SoporteSisben a owl:Class ; rdfs:subClassOf tst:DocumentoSoporte ; rdfs:label "Puntaje SISBEN actualizado"@es .
+tst:CuentaServicios a owl:Class ; rdfs:subClassOf tst:DocumentoSoporte ; rdfs:label "Ultima cuenta de servicios publicos"@es .
+tst:PlanoArea a owl:Class ; rdfs:subClassOf tst:DocumentoSoporte ; rdfs:label "Plano del area de aprovechamiento"@es .
+tst:CertificadoManipulacionAlimentos a owl:Class ; rdfs:subClassOf tst:DocumentoSoporte ; rdfs:label "Certificado de manipulacion de alimentos"@es .
+
+tst:requiereDocumento a owl:ObjectProperty ;
+    rdfs:domain tst:SolicitudVentaInformal ; rdfs:range tst:DocumentoSoporte ;
+    rdfs:label "requiere documento soporte"@es .
+
+# =============================================================================
+# [CONCEPTO_TECNICO] Conceptos de la categoria
+# =============================================================================
+
+tst:ConceptoSocioeconomico a owl:Class ; rdfs:subClassOf tst:ConceptoTecnico ;
+    rdfs:label "Concepto Socioeconomico"@es ; skos:prefLabel "Concepto Socioeconomico"@es ;
+    skos:altLabel "Concepto de Vulnerabilidad"@es ;
+    skos:definition """Concepto que evalua la situacion socioeconomica y la vulnerabilidad del
+    solicitante (SISBEN, proteccion constitucional, victima, discapacidad, cabeza de familia,
+    linea de pobreza). Se sustenta en el estudio socioeconomico (FO-GOOL-044) y en el cruce
+    interinstitucional (FO-GGOL-022). Captura: FO-GGOL-016 v8. Grado >=3 recomienda exencion
+    de retribucion."""@es ;
+    dcterms:source "FO-GGOL-016 v8" ; tst:formularioAsociado "FO-GGOL-016" ; tst:metodologiaReferencia "DE-GGOL-007" .
+
+tst:ConceptoCruceInterinstitucional a owl:Class ; rdfs:subClassOf tst:ConceptoTecnico ;
+    rdfs:label "Concepto de Cruce Interinstitucional"@es ;
+    skos:definition "Verificacion contra bases interinstitucionales (SISBEN, Catastro, RUNT, RUES, SISPRO, RUV, Revalidacion, SISDEP). Captura: FO-GGOL-022 v4."@es ;
+    dcterms:source "FO-GGOL-022 v4" ; tst:formularioAsociado "FO-GGOL-022" .
+
+tst:ConceptoLegalidad a owl:Class ; rdfs:subClassOf tst:ConceptoTecnico ;
+    rdfs:label "Concepto de Legalidad"@es ;
+    skos:definition "Verificacion juridica de requisitos, identificacion, antecedentes y capacidad juridica."@es .
+tst:ConceptoUrbano a owl:Class ; rdfs:subClassOf tst:ConceptoTecnico ;
+    rdfs:label "Concepto Urbano"@es ;
+    skos:definition "Viabilidad urbanistica: compatibilidad con POT, disponibilidad espacial, movilidad."@es .
+tst:ConceptoSeguridad a owl:Class ; rdfs:subClassOf tst:ConceptoTecnico ;
+    rdfs:label "Concepto de Seguridad"@es ;
+    skos:definition "Antecedentes, convivencia y orden publico de la ocupacion solicitada."@es .
+tst:ConceptoSanitario a owl:Class ; rdfs:subClassOf tst:ConceptoTecnico ;
+    rdfs:label "Concepto Sanitario"@es ;
+    skos:definition "Condiciones sanitarias para alimentos preparados. OBLIGATORIO en esa actividad."@es .
+
+tst:ConceptoViabilidadAPP a owl:Class ; rdfs:subClassOf tst:ConceptoTecnico ;
+    rdfs:label "Concepto de Viabilidad APP (retribucion economica)"@es ;
+    skos:altLabel "Concepto de aprovechamiento economico"@es ;
+    skos:definition """Concepto de la Agencia APP que valora el aprovechamiento economico y
+    calcula la retribucion. Si el ConceptoSocioeconomico determina exencion, la retribucion
+    puede ser cero."""@es ;
+    dcterms:source "concepts/formal_commerce/autorizacion_ep.md" .
+
+tst:retribucionEconomica a owl:DatatypeProperty ; rdfs:domain tst:ConceptoViabilidadAPP ; rdfs:range xsd:decimal ;
+    rdfs:label "valor de retribucion economica"@es .
+
+# --- FO-GGOL-016: criterios de inclusion (sobre ConceptoSocioeconomico) ---
+tst:tieneSisben a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:boolean ; rdfs:label "tiene SISBEN"@es .
+tst:sujetoProteccionConstitucional a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:boolean ; rdfs:label "sujeto de especial proteccion constitucional"@es .
+tst:victimaConflictoArmado a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:boolean ; rdfs:label "victima del conflicto armado"@es .
+tst:condicionDiscapacidad a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:boolean ; rdfs:label "persona en condicion de discapacidad"@es .
+tst:perteneceGrupoEtnico a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:boolean ; rdfs:label "pertenece a grupo etnico"@es .
+tst:cabezaFamilia a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:boolean ; rdfs:label "cabeza de familia"@es .
+tst:poblacionLGBTI a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:boolean ; rdfs:label "poblacion LGBTI"@es .
+tst:adultoMayor a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:boolean ; rdfs:label "adulto mayor"@es .
+# --- FO-GGOL-016: valoracion economica ---
+tst:sisbenPuntaje a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:decimal ; rdfs:label "puntaje SISBEN III"@es .
+tst:sisbenClasificacion a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:string ; rdfs:label "clasificacion SISBEN IV"@es .
+tst:gradoVulnerabilidad a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:integer ;
+    rdfs:label "grado de vulnerabilidad"@es ; skos:scopeNote "1..5; >=3 recomienda exencion de retribucion."@es .
+tst:exentoRetribucionEconomica a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:boolean ; rdfs:label "exento de retribucion economica"@es .
+tst:lineaPobreza a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:boolean ; rdfs:label "linea de pobreza"@es .
+tst:fechaConcepto a owl:DatatypeProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range xsd:date ; rdfs:label "fecha del concepto"@es .
+
+tst:generaEstudio a owl:ObjectProperty ; rdfs:domain tst:ConceptoSocioeconomico ; rdfs:range tst:EstudioSocioeconomico ;
+    rdfs:label "genera estudio"@es .
+
+# =============================================================================
+# [ESTUDIO] + [EVENTO] Visitas de la categoria  (conexion a PLACES)
+# =============================================================================
+
+tst:EstudioSocioeconomico a owl:Class ; rdfs:subClassOf tst:Estudio ;
+    rdfs:label "Estudio Socioeconomico"@es ; skos:altLabel "FO-GOOL-044"@es ;
+    skos:definition """Caracterizacion socioeconomica integral del vendedor y su nucleo familiar
+    (FO-GOOL-044 v9). Insumo principal del ConceptoSocioeconomico; requiere visita domiciliaria
+    previa (FO-GGOL-028)."""@es ;
+    skos:scopeNote "9 secciones: datos personales, criterios de inclusion, vivienda, seguridad social, economia, poblacional, familiar, APGAR, grupo familiar."@es ;
+    dcterms:source "FO-GOOL-044 v9" ; tst:formularioAsociado "FO-GOOL-044" .
+
+tst:MiembroGrupoFamiliar a owl:Class ;
+    rdfs:label "Miembro del Grupo Familiar"@es ;
+    skos:definition "Cada integrante del grupo familiar del vendedor (FO-GOOL-044 seccion 9)."@es .
+
+tst:estudioParaSolicitud a owl:ObjectProperty ; rdfs:domain tst:EstudioSocioeconomico ; rdfs:range tst:SolicitudVentaInformal ;
+    rdfs:label "estudio para solicitud"@es .
+tst:tieneGrupoFamiliar a owl:ObjectProperty ; rdfs:domain tst:EstudioSocioeconomico ; rdfs:range tst:MiembroGrupoFamiliar ;
+    rdfs:label "tiene grupo familiar"@es .
+# Conexion a PLACES (pilar DONDE): el estudio caracteriza la vivienda
+tst:estudioCaracterizaVivienda a owl:ObjectProperty ; rdfs:subPropertyOf tst:caracterizaVivienda ;
+    rdfs:domain tst:EstudioSocioeconomico ; rdfs:range core:Vivienda ;
+    rdfs:label "estudio caracteriza vivienda"@es .
+
+tst:VisitaDomiciliaria a owl:Class ; rdfs:subClassOf tst:Evento ;
+    rdfs:label "Visita Domiciliaria"@es ;
+    skos:definition "Visita A LA VIVIENDA del vendedor (FO-GGOL-028); insumo del estudio."@es ;
+    tst:formularioAsociado "FO-GGOL-028" .
+
+tst:VisitaAdministrativa a owl:Class ; rdfs:subClassOf tst:Evento ;
+    rdfs:label "Visita Administrativa"@es ;
+    skos:definition "Visita AL PUESTO DE VENTA para verificar cumplimiento (FO-GGOL-036)."@es ;
+    tst:formularioAsociado "FO-GGOL-036" .
+
+# Conexion a PLACES: la visita ocurre EN la vivienda / EN el puesto
+tst:visitaEnVivienda a owl:ObjectProperty ; rdfs:subPropertyOf tst:eventoEnLugar ;
+    rdfs:domain tst:VisitaDomiciliaria ; rdfs:range core:Vivienda ;
+    rdfs:label "visita domiciliaria en vivienda"@es .
+tst:visitaEnPuesto a owl:ObjectProperty ; rdfs:subPropertyOf tst:eventoEnLugar ;
+    rdfs:domain tst:VisitaAdministrativa ; rdfs:range core:PuestoVenta ;
+    rdfs:label "visita administrativa en puesto"@es .
+
+# =============================================================================
+# [ACTO_ADMINISTRATIVO] Entregables de la categoria
+# =============================================================================
+
+tst:AprobacionPermiso a owl:Class ; rdfs:subClassOf tst:AprobacionAprovechamiento ;
+    rdfs:label "Aprobacion de Permiso (venta informal)"@es ;
+    skos:definition """Acto administrativo favorable que ES la respuesta del tramite: autoriza la
+    venta informal, porta las condiciones de la ocupacion (vigencia, area, horarios, puesto) y
+    genera el carnet del vendedor. No se modela un permiso aparte; el acto administrativo cumple
+    ese rol."""@es .
+
+tst:NegacionPermiso a owl:Class ; rdfs:subClassOf tst:NegacionAprovechamiento ;
+    rdfs:label "Negacion de Permiso (venta informal)"@es ;
+    skos:definition "Acto que niega la solicitud (tipico de la ruta del no regulado, PR-GGOL-012). Contra el proceden los recursos de ley."@es .
+
+# Condiciones que porta el acto administrativo favorable (la respuesta).
+# Conexion a PLACES y PERSONA: a quien y sobre que puesto autoriza el acto.
+tst:permisoSobrePuesto a owl:ObjectProperty ; rdfs:subPropertyOf tst:lugarAutorizado ;
+    rdfs:domain tst:AprobacionPermiso ; rdfs:range core:PuestoVenta ;
+    rdfs:label "puesto autorizado por el acto"@es .
+tst:titular a owl:ObjectProperty ; rdfs:subPropertyOf tst:beneficiario ;
+    rdfs:domain tst:AprobacionPermiso ; rdfs:range core:PersonaNatural ;
+    rdfs:label "titular del acto"@es .
+tst:derivaDeSolicitud a owl:ObjectProperty ; rdfs:subPropertyOf tst:resuelveTramite ;
+    rdfs:domain tst:AprobacionPermiso ; rdfs:range tst:SolicitudVentaInformal ;
+    rdfs:label "deriva de solicitud"@es .
+
+tst:vigenciaInicio a owl:DatatypeProperty ; rdfs:domain tst:AprobacionPermiso ; rdfs:range xsd:date ; rdfs:label "inicio de vigencia"@es .
+tst:vigenciaFin a owl:DatatypeProperty ; rdfs:domain tst:AprobacionPermiso ; rdfs:range xsd:date ; rdfs:label "fin de vigencia"@es .
+tst:areaAutorizada a owl:DatatypeProperty ; rdfs:domain tst:AprobacionPermiso ; rdfs:range xsd:decimal ; rdfs:label "area autorizada (m2)"@es .
+tst:horariosOperacion a owl:DatatypeProperty ; rdfs:domain tst:AprobacionPermiso ; rdfs:range xsd:string ; rdfs:label "horarios de operacion"@es .
+tst:actividadAutorizada a owl:DatatypeProperty ; rdfs:domain tst:AprobacionPermiso ; rdfs:range xsd:string ; rdfs:label "actividad autorizada"@es .
+
+# Credencial entregada al titular
+tst:Carnet a owl:Class ;
+    rdfs:label "Carnet del vendedor"@es ;
+    skos:definition "Credencial emitida al titular de la Aprobacion de Permiso (acto administrativo favorable)."@es ;
+    tst:tipoArtefacto "credencial" .
+tst:generaCarnet a owl:ObjectProperty ; rdfs:domain tst:AprobacionPermiso ; rdfs:range tst:Carnet ;
+    rdfs:label "genera carnet"@es .
+
+# =============================================================================
+# [FORMULARIO] / [PROCEDIMIENTO]  (instancias de la categoria)
+# =============================================================================
+
+tst:pr-ggol-016 a tst:Procedimiento ; tst:codigoProcedimiento "PR-GGOL-016" ;
+    rdfs:label "PR-GGOL-016 - Autorizacion temporal de ocupacion"@es ;
+    tst:usaFormulario tst:fo-ggol-026, tst:fo-ggol-016, tst:fo-ggol-022, tst:fo-gool-044, tst:fo-ggol-028, tst:fo-ggol-036 .
+tst:pr-ggol-012 a tst:Procedimiento ; tst:codigoProcedimiento "PR-GGOL-012" ;
+    rdfs:label "PR-GGOL-012 - Solicitud de vendedor no regulado"@es .
+
+tst:fo-ggol-026 a tst:Formulario ; tst:codigoFormulario "FO-GGOL-026" ; tst:versionFormulario "12" ;
+    rdfs:label "FO-GGOL-026 - Solicitud de autorizacion (venta informal)"@es ; tst:capturaClase tst:SolicitudVentaInformal .
+tst:fo-ggol-016 a tst:Formulario ; tst:codigoFormulario "FO-GGOL-016" ; tst:versionFormulario "8" ;
+    rdfs:label "FO-GGOL-016 - Concepto socioeconomico"@es ; tst:capturaClase tst:ConceptoSocioeconomico .
+tst:fo-ggol-022 a tst:Formulario ; tst:codigoFormulario "FO-GGOL-022" ; tst:versionFormulario "4" ;
+    rdfs:label "FO-GGOL-022 - Cruce interinstitucional"@es ; tst:capturaClase tst:ConceptoCruceInterinstitucional .
+tst:fo-gool-044 a tst:Formulario ; tst:codigoFormulario "FO-GOOL-044" ; tst:versionFormulario "9" ;
+    rdfs:label "FO-GOOL-044 - Estudio socioeconomico"@es ; tst:capturaClase tst:EstudioSocioeconomico .
+tst:fo-ggol-028 a tst:Formulario ; tst:codigoFormulario "FO-GGOL-028" ;
+    rdfs:label "FO-GGOL-028 - Visita domiciliaria"@es ; tst:capturaClase tst:VisitaDomiciliaria .
+tst:fo-ggol-036 a tst:Formulario ; tst:codigoFormulario "FO-GGOL-036" ; tst:versionFormulario "6" ;
+    rdfs:label "FO-GGOL-036 - Visita administrativa"@es ; tst:capturaClase tst:VisitaAdministrativa .
+
+# =============================================================================
+# FLUJO (resumen)  ·  conexiones a los pilares marcadas con [P]ersona / [L]ugar
+# =============================================================================
+#  [P]Persona --solicitante--> SolicitudVentaInformal --solicitaPuesto--> [L]PuestoVenta
+#     | FO-GGOL-026 / PR-GGOL-016
+#     v
+#  VisitaDomiciliaria(FO-GGOL-028) --visitaEnVivienda--> [L]Vivienda
+#     -> EstudioSocioeconomico(FO-GOOL-044) --estudioCaracterizaVivienda--> [L]Vivienda
+#         -> ConceptoSocioeconomico(FO-GGOL-016) + ConceptoCruceInterinstitucional(FO-GGOL-022)
+#  VisitaAdministrativa(FO-GGOL-036) --visitaEnPuesto--> [L]PuestoVenta ; ConceptoViabilidadAPP
+#     v  decision (acto administrativo)
+#  FAVORABLE -> AprobacionPermiso (acto administrativo = la respuesta)
+#                 --permisoSobrePuesto--> [L]PuestoVenta ; --titular--> [P]Persona ; genera Carnet
+#  DESFAVORABLE (PR-GGOL-012) -> NegacionPermiso -> Recurso de Apelacion -> Reevaluacion y respuesta
+# =============================================================================

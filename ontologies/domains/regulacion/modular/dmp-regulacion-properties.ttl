@@ -1,0 +1,671 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dmp: <https://w3id.org/medellin/espacio-publico/dmp#> .
+@prefix iso11179: <http://purl.org/iso11179/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# Ontologia Modular: Propiedades Derivadas del DMP regulacion_v1
+# =============================================================================
+# Fecha creacion: 2026-01-07
+# Descripcion: Define propiedades para VendedorInformalRegulado, PuestoVenta,
+#              Modulo y Visita basadas en el estandar DMP regulacion_v1.
+#              Este modulo NORMALIZA la estructura columnar del DMP a una
+#              estructura orientada a objetos semanticos.
+#
+# Secciones DMP mapeadas:
+#   - Titular (36 columnas) → PersonaNatural + VendedorInformalRegulado
+#   - Puesto (31 columnas)  → PuestoVenta + LugarVenta + Modulo
+#   - Estado (12 columnas)  → Estado del ciclo de vida
+#   - Resoluciones (64 columnas) → PermisoOcupacionTemporal (normalizado por año)
+#   - Servicios (5 columnas) → Modulo.tieneServicio
+#   - APP (4 columnas) → ConceptoTecnico + Facturacion
+#   - Visitas (3 columnas) → VisitaAdministrativa
+#   - Sistema (2 columnas) → Metadatos internos (item_id)
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/regulacion/dmp-regulacion-properties> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/regulacion/dmp-regulacion-properties/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/institutional-core-entities> ;
+    dcterms:title "Espacio Publico - Propiedades DMP Regulacion"@es ;
+    dcterms:description """Ontologia que define propiedades de datos derivadas del 
+    estandar DMP regulacion_v1. Normaliza la estructura columnar orientada a años
+    hacia una estructura semantica orientada a objetos."""@es ;
+    dcterms:source "DMP regulacion_v1 - main_metadata.dmp_a1_diccionario" ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-01-07"^^xsd:date ;
+    owl:versionInfo "0.1.0" .
+
+
+
+# =============================================================================
+# CLASE: VisitaAdministrativa (FO-GGOL-036 - Visita al Puesto de Venta)
+# =============================================================================
+# Formulario: FO-GGOL-036 v6 "Visita administrativa a ventas informales"
+# Se realiza EN EL PUESTO DE VENTA para verificar cumplimiento de obligaciones.
+# =============================================================================
+
+:VisitaAdministrativa a owl:Class ;
+    rdfs:subClassOf core:Evento ;
+    rdfs:label "Visita Administrativa"@es ;
+    rdfs:label "Administrative Visit"@en ;
+    skos:prefLabel "Visita Administrativa"@es ;
+    skos:altLabel "Visita de campo"@es ;
+    skos:altLabel "Visita al puesto de venta"@es ;
+    skos:definition """Visita realizada por funcionarios de la Subsecretaría AL PUESTO DE VENTA 
+    del vendedor informal para verificar cumplimiento de obligaciones, condiciones de operación 
+    y detectar novedades. Se captura mediante FO-GGOL-036.
+    
+    Finalidades según FO-GGOL-036:
+    - Verificación: Comprobar cumplimiento de condiciones autorizadas
+    - Novedad: Documentar cambios o irregularidades detectadas
+    
+    Origen de la visita:
+    - Oficio, Solicitud del interesado, PQRS, Autoridad judicial, Programa de reubicaciones"""@es ;
+    skos:scopeNote """Secciones del FO-GGOL-036:
+    1. VENTERO INFORMAL: Datos personales y estado (regulado/en trámite)
+    2. DATOS DE LA VENTA: Ubicación, horario, actividad autorizada
+    3. DATOS DEL AMOBLAMIENTO: Tipo, propiedad, medidas, servicios públicos
+    4. SEGUIMIENTO Y CONTROL: Verificación de cumplimiento
+    5. NOVEDAD ADMINISTRATIVA: Novedades detectadas
+    6. OBSERVACIONES: Comentarios adicionales
+    7. REGISTRO FOTOGRÁFICO: Evidencia visual"""@es ;
+    dcterms:source "FO-GGOL-036 v6" ;
+    :formularioAsociado "FO-GGOL-036" ;
+    iso11179:objectClass "Visita_Administrativa" .
+
+# =============================================================================
+# CLASE: VisitaDomiciliaria (FO-GGOL-028 - Visita al Domicilio)
+# =============================================================================
+# Formulario: FO-GGOL-028 v3 "Visitas Domiciliarias Realizadas en Campo"
+# Se realiza EN LA VIVIENDA del vendedor para verificar condiciones de vida.
+# =============================================================================
+
+:VisitaDomiciliaria a owl:Class ;
+    rdfs:subClassOf core:Evento ;
+    rdfs:label "Visita Domiciliaria"@es ;
+    rdfs:label "Home Visit"@en ;
+    skos:prefLabel "Visita Domiciliaria"@es ;
+    skos:altLabel "Visita al domicilio"@es ;
+    skos:altLabel "Visita de campo domiciliaria"@es ;
+    skos:definition """Visita realizada por funcionarios A LA VIVIENDA del vendedor informal 
+    para verificar condiciones de vida, composición familiar y situación socioeconómica 
+    como parte del proceso de estudio socioeconómico. Se captura mediante FO-GGOL-028."""@es ;
+    skos:scopeNote """La visita domiciliaria es un insumo para el EstudioSocioeconomico (FO-GOOL-044)
+    y complementa la información recopilada en el ConceptoVulnerabilidad (FO-GGOL-016).
+    
+    Diferencia con VisitaAdministrativa:
+    - VisitaDomiciliaria: Se realiza EN LA VIVIENDA del vendedor
+    - VisitaAdministrativa: Se realiza EN EL PUESTO DE VENTA"""@es ;
+    dcterms:source "FO-GGOL-028 v3" ;
+    :formularioAsociado "FO-GGOL-028" ;
+    iso11179:objectClass "Visita_Domiciliaria" .
+
+# -----------------------------------------------------------------------------
+# Propiedades: VisitaDomiciliaria (FO-GGOL-028)
+# -----------------------------------------------------------------------------
+
+:visitaDomiciliariaNumero a owl:DatatypeProperty ;
+    rdfs:domain :VisitaDomiciliaria ;
+    rdfs:range xsd:integer ;
+    rdfs:label "número de visita domiciliaria"@es ;
+    skos:definition "Número secuencial de la visita domiciliaria"@es ;
+    :formCampo "Nº" ;
+    :formFormulario "FO-GGOL-028" .
+
+:visitaDomiciliariaBarrio a owl:DatatypeProperty ;
+    rdfs:domain :VisitaDomiciliaria ;
+    rdfs:range xsd:string ;
+    rdfs:label "barrio de la visita domiciliaria"@es ;
+    skos:definition "Barrio donde se realizó la visita domiciliaria"@es ;
+    :formCampo "BARRIO" ;
+    :formFormulario "FO-GGOL-028" .
+
+:visitaDomiciliariaComuna a owl:DatatypeProperty ;
+    rdfs:domain :VisitaDomiciliaria ;
+    rdfs:range xsd:string ;
+    rdfs:label "comuna de la visita domiciliaria"@es ;
+    skos:definition "Comuna donde se realizó la visita domiciliaria"@es ;
+    :formCampo "COMUNA" ;
+    :formFormulario "FO-GGOL-028" .
+
+:visitaDomiciliariaEntregadoPor a owl:DatatypeProperty ;
+    rdfs:domain :VisitaDomiciliaria ;
+    rdfs:range xsd:string ;
+    rdfs:label "entregado por"@es ;
+    skos:definition "Funcionario que entregó el registro de la visita"@es ;
+    :formCampo "ENTREGADO POR" ;
+    :formFormulario "FO-GGOL-028" .
+
+:visitaDomiciliariaHoraInicio a owl:DatatypeProperty ;
+    rdfs:domain :VisitaDomiciliaria ;
+    rdfs:range xsd:time ;
+    rdfs:label "hora de inicio"@es ;
+    skos:definition "Hora de inicio de la visita domiciliaria"@es ;
+    :formCampo "HORA DE INICIO" ;
+    :formFormulario "FO-GGOL-028" .
+
+:visitaDomiciliariaHoraFin a owl:DatatypeProperty ;
+    rdfs:domain :VisitaDomiciliaria ;
+    rdfs:range xsd:time ;
+    rdfs:label "hora de finalización"@es ;
+    skos:definition "Hora de finalización de la visita domiciliaria"@es ;
+    :formCampo "HORA DE FINALIZACION" ;
+    :formFormulario "FO-GGOL-028" .
+
+:visitaDomiciliariaObservaciones a owl:DatatypeProperty ;
+    rdfs:domain :VisitaDomiciliaria ;
+    rdfs:range xsd:string ;
+    rdfs:label "observaciones de la visita domiciliaria"@es ;
+    skos:definition "Observaciones registradas durante la visita domiciliaria"@es ;
+    :formCampo "OBSERVACIONES" ;
+    :formFormulario "FO-GGOL-028" .
+
+# -----------------------------------------------------------------------------
+# Propiedades: VisitaAdministrativa (FO-GGOL-036)
+# -----------------------------------------------------------------------------
+
+:visitaAdministrativaEstadoVendedor a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:string ;
+    rdfs:label "estado del vendedor en visita"@es ;
+    skos:definition "Estado del vendedor al momento de la visita (Regulado, En trámite)"@es ;
+    :formCampo "Regulado / En trámite" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaOrigenSolicitud a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:string ;
+    rdfs:label "origen de la solicitud de visita"@es ;
+    skos:definition "Origen de la solicitud de visita: Oficio, Solicitud del interesado, PQRS, Autoridad judicial, Programa de reubicaciones"@es ;
+    :formCampo "Origen de la solicitud" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaFinalidad a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:string ;
+    rdfs:label "finalidad de la visita"@es ;
+    skos:definition "Finalidad de la visita: Verificación o Novedad"@es ;
+    :formCampo "Finalidad de la visita" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaExisteVenta a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "existe la venta"@es ;
+    skos:definition "Indica si la venta existe al momento de la visita"@es ;
+    :formCampo "Existe la venta" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaVentaCerrada a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "venta cerrada"@es ;
+    skos:definition "Indica si la venta se encuentra cerrada al momento de la visita"@es ;
+    :formCampo "¿La venta se encuentra cerrada al momento de la visita?" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaAtiendeTitular a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "atiende el titular"@es ;
+    skos:definition "Indica si el titular de la autorización atiende durante la visita"@es ;
+    :formCampo "¿Atiende el titular?" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaCumpleActividad a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "cumple con actividad autorizada"@es ;
+    skos:definition "Indica si cumple con la actividad económica y tipología autorizada"@es ;
+    :formCampo "¿Cumple con la actividad económica y tipología autorizada?" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaCumpleHorario a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "cumple con horario"@es ;
+    skos:definition "Indica si cumple con el horario autorizado"@es ;
+    :formCampo "¿Cumple con el horario?" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaDireccionDistinta a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "en dirección distinta"@es ;
+    skos:definition "Indica si se encuentra en una dirección distinta a la asignada"@es ;
+    :formCampo "¿Se encuentra en una dirección distinta a la asignada?" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaSuperaMedidas a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "supera medidas autorizadas"@es ;
+    skos:definition "Indica si la venta supera las medidas autorizadas"@es ;
+    :formCampo "¿La venta supera las medidas autorizadas?" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaTipoMixtura a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipo de mixtura del suelo"@es ;
+    skos:definition "Tipo de mixtura del suelo que ocupa la venta"@es ;
+    :formCampo "TIPO DE MIXTURA DEL SUELO QUE OCUPA" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaCarnetAlimentos a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "tiene carnet manipulación alimentos"@es ;
+    skos:definition "Indica si tiene carnet de manipulación de alimentos vigente"@es ;
+    :formCampo "¿Tiene carnet de manipulación de alimentos vigente?" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaPublicidadVisual a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "utiliza publicidad exterior visual"@es ;
+    skos:definition "Indica si utiliza publicidad exterior visual"@es ;
+    :formCampo "¿Utiliza publicidad exterior visual?" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaSitioProhibido a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "amoblamiento en sitio prohibido"@es ;
+    skos:definition "Indica si el amoblamiento se encuentra en sitios prohibidos"@es ;
+    :formCampo "¿El amoblamiento se encuentra en sitios prohibidos?" ;
+    :formFormulario "FO-GGOL-036" .
+
+:visitaAdministrativaConexionIlegal a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "conexión ilegal"@es ;
+    skos:definition "Indica si existe conexión ilegal de servicios públicos"@es ;
+    :formCampo "Conexión Ilegal" ;
+    :formFormulario "FO-GGOL-036" .
+
+# =============================================================================
+# CLASE: EstudioSocioeconomico (FO-GOOL-044 - Documento Completo)
+# =============================================================================
+# NOTA: El EstudioSocioeconomico completo con propiedades del FO-GOOL-044
+# está definido en estudio-socioeconomico.ttl
+# =============================================================================
+
+:EstudioSocioeconomico a owl:Class ;
+    rdfs:subClassOf core:ConceptoTecnico ;
+    rdfs:label "Estudio Socioeconomico"@es ;
+    rdfs:label "Socioeconomic Study"@en ;
+    skos:prefLabel "Estudio Socioeconomico"@es ;
+    skos:altLabel "Concepto Socioeconómico"@es ;
+    skos:altLabel "FO-GGOL-016"@es ;
+    skos:historyNote "Corregido 2026-01: rdfs:subClassOf cambiado de :VisitaAdministrativa a core:ConceptoTecnico - el estudio es un documento de evaluación, no una visita"@es ;
+    skos:definition """Documento formal que registra el resultado de la evaluación de vulnerabilidad
+    de un vendedor informal. Es el producto del ConceptoVulnerabilidad (concepto técnico) y se
+    captura mediante el formulario FO-GGOL-016. Incluye:
+    - Criterios de inclusión (SISBÉN, protección constitucional, víctima, discapacidad, etc.)
+    - Valoración económica (puntaje SISBÉN, clasificación, grado vulnerabilidad, línea pobreza)
+    - Evaluación profesional (profesional social, fecha, concepto)
+    
+    El estudio soporta la decisión de otorgar PermisoOcupacionTemporal y determina si el 
+    beneficiario es exento de retribución económica."""@es ;
+    skos:scopeNote """Ciclo de vida:
+    1. ConceptoVulnerabilidad (concepto técnico) se crea para el trámite
+    2. Profesional social realiza visita y diligencia FO-GGOL-016
+    3. Se genera EstudioSocioeconomico como registro formal
+    4. Si resultado favorable → soporta AprobacionPermiso"""@es ;
+    dcterms:source "DMP regulacion_v1 - estudio_socioeconomico_fecha, FO-GGOL-016 v8" ;
+    :formularioAsociado "FO-GGOL-016" ;
+    :metodologiaReferencia "DE-GGOL-007" ;
+    dmp:columnaOrigen "estudio_socioeconomico_fecha" .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Modulo
+# =============================================================================
+
+# =============================================================================
+# NOTA: Las propiedades básicas de Modulo (numeroModulo, materialModulo, etc.)
+# están definidas en infraestructura.ttl. Aquí solo se definen propiedades 
+# adicionales con trazabilidad DMP.
+# =============================================================================
+
+:moduloPlaca a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "placa del modulo"@es ;
+    skos:definition "Placa de identificacion oficial del modulo"@es ;
+    dmp:columnaOrigen "puesto_modulo_placa" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:moduloTipo a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipo de modulo"@es ;
+    skos:definition "Tipologia del modulo (kiosco, caseta, carpa, etc.)"@es ;
+    dmp:columnaOrigen "modulo_tipo" ;
+    dcterms:source "DMP regulacion_v1" .
+
+# --- Servicios del Modulo ---
+
+:tieneServicioAgua a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "tiene servicio de agua"@es ;
+    skos:definition "Indica si el modulo cuenta con servicio de agua potable"@es ;
+    dmp:columnaOrigen "servicios_agua_indicador" ;
+    dmp:ruleName "format_boolean" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:tieneServicioAlcantarillado a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "tiene alcantarillado"@es ;
+    skos:definition "Indica si el modulo cuenta con conexion a alcantarillado"@es ;
+    dmp:columnaOrigen "servicios_alcantarillado_indicador" ;
+    dmp:ruleName "format_boolean" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:tieneServicioEnergia a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "tiene servicio de energia"@es ;
+    skos:definition "Indica si el modulo cuenta con energia electrica"@es ;
+    dmp:columnaOrigen "servicios_energia_indicador" ;
+    dmp:ruleName "format_boolean" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:tieneServicioGas a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "tiene servicio de gas"@es ;
+    skos:definition "Indica si el modulo cuenta con conexion de gas"@es ;
+    dmp:columnaOrigen "servicios_gas_indicador" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:tieneServiciosPublicos a owl:DatatypeProperty ;
+    rdfs:domain :Modulo ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "tiene servicios publicos"@es ;
+    skos:definition "Indicador general de disponibilidad de servicios publicos"@es ;
+    dmp:columnaOrigen "servicios_publicos_indicador" ;
+    dcterms:source "DMP regulacion_v1" .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Estado del Vendedor Regulado
+# =============================================================================
+
+:reguladoIndicador a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "indicador de regulado"@es ;
+    skos:definition "Indica si el vendedor tiene autorizacion vigente"@es ;
+    dmp:columnaOrigen "regulado_indicador" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:ocupacionEstado a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:string ;
+    rdfs:label "estado de ocupacion"@es ;
+    skos:definition "Estado actual de ocupacion del espacio publico"@es ;
+    dmp:columnaOrigen "ocupacion_estado" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:cancelacionIndicador a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "indicador de cancelacion"@es ;
+    skos:definition "Indica si la autorizacion ha sido cancelada"@es ;
+    dmp:columnaOrigen "cancelacion_indicador" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:cancelacionMotivo a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:string ;
+    rdfs:label "motivo de cancelacion"@es ;
+    skos:definition "Motivo por el cual se cancelo la autorizacion"@es ;
+    dmp:columnaOrigen "cancelacion_motivo" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:reubicacionProceso a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:string ;
+    rdfs:label "proceso de reubicacion"@es ;
+    skos:definition "Estado del proceso de reubicacion si aplica"@es ;
+    dmp:columnaOrigen "reubicacion_proceso" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:intervencionIndicador a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "indicador de intervencion"@es ;
+    skos:definition "Indica si el vendedor ha sido intervenido"@es ;
+    dmp:columnaOrigen "intervencion_indicador" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:intervencionClaseVenta a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:string ;
+    rdfs:label "clase de venta en intervencion"@es ;
+    skos:definition "Clase de venta identificada durante la intervencion"@es ;
+    dmp:columnaOrigen "intervencion_clase_venta" ;
+    dmp:ruleName "vocab_clase_venta" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:inspeccionJuridicaTipo a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipo de inspeccion juridica"@es ;
+    skos:definition "Tipo de inspeccion o proceso juridico asociado"@es ;
+    dmp:columnaOrigen "inspeccion_juridica_tipo" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:novedadesTexto a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:string ;
+    rdfs:label "novedades"@es ;
+    skos:definition "Texto libre con novedades registradas del vendedor"@es ;
+    dmp:columnaOrigen "novedades_texto" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:actaEntregaFecha a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:date ;
+    rdfs:label "fecha acta de entrega"@es ;
+    skos:definition "Fecha del acta de entrega del modulo o carnet"@es ;
+    dmp:columnaOrigen "acta_entrega_fecha" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:trasladoDireccionActa a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:string ;
+    rdfs:label "direccion acta de traslado"@es ;
+    skos:definition "Direccion destino segun acta de traslado"@es ;
+    dmp:columnaOrigen "traslado_direccion_acta" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:resolucionDireccionDefinitiva a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:string ;
+    rdfs:label "direccion definitiva en resolucion"@es ;
+    skos:definition "Direccion definitiva segun la ultima resolucion"@es ;
+    dmp:columnaOrigen "resolucion_direccion_definitiva" ;
+    dcterms:source "DMP regulacion_v1" .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: APP (Concepto Tecnico y Facturacion)
+# =============================================================================
+
+:conceptoTecnicoAppNumero a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:string ;
+    rdfs:label "numero concepto tecnico APP"@es ;
+    skos:definition "Numero del concepto tecnico emitido en APP"@es ;
+    dmp:columnaOrigen "concepto_tecnico_app_numero" ;
+    dmp:ruleName "format_consecutivo_mercurio" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:conceptoTecnicoAppFecha a owl:DatatypeProperty ;
+    rdfs:domain :ConceptoVulnerabilidad ;
+    rdfs:range xsd:date ;
+    rdfs:label "fecha concepto tecnico APP"@es ;
+    skos:definition "Fecha de emision del concepto tecnico en APP"@es ;
+    dmp:columnaOrigen "concepto_tecnico_app_fecha" ;
+    dmp:ruleName "format_iso_date" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:facturacionEnvioFecha a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:date ;
+    rdfs:label "fecha envio a facturacion"@es ;
+    skos:definition "Fecha en que se envio informacion a facturacion"@es ;
+    dmp:columnaOrigen "facturacion_envio_fecha" ;
+    dmp:ruleName "format_iso_date" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:retribucionValor a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "valor de retribucion"@es ;
+    skos:definition "Valor de retribucion economica a pagar"@es ;
+    dmp:columnaOrigen "retribucion_valor" ;
+    dmp:ruleName "format_moneda_colombiana" ;
+    dcterms:source "DMP regulacion_v1" .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Visitas
+# =============================================================================
+
+:visitaAdministrativa1Fecha a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:date ;
+    rdfs:label "fecha primera visita administrativa"@es ;
+    skos:definition "Fecha de la primera visita administrativa de seguimiento"@es ;
+    dmp:columnaOrigen "visita_administrativa_1_fecha" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:visitaAdministrativa2Fecha a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:date ;
+    rdfs:label "fecha segunda visita administrativa"@es ;
+    skos:definition "Fecha de la segunda visita administrativa de seguimiento"@es ;
+    dmp:columnaOrigen "visita_administrativa_2_fecha" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:visitaAdministrativa3Fecha a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:date ;
+    rdfs:label "fecha tercera visita administrativa"@es ;
+    skos:definition "Fecha de la tercera visita administrativa de seguimiento"@es ;
+    dmp:columnaOrigen "visita_administrativa_3_fecha" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:estudioSocioeconomicoFecha a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:date ;
+    rdfs:label "fecha estudio socioeconomico"@es ;
+    skos:definition "Fecha del ultimo estudio socioeconomico realizado"@es ;
+    dmp:columnaOrigen "estudio_socioeconomico_fecha" ;
+    dmp:ruleName "format_iso_date" ;
+    dcterms:source "DMP regulacion_v1" .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: VisitaAdministrativa (Detalle de Visita)
+# =============================================================================
+
+:numeroVisita a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:integer ;
+    rdfs:label "número de visita"@es ;
+    skos:definition "Número secuencial de la visita administrativa (1, 2, 3...)"@es ;
+    skos:scopeNote "Las visitas 1-3 son de seguimiento regular; visitas adicionales pueden ser por novedad"@es .
+
+:fechaVisita a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:date ;
+    rdfs:label "fecha de visita"@es ;
+    skos:definition "Fecha en que se realizó la visita administrativa"@es .
+
+:tipoVisita a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipo de visita"@es ;
+    skos:definition "Tipo de visita: 'seguimiento', 'novedad', 'estudio_socioeconomico', 'verificacion'"@es .
+
+:resultadoVisita a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:string ;
+    rdfs:label "resultado de visita"@es ;
+    skos:definition "Resultado de la visita: 'conforme', 'novedad_detectada', 'ausente', 'puesto_cerrado'"@es .
+
+:funcionarioVisita a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:string ;
+    rdfs:label "funcionario que realizó la visita"@es ;
+    skos:definition "Nombre del funcionario o profesional que realizó la visita"@es .
+
+:observacionesVisita a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:string ;
+    rdfs:label "observaciones de visita"@es ;
+    skos:definition "Observaciones registradas durante la visita administrativa"@es .
+
+:visitaGeneraNovedad a owl:ObjectProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range :Novedad ;
+    rdfs:label "visita genera novedad"@es ;
+    skos:definition "Vincula la visita a la novedad que detectó (si aplica)"@es .
+
+:visitaActualizaEstado a owl:DatatypeProperty ;
+    rdfs:domain :VisitaAdministrativa ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "visita actualiza estado"@es ;
+    skos:definition "Indica si la visita generó un cambio de estado del vendedor"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Sistema
+# =============================================================================
+
+:itemId a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:string ;
+    rdfs:label "ID de registro"@es ;
+    skos:definition "Identificador unico del registro en el sistema fuente"@es ;
+    dmp:columnaOrigen "item_id" ;
+    dcterms:source "DMP regulacion_v1" .
+
+:observacionesAdicionales a owl:DatatypeProperty ;
+    rdfs:domain :VendedorInformalRegulado ;
+    rdfs:range xsd:string ;
+    rdfs:label "observaciones adicionales"@es ;
+    skos:definition "Observaciones generales adicionales del registro"@es ;
+    dmp:columnaOrigen "observaciones_adicionales" ;
+    dcterms:source "DMP regulacion_v1" .
+
+# =============================================================================
+# ANNOTATION PROPERTY: Trazabilidad DMP
+# =============================================================================
+
+dmp:columnaOrigen a owl:AnnotationProperty ;
+    rdfs:label "columna DMP origen"@es ;
+    skos:definition "Nombre de la columna en el DMP a1_diccionario de origen"@es .
+
+dmp:estandarOrigen a owl:AnnotationProperty ;
+    rdfs:label "estandar DMP origen"@es ;
+    skos:definition "Identificador del estandar DMP de origen (ej: regulacion_v1)"@es .
+
+dmp:ruleName a owl:DatatypeProperty ;
+    rdfs:label "nombre de regla de calidad"@es ;
+    rdfs:label "quality rule name"@en ;
+    rdfs:range xsd:string ;
+    skos:definition "Nombre de la regla de validacion de calidad (vocabulario o formato) aplicable a esta propiedad, segun rule-names-vocabulary.ttl"@es .
+

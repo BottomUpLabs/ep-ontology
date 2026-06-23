@@ -1,0 +1,252 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/control#> .
+@prefix ctrl: <https://w3id.org/medellin/espacio-publico/control#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix vocab: <https://w3id.org/medellin/espacio-publico/vocab/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# ONTOLOGIA DE DOMINIO: Control y Aprovechamiento del Espacio Publico
+# =============================================================================
+# Formaliza conceptos descritos en la documentacion narrativa (concepts/, context/)
+# que no estaban modelados: la intervencion/recuperacion del espacio publico, el
+# aprovechamiento economico, la oferta institucional, los puntos criticos, y los
+# vocabularios controlados de causales de novedad, tipos de concepto tecnico,
+# actividades prohibidas y zonas restringidas. Responde a las preguntas abiertas
+# registradas en concepts/ToDo.md.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/control> a owl:Ontology ;
+    dcterms:title "Espacio Publico - Control y Aprovechamiento"@es ;
+    dcterms:title "Public Space - Control and Economic Use"@en ;
+    dcterms:description """Ontologia de dominio que modela la dimension de control,
+    intervencion y aprovechamiento economico del espacio publico de Medellin:
+    operativos de recuperacion, autorizaciones de uso oneroso, oferta institucional,
+    puntos criticos y los vocabularios controlados asociados (causales de novedad,
+    tipos de concepto tecnico, actividades prohibidas, zonas restringidas).
+    Derivada de la caracterizacion conceptual de los procesos misionales."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    dcterms:source "concepts/control/intervencion_ep.md" ;
+    dcterms:source "concepts/formal_commerce/aprovechamiento_economico.md" ;
+    dcterms:source "concepts/regulated/novedades_regulados.md" ;
+    dcterms:created "2026-05-31"^^xsd:date ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    vann:preferredNamespacePrefix "ctrl" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/control#" ;
+    bibo:status "published"@en ;
+    owl:versionInfo "0.1.0" ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/control/0.1.0> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/entidades-primer-orden> ,
+        <https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda> ,
+        <https://w3id.org/medellin/espacio-publico/core/institutional-core-entities> .
+
+# =============================================================================
+# CLASES
+# =============================================================================
+
+ctrl:IntervencionEspacioPublico a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/control> ;
+    rdfs:label "Intervencion del Espacio Publico"@es ;
+    rdfs:label "Public Space Intervention"@en ;
+    skos:prefLabel "Intervencion integral del espacio publico"@es ;
+    skos:altLabel "Operativo de Territorios Publicos"@es ;
+    skos:altLabel "Recuperacion del espacio publico"@es ;
+    skos:definition """Conjunto planificado de diagnosticos, recorridos, sensibilizaciones,
+    controles y acompanamientos institucionales para regular la ocupacion economica y
+    cultural del espacio publico, garantizando legalidad y disfrute colectivo."""@es ;
+    skos:scopeNote "Brazo operativo de la estrategia Territorios Publicos. Puede originar novedades (hallazgos de abandono, ocupacion indebida, incautaciones)."@es ;
+    skos:editorialNote "Se prefiere 'recuperacion del espacio' y 'vendedores informales no autorizados'; evitar terminos estigmatizantes como 'invasores'."@es ;
+    dcterms:source "PR-GGOL-011 (2022); Ley 1801 de 2016; Manual del Espacio Publico Medellin (2017)" .
+
+ctrl:AprovechamientoEconomico a owl:Class ;
+    rdfs:subClassOf core:Tramite ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/control> ;
+    rdfs:label "Aprovechamiento Economico del Espacio Publico"@es ;
+    rdfs:label "Economic Use of Public Space"@en ;
+    skos:prefLabel "Aprovechamiento economico del espacio publico"@es ;
+    skos:altLabel "Contraprestacion por uso"@es ;
+    skos:altLabel "Uso temporal oneroso"@es ;
+    skos:definition """Autorizacion temporal para que un actor privado utilice areas,
+    soportes o mobiliario urbano con fines comerciales, publicitarios o de servicios,
+    a cambio del pago de una contraprestacion y del cumplimiento de parametros tecnicos."""@es ;
+    skos:scopeNote "Excluye ocupaciones permanentes sin titularidad y las intervenciones comunitarias sin aprovechamiento economico. Activa cobros (preliquidacion APP/EPM)."@es ;
+    skos:example "Ferias, modulos comerciales regulados, avisos transitorios, uso de redes de energia para elementos promocionales."@es ;
+    dcterms:source "Acuerdo 048 de 2014; Decreto 883 de 2015; Decreto 288 de 2018; PR-GGOL-019 (2023)" .
+
+ctrl:OfertaInstitucional a owl:Class ;
+    rdfs:subClassOf core:ProgramaInstitucional ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/control> ;
+    rdfs:label "Oferta Institucional"@es ;
+    rdfs:label "Institutional Offer"@en ;
+    skos:prefLabel "Oferta institucional"@es ;
+    skos:definition """Conjunto de programas de capacitacion, microcreditos, subsidios o
+    espacios comerciales alternativos que la Administracion ofrece a los vendedores
+    informales, especialmente como destino recomendado cuando una novedad concluye en
+    cancelacion o negativa del permiso."""@es ;
+    dcterms:source "concepts/regulated/novedades_regulados.md; concepts/informal/informal_vendor.md" .
+
+ctrl:PuntoCritico a owl:Class ;
+    rdfs:subClassOf core:Lugar ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/control> ;
+    rdfs:label "Punto Critico"@es ;
+    rdfs:label "Critical Point"@en ;
+    skos:prefLabel "Punto critico"@es ;
+    skos:definition """Designacion institucional para zonas con alta concentracion de
+    ocupacion del espacio publico que generan problemas de movilidad, seguridad o
+    convivencia y se priorizan para intervencion (estaciones de transporte, plazas de
+    mercado, corredores comerciales)."""@es ;
+    dcterms:source "concepts/control/intervencion_ep.md; concepts/informal/informal_vendor.md" .
+
+# =============================================================================
+# PROPIEDADES
+# =============================================================================
+
+ctrl:intervieneEn a owl:ObjectProperty ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/control> ;
+    rdfs:label "interviene en"@es ;
+    rdfs:domain ctrl:IntervencionEspacioPublico ;
+    rdfs:range core:Lugar ;
+    skos:definition "Vincula una intervencion con el lugar o punto critico donde se ejecuta."@es .
+
+ctrl:causalNovedad a owl:ObjectProperty ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/control> ;
+    rdfs:label "tiene causal de novedad"@es ;
+    rdfs:range skos:Concept ;
+    skos:definition "Relaciona una novedad o cancelacion con su causal en el vocabulario causal-novedad."@es .
+
+# =============================================================================
+# VOCABULARIO: Causales de novedad / cancelacion del permiso
+# (Responde a ToDo: causales de cancelacion de una autorizacion)
+# =============================================================================
+
+ctrl:causal-novedad a skos:ConceptScheme ;
+    dcterms:title "Causales de Novedad del Vendedor Regulado"@es ;
+    dcterms:description "Causales que modifican o cancelan el permiso temporal de un vendedor regulado."@es ;
+    dcterms:source "PR-GGOL-012 (2023); Ley 1801 de 2016; concepts/regulated/novedades_regulados.md" ;
+    skos:hasTopConcept ctrl:renuncia-voluntaria , ctrl:fallecimiento-titular ,
+        ctrl:cambio-titular , ctrl:traslado-transitorio-obra ,
+        ctrl:reubicacion-definitiva-amenaza , ctrl:ocupacion-indebida-terceros ,
+        ctrl:abandono-puesto , ctrl:cancelacion-incumplimiento .
+
+ctrl:renuncia-voluntaria a skos:Concept ; skos:inScheme ctrl:causal-novedad ; skos:topConceptOf ctrl:causal-novedad ;
+    skos:prefLabel "Renuncia voluntaria"@es ; skos:notation "renuncia_voluntaria" ;
+    skos:definition "El titular renuncia voluntariamente a su permiso, soportado con oficio y entrega de llaves/modulo."@es .
+ctrl:fallecimiento-titular a skos:Concept ; skos:inScheme ctrl:causal-novedad ; skos:topConceptOf ctrl:causal-novedad ;
+    skos:prefLabel "Fallecimiento del titular"@es ; skos:notation "fallecimiento_titular" ;
+    skos:definition "Deceso del titular acreditado con certificado de defuncion; activa recuperacion o reasignacion del modulo."@es .
+ctrl:cambio-titular a skos:Concept ; skos:inScheme ctrl:causal-novedad ; skos:topConceptOf ctrl:causal-novedad ;
+    skos:prefLabel "Cambio de titular"@es ; skos:notation "cambio_titular" ;
+    skos:definition "Transferencia del permiso a otra persona conforme a los requisitos del procedimiento."@es .
+ctrl:traslado-transitorio-obra a skos:Concept ; skos:inScheme ctrl:causal-novedad ; skos:topConceptOf ctrl:causal-novedad ;
+    skos:prefLabel "Traslado transitorio por obra"@es ; skos:notation "traslado_transitorio_obra" ;
+    skos:definition "Reubicacion temporal del puesto por obras de infraestructura; el permiso se mantiene en otra ubicacion."@es .
+ctrl:reubicacion-definitiva-amenaza a skos:Concept ; skos:inScheme ctrl:causal-novedad ; skos:topConceptOf ctrl:causal-novedad ;
+    skos:prefLabel "Reubicacion definitiva por amenaza"@es ; skos:notation "reubicacion_definitiva_amenaza" ;
+    skos:definition "Traslado definitivo por amenazas comprobadas (denuncia en Fiscalia); puede implicar cambio de comuna."@es .
+ctrl:ocupacion-indebida-terceros a skos:Concept ; skos:inScheme ctrl:causal-novedad ; skos:topConceptOf ctrl:causal-novedad ;
+    skos:prefLabel "Ocupacion indebida por terceros"@es ; skos:notation "ocupacion_indebida_terceros" ;
+    skos:definition "Un tercero ocupa el puesto sin autorizacion, frecuentemente tras fallecimiento o abandono."@es .
+ctrl:abandono-puesto a skos:Concept ; skos:inScheme ctrl:causal-novedad ; skos:topConceptOf ctrl:causal-novedad ;
+    skos:prefLabel "Abandono del puesto"@es ; skos:notation "abandono_puesto" ;
+    skos:definition "Inactividad del puesto probada con visitas administrativas (tres intentos consecutivos)."@es .
+ctrl:cancelacion-incumplimiento a skos:Concept ; skos:inScheme ctrl:causal-novedad ; skos:topConceptOf ctrl:causal-novedad ;
+    skos:prefLabel "Cancelacion del permiso por incumplimiento"@es ; skos:notation "cancelacion_incumplimiento" ;
+    skos:definition "Cancelacion del permiso por incumplimiento de condiciones, conforme a la Ley 1801. Se prefiere 'cancelacion' frente a 'baja' o 'expulsion'."@es .
+
+# =============================================================================
+# VOCABULARIO: Tipos de concepto tecnico
+# (Responde a ToDo: tipos de conceptos tecnicos que hay)
+# =============================================================================
+
+ctrl:tipo-concepto-tecnico a skos:ConceptScheme ;
+    dcterms:title "Tipos de Concepto Tecnico"@es ;
+    dcterms:description "Clasificacion de los conceptos tecnicos o juridicos que soportan las decisiones administrativas."@es ;
+    dcterms:source "core:ConceptoTecnico; concepts/forms/*; DE-GGOL-007" ;
+    skos:hasTopConcept ctrl:concepto-juridico , ctrl:concepto-tecnico-urbano ,
+        ctrl:concepto-socioeconomico , ctrl:concepto-vulnerabilidad ,
+        ctrl:concepto-cruce-interinstitucional , ctrl:concepto-seguridad ,
+        ctrl:concepto-verificacion-pev , ctrl:concepto-preliquidacion-app .
+
+ctrl:concepto-juridico a skos:Concept ; skos:inScheme ctrl:tipo-concepto-tecnico ; skos:topConceptOf ctrl:tipo-concepto-tecnico ;
+    skos:prefLabel "Concepto juridico"@es ; skos:notation "concepto_juridico" ;
+    skos:definition "Evaluacion de legalidad de un tramite o decision."@es .
+ctrl:concepto-tecnico-urbano a skos:Concept ; skos:inScheme ctrl:tipo-concepto-tecnico ; skos:topConceptOf ctrl:tipo-concepto-tecnico ;
+    skos:prefLabel "Concepto tecnico urbano"@es ; skos:notation "concepto_tecnico_urbano" ;
+    skos:definition "Viabilidad urbanistica y de ocupacion del espacio publico."@es .
+ctrl:concepto-socioeconomico a skos:Concept ; skos:inScheme ctrl:tipo-concepto-tecnico ; skos:topConceptOf ctrl:tipo-concepto-tecnico ;
+    skos:prefLabel "Concepto socioeconomico"@es ; skos:notation "concepto_socioeconomico" ;
+    skos:definition "Evaluacion de condiciones sociales y economicas (FO-GGOL-016 / metodologia DE-GGOL-007)."@es .
+ctrl:concepto-vulnerabilidad a skos:Concept ; skos:inScheme ctrl:tipo-concepto-tecnico ; skos:topConceptOf ctrl:tipo-concepto-tecnico ;
+    skos:prefLabel "Concepto de vulnerabilidad"@es ; skos:notation "concepto_vulnerabilidad" ;
+    skos:definition "Valoracion del grado de vulnerabilidad para priorizacion y proteccion constitucional."@es .
+ctrl:concepto-cruce-interinstitucional a skos:Concept ; skos:inScheme ctrl:tipo-concepto-tecnico ; skos:topConceptOf ctrl:tipo-concepto-tecnico ;
+    skos:prefLabel "Concepto de cruce interinstitucional"@es ; skos:notation "concepto_cruce_interinstitucional" ;
+    skos:definition "Verificacion de la condicion del solicitante mediante cruce con otras entidades."@es .
+ctrl:concepto-seguridad a skos:Concept ; skos:inScheme ctrl:tipo-concepto-tecnico ; skos:topConceptOf ctrl:tipo-concepto-tecnico ;
+    skos:prefLabel "Concepto de seguridad"@es ; skos:notation "concepto_seguridad" ;
+    skos:definition "Evaluacion de condiciones de seguridad y riesgo."@es .
+ctrl:concepto-verificacion-pev a skos:Concept ; skos:inScheme ctrl:tipo-concepto-tecnico ; skos:topConceptOf ctrl:tipo-concepto-tecnico ;
+    skos:prefLabel "Estudio de verificacion de PEV"@es ; skos:notation "concepto_verificacion_pev" ;
+    skos:definition "Estudio tecnico de verificacion de publicidad exterior visual (estructura, medidas, acometidas)."@es .
+ctrl:concepto-preliquidacion-app a skos:Concept ; skos:inScheme ctrl:tipo-concepto-tecnico ; skos:topConceptOf ctrl:tipo-concepto-tecnico ;
+    skos:prefLabel "Concepto de preliquidacion (Agencia APP)"@es ; skos:notation "concepto_preliquidacion_app" ;
+    skos:definition "Calculo economico de la contraprestacion por aprovechamiento, emitido por la Agencia APP."@es .
+
+# =============================================================================
+# VOCABULARIO: Actividades prohibidas y zonas restringidas
+# (Responde parcialmente a ToDo: actividades / sitios prohibidos)
+# NOTA: lista preliminar y NO exhaustiva; requiere confirmacion normativa.
+# =============================================================================
+
+ctrl:actividad-prohibida a skos:ConceptScheme ;
+    dcterms:title "Actividades Prohibidas en el Espacio Publico"@es ;
+    dcterms:description "Conductas no permitidas en el espacio publico. Lista preliminar derivada de la caracterizacion operativa; requiere confirmacion normativa para ser exhaustiva."@es ;
+    dcterms:source "Ley 1801 de 2016; PR-GGOL-011; concepts/control/intervencion_ep.md" ;
+    skos:scopeNote "PRELIMINAR / NO EXHAUSTIVA. Pendiente de validacion con el normograma completo (ver concepts/ToDo.md)."@es ;
+    skos:hasTopConcept ctrl:venta-sin-autorizacion , ctrl:ocupacion-indebida ,
+        ctrl:parqueo-ilegal , ctrl:publicidad-no-autorizada .
+
+ctrl:venta-sin-autorizacion a skos:Concept ; skos:inScheme ctrl:actividad-prohibida ; skos:topConceptOf ctrl:actividad-prohibida ;
+    skos:prefLabel "Venta sin autorizacion"@es ; skos:notation "venta_sin_autorizacion" ;
+    skos:definition "Aprovechamiento economico del espacio publico sin permiso vigente."@es .
+ctrl:ocupacion-indebida a skos:Concept ; skos:inScheme ctrl:actividad-prohibida ; skos:topConceptOf ctrl:actividad-prohibida ;
+    skos:prefLabel "Ocupacion indebida del espacio publico"@es ; skos:notation "ocupacion_indebida" ;
+    skos:definition "Uso u ocupacion del espacio publico que impide su disfrute colectivo, conforme a la Ley 1801."@es .
+ctrl:parqueo-ilegal a skos:Concept ; skos:inScheme ctrl:actividad-prohibida ; skos:topConceptOf ctrl:actividad-prohibida ;
+    skos:prefLabel "Parqueo ilegal"@es ; skos:notation "parqueo_ilegal" ;
+    skos:definition "Estacionamiento de vehiculos en zonas no autorizadas del espacio publico."@es .
+ctrl:publicidad-no-autorizada a skos:Concept ; skos:inScheme ctrl:actividad-prohibida ; skos:topConceptOf ctrl:actividad-prohibida ;
+    skos:prefLabel "Publicidad exterior visual no autorizada"@es ; skos:notation "publicidad_no_autorizada" ;
+    skos:definition "Instalacion de elementos publicitarios sin registro ni autorizacion; activa desmonte y sancion."@es .
+
+ctrl:zona-restringida a skos:ConceptScheme ;
+    dcterms:title "Zonas Restringidas para Ocupacion y Publicidad"@es ;
+    dcterms:description "Sitios donde la ocupacion o la publicidad exterior visual estan restringidas. Lista preliminar derivada de la caracterizacion; requiere confirmacion normativa."@es ;
+    dcterms:source "Acuerdo 036 de 2017; concepts/pev/publicidad_exterior_visual.md; concepts/control/intervencion_ep.md" ;
+    skos:scopeNote "PRELIMINAR / NO EXHAUSTIVA. Pendiente de validacion normativa (ver concepts/ToDo.md)."@es ;
+    skos:hasTopConcept ctrl:corredor-patrimonial , ctrl:eje-ambiental ,
+        ctrl:estacion-transporte , ctrl:zona-peatonal-prioritaria .
+
+ctrl:corredor-patrimonial a skos:Concept ; skos:inScheme ctrl:zona-restringida ; skos:topConceptOf ctrl:zona-restringida ;
+    skos:prefLabel "Corredor patrimonial"@es ; skos:notation "corredor_patrimonial" ;
+    skos:definition "Eje o area de valor patrimonial donde se restringe la publicidad y la ocupacion."@es .
+ctrl:eje-ambiental a skos:Concept ; skos:inScheme ctrl:zona-restringida ; skos:topConceptOf ctrl:zona-restringida ;
+    skos:prefLabel "Eje ambiental"@es ; skos:notation "eje_ambiental" ;
+    skos:definition "Corredor ambiental protegido con restricciones de ocupacion y publicidad."@es .
+ctrl:estacion-transporte a skos:Concept ; skos:inScheme ctrl:zona-restringida ; skos:topConceptOf ctrl:zona-restringida ;
+    skos:prefLabel "Estacion de transporte"@es ; skos:notation "estacion_transporte" ;
+    skos:definition "Entorno de estaciones de Metro, Tranvia o terminales, con prioridad de despeje peatonal."@es .
+ctrl:zona-peatonal-prioritaria a skos:Concept ; skos:inScheme ctrl:zona-restringida ; skos:topConceptOf ctrl:zona-restringida ;
+    skos:prefLabel "Zona peatonal prioritaria"@es ; skos:notation "zona_peatonal_prioritaria" ;
+    skos:definition "Anden o corredor de alta circulacion peatonal donde se prioriza el despeje en horas pico."@es .

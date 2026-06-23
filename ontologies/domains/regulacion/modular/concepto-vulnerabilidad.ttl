@@ -1,0 +1,383 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dmp: <https://w3id.org/medellin/espacio-publico/dmp/> .
+@prefix form: <https://w3id.org/medellin/espacio-publico/form/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+
+# =============================================================================
+# Ontologia Modular: Concepto de Vulnerabilidad y FO-GGOL-016
+# =============================================================================
+# Fecha creacion: 2026-01-09
+# Descripcion: Define el proceso de evaluación de vulnerabilidad para vendedores
+#              informales, mapeando el formulario FO-GGOL-016 (Concepto Socioeconómico)
+#              a la ontología. Incluye SHACL shapes para validación.
+
+<https://w3id.org/medellin/espacio-publico/regulacion/concepto-vulnerabilidad> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/regulacion/concepto-vulnerabilidad/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Concepto de Vulnerabilidad y Estudio Socioeconómico"@es ;
+    dcterms:description """Ontologia que define el proceso de evaluación de vulnerabilidad
+    para vendedores informales. Mapea el formulario FO-GGOL-016 (Concepto Socioeconómico)
+    a clases y propiedades semánticas. Establece la relación:
+    
+    ConceptoVulnerabilidad (concepto técnico) 
+        → genera → EstudioSocioeconomico (documento formal, FO-GGOL-016)
+        → soporta → PermisoOcupacionTemporal (autorización)
+    
+    Incluye SHACL shapes para validar datos contra el formulario."""@es ;
+    dcterms:created "2026-01-09"^^xsd:date ;
+    dcterms:modified "2026-01-09"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    vann:preferredNamespacePrefix "reg" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/regulacion#" ;
+    dcterms:source "FO-GGOL-016 v8, DE-GGOL-007" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/tramites-autorizacion> .
+
+# =============================================================================
+# MAPEO: FO-GGOL-016 → Ontología
+# =============================================================================
+# El formulario FO-GGOL-016 v8 tiene 5 secciones y 26 campos.
+# Este archivo documenta el mapeo completo a propiedades ontológicas.
+#
+# Sección 1: Información Personal → core:PersonaNatural (ya en dmp-regulacion-properties)
+# Sección 2: Solicitud → :SolicitudAutorizacionTemporal, :ProgramaReubicacion
+# Sección 3: Criterios de Inclusión → :ConceptoVulnerabilidad (propiedades booleanas)
+# Sección 4: Valoración Económica → :ConceptoVulnerabilidad (puntajes, clasificación)
+# Sección 5: Evaluación Profesional → :ConceptoVulnerabilidad (evaluador, fecha)
+# =============================================================================
+
+# =============================================================================
+# ANNOTATION: Formulario
+# =============================================================================
+
+form:campo a owl:AnnotationProperty ;
+    rdfs:label "campo del formulario"@es ;
+    skos:definition "Nombre del campo en el formulario de origen"@es .
+
+form:seccion a owl:AnnotationProperty ;
+    rdfs:label "sección del formulario"@es ;
+    skos:definition "Sección del formulario donde se ubica el campo"@es .
+
+form:formulario a owl:AnnotationProperty ;
+    rdfs:label "formulario de origen"@es ;
+    skos:definition "Código del formulario de origen"@es .
+
+# =============================================================================
+# CLASE: ProgramaReubicacion (Sección 2 - Solicitud)
+# =============================================================================
+
+:ProgramaReubicacion a owl:Class ;
+    rdfs:label "Programa de Reubicación"@es ;
+    skos:prefLabel "Programa de Reubicación"@es ;
+    skos:definition """Programa institucional de reubicación de vendedores informales.
+    Tipos según FO-GGOL-016:
+    - RP: Reubicación Permanente
+    - RPOP: Reubicación Permanente con Ocupación del Puesto
+    - ROP: Reubicación con Ocupación del Puesto
+    - REC: Reubicación por Evento Coyuntural
+    - RPP: Reubicación por Plan Parcial
+    - REP: Reubicación por Espacio Público
+    - ROAJ: Reubicación por Obras de Ajuste"""@es ;
+    dcterms:source "FO-GGOL-016 - Solicitud" .
+
+:tipoReubicacion a owl:DatatypeProperty ;
+    rdfs:domain :ProgramaReubicacion ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipo de reubicación"@es ;
+    skos:definition "Código del tipo de programa de reubicación (RP, RPOP, ROP, etc.)"@es ;
+    form:campo "Programa de Reubicación" ;
+    form:seccion "Solicitud" ;
+    form:formulario "FO-GGOL-016" .
+
+:solicitaAutorizacion a owl:DatatypeProperty ;
+    rdfs:domain :SolicitudAutorizacionTemporal ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "solicita autorización"@es ;
+    skos:definition "Indica si el trámite es una solicitud de autorización nueva"@es ;
+    form:campo "Autorización" ;
+    form:seccion "Solicitud" ;
+    form:formulario "FO-GGOL-016" .
+
+:solicitaCambioTitular a owl:DatatypeProperty ;
+    rdfs:domain :SolicitudAutorizacionTemporal ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "solicita cambio de titular"@es ;
+    skos:definition "Indica si el trámite es un cambio de titular"@es ;
+    form:campo "Cambio de Titular" ;
+    form:seccion "Solicitud" ;
+    form:formulario "FO-GGOL-016" .
+
+:otroTipoSolicitud a owl:DatatypeProperty ;
+    rdfs:domain :SolicitudAutorizacionTemporal ;
+    rdfs:range xsd:string ;
+    rdfs:label "otro tipo de solicitud"@es ;
+    skos:definition "Descripción de otro tipo de solicitud no clasificada"@es ;
+    form:campo "Otro" ;
+    form:seccion "Solicitud" ;
+    form:formulario "FO-GGOL-016" .
+
+# =============================================================================
+# CLASES: Tipos de Vulnerabilidad (Sección 3 - Criterios de Inclusión)
+# =============================================================================
+# Estas propiedades están definidas en tramites-autorizacion.ttl con dominio
+# :ConceptoVulnerabilidad. Aquí documentamos el mapeo al formulario.
+# =============================================================================
+
+# El mapeo ya está en tramites-autorizacion.ttl:
+# - :tieneSisben → "Tiene Sisbén"
+# - :sujetoProteccionConstitucional → "Sujeto de especial protección constitucional"
+# - :victimaConflictoArmado → "Víctima del conflicto armado"
+# - :condicionDiscapacidad → "Persona en condición de discapacidad"
+# - :perteneceGrupoEtnico → "Pertenece a un grupo étnico"
+# - :cabezaFamilia → "Hombre/mujer cabeza de familia"
+# - :poblacionLGBTI → "Población LGBTI"
+# - :adultoMayor → "Adulto mayor"
+
+# =============================================================================
+# FLUJO: ConceptoVulnerabilidad → EstudioSocioeconomico → PermisoOcupacionTemporal
+# =============================================================================
+# Documentación del flujo de proceso según FO-GGOL-016:
+#
+# 1. INICIO: Se radica SolicitudAutorizacionTemporal
+#    <tramite/T-001> a :SolicitudAutorizacionTemporal ;
+#        :estadoTramite "en_evaluacion" .
+#
+# 2. CONCEPTO: Se crea ConceptoVulnerabilidad para evaluar al solicitante
+#    <concepto/CV-001> a :ConceptoVulnerabilidad ;
+#        :conceptoParaTramite <tramite/T-001> ;
+#        :estadoConcepto "en_elaboracion" .
+#
+# 3. VISITA: Profesional social realiza visita y diligencia FO-GGOL-016
+#    <estudio/ES-001> a :EstudioSocioeconomico ;
+#        :fechaVisita "2025-01-08"^^xsd:date ;
+#        :funcionarioVisita "Ana Gómez" .
+#
+# 4. EVALUACIÓN: Se registran criterios de inclusión y valoración
+#    <concepto/CV-001> :tieneSisben true ;
+#        :sisbenClasificacion "A1" ;
+#        :gradoVulnerabilidad 4 ;
+#        :cabezaFamilia true ;
+#        :exentoRetribucionEconomica true .
+#
+# 5. RESULTADO: Concepto favorable fundamenta aprobación
+#    <concepto/CV-001> :conceptoResultado "favorable" ;
+#        :generaEstudio <estudio/ES-001> ;
+#        :estadoConcepto "emitido" .
+#
+# 6. DECISIÓN: Aprobación genera PermisoOcupacionTemporal
+#    <aprobacion/A-001> a :AprobacionPermiso ;
+#        :tramiteRelacionado <tramite/T-001> ;
+#        :aprobacionGenera <permiso/P-001> .
+#    
+#    <concepto/CV-001> :soportaPermiso <permiso/P-001> .
+# =============================================================================
+
+# =============================================================================
+# SHACL SHAPES: Validación de ConceptoVulnerabilidad
+# =============================================================================
+
+:ConceptoVulnerabilidadShape a sh:NodeShape ;
+    sh:targetClass :ConceptoVulnerabilidad ;
+    rdfs:label "Shape para Concepto de Vulnerabilidad"@es ;
+    sh:description """Valida que un ConceptoVulnerabilidad tenga los campos mínimos
+    requeridos según FO-GGOL-016 para ser considerado completo."""@es ;
+    
+    # Propiedades requeridas para emitir concepto
+    sh:property [
+        sh:path :conceptoResultado ;
+        sh:minCount 1 ;
+        sh:in ( "favorable" "desfavorable" "condicionado" ) ;
+        sh:message "El concepto debe tener un resultado: favorable, desfavorable o condicionado"@es
+    ] ;
+    
+    sh:property [
+        sh:path :gradoVulnerabilidad ;
+        sh:minCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 5 ;
+        sh:message "El grado de vulnerabilidad debe estar entre 1 y 5"@es
+    ] ;
+    
+    sh:property [
+        sh:path :profesionalEvaluador ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Debe indicarse el profesional social que realizó la evaluación"@es
+    ] ;
+    
+    sh:property [
+        sh:path :fechaConceptoVulnerabilidad ;
+        sh:minCount 1 ;
+        sh:datatype xsd:date ;
+        sh:message "Debe indicarse la fecha del concepto"@es
+    ] .
+
+:ConceptoVulnerabilidadCriteriosShape a sh:NodeShape ;
+    sh:targetClass :ConceptoVulnerabilidad ;
+    rdfs:label "Shape para Criterios de Inclusión"@es ;
+    sh:description """Valida los criterios de inclusión del FO-GGOL-016 §3.
+    Al menos uno de los criterios debe estar marcado como true para 
+    justificar un concepto favorable."""@es ;
+    
+    # Al menos un criterio de vulnerabilidad debe estar presente
+    sh:or (
+        [ sh:property [ sh:path :tieneSisben ; sh:hasValue true ] ]
+        [ sh:property [ sh:path :sujetoProteccionConstitucional ; sh:hasValue true ] ]
+        [ sh:property [ sh:path :victimaConflictoArmado ; sh:hasValue true ] ]
+        [ sh:property [ sh:path :condicionDiscapacidad ; sh:hasValue true ] ]
+        [ sh:property [ sh:path :perteneceGrupoEtnico ; sh:hasValue true ] ]
+        [ sh:property [ sh:path :cabezaFamilia ; sh:hasValue true ] ]
+        [ sh:property [ sh:path :poblacionLGBTI ; sh:hasValue true ] ]
+        [ sh:property [ sh:path :adultoMayor ; sh:hasValue true ] ]
+    ) ;
+    
+    sh:message "Un concepto favorable requiere al menos un criterio de inclusión marcado"@es .
+
+:ExencionRetribucionShape a sh:NodeShape ;
+    sh:targetClass :ConceptoVulnerabilidad ;
+    rdfs:label "Shape para Exención de Retribución"@es ;
+    sh:description """Valida las condiciones para exención de retribución económica.
+    Un vendedor es exento si tiene grado de vulnerabilidad ≥ 3."""@es ;
+    
+    # Regla SPARQL: exentoRetribucion implica gradoVulnerabilidad >= 3
+    sh:sparql [
+        sh:message "Exención de retribución requiere grado de vulnerabilidad ≥ 3"@es ;
+        sh:prefixes [
+            sh:declare [ sh:prefix ":" ; sh:namespace "https://w3id.org/medellin/espacio-publico/regulacion#" ]
+        ] ;
+        sh:select """
+            SELECT $this ?exento ?grado
+            WHERE {
+                $this :exentoRetribucionEconomica ?exento .
+                $this :gradoVulnerabilidad ?grado .
+                FILTER (?exento = true && ?grado < 3)
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHACL SHAPE: PermisoOcupacionTemporal requiere ConceptoVulnerabilidad favorable
+# =============================================================================
+
+:PermisoRequiereConceptoShape a sh:NodeShape ;
+    sh:targetClass :PermisoOcupacionTemporal ;
+    rdfs:label "Shape para Permiso con Concepto"@es ;
+    sh:description """Valida que un PermisoOcupacionTemporal esté soportado por 
+    un ConceptoVulnerabilidad con resultado favorable."""@es ;
+    
+    sh:sparql [
+        sh:message "El permiso debe estar soportado por un concepto de vulnerabilidad favorable"@es ;
+        sh:prefixes [
+            sh:declare [ sh:prefix ":" ; sh:namespace "https://w3id.org/medellin/espacio-publico/regulacion#" ]
+        ] ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this a :PermisoOcupacionTemporal .
+                FILTER NOT EXISTS {
+                    ?concepto :soportaPermiso $this .
+                    ?concepto :conceptoResultado "favorable" .
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# VOCABULARIO CONTROLADO: Clasificación SISBÉN IV
+# =============================================================================
+
+:sisbenClasificacionValores a skos:ConceptScheme ;
+    rdfs:label "Clasificación SISBÉN IV"@es ;
+    skos:definition "Grupos de clasificación del SISBÉN metodología IV (2020+)"@es .
+
+:sisbenA1 a skos:Concept ;
+    skos:inScheme :sisbenClasificacionValores ;
+    skos:notation "A1" ;
+    skos:prefLabel "Grupo A1 - Pobreza extrema"@es ;
+    skos:definition "Hogares en pobreza extrema multidimensional"@es .
+
+:sisbenA2 a skos:Concept ;
+    skos:inScheme :sisbenClasificacionValores ;
+    skos:notation "A2" ;
+    skos:prefLabel "Grupo A2 - Pobreza extrema"@es .
+
+:sisbenB1 a skos:Concept ;
+    skos:inScheme :sisbenClasificacionValores ;
+    skos:notation "B1" ;
+    skos:prefLabel "Grupo B1 - Pobreza moderada"@es .
+
+:sisbenB2 a skos:Concept ;
+    skos:inScheme :sisbenClasificacionValores ;
+    skos:notation "B2" ;
+    skos:prefLabel "Grupo B2 - Pobreza moderada"@es .
+
+:sisbenC1 a skos:Concept ;
+    skos:inScheme :sisbenClasificacionValores ;
+    skos:notation "C1" ;
+    skos:prefLabel "Grupo C1 - Vulnerable"@es .
+
+:sisbenC2 a skos:Concept ;
+    skos:inScheme :sisbenClasificacionValores ;
+    skos:notation "C2" ;
+    skos:prefLabel "Grupo C2 - Vulnerable"@es .
+
+:sisbenD1 a skos:Concept ;
+    skos:inScheme :sisbenClasificacionValores ;
+    skos:notation "D1" ;
+    skos:prefLabel "Grupo D1 - No vulnerable"@es .
+
+# =============================================================================
+# EJEMPLO: Instancia completa de ConceptoVulnerabilidad
+# =============================================================================
+# 
+# <concepto/CV-2025-001> a :ConceptoVulnerabilidad ;
+#     # Identificación
+#     :codigoConcepto "CV-2025-001" ;
+#     :conceptoParaTramite <tramite/T-2025-100> ;
+#     
+#     # Criterios de Inclusión (FO-GGOL-016 §3)
+#     :tieneSisben true ;
+#     :sujetoProteccionConstitucional true ;
+#     :victimaConflictoArmado false ;
+#     :condicionDiscapacidad false ;
+#     :perteneceGrupoEtnico false ;
+#     :cabezaFamilia true ;
+#     :poblacionLGBTI false ;
+#     :adultoMayor false ;
+#     
+#     # Valoración Económica (FO-GGOL-016 §4)
+#     :sisbenPuntaje 28.5 ;
+#     :sisbenClasificacion "A1" ;
+#     :gradoVulnerabilidad 4 ;
+#     :exentoRetribucionEconomica true ;
+#     :tipoVendedor "estacionario" ;
+#     :lineaPobreza true ;
+#     :lineaPobrezaExtrema false ;
+#     
+#     # Evaluación Profesional (FO-GGOL-016 §5)
+#     :profesionalEvaluador "Ana María Gómez Restrepo" ;
+#     :cargoEvaluador "Trabajadora Social" ;
+#     :correoEvaluador "ana.gomez@medellin.gov.co" ;
+#     :fechaConceptoVulnerabilidad "2025-01-08"^^xsd:date ;
+#     
+#     # Resultado
+#     :conceptoResultado "favorable" ;
+#     :conceptoJustificacion "Solicitante cumple criterios de vulnerabilidad: cabeza de familia con SISBÉN A1 y grado 4" ;
+#     :estadoConcepto "emitido" ;
+#     
+#     # Vinculaciones
+#     :generaEstudio <estudio/ES-2025-001> ;
+#     :soportaPermiso <permiso/P-2025-050> .
+# =============================================================================

@@ -1,0 +1,214 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+
+# =============================================================================
+# ONTOLOGIA MODULAR: Roles del Vendedor Informal (Dominio Regulacion)
+# =============================================================================
+# Fecha creacion: 2026-01-07
+# EXTIENDE: core/roles-institucionales.ttl
+# 
+# Define los roles institucionales ESPECIFICOS del dominio de regulacion de
+# vendedores informales, extendiendo los patrones abstractos del core.
+#
+# Roles definidos:
+#   1. VendedorInformal (abstracto, INFERIDO cuando Persona radica solicitud)
+#   2. VendedorInformalSolicitante (candidato en tramite de autorizacion)
+#   3. VendedorInformalRegulado (vendedor con permiso activo)
+#
+# Ciclos de vida basados en diagrama "Ciclo de Vida - Candidato de Autorizacion"
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/regulacion/roles-vendedor> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/regulacion/roles-vendedor/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Roles del Vendedor Informal"@es ;
+    dcterms:description """Ontologia de dominio que define los roles institucionales 
+    del vendedor informal y sus ciclos de vida basados en procedimientos administrativos.
+    EXTIENDE core/roles-institucionales.ttl con especializaciones para regulacion."""@es ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-01-07"^^xsd:date ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/institutional-core-entities> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    owl:versionInfo "0.1.0" ;
+    vann:preferredNamespacePrefix "reg" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/regulacion#" ;
+    rdfs:comment """CAMBIOS v2.0.0 (2026-01-07):
+    - Actualizado para extender core/roles-institucionales.ttl
+    - Namespace cambiado a regulacion# (era example.org)
+    - VendedorInformal ahora es rdfs:subClassOf role:RolInferido
+    - Agregada propiedad role:heredaEstadoDe para propagacion de ciclo de vida
+    - Estados terminales explicitamente anotados"""@es .
+
+
+# =============================================================================
+# PUENTE CON EL PATRON DE ROL (core/roles-institucionales)
+# =============================================================================
+# core:VendedorInformal es la materializacion de dominio del rol abstracto
+# role:VendedorInformal. Se declara la equivalencia y la jerarquia de rol.
+
+core:VendedorInformal
+    rdfs:subClassOf <https://w3id.org/medellin/espacio-publico/roles#RolInferido> ;
+    owl:equivalentClass <https://w3id.org/medellin/espacio-publico/roles#VendedorInformal> .
+
+# =============================================================================
+# CLASE: VendedorInformalRegulado (Rol Inferido - Sin Propiedades)
+# =============================================================================
+# PATRON: VendedorInformalRegulado ES INFERIDO cuando existe un
+# PermisoOcupacionTemporal activo cuyo :titular apunta a una Persona.
+# NO se asigna manualmente. NO tiene propiedades propias.
+#
+# REGLA DE INFERENCIA (OWL):
+#   ?permiso a :PermisoOcupacionTemporal .
+#   ?permiso :estadoPermiso "activo" .
+#   ?permiso :titular ?persona .
+#   → ?persona a :VendedorInformalRegulado .
+#
+# NOTA: No existe propiedad inversa Persona → PermisoOcupacion.
+# La navegacion es unidireccional: desde el permiso hacia la persona.
+# =============================================================================
+
+:VendedorInformalRegulado a owl:Class ;
+    rdfs:subClassOf core:VendedorInformal ;
+    rdfs:label "Vendedor Informal Regulado"@es ;
+    rdfs:label "Regulated Informal Vendor"@en ;
+    skos:prefLabel "Vendedor Informal Regulado"@es ;
+    skos:definition """Rol INFERIDO - una persona ES VendedorInformalRegulado si existe un
+    PermisoOcupacionTemporal con estadoPermiso='activo' cuyo :titular es esa persona.
+    
+    CARACTERISTICAS:
+    - NO tiene propiedades propias (rol puro)
+    - NO tiene estados (el ciclo de vida reside en PermisoOcupacionTemporal)
+    - NO hay relacion inversa Persona → Permiso
+    
+    INFERENCIA DINAMICA:
+    - La persona ADQUIERE el rol cuando se crea un permiso activo con ella como titular
+    - La persona PIERDE el rol cuando el permiso deja de estar activo
+    - La persona puede RE-ADQUIRIR el rol con un nuevo permiso activo"""@es ;
+    skos:example "Persona X es VendedorInformalRegulado porque existe PermisoOcupacion:12345 con titular=X y estado='activo'"@es ;
+    skos:scopeNote """ROL INFERIDO PURO - Sin propiedades.
+    
+    Para consultar permisos de una persona, usar SPARQL:
+      SELECT ?permiso WHERE { ?permiso :titular ?persona }
+    
+    NO usar: ?persona :tienePermiso ?permiso (no existe tal propiedad)"""@es ;
+    owl:equivalentClass [
+        a owl:Class ;
+        owl:unionOf (
+            [
+                a owl:Restriction ;
+                owl:onProperty [ owl:inverseOf :titular ] ;
+                owl:someValuesFrom [
+                    a owl:Class ;
+                    owl:intersectionOf (
+                        :PermisoOcupacionTemporal
+                        [
+                            a owl:Restriction ;
+                            owl:onProperty :estadoPermiso ;
+                            owl:hasValue "activo"
+                        ]
+                    )
+                ]
+            ]
+        )
+    ] ;
+    skos:historyNote """2026-01-07: CAMBIO MAYOR - Convertido a rol inferido PURO.
+    - Inferido desde PermisoOcupacion.:titular (no desde Persona)
+    - REMOVIDAS todas las propiedades del rol
+    - REMOVIDA relacion inversa Persona → Permiso
+    - Navegacion unidireccional: Permiso → Persona"""@es .
+
+# =============================================================================
+# CLASE: VendedorInformalSolicitante (Candidato a Autorizacion)
+# =============================================================================
+# ACTUALIZACION 2026-01-07: Expandido de 7 a 13 estados segun diagrama
+# Extiende role:RolInstitucional y :VendedorInformal
+
+:VendedorInformalSolicitante a owl:Class ;
+    rdfs:subClassOf core:VendedorInformal ;
+    rdfs:label "Vendedor Informal Solicitante"@es ;
+    rdfs:label "Applicant Informal Vendor"@en ;
+    skos:prefLabel "Vendedor Informal Solicitante"@es ;
+    skos:definition """Rol institucional de una persona que inicio tramite de autorizacion temporal 
+    para ocupar espacio publico. Transita por fases de evaluacion (documentacion, conceptos tecnicos) 
+    y decision (autorizado/no autorizado). Si es negado, puede presentar recurso de reposicion.
+    
+    HEREDA estados terminales de:
+    - core:Persona (si Persona fallece → rol desistido_por_fallecimiento)
+    
+    EVOLUCIONA hacia:
+    - VendedorInformalRegulado (si autorizado → crear rol regulado)
+    
+    IMPORTANTE: Este rol se CIERRA cuando transita a estado terminal. Si es autorizado, 
+    se crea un NUEVO rol VendedorInformalRegulado para la misma persona."""@es ;
+    skos:example "Candidato con radicado 2024-001 en estado 'en_evaluacion_tecnica'"@es ;
+    skos:scopeNote """ROL INSTITUCIONAL con ciclo de vida propio.
+    
+    NAVEGACION (unidireccional desde Solicitud):
+    Para obtener solicitudes de una persona, usar SPARQL:
+      SELECT ?solicitud WHERE { ?solicitud :solicitante ?persona }
+    
+    La SolicitudAutorizacion contiene: radicado, fechas, documentos, conceptos tecnicos."""@es ;
+    :heredaEstadoDe core:PersonaNatural ;
+    :evolucionaHacia :VendedorInformalRegulado ;
+    :basadoEn core:PersonaNatural ;
+    core:estadosCicloVida (
+        # PHASE 1 - SOLICITUD ("Persona solicita autorización" del diagrama)
+        "solicita_autorizacion"          # Inicio del tramite
+        
+        # PHASE 2 - EVALUACION ("Persona Espera Respuesta" del diagrama)
+        "espera_respuesta"               # Tramite radicado, pendiente revision
+        "documentacion_incompleta"       # Falta documentacion requerida
+        "subsanado"                      # Documentacion completada
+        "en_evaluacion_tecnica"          # Equipo tecnico evaluando (conceptos)
+        "concepto_emitido"               # ConceptoTecnico emitido (vinculado a esta fase)
+        
+        # PHASE 3 - DECISION
+        "autorizado"                     # "Persona Autorizada" (era "aprobado")
+        "no_autorizado"                  # "Persona no autorizada" (era "negado")
+        "desistido"                      # Candidato desiste voluntariamente
+        "desistido_por_fallecimiento"    # Cerrado por propagacion (Persona fallecio)
+        
+        # PHASE 4 - POST-NEGACION ("Candidato Presenta Reposición" del diagrama)
+        "presenta_reposicion"            # Recurso de reposicion presentado
+        "reposicion_en_estudio"          # Reposicion bajo evaluacion
+        "reposicion_aceptada"            # Reposicion aceptada → retorna a evaluacion
+        "reposicion_negada"              # Reposicion rechazada → terminal
+    ) ;
+    :estadosTerminales (
+        "autorizado"
+        "no_autorizado"
+        "desistido"
+        "desistido_por_fallecimiento"
+        "reposicion_negada"
+    ) ;
+    :transicionesValidas """
+        solicita_autorizacion → (espera_respuesta, desistido, desistido_por_fallecimiento)
+        espera_respuesta → (documentacion_incompleta, en_evaluacion_tecnica, desistido, desistido_por_fallecimiento)
+        documentacion_incompleta → (subsanado, desistido, desistido_por_fallecimiento)
+        subsanado → (en_evaluacion_tecnica)
+        en_evaluacion_tecnica → (concepto_emitido, desistido, desistido_por_fallecimiento)
+        concepto_emitido → (autorizado, no_autorizado)
+        no_autorizado → (presenta_reposicion)
+        presenta_reposicion → (reposicion_en_estudio)
+        reposicion_en_estudio → (reposicion_aceptada, reposicion_negada)
+        reposicion_aceptada → (en_evaluacion_tecnica)
+    """@es ;
+    skos:historyNote """2026-01-07: Actualizado de 7 a 14 estados para alinear con diagrama oficial. 
+    Agregados: solicita_autorizacion, espera_respuesta, presenta_reposicion, reposicion_en_estudio, 
+    reposicion_aceptada, reposicion_negada, desistido_por_fallecimiento. Renombrados: radicado→espera_respuesta, 
+    aprobado→autorizado, negado→no_autorizado. Agregado role:heredaEstadoDe y role:estadosTerminales."""@es .
+

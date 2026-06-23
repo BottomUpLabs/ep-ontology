@@ -1,0 +1,92 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vocab: <https://w3id.org/medellin/espacio-publico/vocab/> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# VOCABULARIO CONTROLADO: Clase / Modalidad de Venta Informal
+# =============================================================================
+# Clasifica la MODALIDAD de ocupacion del vendedor informal segun su grado de
+# fijacion y movilidad en el espacio publico. Complementa a tipologia-venta
+# (que clasifica QUE se vende); esta clasifica COMO se ocupa el espacio.
+# Provee la lista controlada para la propiedad core:claseVenta / core:puestoClaseVenta.
+# Sinonimos (hiddenLabel) tomados de la caracterizacion narrativa del concepto
+# "Vendedor informal" para normalizacion automatica de datos.
+# =============================================================================
+
+vocab:clase-venta a skos:ConceptScheme , owl:Ontology ;
+    dcterms:title "Clase de Venta Informal (Modalidad de Ocupacion)"@es ;
+    dcterms:title "Informal Sales Class (Occupation Modality)"@en ;
+    dcterms:description """Vocabulario controlado de la modalidad de ocupacion del
+    espacio publico por parte del vendedor informal, segun su grado de fijacion y
+    movilidad: estacionario, semi-estacionario, ambulante, itinerante/rotativo y
+    ocasional/temporal. Relevante para la gestion de seguridad vial, la asignacion
+    de modulos y la regulacion diferenciada."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:source "concepts/informal/informal_vendor.md - Seccion Lenguaje y vocabularios usados" ;
+    dcterms:source "DMP a1_diccionario - vendor_venta_informal_clase" ;
+    dcterms:created "2026-05-31"^^xsd:date ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    vann:preferredNamespacePrefix "vocab" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/vocab/" ;
+    owl:versionInfo "0.1.0" ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/vocab/clase-venta/0.1.0> ;
+    skos:hasTopConcept vocab:estacionario , vocab:semi-estacionario ,
+        vocab:ambulante , vocab:itinerante , vocab:ocasional .
+
+vocab:estacionario a skos:Concept ;
+    skos:inScheme vocab:clase-venta ;
+    skos:topConceptOf vocab:clase-venta ;
+    skos:prefLabel "Estacionario"@es ;
+    skos:prefLabel "Stationary"@en ;
+    skos:altLabel "Puesto fijo"@es ;
+    skos:altLabel "Establecido"@es ;
+    skos:notation "estacionario" ;
+    skos:definition "Vendedor cuya actividad se realiza consistentemente en un mismo lugar fijo, generalmente con modulo o amoblamiento permanente. Es la modalidad clave para procesos de formalizacion."@es ;
+    skos:scopeNote "Ocupa de forma estable un punto; objetivo prioritario de regularizacion y asignacion de modulo."@es ;
+    skos:hiddenLabel "fijo"@es , "puesto fijo"@es , "establecido"@es , "ESTACIONARIO"@es .
+
+vocab:semi-estacionario a skos:Concept ;
+    skos:inScheme vocab:clase-venta ;
+    skos:topConceptOf vocab:clase-venta ;
+    skos:prefLabel "Semi-estacionario"@es ;
+    skos:prefLabel "Semi-stationary"@en ;
+    skos:notation "semi_estacionario" ;
+    skos:definition "Vendedor que se instala y desinstala diariamente en el mismo sitio o se mueve en un radio muy limitado."@es ;
+    skos:hiddenLabel "semiestacionario"@es , "semi estacionario"@es , "semi-fijo"@es , "SEMIESTACIONARIO"@es .
+
+vocab:ambulante a skos:Concept ;
+    skos:inScheme vocab:clase-venta ;
+    skos:topConceptOf vocab:clase-venta ;
+    skos:prefLabel "Ambulante"@es ;
+    skos:prefLabel "Ambulant"@en ;
+    skos:altLabel "Vendedor ambulante"@es ;
+    skos:notation "ambulante" ;
+    skos:definition "Vendedor que comercializa en movimiento continuo, sin ocupar un punto fijo, desplazandose por andenes, plazas y corredores."@es ;
+    skos:hiddenLabel "ambulante"@es , "movil"@es , "venta en malla vial"@es , "AMBULANTE"@es .
+
+vocab:itinerante a skos:Concept ;
+    skos:inScheme vocab:clase-venta ;
+    skos:topConceptOf vocab:clase-venta ;
+    skos:prefLabel "Itinerante"@es ;
+    skos:prefLabel "Itinerant"@en ;
+    skos:altLabel "Rotativo"@es ;
+    skos:notation "itinerante" ;
+    skos:definition "Vendedor que rota constantemente entre diferentes zonas o rutas, por ejemplo la venta en transporte publico o en eventos."@es ;
+    skos:hiddenLabel "itinerante"@es , "rotativo"@es , "venta en transporte"@es , "ITINERANTE"@es .
+
+vocab:ocasional a skos:Concept ;
+    skos:inScheme vocab:clase-venta ;
+    skos:topConceptOf vocab:clase-venta ;
+    skos:prefLabel "Ocasional o temporal"@es ;
+    skos:prefLabel "Occasional or seasonal"@en ;
+    skos:altLabel "Venta de ocasion"@es ;
+    skos:altLabel "Temporal"@es ;
+    skos:notation "ocasional" ;
+    skos:definition "Actividad de venta que ocurre solo en ciertos momentos del ano, dias de la semana o eventos especificos (temporada decembrina, ferias, partidos)."@es ;
+    skos:hiddenLabel "ocasional"@es , "temporal"@es , "de temporada"@es , "decembrina"@es , "OCASIONAL"@es .

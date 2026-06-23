@@ -1,0 +1,903 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix form: <https://w3id.org/medellin/espacio-publico/form/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+
+# =============================================================================
+# Ontología Modular: Estudio Socioeconómico (FO-GOOL-044)
+# =============================================================================
+# Fecha creación: 2026-01-07
+# Descripción: Define el Estudio Socioeconómico completo capturado mediante el 
+#              formulario FO-GOOL-044 v9. Este estudio es el insumo principal
+#              para el ConceptoVulnerabilidad (FO-GGOL-016) y junto con el 
+#              ConceptoCruceInterinstitucional (FO-GGOL-022) fundamenta el
+#              PermisoOcupacionTemporal.
+#
+# Formulario: FO-GOOL-044 v9 "Estudio Socioeconómico"
+# Secciones: 9
+# Campos: 145
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/regulacion/estudio-socioeconomico> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/regulacion/estudio-socioeconomico/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Público - Estudio Socioeconómico"@es ;
+    dcterms:description """Ontología que define el Estudio Socioeconómico (FO-GOOL-044 v9)
+    para vendedores informales. Es el documento más completo de caracterización 
+    socioeconómica y familiar del solicitante.
+    
+    FLUJO EN EL PROCESO:
+    1. VisitaDomiciliaria (FO-GGOL-028) - Visita al domicilio del vendedor
+    2. EstudioSocioeconomico (FO-GOOL-044) - Caracterización completa
+    3. ConceptoVulnerabilidad (FO-GGOL-016) - Concepto técnico resumen
+    4. ConceptoCruceInterinstitucional (FO-GGOL-022) - Verificación bases de datos
+    5. PermisoOcupacionTemporal - Autorización final
+    
+    Secciones del formulario:
+    1. DATOS PERSONALES
+    2. CRITERIOS DE INCLUSIÓN
+    3. ASPECTOS DE LA VIVIENDA
+    4. ASPECTOS DE SEGURIDAD SOCIAL
+    5. ASPECTOS ECONÓMICOS
+    6. ASPECTOS POBLACIONALES
+    7. ASPECTOS FAMILIARES
+    8. CUESTIONARIO APGAR (funcionalidad familiar)
+    9. INFORMACIÓN GENERAL DEL GRUPO FAMILIAR"""@es ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-01-07"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    vann:preferredNamespacePrefix "reg" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/regulacion#" ;
+    dcterms:source "FO-GOOL-044 v9" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/regulacion/tramites-autorizacion> .
+
+# =============================================================================
+# CLASE: EstudioSocioeconomico
+# =============================================================================
+
+:EstudioSocioeconomicoCompleto a owl:Class ;
+    rdfs:label "Estudio Socioeconómico Completo"@es ;
+    rdfs:label "Complete Socioeconomic Study"@en ;
+    skos:prefLabel "Estudio Socioeconómico"@es ;
+    skos:altLabel "FO-GOOL-044"@es ;
+    skos:altLabel "Caracterización Socioeconómica"@es ;
+    skos:definition """Documento de caracterización socioeconómica integral del vendedor 
+    informal y su núcleo familiar. Es el instrumento más completo para evaluar la 
+    vulnerabilidad y elegibilidad del solicitante. Se captura mediante FO-GOOL-044 v9.
+    
+    El estudio incluye:
+    - Datos personales y de identificación
+    - Criterios de inclusión (SISBÉN, protección constitucional, etc.)
+    - Condiciones de vivienda
+    - Seguridad social (EPS, pensión, SISBÉN)
+    - Situación económica (ingresos, gastos, balance)
+    - Aspectos poblacionales (grupos étnicos, discapacidad, desplazamiento)
+    - Composición y funcionalidad familiar (APGAR)
+    - Información detallada de cada miembro del grupo familiar"""@es ;
+    skos:scopeNote """Este estudio es el insumo principal para:
+    1. ConceptoVulnerabilidad (FO-GGOL-016) - Resumen ejecutivo
+    2. Determinación de grado de vulnerabilidad (1-5)
+    3. Decisión de exención de retribución económica
+    
+    Requiere visita domiciliaria previa (FO-GGOL-028)."""@es ;
+    dcterms:source "FO-GOOL-044 v9" ;
+    :formularioAsociado "FO-GOOL-044" .
+
+# =============================================================================
+# PROPIEDADES DE OBJETO: Relaciones con el Flujo
+# =============================================================================
+
+:estudioParaSolicitud a owl:ObjectProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range :SolicitudAutorizacionTemporal ;
+    rdfs:label "estudio para solicitud"@es ;
+    skos:definition "Vincula el estudio socioeconómico a la solicitud de autorización que fundamenta"@es .
+
+:estudioGeneraConcepto a owl:ObjectProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range :ConceptoVulnerabilidad ;
+    rdfs:label "genera concepto"@es ;
+    skos:definition "Vincula el estudio al ConceptoVulnerabilidad que genera"@es .
+
+:requiereVisitaDomiciliaria a owl:ObjectProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range :VisitaDomiciliaria ;
+    rdfs:label "requiere visita domiciliaria"@es ;
+    skos:definition "Vincula el estudio a la visita domiciliaria previa requerida"@es .
+
+:tieneGrupoFamiliar a owl:ObjectProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range :MiembroGrupoFamiliar ;
+    rdfs:label "tiene grupo familiar"@es ;
+    skos:definition "Vincula el estudio a los miembros del grupo familiar registrados"@es .
+
+# =============================================================================
+# SECCIÓN 1: DATOS PERSONALES
+# =============================================================================
+
+:estudioNombresApellidos a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "nombres y apellidos"@es ;
+    skos:definition "Nombres y apellidos completos del solicitante"@es ;
+    form:campo "Nombres y Apellidos" ;
+    form:seccion "DATOS PERSONALES" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioSexo a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "sexo"@es ;
+    skos:definition "Sexo del solicitante (M/F)"@es ;
+    form:campo "Sexo" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioTipoIdentificacion a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipo de identificación"@es ;
+    skos:definition "Tipo de documento de identidad (C.C., T.I., C.E., Otro)"@es ;
+    form:campo "Tipo de Identificación" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioNumeroIdentificacion a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "número de identificación"@es ;
+    skos:definition "Número del documento de identidad"@es ;
+    form:campo "Nro. Identificación" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioLugarFechaNacimiento a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "lugar y fecha de nacimiento"@es ;
+    skos:definition "Lugar y fecha de nacimiento del solicitante"@es ;
+    form:campo "Lugar y Fecha de Nacimiento" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioEstadoCivil a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "estado civil"@es ;
+    skos:definition "Estado civil (Soltero(a), Casado(a), Unión Libre)"@es ;
+    form:campo "Estado Civil" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioPersonasACargo a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "tiene personas a cargo"@es ;
+    skos:definition "Indica si tiene personas económicamente a cargo"@es ;
+    form:campo "Personas a cargo" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioCuantasPersonasACargo a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:integer ;
+    rdfs:label "número de personas a cargo"@es ;
+    skos:definition "Cantidad de personas económicamente a cargo"@es ;
+    form:campo "¿Cuántas?" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioDireccionResidencia a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "dirección de residencia"@es ;
+    skos:definition "Dirección de la vivienda del solicitante"@es ;
+    form:campo "Dirección de Residencia" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioBarrio a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "barrio"@es ;
+    skos:definition "Barrio de residencia"@es ;
+    form:campo "Barrio" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioComuna a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "comuna"@es ;
+    skos:definition "Comuna de residencia"@es ;
+    form:campo "Comuna" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioEstrato a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "estrato"@es ;
+    skos:definition "Estrato socioeconómico de la vivienda"@es ;
+    form:campo "Estrato" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioEscolaridad a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:integer ;
+    rdfs:label "escolaridad (años aprobados)"@es ;
+    skos:definition "Años de escolaridad aprobados"@es ;
+    form:campo "Escolaridad (años aprobados)" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioTituloObtenido a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "título obtenido"@es ;
+    skos:definition "Título académico obtenido"@es ;
+    form:campo "Título Obtenido" ;
+    form:formulario "FO-GOOL-044" .
+
+# =============================================================================
+# SECCIÓN 2: CRITERIOS DE INCLUSIÓN
+# =============================================================================
+
+:estudioPuntajeSisbenBajo a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "puntaje SISBÉN ≤47.99 o clasificación ≤C18"@es ;
+    skos:definition "Puntaje o clasificación SISBÉN igual o inferior a 47.99 o C18"@es ;
+    form:campo "Puntaje o Clasificación del Sisbén Igual o inferior a 47.99 o C18" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioPuntajeSisbenAlto a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "puntaje SISBÉN ≥48.00 o clasificación ≥D1"@es ;
+    skos:definition "Puntaje o clasificación SISBÉN igual o superior a 48.00 o D1"@es ;
+    form:campo "Puntaje o Clasificación del Sisbén Igual o superior a 48.00 o D1" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioSujetoProteccionConstitucional a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "sujeto de especial protección constitucional"@es ;
+    skos:definition "Indica si es sujeto de especial protección constitucional"@es ;
+    form:campo "Sujeto de especial protección constitucional" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioVictimaConflicto a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "víctima del conflicto armado"@es ;
+    skos:definition "Indica si es víctima del conflicto armado"@es ;
+    form:campo "Víctima del conflicto armado" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioCondicionDiscapacidad a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "persona en condición de discapacidad"@es ;
+    skos:definition "Indica si tiene condición de discapacidad"@es ;
+    form:campo "Persona en condición de discapacidad" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioPerteneceGrupoEtnico a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "pertenece a grupo étnico"@es ;
+    skos:definition "Indica si pertenece a un grupo étnico reconocido"@es ;
+    form:campo "Pertenece a un grupo étnico" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioCabezaFamilia a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "hombre/mujer cabeza de familia"@es ;
+    skos:definition "Indica si es cabeza de familia"@es ;
+    form:campo "Hombre/mujer cabeza de familia" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioPoblacionLGBTI a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "población LGBTI"@es ;
+    skos:definition "Indica si pertenece a población LGBTI"@es ;
+    form:campo "Población LGBTI" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioAdultoMayor a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "adulto mayor"@es ;
+    skos:definition "Indica si es adulto mayor (60+ años)"@es ;
+    form:campo "Adulto mayor" ;
+    form:formulario "FO-GOOL-044" .
+
+# =============================================================================
+# SECCIÓN 3: ASPECTOS DE LA VIVIENDA
+# =============================================================================
+
+:estudioTenenciaVivienda a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "tenencia de la vivienda"@es ;
+    skos:definition "Tipo de tenencia (Propia, Familiar, Prestada, Invasión, Arrendada)"@es ;
+    form:campo "Tenencia de la Vivienda" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioValorArriendo a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "valor arriendo mensual"@es ;
+    skos:definition "Valor mensual del arriendo de vivienda"@es ;
+    form:campo "Valor arriendo" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioTipoVivienda a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipo de vivienda"@es ;
+    skos:definition "Tipo de vivienda (Casa, Apartamento, Pieza, Hotel, Inquilinato, Otro)"@es ;
+    form:campo "Tipo de Vivienda" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioMaterialesVivienda a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "materiales de la vivienda"@es ;
+    skos:definition "Descripción de los materiales de construcción"@es ;
+    form:campo "Materiales de la Vivienda" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioNumeroPiezas a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:integer ;
+    rdfs:label "número de piezas"@es ;
+    skos:definition "Cantidad de habitaciones en la vivienda"@es ;
+    form:campo "Número de piezas" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioPersonasPorPieza a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "personas por pieza"@es ;
+    skos:definition "Promedio de personas por habitación"@es ;
+    form:campo "Número de personas por pieza" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioMenoresCompartenPieza a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "menores comparten pieza con adultos"@es ;
+    skos:definition "Indica si menores de 18 años comparten habitación con adultos"@es ;
+    form:campo "Menores de 18 años comparten pieza con adultos" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioServiciosPublicos a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "servicios públicos"@es ;
+    skos:definition "Lista de servicios públicos con los que cuenta la vivienda"@es ;
+    form:campo "Servicios públicos con los que cuenta" ;
+    form:formulario "FO-GOOL-044" .
+
+# =============================================================================
+# SECCIÓN 4: ASPECTOS DE SEGURIDAD SOCIAL
+# =============================================================================
+
+:estudioEsPensionado a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "es pensionado"@es ;
+    skos:definition "Indica si recibe pensión"@es ;
+    form:campo "Pensionado" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioValorPension a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "valor pensión mensual"@es ;
+    skos:definition "Valor mensual de la pensión recibida"@es ;
+    form:campo "Valor ($)" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioPoseeSisben a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "posee SISBÉN"@es ;
+    skos:definition "Indica si está registrado en SISBÉN"@es ;
+    form:campo "Posee SISBEN?" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioMunicipioSisben a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "municipio SISBÉN"@es ;
+    skos:definition "Municipio donde está registrado en SISBÉN"@es ;
+    form:campo "Municipio" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioPuntajeSisben a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "puntaje SISBÉN"@es ;
+    skos:definition "Puntaje SISBÉN del solicitante"@es ;
+    form:campo "Puntaje" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioFichaSisben a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "número de ficha SISBÉN"@es ;
+    skos:definition "Número de ficha SISBÉN"@es ;
+    form:campo "Número de ficha" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioTieneEPS a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "tiene EPS"@es ;
+    skos:definition "Indica si está afiliado a EPS"@es ;
+    form:campo "E.P.S" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioRegimenSalud a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "régimen de salud"@es ;
+    skos:definition "Régimen de salud (Contributivo/Subsidiado)"@es ;
+    form:campo "Régimen contributivo / Régimen Subsidiado" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioCotizaPension a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "cotiza para pensión"@es ;
+    skos:definition "Indica si cotiza para pensión"@es ;
+    form:campo "COTIZA PARA PENSIÓN" ;
+    form:formulario "FO-GOOL-044" .
+
+# =============================================================================
+# SECCIÓN 5: ASPECTOS ECONÓMICOS
+# =============================================================================
+
+:estudioGastoArriendo a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "gasto en arriendo"@es ;
+    skos:definition "Gasto mensual en arriendo"@es ;
+    form:campo "Arriendo" ;
+    form:seccion "Gastos Familiares" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioGastoAlimentacion a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "gasto en alimentación"@es ;
+    skos:definition "Gasto mensual en alimentación"@es ;
+    form:campo "Alimentación" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioGastoTransporte a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "gasto en transporte"@es ;
+    skos:definition "Gasto mensual en transporte"@es ;
+    form:campo "Transporte" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioGastoServiciosPublicos a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "gasto en servicios públicos"@es ;
+    skos:definition "Gasto mensual en servicios públicos"@es ;
+    form:campo "Servicios Públicos" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioGastoEducacion a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "gasto educativo"@es ;
+    skos:definition "Gasto mensual en educación"@es ;
+    form:campo "Gastos Educativos" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioGastoMedico a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "gasto médico"@es ;
+    skos:definition "Gasto mensual en salud"@es ;
+    form:campo "Gastos Médicos" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioTotalGastos a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "total gastos mensuales"@es ;
+    skos:definition "Suma total de gastos familiares mensuales"@es ;
+    form:campo "Total Gastos" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioIngresoVentas a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "ingreso por ventas"@es ;
+    skos:definition "Ganancias mensuales de la venta informal"@es ;
+    form:campo "Ganancias de las ventas" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioIngresoSalarios a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "ingreso por salarios"@es ;
+    skos:definition "Ingresos mensuales por salarios"@es ;
+    form:campo "Salarios" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioIngresoSubsidios a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "ingreso por subsidios"@es ;
+    skos:definition "Ingresos mensuales por subsidios del gobierno"@es ;
+    form:campo "Otros subsidios" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioTotalIngresos a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "total ingresos mensuales"@es ;
+    skos:definition "Suma total de ingresos familiares mensuales"@es ;
+    form:campo "Total Ingresos" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioBalanceEconomico a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "balance económico (ingresos - gastos)"@es ;
+    skos:definition "Resultado de ingresos menos gastos"@es ;
+    form:campo "Resultado Ingresos - Gastos" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioIndicadorEconomico a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "indicador económico"@es ;
+    skos:definition "Indicador económico calculado"@es ;
+    form:campo "Indicador Económico" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioExentoRetribucion a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "exento de retribución económica"@es ;
+    skos:definition "Indica si cumple criterios para exención de retribución"@es ;
+    form:campo "Exento de retribución económica para el aprovechamiento del espacio público" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioIngresoPerCapita a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "ingreso per cápita familiar"@es ;
+    skos:definition "Total ingresos dividido por número de integrantes del grupo familiar"@es ;
+    form:campo "Total de ingresos ÷ Nro. De integrantes del grupo familiar" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioNucleoPobreza a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "núcleo poblacional de pobreza"@es ;
+    skos:definition "Clasificación de pobreza (Pobreza, Pobreza extrema)"@es ;
+    form:campo "Núcleo poblacional de pobreza monetaria" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioGradoVulnerabilidadSisbenIII a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "grado de vulnerabilidad SISBÉN III"@es ;
+    skos:definition "Rango de puntaje SISBÉN III (0-47.9, 48-69.9, 70-74.9, 75-79.9, 80+)"@es ;
+    form:campo "GRADO DE VULNERABILIDAD PUNTAJE SISBEN III" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioGradoVulnerabilidadSisbenIV a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "grado de vulnerabilidad SISBÉN IV"@es ;
+    skos:definition "Rango de clasificación SISBÉN IV (A-B-C, D1-D10, D11-D15, D16-D20, D21)"@es ;
+    form:campo "GRADO DE VULNERABILIDAD CLASIFICACIÓN SISBEN IV" ;
+    form:formulario "FO-GOOL-044" .
+
+# =============================================================================
+# SECCIÓN 6: ASPECTOS POBLACIONALES
+# =============================================================================
+
+:estudioGrupoPoblacional a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "grupo poblacional"@es ;
+    skos:definition "Grupo poblacional (Indígena, Afrodescendiente, ROM, Raizal, LGBTI, Ninguno)"@es ;
+    form:campo "Pertenece al grupo poblacional" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioDesplazadoViolencia a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "desplazado por violencia"@es ;
+    skos:definition "Indica si ha sido desplazado por la violencia"@es ;
+    form:campo "Ha sido desplazado(a) por la violencia" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioDesplazadoRural a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "desplazamiento de zona rural"@es ;
+    skos:definition "Indica si el desplazamiento fue de zona rural"@es ;
+    form:campo "Rural" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioDesplazadoUrbano a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "desplazamiento de zona urbana"@es ;
+    skos:definition "Indica si el desplazamiento fue de zona urbana"@es ;
+    form:campo "Urbano" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioEsDamnificado a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "es damnificado"@es ;
+    skos:definition "Indica si es damnificado por desastres naturales u otros"@es ;
+    form:campo "Es damnificado" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioPerteneceGrupoVendedores a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "pertenece a grupo organizado de vendedores"@es ;
+    skos:definition "Indica si pertenece a un grupo organizado de vendedores informales"@es ;
+    form:campo "Pertenece a un grupo organizado de vendedores informales" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioTipoDiscapacidad a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipo de discapacidad"@es ;
+    skos:definition "Tipo de discapacidad (Motriz, Auditiva, Cognitiva, Visual, Del Habla)"@es ;
+    form:campo "Cuál capacidad diferencial" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioOcupacionAnterior a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "ocupación anterior"@es ;
+    skos:definition "Ocupación antes de dedicarse a la venta informal"@es ;
+    form:campo "Ocupación anterior" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioMotivoTrabajoEP a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "motivo trabajo en espacio público"@es ;
+    skos:definition "Motivo por el cual trabaja en el espacio público"@es ;
+    form:campo "Motivo por el cual labora en el espacio Público" ;
+    form:formulario "FO-GOOL-044" .
+
+# =============================================================================
+# SECCIÓN 7: ASPECTOS FAMILIARES
+# =============================================================================
+
+:estudioTipologiaFamiliar a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipología familiar"@es ;
+    skos:definition "Tipología de la familia (nuclear, extensa, monoparental, etc.)"@es ;
+    form:campo "Tipología familiar" ;
+    form:seccion "ASPECTOS FAMILIARES" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioEtapaCicloVital a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "etapa del ciclo vital"@es ;
+    skos:definition "Etapa del ciclo vital de la familia"@es ;
+    form:campo "Etapa del ciclo vital" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioVariablesRelevantes a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "variables relevantes del grupo familiar"@es ;
+    skos:definition "Variables relevantes identificadas en el grupo familiar"@es ;
+    form:campo "Variables relevantes del grupo familiar" ;
+    form:formulario "FO-GOOL-044" .
+
+# =============================================================================
+# SECCIÓN 8: CUESTIONARIO APGAR
+# =============================================================================
+
+:estudioPuntajeAPGAR a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:integer ;
+    rdfs:label "puntaje total APGAR"@es ;
+    skos:definition """Puntaje total del cuestionario APGAR familiar (0-10).
+    7-10: Familia altamente funcional
+    4-6: Familia moderadamente funcional
+    0-3: Familia severamente disfuncional"""@es ;
+    form:campo "Puntaje total cuestionario APGAR" ;
+    form:seccion "CUESTIONARIO APGAR" ;
+    form:formulario "FO-GOOL-044" .
+
+:estudioFuncionalidadFamiliar a owl:DatatypeProperty ;
+    rdfs:domain :EstudioSocioeconomicoCompleto ;
+    rdfs:range xsd:string ;
+    rdfs:label "nivel de funcionalidad familiar"@es ;
+    skos:definition "Clasificación de funcionalidad familiar según APGAR"@es ;
+    skos:scopeNote """
+    - Altamente funcional (7-10 puntos)
+    - Moderadamente funcional (4-6 puntos)
+    - Severamente disfuncional (0-3 puntos)"""@es ;
+    form:formulario "FO-GOOL-044" .
+
+# =============================================================================
+# SECCIÓN 9: INFORMACIÓN DEL GRUPO FAMILIAR
+# =============================================================================
+
+:MiembroGrupoFamiliar a owl:Class ;
+    rdfs:label "Miembro del Grupo Familiar"@es ;
+    skos:prefLabel "Miembro del Grupo Familiar"@es ;
+    skos:definition """Cada persona que compone el grupo familiar del vendedor informal,
+    según la sección 9 del FO-GOOL-044."""@es ;
+    dcterms:source "FO-GOOL-044 - INFORMACIÓN GENERAL DEL GRUPO FAMILIAR" .
+
+:miembroOrden a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:integer ;
+    rdfs:label "orden"@es ;
+    skos:definition "Número de orden del miembro en el grupo familiar"@es ;
+    form:campo "ORDEN" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroDocumento a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:string ;
+    rdfs:label "documento de identidad"@es ;
+    skos:definition "Número de documento de identidad del miembro"@es ;
+    form:campo "NÚMERO DOCUMENTO DE IDENTIDAD" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroNombre a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:string ;
+    rdfs:label "nombres y apellidos"@es ;
+    skos:definition "Nombres y apellidos del miembro"@es ;
+    form:campo "NOMBRES Y APELLIDOS" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroSexo a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:string ;
+    rdfs:label "sexo"@es ;
+    skos:definition "Sexo del miembro (M/F)"@es ;
+    form:campo "SEXO" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroFechaNacimiento a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:date ;
+    rdfs:label "fecha de nacimiento"@es ;
+    skos:definition "Fecha de nacimiento del miembro"@es ;
+    form:campo "FECHA DE NACIMIENTO" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroParentesco a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:string ;
+    rdfs:label "parentesco"@es ;
+    skos:definition "Parentesco con el vendedor (esposo/a, hijo/a, padre, madre, etc.)"@es ;
+    form:campo "PARENTESCO" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroEscolaridad a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:string ;
+    rdfs:label "escolaridad"@es ;
+    skos:definition "Nivel de escolaridad del miembro"@es ;
+    form:campo "ESCOLARIDAD" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroOcupacion a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:string ;
+    rdfs:label "ocupación"@es ;
+    skos:definition "Ocupación del miembro"@es ;
+    form:campo "OCUPACIÓN" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroTieneSisben a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "tiene SISBÉN"@es ;
+    skos:definition "Indica si el miembro tiene SISBÉN"@es ;
+    form:campo "SISBEN" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroRegimenSalud a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:string ;
+    rdfs:label "régimen de salud"@es ;
+    skos:definition "Régimen de salud del miembro"@es ;
+    form:campo "RÉGIMEN SALUD" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroCapacidadDiferencial a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "capacidad diferencial"@es ;
+    skos:definition "Indica si el miembro tiene alguna discapacidad"@es ;
+    form:campo "CAPACIDAD DIFERENCIAL" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroPersonasACargo a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "tiene personas a cargo"@es ;
+    skos:definition "Indica si el miembro tiene personas a cargo"@es ;
+    form:campo "PERSONAS A CARGO" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroEnfermedadCatastrofica a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "enfermedad catastrófica o terminal"@es ;
+    skos:definition "Indica si el miembro tiene enfermedad catastrófica o terminal"@es ;
+    form:campo "ENFERMEDADES CATASTRÓFICAS O TERMINALES" ;
+    form:formulario "FO-GOOL-044" .
+
+:miembroProblemasAdiccion a owl:DatatypeProperty ;
+    rdfs:domain :MiembroGrupoFamiliar ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "problemas de adicción"@es ;
+    skos:definition "Indica si el miembro tiene problemas de adicción"@es ;
+    form:campo "PROBLEMAS DE ADICCIÓN" ;
+    form:formulario "FO-GOOL-044" .
+
+# =============================================================================
+# SHACL SHAPES: Validación del Estudio
+# =============================================================================
+
+:EstudioSocioeconomicoShape a sh:NodeShape ;
+    sh:targetClass :EstudioSocioeconomicoCompleto ;
+    rdfs:label "Shape para Estudio Socioeconómico"@es ;
+    sh:description "Valida campos mínimos requeridos del FO-GOOL-044"@es ;
+    
+    sh:property [
+        sh:path :estudioNumeroIdentificacion ;
+        sh:minCount 1 ;
+        sh:message "El estudio debe incluir número de identificación del solicitante"@es
+    ] ;
+    
+    sh:property [
+        sh:path :estudioPoseeSisben ;
+        sh:minCount 1 ;
+        sh:message "Debe indicarse si posee SISBÉN"@es
+    ] ;
+    
+    sh:property [
+        sh:path :estudioTotalIngresos ;
+        sh:minCount 1 ;
+        sh:datatype xsd:decimal ;
+        sh:message "Debe registrarse el total de ingresos familiares"@es
+    ] ;
+    
+    sh:property [
+        sh:path :estudioTotalGastos ;
+        sh:minCount 1 ;
+        sh:datatype xsd:decimal ;
+        sh:message "Debe registrarse el total de gastos familiares"@es
+    ] .
+
+# =============================================================================
+# FIN DEL ARCHIVO
+# =============================================================================

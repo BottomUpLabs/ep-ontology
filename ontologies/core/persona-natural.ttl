@@ -1,0 +1,510 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <http://schema.org/> .
+@prefix iso11179: <http://purl.org/iso11179/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# ONTOLOGIA: Persona Natural - Espacio Publico
+# =============================================================================
+# Entidad de primer orden PersonaNatural con su vocabulario de caracterizacion.
+# Separada de entidades-primer-orden.ttl para que la persona y sus atributos
+# vivan en un modulo dedicado y reutilizable. Reutiliza las clases Lugar,
+# Negocio, Familia y Vivienda definidas en entidades-primer-orden (importado).
+#
+# Convencion de vocabulario: nombres de propiedad sin muletillas (no "titular",
+# no prefijo "persona"). El dominio rdfs:domain ya desambigua a quien pertenece
+# cada propiedad. Las propiedades derivadas se anotan con :derivadaDe.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/core/persona-natural> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/core/persona-natural/0.1.0> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/entidades-primer-orden> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:issued "2026-06-03"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Persona Natural"@es ;
+    dcterms:title "Public Space - Natural Person"@en ;
+    dcterms:description """Ontologia de la entidad de primer orden PersonaNatural:
+    el individuo con ciclo de vida independiente de la institucion. Define la clase,
+    su alias de compatibilidad, MiembroFamiliar y el vocabulario de caracterizacion
+    socioeconomica (identidad, demografia, contacto, proteccion constitucional,
+    salud, seguridad social, SISBEN y participacion)."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:created "2026-06-03"^^xsd:date ;
+    dcterms:modified "2026-06-03"^^xsd:date ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    owl:versionInfo "0.1.0" .
+
+# =============================================================================
+# PROPIEDAD DE METADATOS
+# =============================================================================
+
+:derivadaDe a owl:AnnotationProperty ;
+    rdfs:label "derivada de"@es ;
+    rdfs:comment """Indica que el valor de esta propiedad se obtiene (concatena o
+    calcula) a partir de otras propiedades; no es un dato capturado de forma
+    independiente."""@es .
+
+# =============================================================================
+# CLASE: PersonaNatural (Entidad de Primer Orden)
+# =============================================================================
+# Reutiliza foaf:Person como superclase para compatibilidad con ontologias externas
+
+:PersonaNatural a owl:Class ;
+    rdfs:subClassOf foaf:Person ;
+    rdfs:label "Persona Natural"@es ;
+    rdfs:label "Natural Person"@en ;
+    owl:equivalentClass foaf:Person ;
+    skos:prefLabel "Persona Natural"@es ;
+    skos:altLabel "Individuo"@es ;
+    skos:altLabel "Ciudadano"@es ;
+    skos:definition """Individuo con existencia independiente de la institucion. Su ciclo
+    de vida fundamental (vivo/fallecido) NO es controlado por la Subsecretaria de Espacio
+    Publico. La institucion puede asignarle ROLES (vendedor informal, organizador de evento,
+    etc.) pero la persona existe independientemente de estos roles.
+
+    Hereda de foaf:Person para compatibilidad con ontologias W3C y reutilizar
+    propiedades estandar como foaf:name, foaf:mbox, foaf:based_near."""@es ;
+    skos:scopeNote """Entidad base para todos los actores humanos en los dominios:
+    - vendedor_informal: Persona que ejerce venta en espacio publico
+    - organizador_eventos: Persona que organiza eventos en espacio publico
+    - comerciante_formal: Persona con establecimiento formal
+    - anunciante: Persona que solicita publicidad exterior visual
+    La relacion entre Persona y sus roles se establece mediante la propiedad role:basadoEn"""@es ;
+    iso11179:objectClass "Persona_Natural" ;
+    :tipoCicloVida "ciclo_vida_entidad" ;
+    :estadosCicloVida ("vivo" "fallecido") ;
+    :gestionadoPor "Persona misma (independiente de la institucion)" .
+
+# Alias para compatibilidad con versiones anteriores y con las SHACL shapes
+# que referencian :Persona en lugar de :PersonaNatural.
+
+:Persona a owl:Class ;
+    owl:equivalentClass :PersonaNatural ;
+    rdfs:label "Persona"@es ;
+    rdfs:label "Person"@en ;
+    skos:prefLabel "Persona"@es ;
+    skos:definition "Alias de compatibilidad de PersonaNatural. Conservado para retro-compatibilidad de identificadores y validaciones existentes."@es ;
+    skos:editorialNote "Termino de compatibilidad: usar :PersonaNatural en datos nuevos."@es .
+
+# =============================================================================
+# CLASE: MiembroFamiliar (Entidad de Primer Orden)
+# =============================================================================
+
+:MiembroFamiliar a owl:Class ;
+    rdfs:label "Miembro del Grupo Familiar"@es ;
+    rdfs:label "Family Member"@en ;
+    rdfs:subClassOf :PersonaNatural ;
+    skos:prefLabel "Miembro Familiar"@es ;
+    skos:altLabel "Dependiente economico"@es ;
+    skos:altLabel "Integrante del hogar"@es ;
+    skos:definition """Persona que forma parte del nucleo familiar del vendedor informal.
+    Incluye conyuges, hijos, padres y otros dependientes economicos considerados en
+    la caracterizacion socioeconomica."""@es ;
+    iso11179:objectClass "Miembro_Familiar" .
+
+# =============================================================================
+# PROPIEDADES DE OBJETO (relaciones que involucran a la persona)
+# =============================================================================
+
+:perteneceAFamilia a owl:ObjectProperty ;
+    rdfs:label "pertenece a familia"@es ;
+    rdfs:comment "Relaciona una persona con su nucleo familiar"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range :Familia .
+
+:resideEn a owl:ObjectProperty ;
+    rdfs:label "reside en"@es ;
+    rdfs:comment "Relaciona una persona o familia con su lugar de residencia"@es ;
+    rdfs:domain [ a owl:Class ; owl:unionOf (:PersonaNatural :Familia) ] ;
+    rdfs:range :Vivienda ;
+    rdfs:subPropertyOf schema:homeLocation .
+
+:operaNegocio a owl:ObjectProperty ;
+    rdfs:label "opera negocio"@es ;
+    rdfs:comment "Relaciona una persona con el negocio que opera"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range :Negocio .
+
+:tieneJefeHogar a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:label "tiene jefe de hogar"@es ;
+    rdfs:comment "Relaciona una familia con la persona cabeza de hogar"@es ;
+    rdfs:domain :Familia ;
+    rdfs:range :PersonaNatural .
+
+:tieneMiembro a owl:ObjectProperty ;
+    rdfs:label "tiene miembro"@es ;
+    rdfs:comment "Relaciona una familia con sus integrantes"@es ;
+    rdfs:domain :Familia ;
+    rdfs:range :MiembroFamiliar ;
+    owl:inverseOf :perteneceAFamilia .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Identidad y documento
+# =============================================================================
+
+:documentoTipo a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "tipo de documento"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo de documento de identidad (CC, CE, TI, PA, PEP, PPT, NIT, RC, NUIP)"@es .
+
+:documentoNumero a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "numero de documento"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Numero unico de identificacion de la persona"@es .
+
+:documentoFechaExpedicion a owl:DatatypeProperty ;
+    rdfs:label "fecha de expedicion del documento"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha de expedicion del documento de identidad"@es .
+
+:documentoMunicipioExpedicion a owl:DatatypeProperty ;
+    rdfs:label "municipio de expedicion del documento"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Municipio de expedicion del documento de identidad"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Nombre
+# =============================================================================
+
+:nombre1 a owl:DatatypeProperty ;
+    rdfs:label "primer nombre"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Primer nombre de la persona"@es .
+
+:nombre2 a owl:DatatypeProperty ;
+    rdfs:label "segundo nombre"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Segundo nombre de la persona"@es .
+
+:apellido1 a owl:DatatypeProperty ;
+    rdfs:label "primer apellido"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Primer apellido de la persona"@es .
+
+:apellido2 a owl:DatatypeProperty ;
+    rdfs:label "segundo apellido"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Segundo apellido de la persona"@es .
+
+:nombreCompleto a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "nombre completo"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Nombre completo de la persona; concatenacion de :nombre1, :nombre2, :apellido1 y :apellido2"@es ;
+    :derivadaDe :nombre1, :nombre2, :apellido1, :apellido2 .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Demografia
+# =============================================================================
+
+:fechaNacimiento a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "fecha de nacimiento"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:date ;
+    skos:definition "Fecha de nacimiento de la persona"@es .
+
+:edad a owl:DatatypeProperty ;
+    rdfs:label "edad"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:integer ;
+    skos:definition "Edad en anios de la persona; calculada a partir de :fechaNacimiento"@es ;
+    :derivadaDe :fechaNacimiento .
+
+:sexo a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "sexo"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Sexo de la persona registrado en el documento (M, F, I, NB)"@es .
+
+:genero a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "genero"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Identidad de genero con la que se reconoce la persona (Masculino, Femenino, Otro). Distinto de :sexo."@es .
+
+:estadoCivil a owl:DatatypeProperty ;
+    rdfs:label "estado civil"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Estado civil de la persona (Soltero, Casado, Union Libre, Viudo, Separado)"@es .
+
+:grupoEtnico a owl:DatatypeProperty ;
+    rdfs:label "grupo etnico"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Grupo etnico al que pertenece (Indigena, Afrodescendiente, ROM, Raizal, Palenquero, Ninguno)"@es .
+
+:nivelEducativo a owl:DatatypeProperty ;
+    rdfs:label "nivel educativo"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Ultimo nivel de escolaridad alcanzado"@es .
+
+:nacionalidad a owl:DatatypeProperty ;
+    rdfs:label "nacionalidad"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Pais de nacionalidad de la persona (codigo ISO 3166-1)"@es .
+
+:esCabezaHogar a owl:DatatypeProperty ;
+    rdfs:label "es cabeza de hogar"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona es el principal responsable economico del hogar"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Contacto
+# =============================================================================
+
+:celular a owl:DatatypeProperty ;
+    rdfs:label "numero de celular"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Numero de telefono celular de contacto de la persona"@es .
+
+:telefonoFijo a owl:DatatypeProperty ;
+    rdfs:label "telefono fijo"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Numero de telefono fijo de contacto de la persona"@es .
+
+:correoElectronico a owl:DatatypeProperty ;
+    rdfs:label "correo electronico"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Direccion de correo electronico de contacto de la persona"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Proteccion constitucional y poblaciones vulnerables
+# =============================================================================
+
+:tieneProteccionConstitucional a owl:DatatypeProperty ;
+    rdfs:label "tiene proteccion constitucional"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona tiene proteccion constitucional especial"@es .
+
+:tipoProteccionConstitucional a owl:DatatypeProperty ;
+    rdfs:label "tipo de proteccion constitucional"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition """Tipo de proteccion constitucional: desplazado, victima conflicto,
+    cabeza de familia, adulto mayor, etc."""@es .
+
+:esMigrante a owl:DatatypeProperty ;
+    rdfs:label "es migrante"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona tiene condicion migratoria (inmigrante en Colombia)"@es .
+
+:esVictimaConflicto a owl:DatatypeProperty ;
+    rdfs:label "es victima del conflicto armado"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona esta registrada como victima del conflicto armado (RUV)"@es .
+
+:esDesplazado a owl:DatatypeProperty ;
+    rdfs:label "es desplazado"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona ha sido desplazada por la violencia"@es .
+
+:esLGBTIQ a owl:DatatypeProperty ;
+    rdfs:label "poblacion LGBTIQ+"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona se identifica con el colectivo LGBTIQ+"@es .
+
+:esPospenado a owl:DatatypeProperty ;
+    rdfs:label "es pospenado"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona ha cumplido una pena privativa de la libertad y ha sido puesta en libertad"@es .
+
+:esDesmovilizado a owl:DatatypeProperty ;
+    rdfs:label "es desmovilizado"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona hace parte de un programa de desmovilizacion o reintegracion"@es .
+
+:esDamnificado a owl:DatatypeProperty ;
+    rdfs:label "es damnificado"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona es damnificada por desastres naturales u otros eventos"@es .
+
+:condicionMujerEspecial a owl:DatatypeProperty ;
+    rdfs:label "condicion especial mujer"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Condicion especial si la persona es mujer (gestante, lactante, ninguna)"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Salud y discapacidad
+# =============================================================================
+
+:tieneDiscapacidad a owl:DatatypeProperty ;
+    rdfs:label "tiene discapacidad"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona tiene alguna discapacidad certificada"@es .
+
+:tipoDiscapacidad a owl:DatatypeProperty ;
+    rdfs:label "tipo de discapacidad"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo de discapacidad o capacidad diferencial (Motriz, Auditiva, Cognitiva, Visual, Del Habla, Multiple, Ninguna)"@es .
+
+:tieneEnfermedadCronica a owl:DatatypeProperty ;
+    rdfs:label "tiene enfermedad cronica"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona padece alguna enfermedad cronica o de larga duracion"@es .
+
+:enfermedadCronicaDetalle a owl:DatatypeProperty ;
+    rdfs:label "detalle enfermedad cronica"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Especificacion de la enfermedad cronica que padece la persona"@es .
+
+:consumoSustancias a owl:DatatypeProperty ;
+    rdfs:label "consumo de sustancias psicoactivas"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Lista de sustancias psicoactivas que consume la persona (campo multi-seleccion)"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Seguridad social y finanzas personales
+# =============================================================================
+
+:esPensionado a owl:DatatypeProperty ;
+    rdfs:label "es pensionado"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona recibe una pension actualmente"@es .
+
+:valorPension a owl:DatatypeProperty ;
+    rdfs:label "valor mensual de pension"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:decimal ;
+    skos:definition "Valor mensual de la pension recibida en pesos colombianos"@es .
+
+:regimenSalud a owl:DatatypeProperty ;
+    rdfs:label "regimen de salud"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Tipo de afiliacion al sistema de salud (Contributivo, Subsidiado, Regimen Especial, No afiliado)"@es .
+
+:cotizaPension a owl:DatatypeProperty ;
+    rdfs:label "cotiza para pension"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona cotiza actualmente para pension"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: SISBEN
+# =============================================================================
+
+:tieneSisben a owl:DatatypeProperty ;
+    rdfs:label "tiene SISBEN"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona se encuentra afiliada o clasificada en el SISBEN"@es .
+
+:sisbenMunicipio a owl:DatatypeProperty ;
+    rdfs:label "municipio SISBEN"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Municipio donde se realizo la encuesta SISBEN de la persona"@es .
+
+:sisbenFicha a owl:DatatypeProperty ;
+    rdfs:label "numero de ficha SISBEN"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Numero de ficha o registro SISBEN de la persona"@es .
+
+:sisbenClasificacion a owl:DatatypeProperty ;
+    rdfs:label "clasificacion SISBEN IV"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Grupo de clasificacion del SISBEN metodologia IV (A1, A2, B1, B2, C1, C2, ..., D21)"@es .
+
+:sisbenPuntaje a owl:DatatypeProperty ;
+    rdfs:label "puntaje SISBEN"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:decimal ;
+    skos:definition "Puntaje numerico SISBEN de la persona (metodologia III, 0-100)"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Ocupacion, participacion y programas
+# =============================================================================
+
+:trabajoOtraLabor a owl:DatatypeProperty ;
+    rdfs:label "otra labor o trabajo"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Descripcion de otras labores o trabajos que realiza la persona ademas de la venta informal"@es .
+
+:esBeneficiarioProgramaEstatal a owl:DatatypeProperty ;
+    rdfs:label "beneficiario de programa estatal"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Indica si la persona es beneficiaria de algun programa de subsidios o ayudas del Estado"@es .
+
+:perteneceAsociacionVendedores a owl:DatatypeProperty ;
+    rdfs:label "pertenece a asociacion de vendedores"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona esta afiliada a alguna asociacion o gremio de vendedores informales"@es .
+
+:asociacionVendedoresNombre a owl:DatatypeProperty ;
+    rdfs:label "nombre de asociacion de vendedores"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Nombre de la asociacion o gremio de vendedores a la que pertenece"@es .
+
+:gradoVulnerabilidad a owl:DatatypeProperty ;
+    rdfs:label "grado de vulnerabilidad"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:integer ;
+    skos:definition "Grado de vulnerabilidad socioeconomica de la persona (1-5, donde 5 es maxima vulnerabilidad)"@es .
+
+:exentoRetribucionEconomica a owl:DatatypeProperty ;
+    rdfs:label "exento de retribucion economica"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si la persona cumple criterios para exencion de retribucion economica por aprovechamiento del espacio publico"@es .
+
+# =============================================================================
+# PROPIEDADES DE DATOS: Estado
+# =============================================================================
+
+:estadoVida a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:label "estado de vida"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Estado vital fundamental de la persona: 'vivo' o 'fallecido'. Es el estado de ciclo de vida independiente de la institucion (ver :estadosCicloVida de :PersonaNatural). El fallecimiento propaga la terminacion de los roles asociados."@es .
+
+:estadoPersona a owl:DatatypeProperty ;
+    rdfs:label "estado administrativo de la persona"@es ;
+    rdfs:domain :PersonaNatural ;
+    rdfs:range xsd:string ;
+    skos:definition "Estado administrativo del registro de la persona en el sistema (ACTIVO, INACTIVO, NO_VERIFICADO). El estado vital biologico se modela aparte en :estadoVida."@es .

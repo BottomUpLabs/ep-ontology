@@ -1,0 +1,248 @@
+@prefix tst:   <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal#> .
+@prefix core:    <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo:    <http://purl.org/ontology/bibo/> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+
+# #############################################################################
+# TramiteSolicitudTemporalAEEP — PARTE FORMAL (comun) DEL TRAMITE
+# Solicitud temporal de Aprovechamiento Economico del Espacio Publico (SUIT 26521)
+# #############################################################################
+# Parte formal/estructural del tramite, comun a todas las categorias. Aislado y
+# autocontenido en namespace tst:; se conecta UNICAMENTE a los dos pilares
+# (core/persona-natural y core/lugar-puestoventa-vivienda).
+#
+# Las CATEGORIAS viven en archivos aparte (misma carpeta):
+#   - categorias-comercio-formal.ttl  (mesas y sillas, eventos ocasionales,
+#                                       parques de diversiones, amoblamiento urbano,
+#                                       avisos publicitarios, parqueaderos)
+#   - categoria-venta-informal.ttl    (venta informal)
+# #############################################################################
+
+<https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal/0.2.1> ;
+    dcterms:title "TramiteSolicitudTemporalAEEP - parte formal del tramite"@es ;
+    dcterms:description """Parte formal (comun) del tramite de solicitud temporal de
+    aprovechamiento economico del espacio publico (SUIT 26521): trámite base, abstracciones
+    propias, conexiones a los pilares Persona/Lugar, entregables y vocabulario de categorias.
+    Las categorias se desarrollan en archivos aparte de la misma carpeta."""@es ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    dcterms:created "2026-06-17"^^xsd:date ;
+    dcterms:modified "2026-06-17"^^xsd:date ;
+    bibo:status "draft"@en ;
+    owl:versionInfo "0.2.1" ;
+    vann:preferredNamespacePrefix "tst" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/tramite-solicitud-temporal#" ;
+    dcterms:source "SUIT 26521" ;
+    dcterms:source "Decreto 2148 de 2015" ;
+    dcterms:source "Acuerdo 048 de 2014" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/persona-natural> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda> .
+
+# =============================================================================
+# ANOTACIONES PROPIAS
+# =============================================================================
+
+tst:estadosCicloVida a owl:AnnotationProperty ; rdfs:label "estados del ciclo de vida"@es .
+tst:tipoArtefacto a owl:AnnotationProperty ; rdfs:label "tipo de artefacto"@es ;
+    skos:definition "Valores: tramite, solicitud, categoria, procedimiento, formulario, concepto_tecnico, documento_soporte, estudio, acto_administrativo, credencial."@es .
+tst:capturaClase a owl:AnnotationProperty ; rdfs:label "captura datos de la clase"@es .
+tst:formularioAsociado a owl:AnnotationProperty ; rdfs:label "formulario asociado"@es .
+tst:metodologiaReferencia a owl:AnnotationProperty ; rdfs:label "metodologia de referencia"@es .
+tst:fundamentoNormativo a owl:AnnotationProperty ; rdfs:label "fundamento normativo"@es .
+tst:categoria a owl:AnnotationProperty ; rdfs:label "categoria de aprovechamiento"@es .
+
+# =============================================================================
+# ABSTRACCIONES PROPIAS DEL TRAMITE (raices; sin padres externos)
+# =============================================================================
+
+tst:ConceptoTecnico a owl:Class ; rdfs:label "Concepto Tecnico"@es ;
+    skos:definition "ABSTRACTA (propia): dictamen tecnico/juridico que sustenta la decision."@es ;
+    tst:tipoArtefacto "concepto_tecnico" .
+tst:Estudio a owl:Class ; rdfs:label "Estudio"@es ;
+    skos:definition "ABSTRACTA (propia): documento de caracterizacion insumo de los conceptos."@es ;
+    tst:tipoArtefacto "estudio" .
+tst:Evento a owl:Class ; rdfs:label "Evento"@es ;
+    skos:definition "ABSTRACTA (propia): diligencia situada en el tiempo y en un :Lugar (p.ej. visitas)."@es .
+tst:Procedimiento a owl:Class ; rdfs:subClassOf prov:Plan ; rdfs:label "Procedimiento administrativo interno"@es ;
+    skos:definition "[PROCEDIMIENTO] Documento interno (PR-GGOL-XXX) que ejecuta una categoria."@es ;
+    tst:tipoArtefacto "procedimiento" .
+tst:Formulario a owl:Class ; rdfs:subClassOf bibo:Document ; rdfs:label "Formulario / formato de captura"@es ;
+    skos:definition "[FORMULARIO] Instrumento oficial de captura (FO-GGOL-XXX / SUIT)."@es ;
+    tst:tipoArtefacto "formulario" .
+tst:DocumentoSoporte a owl:Class ; rdfs:subClassOf bibo:Document ; rdfs:label "Documento soporte / anexo"@es ;
+    skos:definition "[DOCUMENTO_SOPORTE] Documento aportado por el solicitante como requisito."@es ;
+    tst:tipoArtefacto "documento_soporte" .
+
+# =============================================================================
+# CONEXIONES A LOS DOS PILARES (lo unico que sale de tst:)
+# =============================================================================
+tst:solicitante a owl:ObjectProperty ; rdfs:domain tst:TramiteSolicitudTemporalAEEP ; rdfs:range core:PersonaNatural ;
+    rdfs:label "solicitante"@es ; skos:definition "Persona natural que radica el tramite."@es .
+tst:beneficiario a owl:ObjectProperty ; rdfs:domain tst:ActoAdministrativo ; rdfs:range core:PersonaNatural ;
+    rdfs:label "beneficiario / titular"@es ; skos:definition "Persona a favor de quien se expide el acto."@es .
+tst:ocupacionSolicitada a owl:ObjectProperty ; rdfs:domain tst:TramiteSolicitudTemporalAEEP ; rdfs:range core:Lugar ;
+    rdfs:label "ocupacion solicitada (lugar)"@es ; skos:definition "Lugar/PuestoVenta que se pide aprovechar."@es .
+tst:lugarAutorizado a owl:ObjectProperty ; rdfs:domain tst:ActoAdministrativo ; rdfs:range core:Lugar ;
+    rdfs:label "lugar autorizado"@es ; skos:definition "Lugar/PuestoVenta cuyo aprovechamiento autoriza el acto."@es .
+tst:eventoEnLugar a owl:ObjectProperty ; rdfs:domain tst:Evento ; rdfs:range core:Lugar ;
+    rdfs:label "evento en lugar"@es ; skos:definition "Lugar donde ocurre la diligencia/visita."@es .
+tst:caracterizaVivienda a owl:ObjectProperty ; rdfs:domain tst:Estudio ; rdfs:range core:Vivienda ;
+    rdfs:label "caracteriza vivienda"@es .
+tst:operaEnPuesto a owl:ObjectProperty ; rdfs:domain core:PersonaNatural ; rdfs:range core:PuestoVenta ;
+    rdfs:label "opera en puesto"@es ; skos:definition "Persona que ejerce su actividad economica en un puesto del E.P."@es .
+tst:resuelveTramite a owl:ObjectProperty ; rdfs:domain tst:ActoAdministrativo ; rdfs:range tst:TramiteSolicitudTemporalAEEP ;
+    rdfs:label "resuelve tramite"@es .
+
+# --- Marcado: relaciones ---
+tst:reguladoPor a owl:ObjectProperty ; rdfs:range tst:Procedimiento ; rdfs:label "regulado por procedimiento"@es .
+tst:usaFormulario a owl:ObjectProperty ; rdfs:domain tst:Procedimiento ; rdfs:range tst:Formulario ; rdfs:label "usa formulario"@es .
+tst:codigoFormulario a owl:DatatypeProperty ; rdfs:domain tst:Formulario ; rdfs:range xsd:string ; rdfs:label "codigo del formulario"@es .
+tst:versionFormulario a owl:DatatypeProperty ; rdfs:domain tst:Formulario ; rdfs:range xsd:string ; rdfs:label "version del formulario"@es .
+tst:codigoProcedimiento a owl:DatatypeProperty ; rdfs:domain tst:Procedimiento ; rdfs:range xsd:string ; rdfs:label "codigo del procedimiento"@es .
+
+# =============================================================================
+# TRAMITE BASE  ·  [TRAMITE] SUIT 26521
+# =============================================================================
+
+tst:TramiteSolicitudTemporalAEEP a owl:Class ;
+    rdfs:label "Solicitud Temporal de Aprovechamiento Economico del Espacio Publico (AEEP)"@es ;
+    rdfs:label "Temporary Request for Economic Use of Public Space"@en ;
+    skos:prefLabel "Tramite de solicitud temporal de aprovechamiento economico del E.P."@es ;
+    skos:altLabel "Autorizacion temporal de aprovechamiento economico"@es ;
+    skos:altLabel "Autorizacion temporal de ocupacion del espacio publico"@es ;
+    skos:definition """[TRAMITE] Tramite unico (SUIT 26521) por el cual una persona obtiene
+    permiso para aprovechar economicamente el espacio publico por mas de 30 dias y menos de un
+    (1) ano, a cambio de una contraprestacion cuando aplique. Se divide en CATEGORIAS segun la
+    modalidad de uso (cada una en su archivo). Produce un ACTO ADMINISTRATIVO que autoriza o
+    niega."""@es ;
+    dcterms:source "SUIT 26521" ;
+    tst:tipoArtefacto "tramite" ;
+    tst:estadosCicloVida (
+        "radicado" "documentacion_incompleta" "subsanado" "en_evaluacion"
+        "concepto_emitido" "resuelto_aprobado" "resuelto_negado" "desistido"
+    ) .
+
+tst:codigoSUIT a owl:DatatypeProperty ; rdfs:domain tst:TramiteSolicitudTemporalAEEP ; rdfs:range xsd:string ; rdfs:label "codigo SUIT"@es .
+tst:tiempoRespuestaHabiles a owl:DatatypeProperty ; rdfs:domain tst:TramiteSolicitudTemporalAEEP ; rdfs:range xsd:integer ; rdfs:label "tiempo de respuesta (dias habiles)"@es .
+tst:numeroRadicado a owl:DatatypeProperty ; rdfs:domain tst:TramiteSolicitudTemporalAEEP ; rdfs:range xsd:string ; rdfs:label "numero de radicado"@es .
+tst:fechaRadicacion a owl:DatatypeProperty ; rdfs:domain tst:TramiteSolicitudTemporalAEEP ; rdfs:range xsd:date ; rdfs:label "fecha de radicacion"@es .
+tst:estadoTramite a owl:DatatypeProperty ; rdfs:domain tst:TramiteSolicitudTemporalAEEP ; rdfs:range xsd:string ; rdfs:label "estado del tramite"@es .
+
+tst:tramite-suit-26521 a tst:TramiteSolicitudTemporalAEEP ;
+    rdfs:label "Autorizacion temporal para el aprovechamiento economico del espacio publico"@es ;
+    tst:codigoSUIT "26521" ; tst:tiempoRespuestaHabiles 45 ;
+    tst:fundamentoNormativo "Decreto Municipal 2148 de 2015 (art. 14)" ;
+    tst:fundamentoNormativo "Acuerdo 048 de 2014" ;
+    tst:fundamentoNormativo "Decreto 883 de 2015" ;
+    tst:fundamentoNormativo "Ley 1801 de 2016" ;
+    rdfs:seeAlso <https://www.medellin.gov.co/portalapp/> .
+
+# =============================================================================
+# SOLICITUD DEL TRAMITE  ·  [SOLICITUD]  (raiz comun de las solicitudes)
+# =============================================================================
+# Acto de radicacion con que una persona inicia el tramite SUIT 26521. Lleva un
+# unico tipo de tramite (tst:tipoTramite); ese valor es lo que clasifica la
+# solicitud en una de las dos ramas (venta informal / comercio formal), cada una
+# definida como CLASE DEFINIDA en su archivo de categoria.
+
+tst:tipoTramite a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain tst:SolicitudTramite ; rdfs:range skos:Concept ;
+    rdfs:label "tipo de tramite"@es ; rdfs:label "clase de solicitud"@es ;
+    skos:definition """Clase de solicitud: toma su valor de tst:EsquemaCategoriasAprovechamiento
+    (venta informal, mesas y sillas, eventos ocasionales, parques de diversiones, amoblamiento
+    urbano, avisos publicitarios o parqueaderos). Es funcional: cada solicitud tiene exactamente
+    una categoria, y ese valor determina la subclase DEFINIDA de tst:SolicitudTramite a la que
+    pertenece."""@es .
+
+tst:SolicitudTramite a owl:Class ;
+    rdfs:subClassOf tst:TramiteSolicitudTemporalAEEP ;
+    rdfs:label "Solicitud de tramite"@es ;
+    rdfs:label "Procedure request"@en ;
+    skos:prefLabel "Solicitud del tramite de aprovechamiento temporal"@es ;
+    skos:definition """[SOLICITUD] Radicacion con que una persona inicia el tramite SUIT 26521.
+    Contiene una categoria (tst:tipoTramite) que la clasifica. Hay una subclase DEFINIDA por
+    cada categoria (SolicitudVentaInformal y, para comercio formal, SolicitudMesasYSillas,
+    SolicitudEventosOcasionales, SolicitudParquesDiversiones, SolicitudAmoblamientoUrbano,
+    SolicitudAvisosPublicitarios, SolicitudParqueaderos): una solicitud se vuelve de ese tipo
+    justamente cuando su tst:tipoTramite toma el valor de esa categoria. SolicitudComercioFormal
+    las agrupa por conveniencia."""@es ;
+    tst:tipoArtefacto "solicitud" .
+
+# =============================================================================
+# ENTREGABLES  ·  [ACTO_ADMINISTRATIVO]
+# =============================================================================
+
+tst:ActoAdministrativo a owl:Class ; rdfs:label "Acto administrativo (entregable)"@es ;
+    skos:definition "[ACTO_ADMINISTRATIVO] Entregable del tramite: decision que autoriza o niega."@es ;
+    tst:tipoArtefacto "acto_administrativo" ;
+    tst:estadosCicloVida (
+        "proyectado" "en_revision_juridica" "firmado" "notificado" "activo"
+        "suspendido" "vencido" "revocado" "archivado"
+    ) .
+tst:numeroResolucion a owl:DatatypeProperty ; rdfs:domain tst:ActoAdministrativo ; rdfs:range xsd:string ; rdfs:label "numero de resolucion"@es .
+tst:fechaExpedicion a owl:DatatypeProperty ; rdfs:domain tst:ActoAdministrativo ; rdfs:range xsd:date ; rdfs:label "fecha de expedicion"@es .
+tst:estadoActo a owl:DatatypeProperty ; rdfs:domain tst:ActoAdministrativo ; rdfs:range xsd:string ; rdfs:label "estado del acto"@es .
+
+tst:AprobacionAprovechamiento a owl:Class ; rdfs:subClassOf tst:ActoAdministrativo ;
+    rdfs:label "Aprobacion de Aprovechamiento"@es ;
+    skos:definition "Acto que resuelve FAVORABLEMENTE: autoriza el aprovechamiento temporal del lugar."@es ;
+    tst:tipoArtefacto "acto_administrativo" .
+tst:NegacionAprovechamiento a owl:Class ; rdfs:subClassOf tst:ActoAdministrativo ;
+    rdfs:label "Negacion de Aprovechamiento"@es ;
+    skos:definition "Acto que resuelve DESFAVORABLEMENTE. Contra el proceden los recursos de ley."@es ;
+    tst:tipoArtefacto "acto_administrativo" .
+
+# =============================================================================
+# VOCABULARIO DE CATEGORIAS (SKOS) — clasificacion compartida
+# =============================================================================
+
+tst:EsquemaCategoriasAprovechamiento a skos:ConceptScheme ;
+    skos:prefLabel "Categorias de aprovechamiento economico del espacio publico"@es ;
+    dcterms:source "Portal de tramites de Medellin / SUIT 26521" .
+
+tst:cat-venta-informal a skos:Concept ; skos:inScheme tst:EsquemaCategoriasAprovechamiento ;
+    skos:prefLabel "Venta informal"@es ;
+    skos:definition "Ocupacion del E.P. por vendedores informales con una venta (ambulante, estacionaria o semiestacionaria)."@es .
+tst:cat-mesas-sillas a skos:Concept ; skos:inScheme tst:EsquemaCategoriasAprovechamiento ;
+    skos:prefLabel "Mesas y sillas"@es ;
+    skos:definition "Uso del E.P. con mesas y sillas anexas a un establecimiento de comercio."@es .
+tst:cat-eventos-ocasionales a skos:Concept ; skos:inScheme tst:EsquemaCategoriasAprovechamiento ;
+    skos:prefLabel "Eventos ocasionales"@es ;
+    skos:definition "Uso temporal del E.P. para eventos ocasionales (ferias, mercados, actividades con aprovechamiento)."@es .
+tst:cat-parques-diversiones a skos:Concept ; skos:inScheme tst:EsquemaCategoriasAprovechamiento ;
+    skos:prefLabel "Parques de diversiones"@es ;
+    skos:definition "Instalacion temporal de atracciones mecanicas y parques de diversiones en el E.P."@es .
+tst:cat-amoblamiento-urbano a skos:Concept ; skos:inScheme tst:EsquemaCategoriasAprovechamiento ;
+    skos:prefLabel "Amoblamiento urbano"@es ;
+    skos:definition "Aprovechamiento de mobiliario urbano (mupis, paraderos, modulos, cabinas)."@es .
+tst:cat-avisos-publicitarios a skos:Concept ; skos:inScheme tst:EsquemaCategoriasAprovechamiento ;
+    skos:prefLabel "Avisos publicitarios"@es ;
+    skos:definition "Publicidad exterior visual y avisos en el E.P. (vallas, avisos, pendones)."@es .
+tst:cat-parqueaderos a skos:Concept ; skos:inScheme tst:EsquemaCategoriasAprovechamiento ;
+    skos:prefLabel "Parqueaderos"@es ;
+    skos:definition "Aprovechamiento del E.P. como parqueadero, con o sin actividad economica."@es .
+
+# =============================================================================
+# DETERMINANTE DE LA SOLICITUD — valores de tst:tipoTramite
+# =============================================================================
+# La "clase de solicitud" la fija tst:tipoTramite tomando uno de los 7 conceptos
+# de tst:EsquemaCategoriasAprovechamiento (arriba). Ese valor clasifica la
+# solicitud en su subclase DEFINIDA (una por categoria). Se declaran distintos
+# entre si para que, junto con tipoTramite (funcional), las clases definidas
+# resulten disjuntas.
+
+[] a owl:AllDifferent ; owl:distinctMembers (
+    tst:cat-venta-informal tst:cat-mesas-sillas tst:cat-eventos-ocasionales
+    tst:cat-parques-diversiones tst:cat-amoblamiento-urbano
+    tst:cat-avisos-publicitarios tst:cat-parqueaderos ) .

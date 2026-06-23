@@ -1,0 +1,400 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix : <https://w3id.org/medellin/espacio-publico/shapes/lifecycle-propagation#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix reg: <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+
+# Shared SPARQL prefix declarations for sh:sparql constraints in this file.
+<https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> a sh:Declarable ;
+    sh:declare [ sh:prefix "core" ; sh:namespace "https://w3id.org/medellin/espacio-publico/core#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "role" ; sh:namespace "https://w3id.org/medellin/espacio-publico/roles#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "reg" ; sh:namespace "https://w3id.org/medellin/espacio-publico/regulacion#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "ctrl" ; sh:namespace "https://w3id.org/medellin/espacio-publico/control#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "vocab" ; sh:namespace "https://w3id.org/medellin/espacio-publico/vocab/"^^xsd:anyURI ] .
+
+
+# =============================================================================
+# SHACL SHAPES: Lifecycle Propagation Validation
+# =============================================================================
+# Valida que los cambios de estado terminales en entidades base (Persona, Lugar)
+# se propaguen correctamente a todos los roles dependientes.
+#
+# Reglas de Propagacion:
+# 1. Persona:fallecido → TODOS los roles de esa persona → estado terminal
+# 2. Lugar:demolido → TODOS los roles basados en ese lugar → cerrado
+# 3. Resolucion:revocada → PermisoOcupacion → inactivo → Regulado → revocado
+#
+# Estas shapes DETECTAN inconsistencias donde la propagacion no ocurrio.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/shapes/lifecycle-propagation>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/shapes/lifecycle-propagation/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "SHACL Shapes - Lifecycle Propagation Validation"@es ;
+    dcterms:description """Constraints para validar que la propagacion de estados
+    terminales se ejecute correctamente entre entidades base y roles dependientes.
+    Detecta inconsistencias donde una Persona esta fallecida pero sus roles 
+    siguen activos."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico" ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    vann:preferredNamespacePrefix "lifecycle_propagation" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/shapes/lifecycle-propagation#" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> .
+
+# =============================================================================
+# SHAPE: PersonaFallecidaPropagacionShape
+# =============================================================================
+# Cuando Persona tiene estadoVida = "fallecido", TODOS sus roles deben estar
+# en estado terminal (cerrado_por_fallecimiento, desistido_por_fallecimiento, etc.)
+
+:PersonaFallecidaPropagacionShape a sh:NodeShape ;
+    sh:targetClass core:PersonaNatural ;
+    sh:name "Propagacion: Persona Fallecida → Roles Terminales"@es ;
+    sh:description """Valida que cuando una Persona fallece, todos sus roles 
+    asumidos transiten a estado terminal correspondiente."""@es ;
+    
+    # VIOLATION: Persona fallecida con roles activos
+    sh:sparql [
+        sh:message """Inconsistencia de propagacion: Persona {$this} esta fallecida 
+        pero el rol {?rol} aun tiene estado activo '{?estadoRol}'. 
+        Debe ejecutarse propagacion a estado terminal."""@es ;
+        sh:severity sh:Violation ;
+        sh:prefixes [
+            sh:declare [
+                sh:prefix "role" ;
+                sh:namespace "https://w3id.org/medellin/espacio-publico/roles#"^^xsd:anyURI
+            ] ,
+            [
+                sh:prefix "core" ;
+                sh:namespace "https://w3id.org/medellin/espacio-publico/core#"^^xsd:anyURI
+            ]
+        ] ;
+        sh:select """
+            SELECT $this ?rol ?estadoRol
+            WHERE {
+                # Persona en estado terminal
+                $this core:estadoVida "fallecido" .
+                
+                # Buscar roles basados en esta persona
+                ?rol role:basadoEn $this ;
+                     role:estadoActual ?estadoRol ;
+                     role:esRolActivo true .  # Rol aun activo
+                
+                # Excluir estados que ya son terminales
+                FILTER(?estadoRol NOT IN (
+                    "cerrado_por_fallecimiento",
+                    "desistido_por_fallecimiento",
+                    "fallecido",
+                    "transferido"
+                ))
+            }
+        """
+    ] ;
+    
+    # WARNING: Persona fallecida sin CambioPropagado registrado
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message """Advertencia: Persona {$this} fallecio pero no hay 
+        CambioPropagado registrado. Verificar si la propagacion se ejecuto."""@es ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this core:estadoVida "fallecido" .
+                
+                # Tiene roles que deberian haberse cerrado
+                ?rol role:basadoEn $this .
+                
+                # Pero no hay CambioPropagado registrado
+                FILTER NOT EXISTS {
+                    ?cambio a core:CambioPropagado ;
+                            core:entidadAfectada ?rol ;
+                            core:reglaPropagacion "PROP-FALLECIMIENTO" .
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: SolicitanteFallecidoShape
+# =============================================================================
+# VendedorInformalSolicitante debe transitar a desistido_por_fallecimiento
+# cuando la Persona base fallece
+
+:SolicitanteFallecidoShape a sh:NodeShape ;
+    sh:targetClass reg:VendedorInformalSolicitante ;
+    sh:name "Solicitante Fallecido → Desistido"@es ;
+    sh:description """Valida que VendedorInformalSolicitante transite a 
+    'desistido_por_fallecimiento' cuando Persona fallece."""@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message """Inconsistencia: Solicitante {$this} tiene estado '{?estadoRol}' 
+        pero la persona base {?persona} esta fallecida. Debe ser 'desistido_por_fallecimiento'."""@es ;
+        sh:severity sh:Violation ;
+        sh:select """
+            SELECT $this ?persona ?estadoRol
+            WHERE {
+                $this role:basadoEn ?persona ;
+                      role:estadoActual ?estadoRol .
+                
+                ?persona core:estadoVida "fallecido" .
+                
+                # Estado debe ser desistido_por_fallecimiento
+                FILTER(?estadoRol != "desistido_por_fallecimiento")
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: ReguladoFallecidoShape
+# =============================================================================
+# VendedorInformalRegulado debe transitar a cerrado_por_fallecimiento O 
+# transferido cuando la Persona base fallece
+
+:ReguladoFallecidoShape a sh:NodeShape ;
+    sh:targetClass reg:VendedorInformalRegulado ;
+    sh:name "Regulado Fallecido → Cerrado o Transferido"@es ;
+    sh:description """Valida que VendedorInformalRegulado transite a estado 
+    terminal cuando Persona fallece."""@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message """Inconsistencia: Regulado {$this} tiene estado '{?estadoRol}' 
+        pero la persona base {?persona} esta fallecida. 
+        Debe ser 'cerrado_por_fallecimiento' o 'transferido'."""@es ;
+        sh:severity sh:Violation ;
+        sh:select """
+            SELECT $this ?persona ?estadoRol
+            WHERE {
+                $this role:basadoEn ?persona ;
+                      role:estadoActual ?estadoRol .
+                
+                ?persona core:estadoVida "fallecido" .
+                
+                # Estado debe ser terminal por fallecimiento
+                FILTER(?estadoRol NOT IN (
+                    "cerrado_por_fallecimiento",
+                    "fallecido",
+                    "transferido"
+                ))
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: TransferenciaRequiereSucesorShape
+# =============================================================================
+# Cuando un rol es transferido, debe existir un nuevo rol para el sucesor
+
+:TransferenciaRequiereSucesorShape a sh:NodeShape ;
+    sh:targetClass reg:VendedorInformalRegulado ;
+    sh:name "Transferencia Requiere Sucesor"@es ;
+    sh:description """Valida que cuando un rol es transferido, existe un nuevo 
+    rol creado para el titular sucesor."""@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message """Inconsistencia: Rol {$this} esta transferido pero no existe 
+        rol sucesor vinculado. Debe crearse nuevo VendedorInformalRegulado para 
+        el titular sucesor."""@es ;
+        sh:severity sh:Violation ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this role:estadoActual "transferido" .
+                
+                # Debe existir rol sucesor
+                FILTER NOT EXISTS {
+                    ?rolSucesor role:subroganteRol $this .
+                }
+            }
+        """
+    ] ;
+    
+    # Advertencia si transferencia no tiene titular sucesor documentado
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message """Advertencia: Rol {$this} en estado 'cambia_titular' pero 
+        no tiene titular sucesor documentado (:titularSucesor)."""@es ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this role:estadoActual "cambia_titular" .
+                
+                FILTER NOT EXISTS {
+                    $this reg:titularSucesor ?sucesor .
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: PermisoInactivoCuandoRolTerminalShape
+# =============================================================================
+# Cuando un VendedorInformalRegulado llega a estado terminal, su PermisoOcupacion
+# debe cambiar a estado correspondiente
+
+:PermisoInactivoCuandoRolTerminalShape a sh:NodeShape ;
+    sh:targetClass reg:VendedorInformalRegulado ;
+    sh:name "Permiso Inactivo Cuando Rol Terminal"@es ;
+    sh:description """Valida que cuando Regulado llega a estado terminal, el 
+    PermisoOcupacion asociado tambien transite a estado correspondiente."""@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message """Inconsistencia: Regulado {$this} tiene estado terminal 
+        '{?estadoRol}' pero su permiso {?permiso} aun esta vigente. 
+        Debe propagarse el cambio al permiso."""@es ;
+        sh:severity sh:Violation ;
+        sh:select """
+            SELECT $this ?estadoRol ?permiso ?estadoPermiso
+            WHERE {
+                $this role:estadoActual ?estadoRol .
+                
+                # Rol en estado terminal
+                FILTER(?estadoRol IN (
+                    "vencido", "cancelado", "fallecido", 
+                    "cerrado_por_fallecimiento", "transferido", "revocado"
+                ))
+                
+                # Buscar permiso asociado
+                $this reg:tienePermisoOcupacion ?permiso .
+                ?permiso core:estadoResolucion ?estadoPermiso .
+                
+                # Permiso aun vigente = inconsistencia
+                FILTER(?estadoPermiso = "vigente")
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: CadenasPropagacionCompletasShape
+# =============================================================================
+# Valida que las cadenas de propagacion esten completas (no haya cambios 
+# propagados huerfanos)
+
+:CadenasPropagacionCompletasShape a sh:NodeShape ;
+    sh:targetClass core:CambioPropagado ;
+    sh:name "Cadena de Propagacion Completa"@es ;
+    sh:description """Valida que todo CambioPropagado tenga su cambioOrigen 
+    correctamente referenciado."""@es ;
+    
+    sh:property [
+        sh:path core:cambioOrigen ;
+        sh:name "Cambio Origen"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class core:CambioEstado ;
+        sh:message "CambioPropagado debe tener exactamente un cambioOrigen"@es
+    ] ;
+    
+    sh:property [
+        sh:path core:reglaPropagacion ;
+        sh:name "Regla de Propagacion"@es ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "CambioPropagado debe documentar que regla lo genero"@es
+    ] ;
+    
+    sh:property [
+        sh:path core:propagadoAutomaticamente ;
+        sh:name "Propagado Automaticamente"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:boolean ;
+        sh:message "CambioPropagado debe indicar si fue automatico o manual"@es
+    ] .
+
+# =============================================================================
+# SHAPE: EstadosSincronizadosShape
+# =============================================================================
+# Valida sincronizacion de estados entre Solicitante y Tramite asociado
+
+:EstadosSincronizadosSolicitanteTramiteShape a sh:NodeShape ;
+    sh:targetClass reg:VendedorInformalSolicitante ;
+    sh:name "Sincronizacion Solicitante-Tramite"@es ;
+    sh:description """Valida que el estado del VendedorInformalSolicitante este 
+    sincronizado con el estado del Tramite asociado."""@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message """Inconsistencia: Solicitante {$this} tiene estado '{?estadoSolicitante}' 
+        pero tramite {?tramite} tiene estado '{?estadoTramite}'. Estados incompatibles."""@es ;
+        sh:severity sh:Violation ;
+        sh:select """
+            SELECT $this ?estadoSolicitante ?tramite ?estadoTramite
+            WHERE {
+                $this role:estadoActual ?estadoSolicitante ;
+                      reg:tramiteAsociado ?tramite .
+                
+                ?tramite core:estadoTramite ?estadoTramite .
+                
+                # Definir mapeo valido de estados
+                # Solicitante:autorizado ↔ Tramite:resuelto_favorable
+                # Solicitante:no_autorizado ↔ Tramite:resuelto_desfavorable
+                # etc.
+                
+                FILTER(
+                    (?estadoSolicitante = "autorizado" && ?estadoTramite != "resuelto_favorable") ||
+                    (?estadoSolicitante = "no_autorizado" && ?estadoTramite != "resuelto_desfavorable") ||
+                    (?estadoSolicitante = "desistido" && ?estadoTramite != "desistido") ||
+                    (?estadoSolicitante = "en_evaluacion_tecnica" && ?estadoTramite NOT IN ("en_evaluacion", "concepto_emitido"))
+                )
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: NovedadFallecimientoPropagacionShape
+# =============================================================================
+# Cuando ocurre NovedadFallecimiento, debe generar CambioPropagados a todos
+# los roles de la persona
+
+:NovedadFallecimientoPropagacionShape a sh:NodeShape ;
+    sh:targetClass core:Novedad ;
+    sh:name "Novedad Fallecimiento Propaga Correctamente"@es ;
+    sh:description """Valida que una NovedadFallecimiento genere todos los 
+    CambioPropagados necesarios."""@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message """Inconsistencia: Novedad {$this} de tipo fallecimiento afecto 
+        a persona {?persona} pero el rol {?rol} no tiene CambioPropagado asociado."""@es ;
+        sh:severity sh:Violation ;
+        sh:select """
+            SELECT $this ?persona ?rol
+            WHERE {
+                $this core:tipoEvento "fallecimiento" ;
+                      core:afectaEntidad ?persona .
+                
+                ?persona a core:Persona .
+                
+                # Buscar roles de la persona
+                ?rol role:basadoEn ?persona .
+                
+                # Debe existir CambioPropagado para cada rol
+                FILTER NOT EXISTS {
+                    ?cambio a core:CambioPropagado ;
+                            core:entidadAfectada ?rol ;
+                            core:cambioOrigen ?cambioOrigen .
+                    
+                    # El cambioOrigen debe estar relacionado con esta novedad
+                    ?cambioOrigen core:generadoPor $this .
+                }
+            }
+        """
+    ] .

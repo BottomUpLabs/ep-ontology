@@ -1,0 +1,87 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix : <https://w3id.org/medellin/espacio-publico/shapes/direccion-concat#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# SHACL RULE: derivar core:direccionTexto por concatenacion de componentes
+# =============================================================================
+# OWL/RDFS NO pueden calcular cadenas (no hay funciones de string). SHACL Advanced
+# Features SI: una sh:SPARQLRule construye core:direccionTexto concatenando los
+# componentes de nomenclatura vial (declarados con core:componenteDe en la
+# ontologia). Aplica a cualquier :Lugar (y por herencia a :PuestoVenta y :Vivienda).
+#
+# Ejecutar con un motor que soporte sh:rule (p. ej. pyshacl --advanced, TopBraid).
+# La regla solo escribe core:direccionTexto si aun no existe (NOT EXISTS), para no
+# pisar el texto crudo de la fuente cuando ya viene dado.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/shapes/direccion-concat>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/shapes/direccion-concat/0.1.0> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/lugar-puestoventa-vivienda> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:issued "2026-06-03"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Regla de concatenacion de direccion"@es ;
+    dcterms:description """Regla SHACL (sh:SPARQLRule) que deriva core:direccionTexto
+    concatenando los componentes de nomenclatura vial colombiana de un :Lugar."""@es ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    owl:versionInfo "0.1.0" .
+
+:LugarDireccionShape a sh:NodeShape ;
+    sh:targetClass core:Lugar ;
+    rdfs:label "Concatenacion de direccion del Lugar"@es ;
+    rdfs:comment """Construye core:direccionTexto a partir de los componentes
+    (viaPrincipal*, viaSecundaria*, placaNumero, direccionInterior,
+    direccionComplemento). Formato Colombia:
+    '<tipoP> <numP><letraP> <cardinalP> # <numS><letraS> <cardinalS> - <placa> <interior> <complemento>'."""@es ;
+    sh:rule [
+        a sh:SPARQLRule ;
+        rdfs:label "derivar direccionTexto (CONCAT)"@es ;
+        sh:order 1 ;
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/direccion-concat> ;
+        sh:construct """
+            PREFIX core: <https://w3id.org/medellin/espacio-publico/core#>
+            CONSTRUCT {
+                $this core:direccionTexto ?direccion .
+            }
+            WHERE {
+                # solo si aun no hay direccionTexto cargada
+                FILTER NOT EXISTS { $this core:direccionTexto ?x }
+                # al menos un componente debe existir
+                FILTER( EXISTS { $this core:viaPrincipalTipo ?a } ||
+                        EXISTS { $this core:viaPrincipalNumero ?b } )
+                OPTIONAL { $this core:viaPrincipalTipo      ?tipoP }
+                OPTIONAL { $this core:viaPrincipalNumero    ?numP }
+                OPTIONAL { $this core:viaPrincipalLetra     ?letraP }
+                OPTIONAL { $this core:viaPrincipalCardinal  ?cardP }
+                OPTIONAL { $this core:viaSecundariaNumero   ?numS }
+                OPTIONAL { $this core:viaSecundariaLetra    ?letraS }
+                OPTIONAL { $this core:viaSecundariaCardinal ?cardS }
+                OPTIONAL { $this core:placaNumero           ?placa }
+                OPTIONAL { $this core:direccionInterior     ?interior }
+                OPTIONAL { $this core:direccionComplemento  ?compl }
+                BIND( CONCAT(
+                    COALESCE(STR(?tipoP),""), " ",
+                    COALESCE(STR(?numP),""), COALESCE(STR(?letraP),""), " ",
+                    COALESCE(STR(?cardP),""),
+                    " # ",
+                    COALESCE(STR(?numS),""), COALESCE(STR(?letraS),""), " ",
+                    COALESCE(STR(?cardS),""),
+                    " - ",
+                    COALESCE(STR(?placa),""), " ",
+                    COALESCE(STR(?interior),""), " ",
+                    COALESCE(STR(?compl),"")
+                ) AS ?bruto )
+                # normaliza espacios multiples y recorta
+                BIND( REPLACE(REPLACE(?bruto, "\\\\s+", " "), "^\\\\s+|\\\\s+$", "") AS ?direccion )
+            }
+        """ ;
+    ] .

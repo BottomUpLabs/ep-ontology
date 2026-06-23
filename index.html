@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ontología de Espacio Público de Medellín — v0.1.0</title>
+<style>
+  :root { --accent:#0b5394; --bg:#f7f9fb; --fg:#1c2733; --muted:#5b6b7a; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+         color:var(--fg); background:var(--bg); line-height:1.6; }
+  header { background:linear-gradient(135deg,#0b5394,#073763); color:#fff; padding:3rem 1.5rem; }
+  .wrap { max-width:920px; margin:0 auto; padding:0 1.5rem; }
+  header .wrap { padding:0; }
+  h1 { margin:0 0 .3rem; font-size:1.9rem; }
+  .sub { opacity:.9; font-size:1.05rem; }
+  .badges span { display:inline-block; background:rgba(255,255,255,.15); border-radius:4px;
+                 padding:.2rem .6rem; margin:.6rem .4rem 0 0; font-size:.85rem; }
+  main { padding:2.5rem 0; }
+  h2 { color:var(--accent); border-bottom:2px solid #e3e9ef; padding-bottom:.3rem; margin-top:2.2rem; }
+  a { color:var(--accent); }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin:1.2rem 0; }
+  .card { background:#fff; border:1px solid #e3e9ef; border-radius:8px; padding:1.1rem 1.2rem; }
+  .card h3 { margin:.1rem 0 .4rem; font-size:1.05rem; }
+  .card p { margin:0; color:var(--muted); font-size:.92rem; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; background:#fff; }
+  th,td { text-align:left; padding:.5rem .7rem; border-bottom:1px solid #e3e9ef; font-size:.92rem; }
+  th { background:#eef3f8; }
+  code { background:#eef3f8; padding:.1rem .35rem; border-radius:4px; font-size:.88em; }
+  pre { background:#0d1b2a; color:#e6edf3; padding:1rem; border-radius:8px; overflow:auto; font-size:.85rem; }
+  footer { color:var(--muted); font-size:.85rem; padding:2rem 0 3rem; border-top:1px solid #e3e9ef; }
+  .btn { display:inline-block; background:var(--accent); color:#fff!important; text-decoration:none;
+         padding:.55rem 1rem; border-radius:6px; margin:.3rem .4rem 0 0; font-size:.9rem; }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>Ontología de Espacio Público de Medellín</h1>
+  <div class="sub">Modelo OWL/SKOS para la gestión del espacio público — vendedores informales, propaganda electoral, control y aprovechamiento.</div>
+  <div class="badges">
+    <span>Versión 0.1.0</span><span>OWL 2 + SKOS</span><span>CC BY 4.0</span>
+    <span>w3id.org/medellin/espacio-publico</span>
+  </div>
+</div></header>
+
+<main class="wrap">
+
+  <p>
+    <a class="btn" href="docs/index.html">📖 Documentación completa (HTML)</a>
+    <a class="btn" href="dist/espacio-publico-0.1.0.ttl">⬇ Turtle</a>
+    <a class="btn" href="https://github.com/medellin-datos/ep-ontology">💻 Repositorio</a>
+  </p>
+
+  <h2>Resumen</h2>
+  <table>
+    <tr><th>Métrica</th><th>Valor</th></tr>
+    <tr><td>Ontologías OWL (módulos)</td><td>23</td></tr>
+    <tr><td>Clases</td><td>132</td></tr>
+    <tr><td>Conceptos SKOS</td><td>476</td></tr>
+    <tr><td>Propiedades (objeto + datos)</td><td>504</td></tr>
+    <tr><td>Tripletas (grafo integrado)</td><td>10 060</td></tr>
+  </table>
+
+  <h2>Descargas (release 0.1.0)</h2>
+  <table>
+    <tr><th>Formato</th><th>Archivo</th><th>Media type</th></tr>
+    <tr><td>Turtle</td><td><a href="dist/espacio-publico-0.1.0.ttl">espacio-publico-0.1.0.ttl</a></td><td><code>text/turtle</code></td></tr>
+    <tr><td>RDF/XML</td><td><a href="dist/espacio-publico-0.1.0.rdf">espacio-publico-0.1.0.rdf</a></td><td><code>application/rdf+xml</code></td></tr>
+    <tr><td>JSON-LD</td><td><a href="dist/espacio-publico-0.1.0.jsonld">espacio-publico-0.1.0.jsonld</a></td><td><code>application/ld+json</code></td></tr>
+    <tr><td>N-Triples</td><td><a href="dist/espacio-publico-0.1.0.nt">espacio-publico-0.1.0.nt</a></td><td><code>application/n-triples</code></td></tr>
+    <tr><td>SHACL</td><td><a href="dist/espacio-publico-shapes-0.1.0.ttl">espacio-publico-shapes-0.1.0.ttl</a></td><td><code>text/turtle</code></td></tr>
+  </table>
+
+  <h2>Dominios</h2>
+  <div class="cards">
+    <div class="card"><h3>Núcleo</h3><p>Persona, Lugar, Negocio, Familia; Trámite, Resolución, Concepto Técnico; patrón de rol.</p></div>
+    <div class="card"><h3>Regulación</h3><p>Vendedores informales: roles, autorización temporal, permisos, módulos, novedades.</p></div>
+    <div class="card"><h3>Propaganda electoral</h3><p>Partidos, candidatos, elementos publicitarios, infracciones, periodos electorales.</p></div>
+    <div class="card"><h3>Control y aprovechamiento</h3><p>Intervención, aprovechamiento económico, puntos críticos, causales, conceptos técnicos.</p></div>
+  </div>
+
+  <h2>Uso rápido</h2>
+<pre>from rdflib import Graph
+g = Graph().parse("espacio-publico-0.1.0.ttl", format="turtle")
+print(len(g), "tripletas")</pre>
+
+  <h2>Citar</h2>
+  <p>Subsecretaría de Espacio Público de Medellín (2026). <em>Ontología de Espacio Público de Medellín</em>,
+     versión 0.1.0. <a href="https://w3id.org/medellin/espacio-publico">https://w3id.org/medellin/espacio-publico</a>. CC BY 4.0.</p>
+
+</main>
+<footer class="wrap">
+  © 2026 Alcaldía de Medellín — Subsecretaría de Espacio Público, Secretaría de Seguridad y Convivencia.
+  Publicado bajo <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+</footer>
+</body>
+</html>

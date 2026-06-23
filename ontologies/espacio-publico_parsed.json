@@ -1,0 +1,3319 @@
+{
+  "success": true,
+  "errors": [],
+  "warnings": [],
+  "ontologies": [
+    "https://w3id.org/medellin/espacio-publico",
+    "https://w3id.org/medellin/espacio-publico/core/entidades-primer-orden",
+    "https://w3id.org/medellin/espacio-publico/core/institutional-core-entities",
+    "https://w3id.org/medellin/espacio-publico/regulacion/infraestructura",
+    "https://w3id.org/medellin/espacio-publico/regulacion/permisos-resoluciones",
+    "https://w3id.org/medellin/espacio-publico/regulacion/pqrs-novedades",
+    "https://w3id.org/medellin/espacio-publico/regulacion/programas-institucionales",
+    "https://w3id.org/medellin/espacio-publico/regulacion/roles-vendedor",
+    "https://w3id.org/medellin/espacio-publico/regulacion/tramites-autorizacion",
+    "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+    "https://w3id.org/medellin/espacio-publico/propaganda-electoral/properties"
+  ],
+  "classes": [
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Candidato",
+      "local_name": "Candidato",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#PersonaNatural"
+      ],
+      "label": "Candidato Politico"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#Carnet",
+      "local_name": "Carnet",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Carnet de Vendedor Autorizado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoCruceInterinstitucional",
+      "local_name": "ConceptoCruceInterinstitucional",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico"
+      ],
+      "label": "Concepto de Cruce Interinstitucional"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoLegalidad",
+      "local_name": "ConceptoLegalidad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico"
+      ],
+      "label": "Concepto de Legalidad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoSanitario",
+      "local_name": "ConceptoSanitario",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico"
+      ],
+      "label": "Concepto Sanitario"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoSeguridad",
+      "local_name": "ConceptoSeguridad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico"
+      ],
+      "label": "Concepto de Seguridad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico",
+      "local_name": "ConceptoTecnico",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Concepto Tecnico"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoUrbano",
+      "local_name": "ConceptoUrbano",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico"
+      ],
+      "label": "Concepto Urbano"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+      "local_name": "ConceptoVulnerabilidad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico"
+      ],
+      "label": "Concepto de Vulnerabilidad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+      "local_name": "ElementoPublicitario",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "subclass_of": [],
+      "label": "Elemento Publicitario Electoral"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#Familia",
+      "local_name": "Familia",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Nucleo Familiar"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#InfraccionElectoral",
+      "local_name": "InfraccionElectoral",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "subclass_of": [
+        "http://www.w3.org/ns/prov#Activity"
+      ],
+      "label": "Infraccion Electoral"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#Lugar",
+      "local_name": "Lugar",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Lugar"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#MiembroFamiliar",
+      "local_name": "MiembroFamiliar",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#PersonaNatural"
+      ],
+      "label": "Miembro del Grupo Familiar"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+      "local_name": "Modulo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Modulo de Venta Regulado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#Negocio",
+      "local_name": "Negocio",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Unidad Economica"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#Novedad",
+      "local_name": "Novedad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Novedad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadCambioTitular",
+      "local_name": "NovedadCambioTitular",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#Novedad"
+      ],
+      "label": "Novedad de Cambio de Titular"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadFallecimiento",
+      "local_name": "NovedadFallecimiento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#Novedad"
+      ],
+      "label": "Novedad por Fallecimiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+      "local_name": "NovedadSuspension",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#Novedad"
+      ],
+      "label": "Novedad de Suspension"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#OfertaInstitucional",
+      "local_name": "OfertaInstitucional",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional"
+      ],
+      "label": "Oferta Institucional"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+      "local_name": "PartidoPolitico",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "subclass_of": [
+        "http://xmlns.com/foaf/0.1/Organization"
+      ],
+      "label": "Partido Politico"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PeriodoElectoral",
+      "local_name": "PeriodoElectoral",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "subclass_of": [
+        "http://schema.org/Event"
+      ],
+      "label": "Periodo Electoral"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#PermisoOcupacionTemporal",
+      "local_name": "PermisoOcupacionTemporal",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#Resolucion"
+      ],
+      "label": "Permiso de Ocupacion Temporal"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+      "local_name": "PersonaNatural",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "http://xmlns.com/foaf/0.1/Person"
+      ],
+      "label": "Persona Natural"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#ProgramaFormalizacion",
+      "local_name": "ProgramaFormalizacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/regulacion#OfertaInstitucional"
+      ],
+      "label": "Programa de Formalización"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+      "local_name": "ProgramaInstitucional",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Programa Institucional"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#ProgramaReubicacion",
+      "local_name": "ProgramaReubicacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional"
+      ],
+      "label": "Programa de Reubicacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+      "local_name": "PuestoVenta",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Puesto de Venta"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Requerimiento",
+      "local_name": "Requerimiento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "subclass_of": [
+        "http://www.w3.org/ns/prov#Activity"
+      ],
+      "label": "Requerimiento Documental"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#Resolucion",
+      "local_name": "Resolucion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Resolucion Administrativa"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ResolucionAdministrativa",
+      "local_name": "ResolucionAdministrativa",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "subclass_of": [
+        "http://www.w3.org/ns/prov#Entity"
+      ],
+      "label": "Resolucion Administrativa"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#SolicitudAutorizacionTemporal",
+      "local_name": "SolicitudAutorizacionTemporal",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#Tramite"
+      ],
+      "label": "Solicitud de Autorización Temporal"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#SolicitudPQRS",
+      "local_name": "SolicitudPQRS",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Solicitud PQRS"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#SolicitudPQRSVendedor",
+      "local_name": "SolicitudPQRSVendedor",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#SolicitudPQRS"
+      ],
+      "label": "Solicitud PQRS de Vendedor"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#SolicitudPropaganda",
+      "local_name": "SolicitudPropaganda",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "subclass_of": [
+        "http://www.w3.org/ns/prov#Activity"
+      ],
+      "label": "Solicitud de Propaganda Electoral"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#TipoEleccion",
+      "local_name": "TipoEleccion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "subclass_of": [],
+      "label": "Tipo de Eleccion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#Tramite",
+      "local_name": "Tramite",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Tramite Administrativo"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#UbicacionPropaganda",
+      "local_name": "UbicacionPropaganda",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#Lugar"
+      ],
+      "label": "Ubicacion de Propaganda"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#VendedorInformal",
+      "local_name": "VendedorInformal",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [],
+      "label": "Vendedor Informal"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#VendedorInformalRegulado",
+      "local_name": "VendedorInformalRegulado",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#VendedorInformal"
+      ],
+      "label": "Vendedor Informal Regulado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#VendedorInformalSolicitante",
+      "local_name": "VendedorInformalSolicitante",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#VendedorInformal"
+      ],
+      "label": "Vendedor Informal Solicitante"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#Vivienda",
+      "local_name": "Vivienda",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "subclass_of": [
+        "https://w3id.org/medellin/espacio-publico/core#Lugar"
+      ],
+      "label": "Vivienda"
+    }
+  ],
+  "object_properties": [
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#afectaElemento",
+      "local_name": "afectaElemento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#InfraccionElectoral",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "afecta elemento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#asignadoA",
+      "local_name": "asignadoA",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#VendedorInformalRegulado",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Asignado a"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#conceptoParaTramite",
+      "local_name": "conceptoParaTramite",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Tramite",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Concepto para tramite"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#contieneElemento",
+      "local_name": "contieneElemento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#SolicitudPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "contiene elemento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#correspondeTipoEleccion",
+      "local_name": "correspondeTipoEleccion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PeriodoElectoral",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#TipoEleccion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "corresponde a tipo de eleccion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#derivaDeSolicitud",
+      "local_name": "derivaDeSolicitud",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#PermisoOcupacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#SolicitudAutorizacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Deriva de solicitud"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#derivaDeSolicitud",
+      "local_name": "derivaDeSolicitud",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Requerimiento",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#SolicitudPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "deriva de solicitud"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#derivadoDe",
+      "local_name": "derivadoDe",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Carnet",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#PermisoOcupacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Derivado de"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#enPeriodoElectoral",
+      "local_name": "enPeriodoElectoral",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PeriodoElectoral",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "en periodo electoral"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#esPostuladoPor",
+      "local_name": "esPostuladoPor",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Candidato",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "es postulado por"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#esPresentadaPor",
+      "local_name": "esPresentadaPor",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#SolicitudPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "es presentada por"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#generaEstudio",
+      "local_name": "generaEstudio",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#EstudioSocioeconomico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Genera estudio"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#gestionadoPorPrograma",
+      "local_name": "gestionadoPorPrograma",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Gestionado por programa"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#infraccioRegistradaContra",
+      "local_name": "infraccioRegistradaContra",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#InfraccionElectoral",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "infraccion registrada contra"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#involucraCandidato",
+      "local_name": "involucraCandidato",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#InfraccionElectoral",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Candidato",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "involucra candidato"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#operaEnLugar",
+      "local_name": "operaEnLugar",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Lugar",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "opera en lugar"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#operaNegocio",
+      "local_name": "operaNegocio",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Negocio",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "opera negocio"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#participaEn",
+      "local_name": "participaEn",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Participa en"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#participaEnPrograma",
+      "local_name": "participaEnPrograma",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": null,
+        "ontology_iri": null
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "participa en programa"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#participante",
+      "local_name": "participante",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Participante"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#perteneceAFamilia",
+      "local_name": "perteneceAFamilia",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Familia",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "pertenece a familia"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#perteneceASolicitud",
+      "local_name": "perteneceASolicitud",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#SolicitudPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "pertenece a solicitud"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#presentaSolicitud",
+      "local_name": "presentaSolicitud",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#SolicitudPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "presenta solicitud"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#radicaTramite",
+      "local_name": "radicaTramite",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Tramite",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "radica tramite"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#remiteAOferta",
+      "local_name": "remiteAOferta",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NegacionPermiso",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#OfertaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Remite a oferta"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#requierePrograma",
+      "local_name": "requierePrograma",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NegacionPermiso",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#OfertaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Requiere programa"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#resideEn",
+      "local_name": "resideEn",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Vivienda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "reside en"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#resueltoPor",
+      "local_name": "resueltoPor",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Tramite",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Resolucion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "resuelto por"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#resuelve",
+      "local_name": "resuelve",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Resolucion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Tramite",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "resuelve"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#resuelveSolicitud",
+      "local_name": "resuelveSolicitud",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ResolucionAdministrativa",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#SolicitudPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "resuelve solicitud"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#resultadoDeTramite",
+      "local_name": "resultadoDeTramite",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#PermisoOcupacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#SolicitudAutorizacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Resultado de tramite"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#solicitante",
+      "local_name": "solicitante",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#SolicitudAutorizacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Solicitante"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#tieneCandidato",
+      "local_name": "tieneCandidato",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Candidato",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "tiene candidato"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#tieneCarnet",
+      "local_name": "tieneCarnet",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#VendedorInformalRegulado",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Carnet",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Tiene carnet"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#tieneConcepto",
+      "local_name": "tieneConcepto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Tramite",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Tiene concepto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#tieneJefeHogar",
+      "local_name": "tieneJefeHogar",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Familia",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "tiene jefe de hogar"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#tieneMiembro",
+      "local_name": "tieneMiembro",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Familia",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#MiembroFamiliar",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "tiene miembro"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#tieneModuloAsignado",
+      "local_name": "tieneModuloAsignado",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#VendedorInformalRegulado",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Tiene modulo asignado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#tienePuestoVenta",
+      "local_name": "tienePuestoVenta",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#VendedorInformal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "tiene puesto de venta"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#tieneRequerimiento",
+      "local_name": "tieneRequerimiento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#SolicitudPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Requerimiento",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "tiene requerimiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#tieneResolucion",
+      "local_name": "tieneResolucion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#SolicitudPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ResolucionAdministrativa",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "tiene resolucion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#tieneUbicacionAutorizada",
+      "local_name": "tieneUbicacionAutorizada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#UbicacionPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "tiene ubicacion autorizada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#tieneUbicacionSolicitada",
+      "local_name": "tieneUbicacionSolicitada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#UbicacionPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "tiene ubicacion solicitada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#titular",
+      "local_name": "titular",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#PermisoOcupacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "Titular del permiso"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#ubicadoEn",
+      "local_name": "ubicadoEn",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Negocio",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Lugar",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "label": "ubicado en"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#ubicadoEn",
+      "local_name": "ubicadoEn",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#UbicacionPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "label": "ubicado en"
+    }
+  ],
+  "datatype_properties": [
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#actividadAutorizada",
+      "local_name": "actividadAutorizada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#PermisoOcupacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Actividad autorizada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#actividadEconomica",
+      "local_name": "actividadEconomica",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Negocio",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "actividad economica"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#actividadEconomicaSolicitada",
+      "local_name": "actividadEconomicaSolicitada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#SolicitudAutorizacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Actividad economica solicitada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#adultoMayor",
+      "local_name": "adultoMayor",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Adulto mayor"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#alusivaA",
+      "local_name": "alusivaA",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "alusiva a"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#amoblamientoPropietario",
+      "local_name": "amoblamientoPropietario",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "propietario del amoblamiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#antiguedadAnios",
+      "local_name": "antiguedadAnios",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Negocio",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#integer",
+      "label": "antiguedad en anios"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#archivoFormularioE6",
+      "local_name": "archivoFormularioE6",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "archivo formulario E6"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#areaAutorizada",
+      "local_name": "areaAutorizada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#PermisoOcupacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "Area autorizada (m²)"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#autorizacionEstado",
+      "local_name": "autorizacionEstado",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "estado de autorizacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#barrio",
+      "local_name": "barrio",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#UbicacionPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "barrio"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#barrioNombre",
+      "local_name": "barrioNombre",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Lugar",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "nombre de barrio"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#beneficiarioDocumento",
+      "local_name": "beneficiarioDocumento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "documento del beneficiario"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#beneficiarioNombre",
+      "local_name": "beneficiarioNombre",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "nombre del beneficiario"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#beneficiariosAtendidos",
+      "local_name": "beneficiariosAtendidos",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#integer",
+      "label": "Beneficiarios atendidos"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#cabezaFamilia",
+      "local_name": "cabezaFamilia",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Hombre/mujer cabeza de familia"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#candidatoApellidos",
+      "local_name": "candidatoApellidos",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Candidato",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "apellidos del candidato"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#candidatoDocumento",
+      "local_name": "candidatoDocumento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Candidato",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "documento del candidato"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#candidatoNombres",
+      "local_name": "candidatoNombres",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Candidato",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "nombres del candidato"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#cargoEvaluador",
+      "local_name": "cargoEvaluador",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Cargo del evaluador"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#causalNovedad",
+      "local_name": "causalNovedad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#SolicitudPQRS",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "causal de novedad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#causalSuspension",
+      "local_name": "causalSuspension",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "causal de suspension"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#celular",
+      "local_name": "celular",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "numero de celular"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#certificadoDefuncionNumero",
+      "local_name": "certificadoDefuncionNumero",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadFallecimiento",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "numero de certificado de defuncion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#certificadoParentesco",
+      "local_name": "certificadoParentesco",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "certificado de parentesco"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#cesionAprobada",
+      "local_name": "cesionAprobada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "cesion aprobada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#ciudad",
+      "local_name": "ciudad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#UbicacionPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "ciudad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#claseVenta",
+      "local_name": "claseVenta",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Negocio",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "clase de venta"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#coalicionNombre",
+      "local_name": "coalicionNombre",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "nombre de la coalicion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#codigoConcepto",
+      "local_name": "codigoConcepto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Codigo del concepto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#codigoPrograma",
+      "local_name": "codigoPrograma",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Codigo del programa"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#codigoQRCarnet",
+      "local_name": "codigoQRCarnet",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Carnet",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Codigo QR del carnet"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#codigoSisdep",
+      "local_name": "codigoSisdep",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Codigo SISDEP"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#colorModulo",
+      "local_name": "colorModulo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Color del modulo"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#comuna",
+      "local_name": "comuna",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#UbicacionPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "comuna"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#comunaNombre",
+      "local_name": "comunaNombre",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Lugar",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "nombre de comuna"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#conceptoFechaEmision",
+      "local_name": "conceptoFechaEmision",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de emision del concepto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#conceptoJustificacion",
+      "local_name": "conceptoJustificacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Justificacion del concepto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#conceptoResponsable",
+      "local_name": "conceptoResponsable",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Responsable del concepto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#conceptoResultado",
+      "local_name": "conceptoResultado",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Resultado del concepto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#conceptoVinculante",
+      "local_name": "conceptoVinculante",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Concepto vinculante"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#condicionDiscapacidad",
+      "local_name": "condicionDiscapacidad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Persona en condición de discapacidad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#consentimientoTitular",
+      "local_name": "consentimientoTitular",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadCambioTitular",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "consentimiento del titular"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#correoElectronico",
+      "local_name": "correoElectronico",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "correo electronico"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#correoEvaluador",
+      "local_name": "correoEvaluador",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Correo electrónico del evaluador"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#delegacionDepartamental",
+      "local_name": "delegacionDepartamental",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "delegacion departamental"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#descripcion",
+      "local_name": "descripcion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "descripcion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#dimensionAlto",
+      "local_name": "dimensionAlto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "dimension alto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#dimensionAncho",
+      "local_name": "dimensionAncho",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "dimension ancho"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#dimensionesModulo",
+      "local_name": "dimensionesModulo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Dimensiones del modulo"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#direccion",
+      "local_name": "direccion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#UbicacionPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "direccion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#direccionTexto",
+      "local_name": "direccionTexto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Lugar",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "direccion texto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#documentoNumero",
+      "local_name": "documentoNumero",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "numero de documento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#documentoSoporteCausal",
+      "local_name": "documentoSoporteCausal",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "documento soporte de causal"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#documentoTipo",
+      "local_name": "documentoTipo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "tipo de documento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#duracionSuspensionAprobada",
+      "local_name": "duracionSuspensionAprobada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#integer",
+      "label": "duracion de suspension aprobada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#duracionSuspensionSolicitada",
+      "local_name": "duracionSuspensionSolicitada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#integer",
+      "label": "duracion de suspension solicitada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#elementoTipo",
+      "local_name": "elementoTipo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "tipo de elemento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#entidadAliada",
+      "local_name": "entidadAliada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#OfertaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Entidad aliada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#esCoalicion",
+      "local_name": "esCoalicion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "es coalicion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#estadoCarnet",
+      "local_name": "estadoCarnet",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Carnet",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Estado del carnet"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#estadoCodigo",
+      "local_name": "estadoCodigo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "codigo de estado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#estadoConcepto",
+      "local_name": "estadoConcepto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ConceptoTecnico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Estado del concepto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#estadoFisico",
+      "local_name": "estadoFisico",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Estado fisico"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#estadoModulo",
+      "local_name": "estadoModulo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Estado del modulo"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#estadoPQRS",
+      "local_name": "estadoPQRS",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#SolicitudPQRS",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "estado PQRS"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#estadoPrograma",
+      "local_name": "estadoPrograma",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Estado del programa"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#estadoResolucion",
+      "local_name": "estadoResolucion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Resolucion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Estado de la resolucion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#estadoTramite",
+      "local_name": "estadoTramite",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Tramite",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "estado del tramite"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#estadoTramite",
+      "local_name": "estadoTramite",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#SolicitudAutorizacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Estado del tramite"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#estratoSocioeconomico",
+      "local_name": "estratoSocioeconomico",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Vivienda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#integer",
+      "label": "estrato socioeconomico"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#exentoRetribucionEconomica",
+      "local_name": "exentoRetribucionEconomica",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Exento de retribución económica"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#fallecidoIndicador",
+      "local_name": "fallecidoIndicador",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "indicador de fallecimiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaConceptoVulnerabilidad",
+      "local_name": "fechaConceptoVulnerabilidad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha del concepto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaConsentimiento",
+      "local_name": "fechaConsentimiento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadCambioTitular",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de consentimiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaDecisionCesion",
+      "local_name": "fechaDecisionCesion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de decision de cesion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaDefuncion",
+      "local_name": "fechaDefuncion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadFallecimiento",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de defuncion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaEmisionCarnet",
+      "local_name": "fechaEmisionCarnet",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Carnet",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de emision del carnet"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#fechaExpedicion",
+      "local_name": "fechaExpedicion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Resolucion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de expedicion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaFinPrograma",
+      "local_name": "fechaFinPrograma",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de fin del programa"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaFinSuspension",
+      "local_name": "fechaFinSuspension",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de fin de suspension"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaInicioPrograma",
+      "local_name": "fechaInicioPrograma",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de inicio del programa"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaInicioSuspension",
+      "local_name": "fechaInicioSuspension",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de inicio de suspension"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaInstalacion",
+      "local_name": "fechaInstalacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de instalacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#fechaNacimiento",
+      "local_name": "fechaNacimiento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de nacimiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#fechaNotificacion",
+      "local_name": "fechaNotificacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Resolucion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de notificacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#fechaRadicacion",
+      "local_name": "fechaRadicacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Tramite",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de radicacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaRadicacion",
+      "local_name": "fechaRadicacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#SolicitudAutorizacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de radicacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#fechaRadicacionPQRS",
+      "local_name": "fechaRadicacionPQRS",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#SolicitudPQRS",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+      "label": "fecha de radicacion PQRS"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaReactivacion",
+      "local_name": "fechaReactivacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de reactivacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaSolicitudReactivacion",
+      "local_name": "fechaSolicitudReactivacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de solicitud de reactivacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#fechaUltimoMantenimiento",
+      "local_name": "fechaUltimoMantenimiento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de ultimo mantenimiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#gradoVulnerabilidad",
+      "local_name": "gradoVulnerabilidad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#integer",
+      "label": "Grado de vulnerabilidad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#horaCierre",
+      "local_name": "horaCierre",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Negocio",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#time",
+      "label": "hora de cierre"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#horaInicio",
+      "local_name": "horaInicio",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Negocio",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#time",
+      "label": "hora de inicio"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#horariosOperacion",
+      "local_name": "horariosOperacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#PermisoOcupacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Horarios de operacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#incumplimientoTipo",
+      "local_name": "incumplimientoTipo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "tipo de incumplimiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#infraccionCodigo",
+      "local_name": "infraccionCodigo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#InfraccionElectoral",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "codigo de infraccion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#infraccionDetalles",
+      "local_name": "infraccionDetalles",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#InfraccionElectoral",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "detalles de la infraccion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#infraccionFoto",
+      "local_name": "infraccionFoto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#InfraccionElectoral",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "foto de evidencia"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#ingresoFechaHora",
+      "local_name": "ingresoFechaHora",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+      "label": "fecha y hora de ingreso"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#ingresoMensual",
+      "local_name": "ingresoMensual",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Negocio",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "ingreso mensual"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#integrantesAdultosMayores",
+      "local_name": "integrantesAdultosMayores",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Familia",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#integer",
+      "label": "integrantes adultos mayores"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#integrantesMenores",
+      "local_name": "integrantesMenores",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Familia",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#integer",
+      "label": "integrantes menores de edad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#latitud",
+      "local_name": "latitud",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Lugar",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "latitud"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#lineaPobreza",
+      "local_name": "lineaPobreza",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Línea de pobreza"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#lineaPobrezaExtrema",
+      "local_name": "lineaPobrezaExtrema",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Línea de pobreza extrema"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#longitud",
+      "local_name": "longitud",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Lugar",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "longitud"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#lugarDefuncion",
+      "local_name": "lugarDefuncion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadFallecimiento",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "lugar de defuncion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#materialModulo",
+      "local_name": "materialModulo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Material del modulo"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#metaBeneficiarios",
+      "local_name": "metaBeneficiarios",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#integer",
+      "label": "Meta de beneficiarios"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#metaCreatedAt",
+      "local_name": "metaCreatedAt",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "http://www.w3.org/2002/07/owl#Thing",
+        "ontology_iri": "http://www.w3.org/2002/07/owl"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+      "label": "fecha de creacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#metaUpdatedAt",
+      "local_name": "metaUpdatedAt",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "http://www.w3.org/2002/07/owl#Thing",
+        "ontology_iri": "http://www.w3.org/2002/07/owl"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#dateTime",
+      "label": "fecha de actualizacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#motivoCesionVoluntaria",
+      "local_name": "motivoCesionVoluntaria",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadCambioTitular",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "motivo de cesion voluntaria"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#motivoNegacionCesion",
+      "local_name": "motivoNegacionCesion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "motivo de negacion de cesion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#motivoNegacionSuspension",
+      "local_name": "motivoNegacionSuspension",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "motivo de negacion de suspension"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#motivoReubicacion",
+      "local_name": "motivoReubicacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ProgramaReubicacion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Motivo de reubicacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#nombreCompleto",
+      "local_name": "nombreCompleto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "nombre completo"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#nombrePrograma",
+      "local_name": "nombrePrograma",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Nombre del programa"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#notificacionFecha",
+      "local_name": "notificacionFecha",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ResolucionAdministrativa",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de notificacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#numeroCarnet",
+      "local_name": "numeroCarnet",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Carnet",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Numero de carnet"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#numeroModulo",
+      "local_name": "numeroModulo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Numero de modulo"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#numeroRadicado",
+      "local_name": "numeroRadicado",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Tramite",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "numero de radicado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#numeroRadicado",
+      "local_name": "numeroRadicado",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#SolicitudAutorizacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Numero de radicado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#numeroRadicadoOrigen",
+      "local_name": "numeroRadicadoOrigen",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#PermisoOcupacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Numero de radicado origen"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#numeroRadicadoPQRS",
+      "local_name": "numeroRadicadoPQRS",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#SolicitudPQRS",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "numero de radicado PQRS"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#numeroResolucion",
+      "local_name": "numeroResolucion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Resolucion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Numero de resolucion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#objetivoPrograma",
+      "local_name": "objetivoPrograma",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Objetivo del programa"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#parentescoBeneficiario",
+      "local_name": "parentescoBeneficiario",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "parentesco del beneficiario"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#partidoNombre",
+      "local_name": "partidoNombre",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "nombre del partido"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#pazSalvoTitular",
+      "local_name": "pazSalvoTitular",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadCambioTitular",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "paz y salvo del titular"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#periodoElectoralAnio",
+      "local_name": "periodoElectoralAnio",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#gYear",
+      "label": "anio del periodo electoral"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#perteneceGrupoEtnico",
+      "local_name": "perteneceGrupoEtnico",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Pertenece a un grupo étnico"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#poblacionLGBTI",
+      "local_name": "poblacionLGBTI",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Población LGBTI"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#presupuestoAsignado",
+      "local_name": "presupuestoAsignado",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#ProgramaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "Presupuesto asignado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#profesionalEvaluador",
+      "local_name": "profesionalEvaluador",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Nombre del profesional social que evaluó"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#puestoActividadDetalle",
+      "local_name": "puestoActividadDetalle",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "detalle de actividad economica"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#puestoActividadEconomica",
+      "local_name": "puestoActividadEconomica",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "actividad economica"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#puestoAmoblamientoClase",
+      "local_name": "puestoAmoblamientoClase",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "clase de amoblamiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#puestoArea",
+      "local_name": "puestoArea",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "area de ocupacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#puestoClaseVenta",
+      "local_name": "puestoClaseVenta",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "clase de venta"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#puestoDimensionAlto",
+      "local_name": "puestoDimensionAlto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "dimension alto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#puestoDimensionFondo",
+      "local_name": "puestoDimensionFondo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "dimension fondo"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#puestoDimensionFrente",
+      "local_name": "puestoDimensionFrente",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "dimension frente"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#puestoHorario",
+      "local_name": "puestoHorario",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "horario de venta"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#puestoTipologia",
+      "local_name": "puestoTipologia",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PuestoVenta",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "tipologia del puesto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#radicadoNumero",
+      "local_name": "radicadoNumero",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#SolicitudPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "numero de radicado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#reactivacionAprobada",
+      "local_name": "reactivacionAprobada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "reactivacion aprobada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#reactivacionSolicitada",
+      "local_name": "reactivacionSolicitada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "reactivacion solicitada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#relacionSolicitante",
+      "local_name": "relacionSolicitante",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#SolicitudPQRS",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "relacion del solicitante"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#representanteDocumento",
+      "local_name": "representanteDocumento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "documento del representante"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#representanteNombre",
+      "local_name": "representanteNombre",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#PartidoPolitico",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "nombre del representante"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#requerimientoCodigo",
+      "local_name": "requerimientoCodigo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Requerimiento",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "codigo de requerimiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#requerimientoEstado",
+      "local_name": "requerimientoEstado",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Requerimiento",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "estado del requerimiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#requisitoFormalizacion",
+      "local_name": "requisitoFormalizacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ProgramaFormalizacion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Requisitos de formalizacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#requisitosSolicitados",
+      "local_name": "requisitosSolicitados",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#Requerimiento",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "requisitos solicitados"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#resolucionFecha",
+      "local_name": "resolucionFecha",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ResolucionAdministrativa",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de resolucion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#resolucionNumero",
+      "local_name": "resolucionNumero",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ResolucionAdministrativa",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "numero de resolucion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#rutaFormalizacion",
+      "local_name": "rutaFormalizacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ProgramaFormalizacion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Ruta de formalizacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#sexo",
+      "local_name": "sexo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "sexo"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#sisbenClasificacion",
+      "local_name": "sisbenClasificacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Clasificación SISBÉN (Versión IV)"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#sisbenPuntaje",
+      "local_name": "sisbenPuntaje",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "Puntaje SISBÉN (Versión III)"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#solicitanteNovedad",
+      "local_name": "solicitanteNovedad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#SolicitudPQRS",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "solicitante de novedad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#solicitudOrigen",
+      "local_name": "solicitudOrigen",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#SolicitudPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "origen de la solicitud"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#sujetoProteccionConstitucional",
+      "local_name": "sujetoProteccionConstitucional",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Sujeto de especial protección constitucional"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#suspensionAprobada",
+      "local_name": "suspensionAprobada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#NovedadSuspension",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "suspension aprobada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#tenenciaVivienda",
+      "local_name": "tenenciaVivienda",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Vivienda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "tenencia de vivienda"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#tieneAcueducto",
+      "local_name": "tieneAcueducto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Vivienda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "tiene acueducto"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#tieneAguaPotable",
+      "local_name": "tieneAguaPotable",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Tiene agua potable"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#tieneAlcantarillado",
+      "local_name": "tieneAlcantarillado",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Vivienda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "tiene alcantarillado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#tieneElectricidad",
+      "local_name": "tieneElectricidad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Modulo",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Tiene electricidad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#tieneEnergia",
+      "local_name": "tieneEnergia",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Vivienda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "tiene energia"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#tieneSisben",
+      "local_name": "tieneSisben",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Tiene SISBÉN"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#tipoAcompanamiento",
+      "local_name": "tipoAcompanamiento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#OfertaInstitucional",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Tipo de acompanamiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#tipoEleccionTexto",
+      "local_name": "tipoEleccionTexto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "[Complex Domain]",
+        "ontology_iri": null
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "tipo de eleccion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#tipoNovedad",
+      "local_name": "tipoNovedad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#SolicitudPQRS",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "tipo de novedad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#tipoVendedor",
+      "local_name": "tipoVendedor",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Tipo de vendedor evaluado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#tipoVivienda",
+      "local_name": "tipoVivienda",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Vivienda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "tipo de vivienda"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#tipologiaVenta",
+      "local_name": "tipologiaVenta",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Negocio",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "tipologia de venta"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularApellido1",
+      "local_name": "titularApellido1",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "primer apellido"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularApellido2",
+      "local_name": "titularApellido2",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "segundo apellido"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularDiscapacidadIndicador",
+      "local_name": "titularDiscapacidadIndicador",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "indicador de discapacidad"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularDocumentoFechaExpedicion",
+      "local_name": "titularDocumentoFechaExpedicion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha expedicion documento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularDocumentoMunicipioExpedicion",
+      "local_name": "titularDocumentoMunicipioExpedicion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "municipio expedicion documento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularDocumentoNumero",
+      "local_name": "titularDocumentoNumero",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "numero de documento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularDocumentoTipo",
+      "local_name": "titularDocumentoTipo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "tipo de documento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularEdad",
+      "local_name": "titularEdad",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#integer",
+      "label": "edad del titular"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularFechaNacimiento",
+      "local_name": "titularFechaNacimiento",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "fecha de nacimiento"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularGenero",
+      "local_name": "titularGenero",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "genero del titular"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#titularInmuebleNombre",
+      "local_name": "titularInmuebleNombre",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#UbicacionPropaganda",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "nombre del titular del inmueble"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularNombre1",
+      "local_name": "titularNombre1",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "primer nombre"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularNombre2",
+      "local_name": "titularNombre2",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "segundo nombre"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularNombreCompleto",
+      "local_name": "titularNombreCompleto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "nombre completo del titular"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularProteccionConstitucionalIndicador",
+      "local_name": "titularProteccionConstitucionalIndicador",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "indicador de proteccion constitucional"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularProteccionConstitucionalTipo",
+      "local_name": "titularProteccionConstitucionalTipo",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "tipo de proteccion constitucional"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularSisbenMunicipio",
+      "local_name": "titularSisbenMunicipio",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "municipio SISBEN"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularSisbenPuntaje",
+      "local_name": "titularSisbenPuntaje",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+      "label": "puntaje SISBEN"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularTelefono1",
+      "local_name": "titularTelefono1",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "telefono de contacto 1"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#titularTelefono2",
+      "local_name": "titularTelefono2",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#PersonaNatural",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "telefono de contacto 2"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/core#totalIntegrantes",
+      "local_name": "totalIntegrantes",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/core#Familia",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#integer",
+      "label": "total de integrantes"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral/property#ubicacionFoto",
+      "local_name": "ubicacionFoto",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral#ElementoPublicitario",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico/propaganda-electoral"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "foto de ubicacion"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#victimaConflictoArmado",
+      "local_name": "victimaConflictoArmado",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ConceptoVulnerabilidad",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#boolean",
+      "label": "Víctima del conflicto armado"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#vigenciaCarnet",
+      "local_name": "vigenciaCarnet",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#Carnet",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de vencimiento del carnet"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#vigenciaFin",
+      "local_name": "vigenciaFin",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#PermisoOcupacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de fin de vigencia"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#vigenciaInicio",
+      "local_name": "vigenciaInicio",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#PermisoOcupacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "Fecha de inicio de vigencia"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#zonaOcupacionSolicitada",
+      "local_name": "zonaOcupacionSolicitada",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#SolicitudAutorizacionTemporal",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Zona de ocupacion solicitada"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#zonasDestinoReubicacion",
+      "local_name": "zonasDestinoReubicacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ProgramaReubicacion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Zonas destino"
+    },
+    {
+      "iri": "https://w3id.org/medellin/espacio-publico/regulacion#zonasOrigenReubicacion",
+      "local_name": "zonasOrigenReubicacion",
+      "ontology_iri": "https://w3id.org/medellin/espacio-publico",
+      "domain": {
+        "class_iri": "https://w3id.org/medellin/espacio-publico/regulacion#ProgramaReubicacion",
+        "ontology_iri": "https://w3id.org/medellin/espacio-publico"
+      },
+      "range_datatype": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "Zonas origen"
+    }
+  ],
+  "summary": {
+    "total_classes": 43,
+    "total_object_properties": 46,
+    "total_datatype_properties": 208,
+    "total_ontologies": 11
+  }
+}

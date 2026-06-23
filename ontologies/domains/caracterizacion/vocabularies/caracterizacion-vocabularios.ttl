@@ -1,0 +1,397 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+
+# EP Modeling Namespaces
+@prefix epd-car-vocab: <https://w3id.org/medellin/ep/domain/caracterizacion/vocabulary/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# ============================================================================
+# CONTROLLED VOCABULARIES FOR CARACTERIZACION DOMAIN
+# ============================================================================
+# Based on DMP a2_listas for caracterizacion_v1
+
+# --- SEXO (Gender) ---
+
+epd-car-vocab:SexoScheme
+    a skos:ConceptScheme ;
+    dct:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dct:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dct:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    skos:prefLabel "Sexo del Vendedor"@es ;
+    dct:title "Clasificación de Sexo - DANE"@es ;
+    dct:description "Valores de sexo según DANE"@es ;
+    dct:source "DMP a2_listas - sexo" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    dct:modified "2026-01-11"^^xsd:date ;
+    rdfs:comment "Clasificación estandarizada DANE para sexo o género"@es ;
+    owl:versionInfo "0.1.0" .
+
+epd-car-vocab:masculino
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:SexoScheme ;
+    skos:prefLabel "Masculino"@es ;
+    skos:notation "M" ;
+    skos:hiddenLabel "hombre"@es ;
+    skos:hiddenLabel "var"@es ;
+    dct:source "DANE" ;
+    skos:topConceptOf epd-car-vocab:SexoScheme .
+
+epd-car-vocab:femenino
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:SexoScheme ;
+    skos:prefLabel "Femenino"@es ;
+    skos:notation "F" ;
+    skos:hiddenLabel "mujer"@es ;
+    skos:hiddenLabel "fem"@es ;
+    dct:source "DANE" ;
+    skos:topConceptOf epd-car-vocab:SexoScheme .
+
+epd-car-vocab:otro
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:SexoScheme ;
+    skos:prefLabel "Otro"@es ;
+    skos:notation "O" ;
+    skos:hiddenLabel "no binario"@es ;
+    dct:source "DANE" ;
+    skos:topConceptOf epd-car-vocab:SexoScheme .
+
+# --- ESTADO CIVIL ---
+
+epd-car-vocab:EstadoCivilScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Estado Civil"@es ;
+    dct:title "Estados Civiles - DANE"@es ;
+    dct:source "DMP a2_listas - estado_civil" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" .
+
+epd-car-vocab:soltero
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:EstadoCivilScheme ;
+    skos:prefLabel "Soltero"@es ;
+    skos:notation "SOL" ;
+    skos:hiddenLabel "sin pareja"@es ;
+    skos:topConceptOf epd-car-vocab:EstadoCivilScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:casado
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:EstadoCivilScheme ;
+    skos:prefLabel "Casado"@es ;
+    skos:notation "CAS" ;
+    skos:hiddenLabel "matrimonio"@es ;
+    skos:topConceptOf epd-car-vocab:EstadoCivilScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:unionLibre
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:EstadoCivilScheme ;
+    skos:prefLabel "Unión Libre"@es ;
+    skos:notation "UNI" ;
+    skos:hiddenLabel "convivencia"@es ;
+    skos:hiddenLabel "pareja"@es ;
+    skos:topConceptOf epd-car-vocab:EstadoCivilScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:divorciado
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:EstadoCivilScheme ;
+    skos:prefLabel "Divorciado"@es ;
+    skos:notation "DIV" ;
+    skos:topConceptOf epd-car-vocab:EstadoCivilScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:viudo
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:EstadoCivilScheme ;
+    skos:prefLabel "Viudo"@es ;
+    skos:notation "VIU" ;
+    skos:topConceptOf epd-car-vocab:EstadoCivilScheme ;
+    dct:source "DANE" .
+
+# --- TIPO DOCUMENTO ---
+
+epd-car-vocab:TipoDocumentoScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Tipo de Documento de Identidad"@es ;
+    dct:title "Documentos de Identidad - RNEC"@es ;
+    dct:source "DMP a2_listas - tipo_documento" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Tipos de documentos válidos en Colombia según RNEC"@es .
+
+epd-car-vocab:cedulaCiudadania
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:TipoDocumentoScheme ;
+    skos:prefLabel "Cédula de Ciudadanía"@es ;
+    skos:notation "CC" ;
+    skos:hiddenLabel "cedula"@es ;
+    skos:hiddenLabel "cédula ciudadanía"@es ;
+    skos:definition "Documento de identidad nacional de ciudadano colombiano"@es ;
+    skos:topConceptOf epd-car-vocab:TipoDocumentoScheme ;
+    dct:source "RNEC" .
+
+epd-car-vocab:cedulaExtranjeria
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:TipoDocumentoScheme ;
+    skos:prefLabel "Cédula de Extranjería"@es ;
+    skos:notation "CE" ;
+    skos:hiddenLabel "cedula extranjeria"@es ;
+    skos:definition "Documento de identidad para ciudadano extranjero"@es ;
+    skos:topConceptOf epd-car-vocab:TipoDocumentoScheme ;
+    dct:source "RNEC" .
+
+epd-car-vocab:pep
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:TipoDocumentoScheme ;
+    skos:prefLabel "PEP (Permiso de Estancia Permanente)"@es ;
+    skos:notation "PEP" ;
+    skos:definition "Documento de permanencia para extranjero"@es ;
+    skos:topConceptOf epd-car-vocab:TipoDocumentoScheme ;
+    dct:source "RNEC" .
+
+epd-car-vocab:pasaporte
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:TipoDocumentoScheme ;
+    skos:prefLabel "Pasaporte"@es ;
+    skos:notation "PAS" ;
+    skos:definition "Documento de viaje internacional"@es ;
+    skos:topConceptOf epd-car-vocab:TipoDocumentoScheme ;
+    dct:source "RNEC" .
+
+# --- ESCOLARIDAD ---
+
+epd-car-vocab:EscolaridadScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Nivel de Escolaridad"@es ;
+    dct:title "Niveles de Escolaridad - DANE"@es ;
+    dct:source "DMP a2_listas - escolaridad" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Clasificación oficial DANE de niveles educativos"@es .
+
+epd-car-vocab:ningunEstudio
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:EscolaridadScheme ;
+    skos:prefLabel "Ninguno"@es ;
+    skos:notation "N" ;
+    skos:definition "Persona que nunca asistió a establecimiento educativo"@es ;
+    skos:topConceptOf epd-car-vocab:EscolaridadScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:preescolar
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:EscolaridadScheme ;
+    skos:prefLabel "Preescolar"@es ;
+    skos:notation "PRE" ;
+    skos:definition "Educación inicial (0-5 años)"@es ;
+    skos:topConceptOf epd-car-vocab:EscolaridadScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:basicaPrimaria
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:EscolaridadScheme ;
+    skos:prefLabel "Básica Primaria"@es ;
+    skos:notation "BP" ;
+    skos:hiddenLabel "primaria"@es ;
+    skos:definition "Grados 1-5 (primaria)"@es ;
+    skos:topConceptOf epd-car-vocab:EscolaridadScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:basicaSecundaria
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:EscolaridadScheme ;
+    skos:prefLabel "Básica Secundaria"@es ;
+    skos:notation "BS" ;
+    skos:hiddenLabel "secundaria"@es ;
+    skos:definition "Grados 6-9 (ciclo básico secundaria)"@es ;
+    skos:topConceptOf epd-car-vocab:EscolaridadScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:media
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:EscolaridadScheme ;
+    skos:prefLabel "Media"@es ;
+    skos:notation "MED" ;
+    skos:hiddenLabel "bachillerato"@es ;
+    skos:definition "Grados 10-11 (educación media)"@es ;
+    skos:topConceptOf epd-car-vocab:EscolaridadScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:superior
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:EscolaridadScheme ;
+    skos:prefLabel "Educación Superior"@es ;
+    skos:notation "SUP" ;
+    skos:hiddenLabel "universidad"@es ;
+    skos:hiddenLabel "técnica"@es ;
+    skos:hiddenLabel "tecnologica"@es ;
+    skos:definition "Tecnológica, tecnológica, universitaria o postgrado"@es ;
+    skos:topConceptOf epd-car-vocab:EscolaridadScheme ;
+    dct:source "DANE" .
+
+# --- ACTIVIDAD ECONOMICA ---
+
+epd-car-vocab:ActividadEconomicaScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Actividad Económica de Vendedor"@es ;
+    dct:title "Clasificación de Actividades Económicas Informales"@es ;
+    dct:source "DMP a2_listas - actividad_economica_tipologica" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Clasificación de tipos de venta/comercio realizados por vendedores informales"@es .
+
+epd-car-vocab:ventaAlimentos
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:ActividadEconomicaScheme ;
+    skos:prefLabel "Venta y consumo de alimentos y bebidas no alcohólicas"@es ;
+    skos:notation "ALI" ;
+    skos:altLabel "Venta de Alimentos"@es ;
+    skos:hiddenLabel "alimentos"@es ;
+    skos:hiddenLabel "comidas"@es ;
+    skos:hiddenLabel "arepas"@es ;
+    skos:hiddenLabel "comida rápida"@es ;
+    skos:definition "Comercialización de alimentos preparados, bebidas, refrescos"@es ;
+    skos:example "Vendedor de arepas, jugos, empanadas, comida callejera"@es ;
+    skos:topConceptOf epd-car-vocab:ActividadEconomicaScheme ;
+    dct:source "Clasificación interna" .
+
+epd-car-vocab:comercializacionBienes
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:ActividadEconomicaScheme ;
+    skos:prefLabel "Comercialización de bienes"@es ;
+    skos:notation "BIE" ;
+    skos:altLabel "Venta de Productos"@es ;
+    skos:hiddenLabel "ropa"@es ;
+    skos:hiddenLabel "accesorios"@es ;
+    skos:hiddenLabel "mercancia"@es ;
+    skos:definition "Venta de productos y mercancías (ropa, accesorios, artesanías, etc.)"@es ;
+    skos:example "Vendedor de ropa usada, accesorios de moda, artesanías"@es ;
+    skos:topConceptOf epd-car-vocab:ActividadEconomicaScheme ;
+    dct:source "Clasificación interna" .
+
+epd-car-vocab:servicios
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:ActividadEconomicaScheme ;
+    skos:prefLabel "Prestación de servicios"@es ;
+    skos:notation "SER" ;
+    skos:altLabel "Servicios"@es ;
+    skos:hiddenLabel "reparacion"@es ;
+    skos:hiddenLabel "limpieza"@es ;
+    skos:hiddenLabel "belleza"@es ;
+    skos:definition "Prestación de servicios (reparación, peluquería, servicios de aseo, etc.)"@es ;
+    skos:example "Peluquero, reparador de electrodomésticos, sastre, servicio de aseó"@es ;
+    skos:topConceptOf epd-car-vocab:ActividadEconomicaScheme ;
+    dct:source "Clasificación interna" .
+
+epd-car-vocab:artesanias
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:ActividadEconomicaScheme ;
+    skos:prefLabel "Artesanías y oficios"@es ;
+    skos:notation "ART" ;
+    skos:hiddenLabel "artesania"@es ;
+    skos:hiddenLabel "manualidades"@es ;
+    skos:definition "Elaboración y venta de artesanías y productos de oficios tradicionales"@es ;
+    skos:example "Alfarero, tejedor, ebanista informal"@es ;
+    skos:topConceptOf epd-car-vocab:ActividadEconomicaScheme ;
+    dct:source "Clasificación interna" .
+
+epd-car-vocab:entretenimiento
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:ActividadEconomicaScheme ;
+    skos:prefLabel "Entretenimiento y ocio"@es ;
+    skos:notation "ENT" ;
+    skos:hiddenLabel "música"@es ;
+    skos:hiddenLabel "juegos"@es ;
+    skos:hiddenLabel "payaso"@es ;
+    skos:definition "Servicios de entretenimiento, música, juegos"@es ;
+    skos:example "Músico callejero, mago, payaso, vendedor de juegos"@es ;
+    skos:topConceptOf epd-car-vocab:ActividadEconomicaScheme ;
+    dct:source "Clasificación interna" .
+
+# --- MUNICIPIOS (Cities) - Sample for Medellín ---
+
+epd-car-vocab:MunicipioScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Municipios de Colombia"@es ;
+    dct:title "Registro de Municipios - DANE"@es ;
+    dct:source "DMP a2_listas - municipio" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Municipios de Colombia según DANE. Ejemplo: Medellín"@es .
+
+epd-car-vocab:medellin
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:MunicipioScheme ;
+    skos:prefLabel "Medellín"@es ;
+    skos:notation "05001" ;
+    skos:hiddenLabel "medellin"@es ;
+    skos:definition "Capital del Departamento de Antioquia"@es ;
+    skos:topConceptOf epd-car-vocab:MunicipioScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:bello
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:MunicipioScheme ;
+    skos:prefLabel "Bello"@es ;
+    skos:notation "05079" ;
+    skos:topConceptOf epd-car-vocab:MunicipioScheme ;
+    dct:source "DANE" .
+
+# --- ETNIA/GRUPO ETNICO ---
+
+epd-car-vocab:GrupoEtnicoScheme
+    a skos:ConceptScheme ;
+    skos:prefLabel "Grupo Étnico"@es ;
+    dct:title "Grupos Étnicos - DANE"@es ;
+    dct:source "DMP a2_listas - etnia" ;
+    dct:created "2026-01-11"^^xsd:date ;
+    owl:versionInfo "0.1.0" ;
+    rdfs:comment "Grupos étnicos reconocidos en Colombia"@es .
+
+epd-car-vocab:ninguno
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:GrupoEtnicoScheme ;
+    skos:prefLabel "Ninguno"@es ;
+    skos:notation "N" ;
+    skos:hiddenLabel "mestizo"@es ;
+    skos:definition "No pertenece a grupo étnico"@es ;
+    skos:topConceptOf epd-car-vocab:GrupoEtnicoScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:indigena
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:GrupoEtnicoScheme ;
+    skos:prefLabel "Indígena"@es ;
+    skos:notation "IND" ;
+    skos:hiddenLabel "aborigen"@es ;
+    skos:definition "Perteneciente a pueblos indígenas"@es ;
+    skos:topConceptOf epd-car-vocab:GrupoEtnicoScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:afrodescendiente
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:GrupoEtnicoScheme ;
+    skos:prefLabel "Afrodescendiente"@es ;
+    skos:notation "AFR" ;
+    skos:hiddenLabel "negro"@es ;
+    skos:hiddenLabel "raizal"@es ;
+    skos:hiddenLabel "palenquero"@es ;
+    skos:definition "Afrocolombianos, Raizales, Palenqueros"@es ;
+    skos:topConceptOf epd-car-vocab:GrupoEtnicoScheme ;
+    dct:source "DANE" .
+
+epd-car-vocab:rom
+    a skos:Concept ;
+    skos:inScheme epd-car-vocab:GrupoEtnicoScheme ;
+    skos:prefLabel "ROM"@es ;
+    skos:notation "ROM" ;
+    skos:hiddenLabel "gitano"@es ;
+    skos:definition "Pueblo ROM (Gitano)"@es ;
+    skos:topConceptOf epd-car-vocab:GrupoEtnicoScheme ;
+    dct:source "DANE" .

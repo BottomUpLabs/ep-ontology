@@ -1,0 +1,242 @@
+@prefix : <https://w3id.org/medellin/espacio-publico/regulacion#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# Ontologia Modular: Programas Institucionales
+# =============================================================================
+# Fecha creacion: 2026-01-07
+# Descripcion: Define programas y servicios institucionales para vendedores
+#              informales: reubicacion, formalizacion, capacitacion y acompanamiento.
+
+<https://w3id.org/medellin/espacio-publico/regulacion/programas-institucionales> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/regulacion/programas-institucionales/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/institutional-core-entities> ;
+    dcterms:title "Espacio Publico - Programas Institucionales"@es ;
+    dcterms:description """Ontologia que define programas institucionales de la 
+    Subsecretaria de Espacio Publico para acompanamiento, reubicacion y formalizacion 
+    de vendedores informales. Extiende core:ProgramaInstitucional."""@es ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-01-07"^^xsd:date ;
+    owl:versionInfo "0.1.0" .
+
+# =============================================================================
+# CLASE: ProgramaReubicacion
+# =============================================================================
+
+:ProgramaReubicacion a owl:Class ;
+    rdfs:subClassOf core:ProgramaInstitucional ;
+    rdfs:label "Programa de Reubicacion"@es ;
+    skos:definition """Programa que gestiona el traslado definitivo de vendedores 
+    regulados por amenazas documentadas, obras publicas o intervenciones estrategicas. 
+    Provee cupos en zonas seguras, coordina logistica del traslado, actualiza 
+    autorizaciones y realiza seguimiento posttraslado."""@es ;
+    skos:scopeNote """Servicios provistos:
+    - Evaluacion de viabilidad de reubicacion
+    - Busqueda de ubicaciones alternativas seguras
+    - Coordinacion con Fiscalia y entidades de seguridad (amenazas)
+    - Gestion de permisos transitorios durante traslado
+    - Seguimiento a adaptacion en nuevo punto
+    Articula con Facturacion para ajustar cobros"""@es ;
+    skos:example "Programa de traslado de vendedores por obra Metro Linea P"@es ;
+    dcterms:source "Proceso PR-GGOL-012 - Gestion de novedades" ;
+    dcterms:source "concepts/regulated/reubicacion_definitiva_amenaza.md" .
+
+# =============================================================================
+# CLASE: OfertaInstitucional
+# =============================================================================
+
+:OfertaInstitucional a owl:Class ;
+    rdfs:subClassOf core:ProgramaInstitucional ;
+    rdfs:label "Oferta Institucional"@es ;
+    skos:definition """Conjunto coordinado de programas y servicios para orientar 
+    vendedores no regulados o con solicitudes negadas hacia alternativas de 
+    formalizacion, capacitacion, vinculacion laboral o emprendimientos formalizados. 
+    Coordinado con Secretaria de Desarrollo Economico y otras entidades."""@es ;
+    skos:scopeNote """Componentes tipicos:
+    - Orientacion vocacional y rutas de formalizacion
+    - Capacitacion en gestion empresarial, manipulacion de alimentos
+    - Remision a programas de empleabilidad
+    - Apoyo para acceso a credito y capital semilla
+    - Vinculacion a programas sociales (vivienda, salud, educacion)
+    Destinatarios: vendedores caracterizados sin permiso, casos negados, desistidos"""@es ;
+    skos:example "Programa de formalizacion comercial 2025"@es ;
+    dcterms:source "concepts/informal/solicitud_permiso_no_regulado.md" ;
+    dcterms:source "concepts/regulated/novedades_regulados.md" ;
+    dcterms:source "Secretaria de Desarrollo Economico - Programas de emprendimiento" .
+
+# =============================================================================
+# CLASE: ProgramaFormalizacion
+# =============================================================================
+
+:ProgramaFormalizacion a owl:Class ;
+    rdfs:subClassOf :OfertaInstitucional ;
+    rdfs:label "Programa de Formalizacion"@es ;
+    skos:definition """Programa que acompana vendedores informales en la transicion 
+    hacia actividades economicas formales: registro mercantil, obtencion de permisos 
+    sanitarios, vinculacion a plazas de mercado o locales comerciales."""@es ;
+    skos:example "Programa Formaliza tu Negocio 2025"@es ;
+    dcterms:source "Secretaria de Desarrollo Economico" .
+
+# =============================================================================
+# PROPIEDADES: Persona → Programa
+# =============================================================================
+
+:participaEn a owl:ObjectProperty ;
+    rdfs:domain core:PersonaNatural ;
+    rdfs:range core:ProgramaInstitucional ;
+    rdfs:label "Participa en"@es ;
+    skos:definition """Vincula una persona (vendedor) al programa institucional en el 
+    que participa (reubicacion, formalizacion, capacitacion)"""@es .
+
+:participante a owl:ObjectProperty ;
+    owl:inverseOf :participaEn ;
+    rdfs:domain core:ProgramaInstitucional ;
+    rdfs:range core:PersonaNatural ;
+    rdfs:label "Participante"@es ;
+    skos:definition "Inversa - vincula el programa a sus participantes"@es .
+
+# =============================================================================
+# PROPIEDADES: Tramite/Evento → Programa
+# =============================================================================
+
+:gestionadoPorPrograma a owl:ObjectProperty ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf ( :SolicitudAutorizacionTemporal :PermisoTransitorio :NovedadRegulado )
+    ] ;
+    rdfs:range core:ProgramaInstitucional ;
+    rdfs:label "Gestionado por programa"@es ;
+    skos:definition """Vincula un tramite o evento a un programa institucional que lo 
+    gestiona (ej: PermisoTransitorio gestionado por ProgramaReubicacion)"""@es .
+
+:requierePrograma a owl:ObjectProperty ;
+    rdfs:domain :NegacionPermiso ;
+    rdfs:range :OfertaInstitucional ;
+    rdfs:label "Requiere programa"@es ;
+    skos:definition """Vincula una negacion de permiso a la oferta institucional que 
+    debe activarse para el solicitante (orientacion a alternativas)"""@es .
+
+# =============================================================================
+# DATATYPE PROPERTIES: ProgramaInstitucional
+# =============================================================================
+
+:nombrePrograma a owl:DatatypeProperty ;
+    rdfs:domain core:ProgramaInstitucional ;
+    rdfs:range xsd:string ;
+    rdfs:label "Nombre del programa"@es ;
+    skos:definition "Nombre oficial del programa institucional"@es .
+
+:codigoPrograma a owl:DatatypeProperty ;
+    rdfs:domain core:ProgramaInstitucional ;
+    rdfs:range xsd:string ;
+    rdfs:label "Codigo del programa"@es ;
+    skos:definition "Codigo identificador unico del programa"@es .
+
+:objetivoPrograma a owl:DatatypeProperty ;
+    rdfs:domain core:ProgramaInstitucional ;
+    rdfs:range xsd:string ;
+    rdfs:label "Objetivo del programa"@es ;
+    skos:definition "Objetivo general del programa institucional"@es .
+
+:estadoPrograma a owl:DatatypeProperty ;
+    rdfs:domain core:ProgramaInstitucional ;
+    rdfs:range xsd:string ;
+    rdfs:label "Estado del programa"@es ;
+    skos:definition "Estado actual del programa segun ciclo de vida"@es .
+
+:fechaInicioPrograma a owl:DatatypeProperty ;
+    rdfs:domain core:ProgramaInstitucional ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de inicio del programa"@es ;
+    skos:definition "Fecha en que inicio la ejecucion del programa"@es .
+
+:fechaFinPrograma a owl:DatatypeProperty ;
+    rdfs:domain core:ProgramaInstitucional ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de fin del programa"@es ;
+    skos:definition "Fecha prevista de finalizacion del programa"@es .
+
+:metaBeneficiarios a owl:DatatypeProperty ;
+    rdfs:domain core:ProgramaInstitucional ;
+    rdfs:range xsd:integer ;
+    rdfs:label "Meta de beneficiarios"@es ;
+    skos:definition "Cantidad de personas meta a atender por el programa"@es .
+
+:beneficiariosAtendidos a owl:DatatypeProperty ;
+    rdfs:domain core:ProgramaInstitucional ;
+    rdfs:range xsd:integer ;
+    rdfs:label "Beneficiarios atendidos"@es ;
+    skos:definition "Cantidad de personas efectivamente atendidas por el programa"@es .
+
+:presupuestoAsignado a owl:DatatypeProperty ;
+    rdfs:domain core:ProgramaInstitucional ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "Presupuesto asignado"@es ;
+    skos:definition "Monto presupuestal asignado al programa (COP)"@es .
+
+# =============================================================================
+# DATATYPE PROPERTIES: ProgramaReubicacion
+# =============================================================================
+
+:motivoReubicacion a owl:DatatypeProperty ;
+    rdfs:domain :ProgramaReubicacion ;
+    rdfs:range xsd:string ;
+    rdfs:label "Motivo de reubicacion"@es ;
+    skos:definition "Causa que origina el programa de reubicacion (obra, amenaza, intervencion)"@es .
+
+:zonasOrigenReubicacion a owl:DatatypeProperty ;
+    rdfs:domain :ProgramaReubicacion ;
+    rdfs:range xsd:string ;
+    rdfs:label "Zonas origen"@es ;
+    skos:definition "Zonas geograficas de donde se reubicarán vendedores"@es .
+
+:zonasDestinoReubicacion a owl:DatatypeProperty ;
+    rdfs:domain :ProgramaReubicacion ;
+    rdfs:range xsd:string ;
+    rdfs:label "Zonas destino"@es ;
+    skos:definition "Zonas geograficas hacia donde se reubicarán vendedores"@es .
+
+# =============================================================================
+# DATATYPE PROPERTIES: OfertaInstitucional
+# =============================================================================
+
+:tipoAcompanamiento a owl:DatatypeProperty ;
+    rdfs:domain :OfertaInstitucional ;
+    rdfs:range xsd:string ;
+    rdfs:label "Tipo de acompanamiento"@es ;
+    skos:definition "Tipo de servicio ofrecido (orientacion, capacitacion, vinculacion laboral, credito)"@es .
+
+:entidadAliada a owl:DatatypeProperty ;
+    rdfs:domain :OfertaInstitucional ;
+    rdfs:range xsd:string ;
+    rdfs:label "Entidad aliada"@es ;
+    skos:definition "Entidades aliadas que proveen servicios (SENA, Camara de Comercio, etc.)"@es .
+
+# =============================================================================
+# DATATYPE PROPERTIES: ProgramaFormalizacion
+# =============================================================================
+
+:rutaFormalizacion a owl:DatatypeProperty ;
+    rdfs:domain :ProgramaFormalizacion ;
+    rdfs:range xsd:string ;
+    rdfs:label "Ruta de formalizacion"@es ;
+    skos:definition "Ruta especifica de formalizacion ofrecida (plaza de mercado, local comercial, emprendimiento)"@es .
+
+:requisitoFormalizacion a owl:DatatypeProperty ;
+    rdfs:domain :ProgramaFormalizacion ;
+    rdfs:range xsd:string ;
+    rdfs:label "Requisitos de formalizacion"@es ;
+    skos:definition "Requisitos que debe cumplir el vendedor para acceder al programa"@es .

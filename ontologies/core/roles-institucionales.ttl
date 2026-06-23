@@ -1,0 +1,204 @@
+@prefix role: <https://w3id.org/medellin/espacio-publico/roles#> .
+@prefix : <https://w3id.org/medellin/espacio-publico/roles#> .
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# ONTOLOGIA: Roles Institucionales (Patron de Rol - Core Abstracto)
+# =============================================================================
+# Define el PATRON DE ROL (role design pattern) reutilizable en todos los
+# dominios de Espacio Publico. Separa la ENTIDAD de primer orden (Persona,
+# Lugar, Negocio) del ROL que la institucion le asigna o le infiere.
+#
+# Una Persona NO es "un vendedor"; una Persona DESEMPENA el ROL de vendedor
+# informal en un contexto institucional y temporal determinado. El rol tiene
+# su propio ciclo de vida, controlado por la institucion, mientras que la
+# entidad base existe independientemente.
+#
+# Este modulo formaliza los terminos role:* que las SHACL shapes y las
+# ontologias de dominio (regulacion, propaganda) referencian.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/core/roles-institucionales> a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/core/roles-institucionales/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "Espacio Publico - Roles Institucionales (Patron de Rol)"@es ;
+    dcterms:title "Public Space - Institutional Roles (Role Pattern)"@en ;
+    dcterms:description """Ontologia core abstracta que formaliza el patron de rol
+    para el sistema de gestion del espacio publico de Medellin. Distingue entre las
+    entidades de primer orden (cuyo ciclo de vida es independiente de la institucion)
+    y los roles institucionales o inferidos que esas entidades desempenan. Define las
+    clases abstractas Rol, RolInstitucional y RolInferido, y las propiedades de
+    relacion (basadoEn, subroganteRol) y de ciclo de vida (estadoActual, esRolActivo,
+    heredaEstadoDe, estadosTerminales, evolucionaHacia) reutilizadas por todos los
+    dominios."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico - Secretaria de Seguridad y Convivencia" ;
+    dcterms:created "2026-01-07"^^xsd:date ;
+    dcterms:modified "2026-05-31"^^xsd:date ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:coverage "Medellin, Colombia"@es ;
+    vann:preferredNamespacePrefix "role" ;
+    vann:preferredNamespaceUri "https://w3id.org/medellin/espacio-publico/roles#" ;
+    owl:versionInfo "0.1.0" ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/entidades-primer-orden> ;
+    owl:imports <https://w3id.org/medellin/espacio-publico/core/persona-natural> ;
+    rdfs:comment """PATRON DE ROL:
+    - Entidad de primer orden (core:PersonaNatural, core:Lugar) = existe por si misma.
+    - Rol (role:Rol) = funcion que una entidad desempena ante la institucion.
+    - role:basadoEn vincula el rol con la entidad que lo desempena.
+    - El rol tiene ciclo de vida propio (role:estadoActual) y puede heredar
+      estados terminales de la entidad base (role:heredaEstadoDe)."""@es .
+
+# =============================================================================
+# CLASE ABSTRACTA: Rol
+# =============================================================================
+
+role:Rol a owl:Class ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "Rol"@es ;
+    rdfs:label "Role"@en ;
+    skos:prefLabel "Rol"@es ;
+    skos:definition """ABSTRACTA: Funcion o papel que una entidad de primer orden
+    (Persona, Lugar, Negocio) desempena en un contexto institucional. El rol es
+    distinto de la entidad: una misma persona puede desempenar varios roles
+    simultaneos (solicitante, regulado, organizador) y cada rol tiene su propio
+    ciclo de vida."""@es ;
+    skos:scopeNote """No instanciar directamente. Usar las subclases RolInstitucional
+    (asignado por acto administrativo) o RolInferido (deducido de los hechos)."""@es ;
+    core:tipoCicloVida "ciclo_vida_rol" ;
+    core:gestionadoPor "Subsecretaria de Espacio Publico" .
+
+# =============================================================================
+# CLASE ABSTRACTA: RolInstitucional (asignado / asumido)
+# =============================================================================
+
+role:RolInstitucional a owl:Class ;
+    rdfs:subClassOf role:Rol ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "Rol Institucional"@es ;
+    rdfs:label "Institutional Role"@en ;
+    skos:prefLabel "Rol Institucional"@es ;
+    skos:altLabel "Rol asumido"@es ;
+    skos:definition """ABSTRACTA: Rol cuya existencia y transiciones de estado son
+    controladas por un procedimiento administrativo de la institucion (radicacion de
+    un tramite, expedicion de una resolucion). El rol se ACTIVA y se CIERRA mediante
+    actos institucionales y tiene estados terminales explicitos.
+    Ejemplo: VendedorInformalSolicitante (existe mientras hay un tramite en curso)."""@es ;
+    skos:scopeNote "El ciclo de vida es gestionado por la institucion, no por la entidad base."@es .
+
+# =============================================================================
+# CLASE ABSTRACTA: RolInferido (deducido)
+# =============================================================================
+
+role:RolInferido a owl:Class ;
+    rdfs:subClassOf role:Rol ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "Rol Inferido"@es ;
+    rdfs:label "Inferred Role"@en ;
+    skos:prefLabel "Rol Inferido"@es ;
+    skos:definition """ABSTRACTA: Rol que NO se asigna manualmente, sino que se DEDUCE
+    automaticamente de los hechos registrados mediante una regla de inferencia (OWL).
+    Ejemplo: una Persona es VendedorInformal si radica una solicitud de autorizacion;
+    es VendedorInformalRegulado si existe un permiso activo a su nombre."""@es ;
+    skos:scopeNote """El rol aparece y desaparece dinamicamente segun cambien los
+    hechos que lo originan. No requiere accion explicita de asignacion."""@es .
+
+# =============================================================================
+# CLASE PUENTE: VendedorInformal (alias abstracto de rol)
+# =============================================================================
+# Las SHACL shapes referencian role:VendedorInformal. Se declara aqui como rol
+# inferido abstracto, equivalente a core:VendedorInformal del dominio.
+
+role:VendedorInformal a owl:Class ;
+    rdfs:subClassOf role:RolInferido ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "Vendedor Informal (rol)"@es ;
+    rdfs:label "Informal Vendor (role)"@en ;
+    skos:prefLabel "Vendedor Informal"@es ;
+    skos:definition """Rol inferido abstracto de una persona que ejerce o aspira a
+    ejercer venta informal en el espacio publico. Punto de anclaje del patron de rol
+    para las validaciones SHACL; en el dominio de regulacion se especializa como
+    core:VendedorInformal y sus subclases Solicitante y Regulado."""@es ;
+    skos:editorialNote "Equivalente a core:VendedorInformal (declarado en el dominio de regulacion)."@es .
+
+# =============================================================================
+# PROPIEDADES DE RELACION
+# =============================================================================
+
+role:basadoEn a owl:ObjectProperty ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "basado en"@es ;
+    rdfs:label "based on"@en ;
+    rdfs:domain role:Rol ;
+    skos:definition """Vincula un rol con la entidad de primer orden que lo desempena.
+    Es la relacion fundamental del patron de rol: todo rol esta basado en exactamente
+    una entidad base (una Persona, un Lugar o un Negocio)."""@es ;
+    skos:scopeNote "Tipicamente el rango es core:PersonaNatural, pero puede ser core:Lugar o core:Negocio."@es .
+
+role:subroganteRol a owl:ObjectProperty ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "subroga al rol"@es ;
+    rdfs:label "subrogates role"@en ;
+    rdfs:domain role:Rol ;
+    rdfs:range role:Rol ;
+    skos:definition """Relaciona un rol sucesor con el rol previo al que sustituye,
+    por ejemplo cuando un nuevo titular subroga al titular fallecido de una
+    autorizacion (cambio de titular)."""@es .
+
+# =============================================================================
+# PROPIEDADES DE CICLO DE VIDA DEL ROL
+# =============================================================================
+
+role:estadoActual a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "estado actual"@es ;
+    rdfs:label "current state"@en ;
+    rdfs:domain role:Rol ;
+    rdfs:range xsd:string ;
+    skos:definition "Estado vigente del rol dentro de su ciclo de vida institucional."@es .
+
+role:esRolActivo a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "es rol activo"@es ;
+    rdfs:label "is active role"@en ;
+    rdfs:domain role:Rol ;
+    rdfs:range xsd:boolean ;
+    skos:definition "Indica si el rol esta vigente (true) o ya transito a un estado terminal (false)."@es .
+
+role:heredaEstadoDe a owl:AnnotationProperty ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "hereda estado de"@es ;
+    rdfs:label "inherits state from"@en ;
+    skos:definition """Declara, a nivel de clase, que los estados terminales de la
+    entidad referenciada se propagan al rol. Por ejemplo, si la Persona base fallece,
+    el rol debe transitar a un estado terminal."""@es .
+
+role:estadosTerminales a owl:AnnotationProperty ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "estados terminales"@es ;
+    rdfs:label "terminal states"@en ;
+    skos:definition "Lista de estados que representan el cierre definitivo del ciclo de vida del rol."@es .
+
+role:evolucionaHacia a owl:AnnotationProperty ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "evoluciona hacia"@es ;
+    rdfs:label "evolves into"@en ;
+    skos:definition """Declara, a nivel de clase, el rol sucesor al que tipicamente
+    evoluciona un rol cuando alcanza un estado favorable. Por ejemplo, un
+    VendedorInformalSolicitante autorizado evoluciona hacia VendedorInformalRegulado."""@es .
+
+role:transicionesValidas a owl:AnnotationProperty ;
+    rdfs:isDefinedBy <https://w3id.org/medellin/espacio-publico/core/roles-institucionales> ;
+    rdfs:label "transiciones validas"@es ;
+    rdfs:label "valid transitions"@en ;
+    skos:definition "Descripcion de las transiciones de estado permitidas en el ciclo de vida del rol."@es .

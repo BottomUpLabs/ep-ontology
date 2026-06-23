@@ -1,0 +1,38 @@
+@prefix core: <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix role: <https://w3id.org/medellin/espacio-publico/roles#> .
+@prefix ex:   <https://w3id.org/medellin/espacio-publico/example/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# =============================================================================
+# EJEMPLO ILUSTRATIVO (datos ficticios) — conforme a las SHACL shapes
+# =============================================================================
+# Demuestra el patron de rol: una Persona (entidad de primer orden) que
+# desempena el rol inferido de VendedorInformal en el espacio publico.
+# Validar con:  pyshacl -s shapes/espacio-publico-shapes.ttl -e ontologies/espacio-publico.ttl examples/ejemplo-vendedor.ttl
+# =============================================================================
+
+ex:persona-001 a core:Persona , core:PersonaNatural ;
+    rdfs:label "Maria Lopez Garcia (ficticia)" ;
+    core:documentoTipo "CC" ;
+    core:documentoNumero "1037654321" ;
+    core:nombreCompleto "Maria Lopez Garcia" ;
+    core:nombre1 "Maria" ;
+    core:apellido1 "Lopez" .
+
+ex:lugar-001 a core:Lugar ;
+    rdfs:label "Carrera 52 con Calle 44, La Candelaria" ;
+    core:barrioNombre "La Candelaria" ;
+    core:comunaNombre "La Candelaria" ;
+    core:latitud 6.2486 ;
+    core:longitud -75.5742 .
+
+ex:vendedor-001 a role:VendedorInformal ;
+    rdfs:label "Vendedora informal regulada (ficticia)" ;
+    core:vendedorId "VEN-100245" ;
+    core:vendedorEstadoCod "regulado_activo" ;
+    core:vendedorFechaInicioEstado "2024-03-12"^^xsd:date ;
+    core:tipologiaVentaCod "comidas_rapidas" ;
+    role:basadoEn ex:persona-001 ;
+    role:estadoActual "regulado_activo" ;
+    role:esRolActivo true .

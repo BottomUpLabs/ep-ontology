@@ -1,0 +1,292 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix : <https://w3id.org/medellin/espacio-publico/core#> .
+@prefix vocab: <https://w3id.org/medellin/espacio-publico/vocab/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+# Shared SPARQL prefix declarations for sh:sparql constraints in this file.
+<https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> a sh:Declarable ;
+    sh:declare [ sh:prefix "core" ; sh:namespace "https://w3id.org/medellin/espacio-publico/core#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "role" ; sh:namespace "https://w3id.org/medellin/espacio-publico/roles#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "reg" ; sh:namespace "https://w3id.org/medellin/espacio-publico/regulacion#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "ctrl" ; sh:namespace "https://w3id.org/medellin/espacio-publico/control#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "vocab" ; sh:namespace "https://w3id.org/medellin/espacio-publico/vocab/"^^xsd:anyURI ] .
+
+
+# =============================================================================
+# SHACL SHAPES: Programa Institucional Validation
+# =============================================================================
+# Valida constraints para programas institucionales: ProgramaReubicacion,
+# OfertaInstitucional, etc. Asegura integridad de datos de programas.
+# =============================================================================
+
+<https://w3id.org/medellin/espacio-publico/shapes/programa-institucional>
+    a owl:Ontology ;
+    owl:versionIRI <https://w3id.org/medellin/espacio-publico/shapes/programa-institucional/0.1.0> ;
+    dcterms:publisher <https://w3id.org/medellin/espacio-publico/agent/subsecretaria-espacio-publico> ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:issued "2026-05-31"^^xsd:date ;
+    bibo:status "published"@en ;
+    dcterms:title "SHACL Shapes - Programa Institucional Validation"@es ;
+    dcterms:description """Constraints para validar programas institucionales:
+    propiedades requeridas, cardinality, tipos de datos, reglas de negocio."""@es ;
+    dcterms:creator "Subsecretaria de Espacio Publico" ;
+    dcterms:created "2026-01-06"^^xsd:date ;
+    owl:versionInfo "0.1.0" .
+
+# =============================================================================
+# SHAPE: ProgramaInstitucional Base Shape
+# =============================================================================
+
+:ProgramaInstitucionalShape a sh:NodeShape ;
+    sh:targetClass :ProgramaInstitucional ;
+    sh:name "Programa Institucional Base"@es ;
+    sh:description "Propiedades requeridas para todo programa institucional"@es ;
+    
+    # Nombre programa (REQUERIDO, UNICO)
+    sh:property [
+        sh:path :nombrePrograma ;
+        sh:name "Nombre del programa"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:minLength 5 ;
+        sh:maxLength 200 ;
+        sh:message "Todo programa debe tener nombre unico (5-200 caracteres)"@es
+    ] ;
+    
+    # Codigo programa (REQUERIDO, UNICO)
+    sh:property [
+        sh:path :codigoPrograma ;
+        sh:name "Codigo del programa"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^PROG-[A-Z]+-[0-9]{4}$" ;
+        sh:message "Codigo debe seguir patron: PROG-XXX-YYYY (ej: PROG-REUB-2025)"@es
+    ] ;
+    
+    # Estado programa (REQUERIDO)
+    sh:property [
+        sh:path :estadoPrograma ;
+        sh:name "Estado del programa"@es ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:in ("en_diseno" "aprobado" "en_ejecucion" "suspendido" "cerrado" "evaluado") ;
+        sh:message "Estado debe ser uno de: en_diseno, aprobado, en_ejecucion, suspendido, cerrado, evaluado"@es
+    ] ;
+    
+    # Fecha inicio (REQUERIDA para programas en_ejecucion)
+    sh:property [
+        sh:path :fechaInicioPrograma ;
+        sh:name "Fecha de inicio"@es ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:message "Fecha de inicio debe ser valida"@es
+    ] ;
+    
+    # Fecha fin (OPCIONAL pero debe ser posterior a inicio)
+    sh:property [
+        sh:path :fechaFinPrograma ;
+        sh:name "Fecha de fin"@es ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1
+    ] ;
+    
+    # Meta beneficiarios (OPCIONAL, pero debe ser positivo)
+    sh:property [
+        sh:path :metaBeneficiarios ;
+        sh:name "Meta de beneficiarios"@es ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 1 ;
+        sh:maxCount 1 ;
+        sh:message "Meta de beneficiarios debe ser entero positivo"@es
+    ] ;
+    
+    # Presupuesto (OPCIONAL, pero debe ser positivo)
+    sh:property [
+        sh:path :presupuestoAsignado ;
+        sh:name "Presupuesto asignado"@es ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxCount 1 ;
+        sh:message "Presupuesto debe ser valor positivo"@es
+    ] ;
+    
+    # Descripcion (RECOMENDADO)
+    sh:property [
+        sh:path :descripcionPrograma ;
+        sh:name "Descripcion del programa"@es ;
+        sh:datatype xsd:string ;
+        sh:minLength 20 ;
+        sh:maxCount 1 ;
+        sh:severity sh:Warning ;
+        sh:message "Recomendado: incluir descripcion del programa (min 20 caracteres)"@es
+    ] ;
+    
+    # Coordinador (RECOMENDADO para programas activos)
+    sh:property [
+        sh:path :coordinadorResponsable ;
+        sh:name "Coordinador responsable"@es ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:severity sh:Warning
+    ] .
+
+# =============================================================================
+# SHAPE: Programa En Ejecucion Requires Fecha Inicio
+# =============================================================================
+
+:ProgramaEnEjecucionShape a sh:NodeShape ;
+    sh:targetClass :ProgramaInstitucional ;
+    sh:name "Programa en ejecucion debe tener fecha inicio"@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Programa en estado 'en_ejecucion' debe tener fechaInicioPrograma definida"@es ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this :estadoPrograma "en_ejecucion" .
+                
+                FILTER NOT EXISTS {
+                    $this :fechaInicioPrograma ?fecha .
+                }
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Fecha Fin Posterior a Fecha Inicio
+# =============================================================================
+
+:FechaFinPosteriorShape a sh:NodeShape ;
+    sh:targetClass :ProgramaInstitucional ;
+    sh:name "Fecha fin debe ser posterior a fecha inicio"@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "fechaFinPrograma ({$fechaFin}) debe ser posterior a fechaInicioPrograma ({$fechaInicio})"@es ;
+        sh:select """
+            SELECT $this ?fechaInicio ?fechaFin
+            WHERE {
+                $this :fechaInicioPrograma ?fechaInicio ;
+                      :fechaFinPrograma ?fechaFin .
+                
+                FILTER(?fechaFin <= ?fechaInicio)
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: ProgramaReubicacion Specific Constraints
+# =============================================================================
+
+:ProgramaReubicacionShape a sh:NodeShape ;
+    sh:targetClass :ProgramaReubicacion ;
+    sh:name "Programa de Reubicacion"@es ;
+    sh:description "Constraints especificos para programas de reubicacion"@es ;
+    
+    # Debe tener participantes
+    sh:property [
+        sh:path [ sh:inversePath :participaEn ] ;
+        sh:name "Participantes"@es ;
+        sh:minCount 1 ;
+        sh:severity sh:Warning ;
+        sh:message "Programa de reubicacion deberia tener al menos un participante"@es
+    ] ;
+    
+    # Codigo debe empezar con PROG-REUB
+    sh:property [
+        sh:path :codigoPrograma ;
+        sh:pattern "^PROG-REUB-[0-9]{4}$" ;
+        sh:message "Codigo de programa de reubicacion debe seguir patron: PROG-REUB-YYYY"@es
+    ] .
+
+# =============================================================================
+# SHAPE: OfertaInstitucional Specific Constraints
+# =============================================================================
+
+:OfertaInstitucionalShape a sh:NodeShape ;
+    sh:targetClass :OfertaInstitucional ;
+    sh:name "Oferta Institucional"@es ;
+    sh:description "Constraints para programas de oferta institucional"@es ;
+    
+    # Codigo debe empezar con PROG-OFER
+    sh:property [
+        sh:path :codigoPrograma ;
+        sh:pattern "^PROG-OFER-[0-9]{4}$" ;
+        sh:message "Codigo de oferta institucional debe seguir patron: PROG-OFER-YYYY"@es
+    ] .
+
+# =============================================================================
+# SHAPE: ProgramaFormalizacion Specific Constraints
+# =============================================================================
+
+:ProgramaFormalizacionShape a sh:NodeShape ;
+    sh:targetClass :ProgramaFormalizacion ;
+    sh:name "Programa de Formalizacion"@es ;
+    
+    # Codigo debe empezar con PROG-FORM
+    sh:property [
+        sh:path :codigoPrograma ;
+        sh:pattern "^PROG-FORM-[0-9]{4}$" ;
+        sh:message "Codigo de programa de formalizacion debe seguir patron: PROG-FORM-YYYY"@es
+    ] .
+
+# =============================================================================
+# SHAPE: Programa Cerrado No Acepta Nuevos Participantes
+# =============================================================================
+
+:ProgramaCerradoShape a sh:NodeShape ;
+    sh:targetClass :ProgramaInstitucional ;
+    sh:name "Programa cerrado no acepta participantes nuevos"@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Programa en estado 'cerrado' no puede tener nuevos participantes vinculados recientemente"@es ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this ?participante
+            WHERE {
+                $this :estadoPrograma "cerrado" ;
+                      :fechaFinPrograma ?fechaCierre .
+                
+                # Tiene participante vinculado despues del cierre
+                $this :participante ?participante .
+                ?participante :fechaVinculacionPrograma ?fechaVinc .
+                
+                FILTER(?fechaVinc > ?fechaCierre)
+            }
+        """
+    ] .
+
+# =============================================================================
+# SHAPE: Presupuesto vs Meta Beneficiarios (Business Rule)
+# =============================================================================
+
+:PresupuestoRazonableShape a sh:NodeShape ;
+    sh:targetClass :ProgramaInstitucional ;
+    sh:name "Presupuesto debe ser razonable vs meta beneficiarios"@es ;
+    
+    sh:sparql [
+        sh:prefixes <https://w3id.org/medellin/espacio-publico/shapes/sparql-prefixes> ;
+        sh:message "Presupuesto por beneficiario es sospechosamente bajo (<100,000 COP). Revisar datos."@es ;
+        sh:severity sh:Warning ;
+        sh:select """
+            SELECT $this ?presupuesto ?meta
+            WHERE {
+                $this :presupuestoAsignado ?presupuesto ;
+                      :metaBeneficiarios ?meta .
+                
+                # Calcular presupuesto per capita
+                BIND(?presupuesto / ?meta AS ?perCapita)
+                
+                # Advertencia si es menor a 100,000 COP por beneficiario
+                FILTER(?perCapita < 100000)
+            }
+        """
+    ] .
